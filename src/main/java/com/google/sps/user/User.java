@@ -12,7 +12,7 @@ public class User {
         //Required
         private final String id;
         //Optional
-        private final String selfIntroduction, imgurl;
+        private final String selfIntroduction, imgUrl;
 
         public Builder(String id){
             this.id = id;
@@ -38,7 +38,7 @@ public class User {
     }
 
     public String getId(){
-        return is;
+        return id;
     }
 
     public String getSelfIntroduction(){
