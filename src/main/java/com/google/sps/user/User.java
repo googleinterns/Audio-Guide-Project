@@ -75,7 +75,7 @@ public class User {
         return imgUrl;
     }
 
-    public boolean isPublic(){
+    public boolean portfolioIsPublic(){
         return publicPortfolio;
     }
 }
