@@ -12,7 +12,7 @@ public class User {
         //Required
         private final String id;
         //Optional
-        private final String selfIntroduction, imgUrl;
+        private String selfIntroduction, imgUrl;
 
         public Builder(String id){
             this.id = id;
