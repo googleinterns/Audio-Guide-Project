@@ -36,4 +36,16 @@ public class User {
         this.selfIntroduction = builder.selfIntroduction;
         this.imgUrl = builder.imgUrl;
     }
+
+    public String getId(){
+        return is;
+    }
+
+    public String getSelfIntroduction(){
+        return selfIntroduction;
+    }
+
+    public String getImgUrl(){
+        return imgUrl;
+    }
 }
