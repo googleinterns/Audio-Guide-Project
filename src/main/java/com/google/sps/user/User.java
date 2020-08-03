@@ -20,10 +20,12 @@ public class User {
 
         public Builder addImgUrl(String imgUrl){
             this.imgUrl = imgUrl;
+            return this;
         }
 
         public Builder addSelfIntroduction(String selfIntroduction){
             this.selfIntroduction = selfIntroduction;
+            return this;
         }
 
         public User build(){
