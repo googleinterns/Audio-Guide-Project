@@ -21,13 +21,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/** This class is a user-authentication servlet.  */
 @WebServlet("/")
 public class UserAuthenticationServlet extends HttpServlet {
 
+    /**
+    * Check if user has already logged in using their Google account. User that has not logged in will
+    * be prompted to the Google login form, once logged in, will be redirected to the portfolio page.
+    */
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        response.setContentType("text/html");
-
         UserService userService = UserServiceFactory.getUserService();
         if (userService.isUserLoggedIn()) {
             response.sendRedirect("/portfolio.html");
