@@ -31,11 +31,11 @@ public class UserAuthenticationServlet extends HttpServlet {
     */
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        UserService userService = UserServiceFactory.getUserService();
         if (userService.isUserLoggedIn()) {
             response.sendRedirect("/portfolio.html");
         } 
         else {
+            // Use portfolio.html as a destination URL when user have logged in.
             String loginURL = userService.createLoginURL("/portfolio.html");
             response.sendRedirect(loginURL);
         }
