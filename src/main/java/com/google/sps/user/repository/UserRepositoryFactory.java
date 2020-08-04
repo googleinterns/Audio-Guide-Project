@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 /** Creates a UserRepository according to the requested type. */
 public class UserRepositoryFactory {
     
-    public UserRepository getUserRepository(RepositoryType repositoryType) {
+    public static UserRepository getUserRepository(RepositoryType repositoryType) {
         if(repositoryType == null) {
             throw new IllegalArgumentException("repositoryType can't be null!");
         }

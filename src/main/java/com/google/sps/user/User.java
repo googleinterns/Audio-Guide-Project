@@ -78,4 +78,13 @@ public class User {
     public boolean portfolioIsPublic(){
         return publicPortfolio;
     }
+
+    @Override
+    public boolean equals(Object o){
+        if (!(o instanceof User)) { 
+            return false; 
+        } 
+        User user = (User) o;
+        return user.getId().equals(this.getId());
+    }
 }

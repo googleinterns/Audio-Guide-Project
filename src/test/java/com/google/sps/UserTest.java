@@ -11,6 +11,7 @@ import org.junit.runners.JUnit4;
 public final class UserTest {
     private static final String ID = "userid";
     private static final String EMAIL = "user@gmail.com";
+    private static final String EMAIL_B = "userB@gmail.com";
     private static final String NAME = "username";
     private static final String SELF_INTRODUCTION = "I am the user";
     private static final String IMG_URL = "/img.com";
@@ -85,5 +86,12 @@ public final class UserTest {
         // User with preset public/private fields.
         newUser = new User.Builder(ID, EMAIL).setPublicPortfolio().addSelfIntroduction(SELF_INTRODUCTION).build();
         Assert.assertEquals(newUser.portfolioIsPublic(), true);
+    }
+
+    @Test
+    public void equals(){
+         User newUserA = new User.Builder(ID, EMAIL).build();
+         User newUserB = new User.Builder(ID, EMAIL_B).build();
+         Assert.assertEquals(newUserA, newUserB);
     }
 }

@@ -34,12 +34,13 @@ public class DatastoreUserRepository implements UserRepository {
 
     private Entity getUserEntity(User user) {
         Entity userEntity = new Entity(ENTITY_NAME, user.getId());
+        System.out.println(userEntity);
         userEntity.setProperty(NAME_PROPERTY, user.getName());
         userEntity.setProperty(EMAIL_PROPERTY, user.getEmail());
         userEntity.setProperty(PUBLIC_PORTFOLIO_PROPERTY, user.portfolioIsPublic());
         userEntity.setProperty(SELF_INTRODUCTION_PROPERTY, user.getSelfIntroduction());
         userEntity.setProperty(IMG_URL_PROPERTY, user.getImgUrl());
-        return  userEntity;
+        return userEntity;
     }
 
 
@@ -62,7 +63,7 @@ public class DatastoreUserRepository implements UserRepository {
         String id = (String) userEntity.getKey().getName();
         String name = (String) userEntity.getProperty(NAME_PROPERTY);
         String email = (String) userEntity.getProperty(EMAIL_PROPERTY);
-        Boolean publicPortfolio = Boolean.parseBoolean((String) userEntity.getProperty(PUBLIC_PORTFOLIO_PROPERTY));
+        Boolean publicPortfolio = (Boolean) userEntity.getProperty(PUBLIC_PORTFOLIO_PROPERTY);
         String selfIntroduction = (String) userEntity.getProperty(SELF_INTRODUCTION_PROPERTY);
         String imgUrl = (String) userEntity.getProperty(IMG_URL_PROPERTY);
         User.Builder newUserBuilder = new User.Builder(id, email).setName(name).addSelfIntroduction(selfIntroduction).addImgUrl(imgUrl);
