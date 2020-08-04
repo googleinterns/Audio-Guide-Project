@@ -20,6 +20,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import com.google.sps.authentication.UserAuthenticationStatus;
 
 /** This class is a user-authentication servlet.  */
 @WebServlet("/user-authentication")
@@ -31,8 +32,13 @@ public class UserAuthenticationServlet extends HttpServlet {
     */
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+        Gson gson = new Gson();
+        response.setContentType("application/json;");
+
         if (userService.isUserLoggedIn()) {
-            response.sendRedirect("/portfolio.html");
+            UserAuthenticationStatus userAuthenticationStatus = new 
+            response.getWriter().println(gson.toJson(recommendationsResponse)); 
         } 
         else {
             // Use portfolio.html as a destination URL when user have logged in.

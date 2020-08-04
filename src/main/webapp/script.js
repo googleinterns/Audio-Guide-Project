@@ -12,10 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/**
+*  
+*/
 function authenticateUser() {
-    
+    const currentWindowLocation = window.location.href;
+    const currentUrl = new URL(currentWindowLocation);
+    queryAuthenticationServer(currentUrl).then((userAuthenticationStatus) => {
+        if (!userAuthenticationStatus.isLoggedIn) {
+            location.replace(userAuthenticationStatus.url);
+        }
+        else {
+            const logoutButton = document.getElementById('logout');
+            logoutButton.onclick = location.replace(userAuthenticationStatus.url);
+        }
+    });
 }
 
-function displayPage(){
-    
+function  queryAuthenticationServer(currentUrl) {
+    return fetch('/user-authentication', {method: 'GET'})
+        .then((response) => {
+            return response.json();
+        });
 }
