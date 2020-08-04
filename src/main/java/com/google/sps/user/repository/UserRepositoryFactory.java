@@ -9,10 +9,10 @@ import org.jetbrains.annotations.Nullable;
 public class UserRepositoryFactory {
     
     public static UserRepository getUserRepository(RepositoryType repositoryType) {
-        if(repositoryType == null) {
+        if (repositoryType == null) {
             throw new IllegalArgumentException("repositoryType can't be null!");
         }
-        switch(repositoryType){
+        switch(repositoryType) {
             case DATASTORE:
                 return new DatastoreUserRepository();
             default:
