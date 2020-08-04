@@ -7,17 +7,17 @@
   <body>
       <div id = "createProfile">
         <form action = "/user-data" method = "POST">
-            <label>Name:</label><br>
-            <input type="text" name="name"><br>
+            <label for = "name">Name:</label><br>
+            <input type="text" name="name" id = "name"><br>
 
-            <label>Upload image</label>
-            <input type="file" name="imgUrl">
+            <label for = "imgUrl">Upload image</label>
+            <input type="file" name="imgUrl" id = "imgUrl">
 
-            <label>Self Introduction:</label><br>
-            <textarea name="selfIntroduction" rows="4" cols="50"></textarea>
+            <label for = "selfIntroduction">Self Introduction:</label><br>
+            <textarea name="selfIntroduction" rows="4" cols="50" id = "selfIntroduction"></textarea>
 
-            <label>Account Status:</label>
-            <select>
+            <label for = "publicPortfolio">Account Status:</label>
+            <select name = "publicPortfolio" id = "publicPortfolio">
                 <option value="public">public</option>
                 <option value="private">private</option>
             </select>
