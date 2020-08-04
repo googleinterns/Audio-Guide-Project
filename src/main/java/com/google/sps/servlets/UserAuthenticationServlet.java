@@ -16,6 +16,8 @@ package com.google.sps.servlets;
 
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import java.io.IOException;
+import com.google.gson.Gson;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -28,22 +30,34 @@ public class UserAuthenticationServlet extends HttpServlet {
 
     /**
     * Check if user has already logged in using their Google account. User that has not logged in will
-    * be prompted to the Google login form, once logged in, will be redirected to the portfolio page.
+    * be prompted to the Google login form, once logged in, will be redirected to the current page.
     */
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        Gson gson = new Gson();
-        response.setContentType("application/json;");
+        UserService userService = UserServiceFactory.getUserService();
+        String destinationUrl = request.getParameter("currentUrl");
 
         if (userService.isUserLoggedIn()) {
-            UserAuthenticationStatus userAuthenticationStatus = new 
-            response.getWriter().println(gson.toJson(recommendationsResponse)); 
+            String logoutUrl = userService.createLogoutURL(destinationUrl);
+            sendResponse(response, true, logoutUrl);
         } 
         else {
-            // Use portfolio.html as a destination URL when user have logged in.
-            String loginURL = userService.createLoginURL("/portfolio.html");
-            response.sendRedirect(loginURL);
+            String loginUrl = userService.createLoginURL(destinationUrl);
+            sendResponse(response, false, loginUrl);
         }
+    }
+
+    private void sendResponse(HttpServletResponse response, boolean isLoggedIn, String url) throws IOException {
+        UserAuthenticationStatus authenticationStatus = new UserAuthenticationStatus(isLoggedIn, 
+                                                                                    url); 
+        response.setContentType("application/json;");
+        response.getWriter().println(convertToJsonUsingGson(authenticationStatus));
+    }
+
+    private String convertToJsonUsingGson(Object object) {
+        Gson gson = new Gson();
+        String json = gson.toJson(object);
+        return json;
     }
 }

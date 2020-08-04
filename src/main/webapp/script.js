@@ -30,8 +30,18 @@ function authenticateUser() {
 }
 
 function  queryAuthenticationServer(currentUrl) {
-    return fetch('/user-authentication', {method: 'GET'})
+    const requestUrl = new URL('/user-authentication', currentUrl);
+    const queryParams = new QueryParams(currentUrl);
+    requestUrl.search = new URLSearchParams(queryParams).toString();
+
+    return fetch(requestUrl, {method: 'GET'})
         .then((response) => {
             return response.json();
         });
+}
+
+class QueryParams{
+  constructor(currentUrl) {
+    this.currentUrl = currentUrl;
+  }
 }

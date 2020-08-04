@@ -19,7 +19,8 @@ public class UserAuthenticationStatus {
 
     private final boolean isLoggedIn;
 
-    // Depends on {@code isLoggedIn}, it will be a login link if logged in, and logout link if not.
+    // Depends on {@code isLoggedIn}, it will be a login link if logged in, and 
+    // logout link otherwise.
     private final String url;
 
     public UserAuthenticationStatus(boolean isLoggedIn, String url) {
