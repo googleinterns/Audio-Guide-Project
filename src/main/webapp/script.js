@@ -13,7 +13,9 @@
 // limitations under the License.
 
 /**
-*  
+* Add a href link to the logout button if the user is logged in,
+* and prompt the user to Google login page if user is not logged
+* in.
 */
 function authenticateUser() {
     const currentWindowLocation = window.location.href;
@@ -29,6 +31,10 @@ function authenticateUser() {
     });
 }
 
+/**
+* Send GET request to UserAuthenticationServlet with the current page url
+* as the query parameters.
+*/
 function  queryAuthenticationServer(currentUrl) {
     const requestUrl = new URL('/user-authentication', currentUrl);
     const queryParams = new QueryParams(currentUrl);
