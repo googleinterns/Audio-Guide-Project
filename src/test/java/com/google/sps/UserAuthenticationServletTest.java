@@ -64,7 +64,7 @@ public class UserAuthenticationServletTest extends UserAuthenticationServlet{
     }
 
     @Test
-    public void doGet_userLoggedOut() throws IOException {
+    public void doGet_userLoggedOut_returnsFalseAndLoginUrl() throws IOException {
 
         StringWriter stringWriter = new StringWriter();
         PrintWriter writer = new PrintWriter(stringWriter);
@@ -81,7 +81,7 @@ public class UserAuthenticationServletTest extends UserAuthenticationServlet{
     }
 
     @Test
-    public void doGet_userLoggedIn() throws IOException {
+    public void doGet_userLoggedIn_returnsTrueAndLogoutUrl() throws IOException {
 
         login("denniswillie", "google.com", true);
 
