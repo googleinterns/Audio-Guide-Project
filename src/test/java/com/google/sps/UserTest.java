@@ -16,19 +16,19 @@ public final class UserTest {
     private static final String IMG_URL = "/img.com";
 
     @Test
-    public void getId(){
+    public void getId() {
         User newUser = new User.Builder(ID, EMAIL).build();
         Assert.assertEquals(newUser.getId(), ID);
     }
 
     @Test
-    public void getEmail(){
+    public void getEmail() {
         User newUser = new User.Builder(ID, EMAIL).build();
         Assert.assertEquals(newUser.getEmail(), EMAIL);
     }
 
     @Test
-    public void getName(){
+    public void getName() {
         // User with no preset name.
         User newUser = new User.Builder(ID, EMAIL).build();
         Assert.assertEquals(newUser.getName(), null);
@@ -43,7 +43,7 @@ public final class UserTest {
     }
 
     @Test
-    public void getSelfIntroduction(){
+    public void getSelfIntroduction() {
         // User with no preset selfIntroduction.
         User newUser = new User.Builder(ID, EMAIL).build();
         Assert.assertEquals(newUser.getSelfIntroduction(), null);
@@ -58,7 +58,7 @@ public final class UserTest {
     }
 
     @Test
-    public void getImgUrl(){
+    public void getImgUrl() {
         // User with no preset imgUrl.
         User newUser = new User.Builder(ID, EMAIL).build();
         Assert.assertEquals(newUser.getImgUrl(), null);
@@ -73,7 +73,7 @@ public final class UserTest {
     }
 
     @Test
-    public void portfolioIsPublic(){
+    public void portfolioIsPublic() {
         // User with no preset public/private fields.
         User newUser = new User.Builder(ID, EMAIL).build();
         Assert.assertEquals(newUser.portfolioIsPublic(), false);
