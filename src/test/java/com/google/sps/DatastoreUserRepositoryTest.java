@@ -3,7 +3,6 @@ package com.google.sps;
 import com.google.sps.user.User;
 import com.google.sps.user.repository.UserRepository;
 import com.google.sps.user.repository.UserRepositoryFactory;
-import com.google.sps.user.repository.impl.DatastoreUserRepository;
 import com.google.sps.data.RepositoryType;
 import org.junit.Assert;
 import org.junit.Before;

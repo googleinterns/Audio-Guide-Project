@@ -14,20 +14,40 @@
 
 package com.google.sps.servlets;
 
+import com.google.sps.user.User;
+import com.google.sps.user.repository.UserRepository;
+import com.google.sps.user.repository.UserRepositoryFactory;
+import com.google.sps.data.RepositoryType;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
+import java.io.IOException;
 
 /** This servlet handles users' data */
 @WebServlet("/user-data")
 public class UserServlet extends HttpServlet {
+
+    /** Returns the data of the user who is currently logged in. */
+    @Override
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException { 
+        UserRepository myUserRepository = UserRepositoryFactory.getUserRepository(RepositoryType.DATASTORE);
+        User user = myUserRepository.getUser("userid");
+        response.setContentType("application/json;");
+        response.getWriter().println(convertToJsonUsingGson(user));
+    }
+
+    public static String getUserIdFromUserService() {
+        UserService userService = UserServiceFactory.getUserService();
+        return userService.getCurrentUser().getUserId();
+    }
 
     private String convertToJsonUsingGson(Object o) {
         Gson gson = new Gson();
         String json = gson.toJson(o);
         return json;
     }
-
 }
