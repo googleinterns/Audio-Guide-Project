@@ -3,8 +3,9 @@
   <head>
     <meta charset="UTF-8">
     <title>My Portfolio</title>
+    <script src = "script.js"></script>
   </head>
-  <body>
+  <body onload = "authenticateUser()">
       <div id = "createProfile">
         <form action = "/user-data" method = "POST">
             <label for = "name">Name:</label><br>

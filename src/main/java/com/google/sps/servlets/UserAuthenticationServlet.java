@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /** This class is a user-authentication servlet.  */
-@WebServlet("/")
+@WebServlet("/user-authentication")
 public class UserAuthenticationServlet extends HttpServlet {
 
     /**
