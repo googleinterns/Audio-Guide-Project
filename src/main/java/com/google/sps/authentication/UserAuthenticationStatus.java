@@ -14,12 +14,12 @@
 
 package com.google.sps.authentication;
 
-/**
-* Class containing user's authentication status, wr
-*/
+/** Class containing user's authentication status. */
 public class UserAuthenticationStatus {
 
     private final boolean isLoggedIn;
+
+    // Depends on {@code isLoggedIn}, it will be a login link if logged in, and logout link if not.
     private final String url;
 
     public UserAuthenticationStatus(boolean isLoggedIn, String url) {
