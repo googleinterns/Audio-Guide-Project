@@ -28,6 +28,18 @@ import com.google.sps.authentication.UserAuthenticationStatus;
 @WebServlet("/user-authentication")
 public class UserAuthenticationServlet extends HttpServlet {
 
+    private final UserService userService;
+
+    // For testing.
+    public UserAuthenticationServlet(UserService userService) {
+        this.userService = userService;
+    }
+
+    // For production.
+    public UserAuthenticationServlet() {
+        userService = UserServiceFactory.getUserService();
+    }
+
     /**
     * Check if user has already logged in using their Google account. User that has not logged in will
     * be prompted to the Google login form, once logged in, will be redirected to the current page.
@@ -35,7 +47,6 @@ public class UserAuthenticationServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        UserService userService = UserServiceFactory.getUserService();
         String destinationUrl = request.getParameter("currentUrl");
 
         if (userService.isUserLoggedIn()) {
@@ -55,9 +66,9 @@ public class UserAuthenticationServlet extends HttpServlet {
         response.getWriter().println(convertToJsonUsingGson(authenticationStatus));
     }
 
-    private String convertToJsonUsingGson(Object object) {
+    private String convertToJsonUsingGson(UserAuthenticationStatus authenticationStatus) {
         Gson gson = new Gson();
-        String json = gson.toJson(object);
+        String json = gson.toJson(authenticationStatus);
         return json;
     }
 }
