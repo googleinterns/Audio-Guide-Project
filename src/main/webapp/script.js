@@ -26,7 +26,9 @@ function authenticateUser() {
         }
         else {
             const logoutButton = document.getElementById('logout');
-            logoutButton.onclick = location.replace(userAuthenticationStatus.url);
+            logoutButton.addEventListener('click', () => {
+                window.location.replace(userAuthenticationStatus.url);
+            });
         }
     });
 }
