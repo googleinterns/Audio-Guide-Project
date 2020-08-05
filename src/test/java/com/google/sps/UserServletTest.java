@@ -4,7 +4,9 @@ import static org.mockito.Mockito.when;
 
 import com.google.sps.user.User;
 import com.google.sps.servlets.UserServlet;
-import org.junit.Assert;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 import org.junit.Before;
 import org.junit.After;
 import org.junit.Test;
@@ -31,7 +33,6 @@ import com.google.gson.Gson;
 public final class UserServletTest {
     private static final String ID = "userid";
     private static final String EMAIL = "user@gmail.com";
-    private static final String EMAIL_B = "userB@gmail.com";
     private static final String NAME = "username";
     private static final String SELF_INTRODUCTION = "I am the user";
     private static final String IMG_URL = "/img.com";
@@ -45,13 +46,15 @@ public final class UserServletTest {
 
     @Before
     public void setup() {
-        attributeToValue.put("com.google.appengine.api.users.UserService.user_id_key", (Object) ID);
+        // Set the userdata that the Userservice will return. 
+        attributeToValue.put("com.google.appengine.api.users.UserService.user_id_key", (Object) ID); 
         helper = new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig())
           .setEnvIsLoggedIn(true)
           .setEnvAuthDomain("localhost")
           .setEnvEmail(EMAIL)
           .setEnvAttributes(attributeToValue);
         helper.setUp();
+
         userServlet = new UserServlet();
     }
 
@@ -61,27 +64,80 @@ public final class UserServletTest {
     }
  
     @Test
-    public void doPostDoGet() throws IOException, ServletException {
+    public void doPostDoGet_existingUserWithAllDataSet_returnsUserWithAllData() throws IOException, ServletException {
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
 
-        when(request.getParameter("name")).thenReturn(NAME);
-        when(request.getParameter("selfIntroduction")).thenReturn(SELF_INTRODUCTION);
-        when(request.getParameter("publicPortfolio")).thenReturn("public");
+        when(request.getParameter(UserServlet.NAME_INPUT)).thenReturn(NAME);
+        when(request.getParameter(UserServlet.SELF_INTRODUCTION_INPUT)).thenReturn(SELF_INTRODUCTION);
+        when(request.getParameter(UserServlet.PUBLIC_PORTFOLIO_INPUT)).thenReturn(UserServlet.PUBLIC_PORTFOLIO_INPUT_PUBLIC_VALUE);
 
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
          
         when(response.getWriter()).thenReturn(pw);
 
+        // Save the currenly logged in user's data
         userServlet.doPost(request, response);
+        // Get the currenly logged in user's previously saved data
         userServlet.doGet(request, response);
+
         pw.flush();
-        System.out.println("Response: " + sw.toString());
-        Assert.assertTrue(sw.toString().contains(ID));
-        Assert.assertTrue(sw.toString().contains(EMAIL));
-        Assert.assertTrue(sw.toString().contains(NAME));
-        Assert.assertTrue(sw.toString().contains(SELF_INTRODUCTION));
-        Assert.assertTrue(sw.toString().contains("true")); //for public portfolio
+        Gson gson = new Gson();
+        User resultUser = gson.fromJson(sw.toString(), User.class);
+        assertEquals(ID, resultUser.getId());
+        assertEquals(EMAIL, resultUser.getEmail());
+        assertEquals(NAME, resultUser.getName());
+        assertTrue(resultUser.portfolioIsPublic());
+        assertEquals(SELF_INTRODUCTION, resultUser.getSelfIntroduction());
+    }
+
+    @Test
+    public void doPostDoGet_existingUserWithNoDataSet_returnsUserWithMissingData() throws IOException, ServletException {
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        HttpServletResponse response = mock(HttpServletResponse.class);
+
+        when(request.getParameter(UserServlet.NAME_INPUT)).thenReturn("");
+        when(request.getParameter(UserServlet.SELF_INTRODUCTION_INPUT)).thenReturn("");
+        when(request.getParameter(UserServlet.PUBLIC_PORTFOLIO_INPUT)).thenReturn("private");
+
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+         
+        when(response.getWriter()).thenReturn(pw);
+
+        // Save the currenly logged in user's data
+        userServlet.doPost(request, response);
+        // Get the currenly logged in user's previously saved data
+        userServlet.doGet(request, response);
+
+        pw.flush();
+        Gson gson = new Gson();
+        User resultUser = gson.fromJson(sw.toString(), User.class);
+        assertEquals(ID, resultUser.getId());
+        assertEquals(EMAIL, resultUser.getEmail());
+        assertEquals(null, resultUser.getName());
+        assertFalse(resultUser.portfolioIsPublic());
+        assertEquals(null, resultUser.getSelfIntroduction());
+    }
+
+     @Test
+    public void doGet_inexistentUser_returnsNull() throws IOException, ServletException {
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        HttpServletResponse response = mock(HttpServletResponse.class);
+
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+         
+        when(response.getWriter()).thenReturn(pw);
+
+        // Try to get the currenly logged in user's data. 
+        // It is not saved.
+        userServlet.doGet(request, response);
+
+        pw.flush();
+        Gson gson = new Gson();
+        User resultUser = gson.fromJson(sw.toString(), User.class);
+        assertEquals(null, resultUser);
     }
 }
