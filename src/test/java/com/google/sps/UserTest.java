@@ -2,7 +2,6 @@ package com.google.sps;
 
 import com.google.sps.user.User;
 import static org.junit.Assert.assertEquals;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,7 +45,7 @@ public final class UserTest {
     public void getName_nameProvidedPlusOtherOptionalParameters_returnsName() {
         // User with preset selfIntroduction, and other fields.
         User newUser = new User.Builder(ID, EMAIL).setPublicPortfolio().setName(NAME).addSelfIntroduction(SELF_INTRODUCTION).build();
-        Assert.assertEquals(NAME, newUser.getName());
+        assertEquals(NAME, newUser.getName());
     }
 
     @Test
