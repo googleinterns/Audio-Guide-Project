@@ -15,6 +15,7 @@
 package com.google.sps.authentication;
 
 import org.jetbrains.annotations.Nullable;
+import java.lang.IllegalStateException;
 
 /** Class containing user's authentication status. */
 public class UserAuthenticationStatus {
@@ -23,6 +24,12 @@ public class UserAuthenticationStatus {
 
     @Nullable
     private final String loginUrl, logoutUrl;
+
+    private UserAuthenticationStatus(boolean isLoggedIn, String loginUrl, String logoutUrl) {
+        this.isLoggedIn = isLoggedIn;
+        this.loginUrl = loginUrl;
+        this.logoutUrl = logoutUrl;
+    }
 
     public static class Builder {
         private final boolean isLoggedIn;
@@ -39,7 +46,7 @@ public class UserAuthenticationStatus {
             return this;
         }
         public Builder setLogoutUrl(String logoutUrl) {
-            if (this.isLoggedOut) {
+            if (!this.isLoggedIn) {
                 throw new IllegalStateException(
                             "User is already logged out, failed to create a logout url!");
             }
@@ -47,14 +54,8 @@ public class UserAuthenticationStatus {
             return this;
         }
         public UserAuthenticationStatus build() {
-            return new UserAuthenticationStatus(this);
+            return new UserAuthenticationStatus(isLoggedIn, loginUrl, logoutUrl);
         }
-    }
-
-    public UserAuthenticationStatus(Builder Builder) {
-        this.isLoggedIn = isLoggedIn;
-        this.loginUrl = loginUrl;
-        this.logoutUrl = logoutUrl;
     }
 
     public boolean isLoggedIn() {

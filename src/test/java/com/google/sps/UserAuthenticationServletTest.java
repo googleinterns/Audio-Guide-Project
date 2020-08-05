@@ -75,9 +75,11 @@ public class UserAuthenticationServletTest extends UserAuthenticationServlet{
 
         Gson gson = new Gson();
         UserAuthenticationStatus result = gson.fromJson(resultJson, UserAuthenticationStatus.class);
-        String expectedUrl = userService.createLoginURL("/index.html");
-        assertEquals(false, result.getIsLoggedIn());
-        assertEquals(expectedUrl, result.getUrl());
+        String expectedLoginUrl = userService.createLoginURL("/index.html");
+        String expectedLogoutUrl = null;
+        assertEquals(false, result.isLoggedIn());
+        assertEquals(expectedLoginUrl, result.getLoginUrl());
+        assertEquals(expectedLogoutUrl, result.getLogoutUrl());
     }
 
     @Test
@@ -94,9 +96,11 @@ public class UserAuthenticationServletTest extends UserAuthenticationServlet{
 
         Gson gson = new Gson();
         UserAuthenticationStatus result = gson.fromJson(resultJson, UserAuthenticationStatus.class);
-        String expectedUrl = userService.createLogoutURL("/index.html");
-        assertEquals(true, result.getIsLoggedIn());
-        assertEquals(expectedUrl, result.getUrl());
+        String expectedLogoutUrl = userService.createLogoutURL("/index.html");
+        String expectedLoginUrl = null;
+        assertEquals(true, result.isLoggedIn());
+        assertEquals(expectedLogoutUrl, result.getLogoutUrl());
+        assertEquals(expectedLoginUrl, result.getLoginUrl());
     }
 
     @After

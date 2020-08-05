@@ -59,7 +59,7 @@ public class UserAuthenticationServlet extends HttpServlet {
     }
 
     private void sendResponse(HttpServletResponse response, boolean isLoggedIn, String url) throws IOException {
-        UserAuthenticationStatus.Builder statusBuilder = UserAuthenticationStatus.Builder(isLoggedIn);
+        UserAuthenticationStatus.Builder statusBuilder = new UserAuthenticationStatus.Builder(isLoggedIn);
         UserAuthenticationStatus status;
         if (isLoggedIn) {
             status = statusBuilder.setLogoutUrl(url).build();
