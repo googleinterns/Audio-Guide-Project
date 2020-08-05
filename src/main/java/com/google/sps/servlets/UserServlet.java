@@ -49,7 +49,7 @@ public class UserServlet extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException { 
         User user = getUserFromRequest(request);
         userRepository.saveUser(user);
-        response.sendRedirect("/portfolio.html");
+        response.sendRedirect("/index.html");
     }
 
     /** Returns the data of the user who is currently logged in. */
