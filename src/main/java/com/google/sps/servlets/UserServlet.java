@@ -36,37 +36,33 @@ public class UserServlet extends HttpServlet {
     public static final String SELF_INTRODUCTION_INPUT = "selfIntroduction";
     public static final String IMG_URL_INPUT = "imgUrl";
 
+    private final UserRepository userRepository;
+    private final UserService userService;
+
+    public UserServlet() {
+        userRepository = UserRepositoryFactory.getUserRepository(RepositoryType.DATASTORE);
+        userService = UserServiceFactory.getUserService();
+    }
+
      /** Saves the recently submitted userdata(updates it if the user already has some data saved). */
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException { 
-        UserRepository myUserRepository = UserRepositoryFactory.getUserRepository(RepositoryType.DATASTORE);
         User user = getUserFromRequest(request);
-        myUserRepository.saveUser(user);
+        userRepository.saveUser(user);
         response.sendRedirect("/portfolio.html");
     }
 
     /** Returns the data of the user who is currently logged in. */
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException { 
-        UserRepository myUserRepository = UserRepositoryFactory.getUserRepository(RepositoryType.DATASTORE);
-        User user = myUserRepository.getUser(getUserIdFromUserService());
+        User user = userRepository.getUser(userService.getCurrentUser().getUserId());
         response.setContentType("application/json;");
         response.getWriter().println(convertToJsonUsingGson(user));
     }
 
-    private String getUserIdFromUserService() {
-        UserService userService = UserServiceFactory.getUserService();
-        return userService.getCurrentUser().getUserId();
-    }
-
-    private String getUserEmailFromUserService() {
-        UserService userService = UserServiceFactory.getUserService();
-        return userService.getCurrentUser().getEmail();
-    }
-
     private User getUserFromRequest(HttpServletRequest request) {
-        String id = getUserIdFromUserService();
-        String email = getUserEmailFromUserService();
+        String id = userService.getCurrentUser().getUserId();
+        String email = userService.getCurrentUser().getEmail();
         User.Builder newUserBuilder = new User.Builder(id, email);
         String name = request.getParameter(NAME_INPUT);
         if (!name.equals("")) {
@@ -77,7 +73,7 @@ public class UserServlet extends HttpServlet {
             newUserBuilder.addSelfIntroduction(selfIntroduction);
         }
         String publicPortfolioStringValue = request.getParameter(PUBLIC_PORTFOLIO_INPUT);
-        if ( publicPortfolioStringValue.equals(PUBLIC_PORTFOLIO_INPUT_PUBLIC_VALUE)) {
+        if (publicPortfolioStringValue.equals(PUBLIC_PORTFOLIO_INPUT_PUBLIC_VALUE)) {
             newUserBuilder.setPublicPortfolio();
         }
         return newUserBuilder.build();
