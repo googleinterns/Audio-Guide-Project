@@ -22,22 +22,59 @@ import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+import java.lang.IllegalStateException;
 
 @RunWith(JUnit4.class)
-public class UserAuthenticationStatusTest extends UserAuthenticationStatus{
+public class UserAuthenticationStatusTest {
 
-    @Before
-    public void setUp() {
-        
+    private static final boolean LOGGED_IN = true;
+    private static final boolean LOGGED_OUT = false;
+    private static final String MOCK_URL = "mock_url";
+
+    @Test
+    public void isLoggedIn_userIsLoggedIn_returnTrue() {
+        UserAuthenticationStatus status = new UserAuthenticationStatus.Builder(LOGGED_IN).build();
+        assertEquals(true, status.isLoggedIn());
     }
 
     @Test
-    public void builderSetLoginUrl_userLoggedInAndSetLoginUrl_throwIllegalStateException() throws IOException {
-
+    public void isLoggedOut_userIsLoggedOut_returnFalse() {
+        UserAuthenticationStatus status = new UserAuthenticationStatus.Builder(LOGGED_OUT).build();
+        assertEquals(LOGGED_OUT, status.isLoggedIn());
     }
 
-    @After
-    public void tearDown() {
-        
+    @Test(expected = IllegalStateException.class)
+    public void setLoginUrl_userAlreadyLoggedIn_throwIllegalStateException() {
+        UserAuthenticationStatus status = new UserAuthenticationStatus
+                                                        .Builder(LOGGED_IN)
+                                                        .setLoginUrl(MOCK_URL)
+                                                        .build();
     }
+
+    @Test(expected = IllegalStateException.class)
+    public void setLogoutUrl_userAlreadyLoggedOut_throwIllegalStateException() {
+        UserAuthenticationStatus status = new UserAuthenticationStatus
+                                                        .Builder(LOGGED_OUT)
+                                                        .setLogoutUrl(MOCK_URL)
+                                                        .build();
+    }
+
+    @Test
+    public void getLoginUrl_userIsLoggedOut_returnMockUrl() {
+        UserAuthenticationStatus status = new UserAuthenticationStatus
+                                                .Builder(LOGGED_OUT)
+                                                .setLoginUrl(MOCK_URL)
+                                                .build();
+        assertEquals(MOCK_URL, status.getLoginUrl());
+    }
+
+    @Test
+    public void getLogoutUrl_userIsLoggedIn_returnMockUrl() {
+        UserAuthenticationStatus status = new UserAuthenticationStatus
+                                                .Builder(LOGGED_IN)
+                                                .setLogoutUrl(MOCK_URL)
+                                                .build();
+        assertEquals(MOCK_URL, status.getLogoutUrl());
+    }
+
 }
