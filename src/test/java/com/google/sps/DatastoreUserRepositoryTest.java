@@ -103,11 +103,11 @@ public final class DatastoreUserRepositoryTest {
         Key userKey = KeyFactory.createKey(DatastoreUserRepository.ENTITY_KIND, ID_C);
         try {
             Entity userEntity = datastore.get(userKey);
-            assertEquals(userEntity.getProperty(DatastoreUserRepository.NAME_PROPERTY), NAME_C);
-            assertEquals(userEntity.getProperty(DatastoreUserRepository.EMAIL_PROPERTY), EMAIL_C);
-            assertEquals(userEntity.getProperty(DatastoreUserRepository.SELF_INTRODUCTION_PROPERTY), SELF_INTRODUCTION_C);
-            assertEquals(userEntity.getProperty(DatastoreUserRepository.PUBLIC_PORTFOLIO_PROPERTY), false);
-            assertEquals(userEntity.getProperty(DatastoreUserRepository.IMG_URL_PROPERTY), IMG_URL_C);
+            assertEquals(NAME_C, userEntity.getProperty(DatastoreUserRepository.NAME_PROPERTY));
+            assertEquals(EMAIL_C, userEntity.getProperty(DatastoreUserRepository.EMAIL_PROPERTY));
+            assertEquals(SELF_INTRODUCTION_C, userEntity.getProperty(DatastoreUserRepository.SELF_INTRODUCTION_PROPERTY));
+            assertEquals(false, userEntity.getProperty(DatastoreUserRepository.PUBLIC_PORTFOLIO_PROPERTY));
+            assertEquals(IMG_URL_C, userEntity.getProperty(DatastoreUserRepository.IMG_URL_PROPERTY));
         } catch (EntityNotFoundException e) {
             fail("Entity not found: " + e);
         }
