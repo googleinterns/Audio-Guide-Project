@@ -37,7 +37,6 @@ public class DatastoreUserRepository implements UserRepository {
         return userEntity;
     }
 
-
     @Override 
     @Nullable
     public User getUser(String id) {
