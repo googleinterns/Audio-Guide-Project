@@ -4,18 +4,13 @@ import com.google.sps.user.User;
 import com.google.sps.user.repository.UserRepository;
 import org.jetbrains.annotations.Nullable;
 import com.google.appengine.api.datastore.Entity;
-import javax.servlet.http.HttpServletRequest;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.PreparedQuery;
-import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.EntityNotFoundException;
-import java.util.List; 
-import java.util.HashMap;
 
 /** Handles the storage of comments using the Datastore API. */ 
 public class DatastoreUserRepository implements UserRepository {
@@ -34,7 +29,6 @@ public class DatastoreUserRepository implements UserRepository {
 
     private Entity getUserEntity(User user) {
         Entity userEntity = new Entity(ENTITY_NAME, user.getId());
-        System.out.println(userEntity);
         userEntity.setProperty(NAME_PROPERTY, user.getName());
         userEntity.setProperty(EMAIL_PROPERTY, user.getEmail());
         userEntity.setProperty(PUBLIC_PORTFOLIO_PROPERTY, user.portfolioIsPublic());
@@ -43,7 +37,6 @@ public class DatastoreUserRepository implements UserRepository {
         return userEntity;
     }
 
-
     @Override 
     @Nullable
     public User getUser(String id) {
@@ -51,15 +44,16 @@ public class DatastoreUserRepository implements UserRepository {
         Key userKey = KeyFactory.createKey(ENTITY_NAME, id);
         try {
             return getUserFromUserEntity(datastore.get(userKey));
-        }
-        catch(EntityNotFoundException e) {
+        } catch (EntityNotFoundException e) {
             return null;
         }
     }
 
     @Nullable
     private User getUserFromUserEntity(Entity userEntity) {
-        if (userEntity==null) return null;
+        if (userEntity==null) {
+            return null;
+        }
         String id = (String) userEntity.getKey().getName();
         String name = (String) userEntity.getProperty(NAME_PROPERTY);
         String email = (String) userEntity.getProperty(EMAIL_PROPERTY);

@@ -1,7 +1,8 @@
 package com.google.sps;
 
 import com.google.sps.user.User;
-import org.junit.Assert;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,6 +11,7 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public final class UserTest {
     private static final String ID = "userid";
+    private static final String ID_B = "useridB";
     private static final String EMAIL = "user@gmail.com";
     private static final String EMAIL_B = "userB@gmail.com";
     private static final String NAME = "username";
@@ -19,79 +21,113 @@ public final class UserTest {
     @Test
     public void getId() {
         User newUser = new User.Builder(ID, EMAIL).build();
-        Assert.assertEquals(newUser.getId(), ID);
+        assertEquals(ID, newUser.getId());
     }
 
     @Test
     public void getEmail() {
         User newUser = new User.Builder(ID, EMAIL).build();
-        Assert.assertEquals(newUser.getEmail(), EMAIL);
+        assertEquals(EMAIL, newUser.getEmail());
     }
 
     @Test
-    public void getName() {
+    public void getName_noNameProvided_returnsNull() {
         // User with no preset name.
         User newUser = new User.Builder(ID, EMAIL).build();
-        Assert.assertEquals(newUser.getName(), null);
-
-        // User with preset selfIntroduction.
-        newUser = new User.Builder(ID, EMAIL).setName(NAME).build();
-        Assert.assertEquals(newUser.getName(), NAME);
-
-        // User with preset selfIntroduction, and other fields.
-        newUser = new User.Builder(ID, EMAIL).setPublicPortfolio().setName(NAME).addSelfIntroduction(SELF_INTRODUCTION).build();
-        Assert.assertEquals(newUser.getName(), NAME);
+        assertEquals(null, newUser.getName());
     }
 
     @Test
-    public void getSelfIntroduction() {
+    public void getName_nameProvidedNoOtherOptionalParameters_returnsName() {
+        // User with preset selfIntroduction.
+        User newUser = new User.Builder(ID, EMAIL).setName(NAME).build();
+        assertEquals(NAME, newUser.getName());
+    }
+
+    @Test
+    public void getName_nameProvidedPlusOtherOptionalParameters_returnsName() {
+        // User with preset selfIntroduction, and other fields.
+        User newUser = new User.Builder(ID, EMAIL).setPublicPortfolio().setName(NAME).addSelfIntroduction(SELF_INTRODUCTION).build();
+        assertEquals(NAME, newUser.getName());
+    }
+
+    @Test
+    public void getSelfIntroduction_noSelfIntroductionProvided_returnsNull() {
         // User with no preset selfIntroduction.
         User newUser = new User.Builder(ID, EMAIL).build();
-        Assert.assertEquals(newUser.getSelfIntroduction(), null);
+        assertEquals(null, newUser.getSelfIntroduction());
+    }
 
+    @Test 
+    public void getSelfIntroduction_selfIntroductionProvidedNoOtherOptionalParameters_returnsSelfIntroduction() {
         // User with preset selfIntroduction.
-        newUser = new User.Builder(ID, EMAIL).addSelfIntroduction(SELF_INTRODUCTION).build();
-        Assert.assertEquals(newUser.getSelfIntroduction(), SELF_INTRODUCTION);
-
-        // User with preset selfIntroduction, and other fields.
-        newUser = new User.Builder(ID, EMAIL).setPublicPortfolio().setName(NAME).addSelfIntroduction(SELF_INTRODUCTION).build();
-        Assert.assertEquals(newUser.getSelfIntroduction(), SELF_INTRODUCTION);
+        User newUser = new User.Builder(ID, EMAIL).addSelfIntroduction(SELF_INTRODUCTION).build();
+        assertEquals(SELF_INTRODUCTION, newUser.getSelfIntroduction());
     }
 
     @Test
-    public void getImgUrl() {
+    public void getSelfIntroduction_selfIntroductionprovidedPlusOtherOptionalParameters_returnsSelfIntroduction() {
+        // User with preset selfIntroduction, and other fields.
+        User newUser = new User.Builder(ID, EMAIL).setPublicPortfolio().setName(NAME).addSelfIntroduction(SELF_INTRODUCTION).build();
+        assertEquals(SELF_INTRODUCTION, newUser.getSelfIntroduction());
+    }
+
+    @Test
+    public void getImgUrl_noImgUrlProvided_returnsNull() {
         // User with no preset imgUrl.
         User newUser = new User.Builder(ID, EMAIL).build();
-        Assert.assertEquals(newUser.getImgUrl(), null);
+        assertEquals(null, newUser.getImgUrl());
+    }
 
+    @Test
+    public void getImgUrl_imgUrlProvidedNoOtherOptionalParameters_returnsImgUrl() {
         // User with preset imgUrl.
-        newUser = new User.Builder(ID, EMAIL).addImgUrl(IMG_URL).build();
-        Assert.assertEquals(newUser.getImgUrl(), IMG_URL);
+        User newUser = new User.Builder(ID, EMAIL).addImgUrl(IMG_URL).build();
+        assertEquals(IMG_URL, newUser.getImgUrl());
+    }
 
+    @Test
+    public void getImgUrl_imgUrlProvidedPlusOtherOptionalParameters_returnsImgUrl() {
         // User with preset imgUrl, and other fields.
-        newUser = new User.Builder(ID, EMAIL).addSelfIntroduction(SELF_INTRODUCTION).addImgUrl(IMG_URL).build();
-        Assert.assertEquals(newUser.getImgUrl(), IMG_URL);
+        User newUser = new User.Builder(ID, EMAIL).addSelfIntroduction(SELF_INTRODUCTION).addImgUrl(IMG_URL).build();
+        assertEquals(IMG_URL, newUser.getImgUrl());
     }
 
-    @Test
-    public void portfolioIsPublic() {
-        // User with no preset public/private fields.
+    @Test 
+    public void portfolioIsPublic_portfolioNotSetToPublic_returnsFalse() {
+         // User with no preset public/private fields.
+         // Portfolio is private by default.
         User newUser = new User.Builder(ID, EMAIL).build();
-        Assert.assertEquals(newUser.portfolioIsPublic(), false);
+        assertEquals(false, newUser.portfolioIsPublic());
+    }
 
+    @Test 
+    public void portfolioIsPublic_portfolioSetToPublic_returnsTrue() {
         // User with preset public/private fields.
-        newUser = new User.Builder(ID, EMAIL).setPublicPortfolio().build();
-        Assert.assertEquals(newUser.portfolioIsPublic(), true);
-
-        // User with preset public/private fields.
-        newUser = new User.Builder(ID, EMAIL).setPublicPortfolio().addSelfIntroduction(SELF_INTRODUCTION).build();
-        Assert.assertEquals(newUser.portfolioIsPublic(), true);
+        // User's portfolio is set to public. 
+        User newUser = new User.Builder(ID, EMAIL).setPublicPortfolio().build();
+        assertEquals(true, newUser.portfolioIsPublic());
     }
 
     @Test
-    public void equals() {
+    public void portfolioIsPublic_portfolioSetToPublicPlusOtherOptionalFields_returnsTrue() {
+        // User with preset public/private fields.
+        // User's portfolio is set to public. 
+        User newUser = new User.Builder(ID, EMAIL).setPublicPortfolio().addSelfIntroduction(SELF_INTRODUCTION).build();
+        assertEquals(true, newUser.portfolioIsPublic());
+    }
+
+    @Test
+    public void equals_usersHaveEqualIds_returnsTrue() {
          User newUserA = new User.Builder(ID, EMAIL).build();
          User newUserB = new User.Builder(ID, EMAIL_B).build();
-         Assert.assertEquals(newUserA, newUserB);
+         assertEquals(newUserA, newUserB);
+    }
+
+    @Test
+    public void equals_usersHaveDifferentIds_returnsFalse() {
+         User newUserA = new User.Builder(ID, EMAIL).build();
+         User newUserB = new User.Builder(ID_B, EMAIL_B).build();
+         assertNotEquals(newUserA, newUserB);
     }
 }

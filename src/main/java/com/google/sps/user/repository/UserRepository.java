@@ -4,7 +4,7 @@ import com.google.sps.user.User;
 import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 
-/** Handles the storage of User data */
+/** Handles the storage of User data. */
 public interface UserRepository {
     public void saveUser(User user);
 

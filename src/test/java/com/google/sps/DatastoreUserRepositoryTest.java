@@ -4,7 +4,7 @@ import com.google.sps.user.User;
 import com.google.sps.user.repository.UserRepository;
 import com.google.sps.user.repository.UserRepositoryFactory;
 import com.google.sps.data.RepositoryType;
-import org.junit.Assert;
+import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.After;
 import org.junit.Test;
@@ -21,15 +21,19 @@ public final class DatastoreUserRepositoryTest {
     private static final String NAME = "username";
     private static final String SELF_INTRODUCTION = "I am the user";
     private static final String IMG_URL = "/img.com";
-    private static final User toSaveUser = new User.Builder(ID, EMAIL).setName(NAME).addSelfIntroduction(SELF_INTRODUCTION).addImgUrl(IMG_URL).build();
-    private static User toGetUser; 
-    private static final UserRepository myUserRepository = UserRepositoryFactory.getUserRepository(RepositoryType.DATASTORE);
 
-    private final LocalServiceTestHelper helper = 
-      new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
+    private static User toSaveUser; 
+    private static User toGetUser; 
+
+    private static UserRepository myUserRepository; 
+
+    private static LocalServiceTestHelper helper;
 
     @Before
     public void setUp() {
+        helper = new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
+        toSaveUser = new User.Builder(ID, EMAIL).setName(NAME).addSelfIntroduction(SELF_INTRODUCTION).addImgUrl(IMG_URL).build();
+        myUserRepository = UserRepositoryFactory.getUserRepository(RepositoryType.DATASTORE);
         helper.setUp();
     }
 
@@ -39,15 +43,15 @@ public final class DatastoreUserRepositoryTest {
     }
     
     @Test
-    public void saveGetUser() {
+    public void saveUserGetUser_existingUser_returnsUserEqualToSavedUser() {
         myUserRepository.saveUser(toSaveUser);
         toGetUser = myUserRepository.getUser(ID);
-        Assert.assertEquals(toSaveUser, toGetUser);
+        assertEquals(toSaveUser, toGetUser);
     }
 
     @Test
-    public void getNonExistingUser() {
+    public void getUser_inexistentUser_returnsNull() {
         toGetUser = myUserRepository.getUser(ID_B);
-        Assert.assertEquals(toGetUser, null);
+        assertEquals(null, toGetUser);
     }
 }

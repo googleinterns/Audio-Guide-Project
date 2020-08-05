@@ -27,7 +27,7 @@ import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
 import java.io.IOException;
 
-/** This servlet handles users' data */
+/** This servlet handles users' data. */
 @WebServlet("/user-data")
 public class UserServlet extends HttpServlet {
     public static final String NAME_INPUT = "name";
