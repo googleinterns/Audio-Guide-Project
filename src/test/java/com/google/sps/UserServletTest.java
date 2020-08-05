@@ -21,6 +21,14 @@ import com.google.sps.servlets.UserServlet;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.fail;
+import com.google.appengine.api.datastore.Entity;
+import com.google.sps.user.repository.impl.DatastoreUserRepository;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.datastore.EntityNotFoundException;
 import org.junit.Before;
 import org.junit.After;
 import org.junit.Test;
@@ -51,7 +59,7 @@ public final class UserServletTest {
     private static final String SELF_INTRODUCTION = "I am the user";
     private static final String IMG_URL = "/img.com";
 
-    private static final User toSaveUser = new User.Builder(ID, EMAIL).setName(NAME).addSelfIntroduction(SELF_INTRODUCTION).addImgUrl(IMG_URL).build();
+    private static final User toSaveUser = new User.Builder(ID, EMAIL).setName(NAME).setPublicPortfolio().addSelfIntroduction(SELF_INTRODUCTION).addImgUrl(IMG_URL).build();
     private static User toGetUser; 
    
     private UserServlet userServlet;
@@ -82,12 +90,12 @@ public final class UserServletTest {
     public void tearDown() {
         helper.tearDown();
     }
- 
+
     @Test
-    public void doPostDoGet_existingUserWithAllDataSet_returnsUserWithAllData() throws IOException, ServletException {
+    public void doPost() throws IOException, ServletException {
         when(request.getParameter(UserServlet.NAME_INPUT)).thenReturn(NAME);
         when(request.getParameter(UserServlet.SELF_INTRODUCTION_INPUT)).thenReturn(SELF_INTRODUCTION);
-        when(request.getParameter(UserServlet.PUBLIC_PORTFOLIO_INPUT)).thenReturn(UserServlet.PUBLIC_PORTFOLIO_INPUT_PUBLIC_VALUE);
+        when(request.getParameter(UserServlet.PUBLIC_PORTFOLIO_INPUT)).thenReturn("private");
 
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
@@ -96,6 +104,41 @@ public final class UserServletTest {
 
         // Save the currenly logged in user's data
         userServlet.doPost(request, response);
+
+        // Get the currenly logged in user's previously saved data
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        Key userKey = KeyFactory.createKey(DatastoreUserRepository.ENTITY_KIND, ID);
+        try {
+            Entity userEntity = datastore.get(userKey);
+            assertEquals(NAME, userEntity.getProperty(DatastoreUserRepository.NAME_PROPERTY));
+            assertEquals(EMAIL, userEntity.getProperty(DatastoreUserRepository.EMAIL_PROPERTY));
+            assertEquals(SELF_INTRODUCTION, userEntity.getProperty(DatastoreUserRepository.SELF_INTRODUCTION_PROPERTY));
+            assertEquals(false, userEntity.getProperty(DatastoreUserRepository.PUBLIC_PORTFOLIO_PROPERTY));
+        } catch (EntityNotFoundException e) {
+            fail("Entity not found: " + e);
+        }
+    }
+
+     @Test
+    public void doGet_existingUser_returnsUser() throws IOException, ServletException {
+         // Create entity to save.
+        Entity userEntity = new Entity(DatastoreUserRepository.ENTITY_KIND, toSaveUser.getId());
+        userEntity.setProperty(DatastoreUserRepository.NAME_PROPERTY, toSaveUser.getName());
+        userEntity.setProperty(DatastoreUserRepository.EMAIL_PROPERTY, toSaveUser.getEmail());
+        userEntity.setProperty(DatastoreUserRepository.PUBLIC_PORTFOLIO_PROPERTY, toSaveUser.portfolioIsPublic());
+        userEntity.setProperty(DatastoreUserRepository.SELF_INTRODUCTION_PROPERTY, toSaveUser.getSelfIntroduction());
+        userEntity.setProperty(DatastoreUserRepository.IMG_URL_PROPERTY, toSaveUser.getImgUrl());
+
+        // Save entity to datastore.
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        datastore.put(userEntity);
+
+        // Get User corresponding to entity from servlet
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+         
+        when(response.getWriter()).thenReturn(pw);
+
         // Get the currenly logged in user's previously saved data
         userServlet.doGet(request, response);
 
@@ -110,36 +153,7 @@ public final class UserServletTest {
     }
 
     @Test
-    public void doPostDoGet_existingUserWithNoDataSet_returnsUserWithMissingData() throws IOException, ServletException {
-        when(request.getParameter(UserServlet.NAME_INPUT)).thenReturn("");
-        when(request.getParameter(UserServlet.SELF_INTRODUCTION_INPUT)).thenReturn("");
-        when(request.getParameter(UserServlet.PUBLIC_PORTFOLIO_INPUT)).thenReturn("private");
-
-        StringWriter sw = new StringWriter();
-        PrintWriter pw = new PrintWriter(sw);
-         
-        when(response.getWriter()).thenReturn(pw);
-
-        // Save the currenly logged in user's data
-        userServlet.doPost(request, response);
-        // Get the currenly logged in user's previously saved data
-        userServlet.doGet(request, response);
-
-        pw.flush();
-        Gson gson = new Gson();
-        User resultUser = gson.fromJson(sw.toString(), User.class);
-        assertEquals(ID, resultUser.getId());
-        assertEquals(EMAIL, resultUser.getEmail());
-        assertEquals(null, resultUser.getName());
-        assertFalse(resultUser.portfolioIsPublic());
-        assertEquals(null, resultUser.getSelfIntroduction());
-    }
-
-    @Test
     public void doGet_inexistentUser_returnsNull() throws IOException, ServletException {
-        // HttpServletRequest request = mock(HttpServletRequest.class);
-        // HttpServletResponse response = mock(HttpServletResponse.class);
-
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
          
