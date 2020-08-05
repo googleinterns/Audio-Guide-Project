@@ -28,7 +28,7 @@ import com.google.appengine.api.datastore.EntityNotFoundException;
 
 /** Handles the storage of comments using the Datastore API. */ 
 public class DatastoreUserRepository implements UserRepository {
-    public static final String ENTITY_NAME = "User";
+    public static final String ENTITY_KIND = "User";
     public static final String NAME_PROPERTY = "name";
     public static final String EMAIL_PROPERTY = "email";
     public static final String PUBLIC_PORTFOLIO_PROPERTY = "publicPortfolio";
@@ -42,7 +42,7 @@ public class DatastoreUserRepository implements UserRepository {
     }
 
     private Entity getUserEntity(User user) {
-        Entity userEntity = new Entity(ENTITY_NAME, user.getId());
+        Entity userEntity = new Entity(ENTITY_KIND, user.getId());
         userEntity.setProperty(NAME_PROPERTY, user.getName());
         userEntity.setProperty(EMAIL_PROPERTY, user.getEmail());
         userEntity.setProperty(PUBLIC_PORTFOLIO_PROPERTY, user.portfolioIsPublic());
@@ -55,7 +55,7 @@ public class DatastoreUserRepository implements UserRepository {
     @Nullable
     public User getUser(String id) {
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-        Key userKey = KeyFactory.createKey(ENTITY_NAME, id);
+        Key userKey = KeyFactory.createKey(ENTITY_KIND, id);
         try {
             return getUserFromUserEntity(datastore.get(userKey));
         } catch (EntityNotFoundException e) {
