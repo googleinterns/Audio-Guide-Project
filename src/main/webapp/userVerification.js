@@ -44,7 +44,7 @@ function  queryAuthenticationServer(currentUrl) {
     requestUrl.search = new URLSearchParams(queryParams).toString();
 
     return fetch(requestUrl, {method: 'GET'})
-        .catch(error => console.log('failure in fetching GET request response from UserAuthenticationServlet'))
+        .catch(error => console.log(error))
         .then((response) => {
             return response.json();
         });
