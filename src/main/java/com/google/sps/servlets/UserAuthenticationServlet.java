@@ -52,23 +52,26 @@ public class UserAuthenticationServlet extends HttpServlet {
         if (userService.isUserLoggedIn()) {
             String logoutUrl = userService.createLogoutURL(destinationUrl);
             sendResponse(response, true, logoutUrl);
-        } 
-        else {
+        } else {
             String loginUrl = userService.createLoginURL(destinationUrl);
             sendResponse(response, false, loginUrl);
         }
     }
 
     private void sendResponse(HttpServletResponse response, boolean isLoggedIn, String url) throws IOException {
-        UserAuthenticationStatus authenticationStatus = new UserAuthenticationStatus(isLoggedIn, 
-                                                                                    url); 
+        UserAuthenticationStatus.Builder statusBuilder = UserAuthenticationStatus.Builder(isLoggedIn);
+        if (isLoggedIn) {
+            UserAuthenticationStatus status = statusBuilder.setLogoutUrl(url).build();
+        } else {
+            UserAuthenticationStatus status = statusBuilder.setLoginUrl(url).build();
+        }
         response.setContentType("application/json;");
-        response.getWriter().println(convertToJsonUsingGson(authenticationStatus));
+        response.getWriter().println(convertToJsonUsingGson(status));
     }
 
-    private String convertToJsonUsingGson(UserAuthenticationStatus authenticationStatus) {
+    private String convertToJsonUsingGson(UserAuthenticationStatus status) {
         Gson gson = new Gson();
-        String json = gson.toJson(authenticationStatus);
+        String json = gson.toJson(status);
         return json;
     }
 }
