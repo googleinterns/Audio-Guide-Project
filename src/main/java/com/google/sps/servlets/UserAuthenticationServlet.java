@@ -60,10 +60,11 @@ public class UserAuthenticationServlet extends HttpServlet {
 
     private void sendResponse(HttpServletResponse response, boolean isLoggedIn, String url) throws IOException {
         UserAuthenticationStatus.Builder statusBuilder = UserAuthenticationStatus.Builder(isLoggedIn);
+        UserAuthenticationStatus status;
         if (isLoggedIn) {
-            UserAuthenticationStatus status = statusBuilder.setLogoutUrl(url).build();
+            status = statusBuilder.setLogoutUrl(url).build();
         } else {
-            UserAuthenticationStatus status = statusBuilder.setLoginUrl(url).build();
+            status = statusBuilder.setLoginUrl(url).build();
         }
         response.setContentType("application/json;");
         response.getWriter().println(convertToJsonUsingGson(status));

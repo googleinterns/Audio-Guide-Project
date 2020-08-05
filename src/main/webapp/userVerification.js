@@ -27,10 +27,10 @@ function authenticateUser() {
     const currentUrl = new URL(currentWindowLocation);
     queryAuthenticationServer(currentUrl).then((userAuthenticationStatus) => {
         if (!userAuthenticationStatus.isLoggedIn) {
-            location.replace(userAuthenticationStatus.url);
+            location.replace(userAuthenticationStatus.loginUrl);
         }
         else {
-            addLinktoLogoutButton(userAuthenticationStatus.url);
+            addLinktoLogoutButton(userAuthenticationStatus.logoutUrl);
         }
     });
 }
