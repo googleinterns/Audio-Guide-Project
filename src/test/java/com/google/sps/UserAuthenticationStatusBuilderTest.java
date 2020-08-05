@@ -22,9 +22,14 @@ import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+import java.lang.IllegalStateException;
 
 @RunWith(JUnit4.class)
 public class UserAuthenticationStatusTest extends UserAuthenticationStatus{
+
+    private static final boolean LOGGED_IN = true;
+    private static final boolean LOGGED_OUT = false;
+    private static final String MOCK_URL = "mock_url";
 
     @Before
     public void setUp() {
@@ -32,8 +37,20 @@ public class UserAuthenticationStatusTest extends UserAuthenticationStatus{
     }
 
     @Test
-    public void builderSetLoginUrl_userLoggedInAndSetLoginUrl_throwIllegalStateException() throws IOException {
+    public void setLoginUrl_userLoggedInAndSetLoginUrl_throwIllegalStateException() {
+        try {
+            UserAuthenticationStatus.Builder = UserAuthenticationStatus
+                                                        .Builder(LOGGED_IN)
+                                                        .setLoginUrl(MOCK_URL);
+        } catch (IllegalStateException ex) {
+            
+        }
+        
+    }
 
+    @Test
+    public void setLogoutUrl_userLoggedOutAndSetLogoutUrl_throwIllegalStateException() {
+        
     }
 
     @After

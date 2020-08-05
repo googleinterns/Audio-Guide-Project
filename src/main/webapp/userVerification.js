@@ -28,8 +28,7 @@ function authenticateUser() {
     queryAuthenticationServer(currentUrl).then((userAuthenticationStatus) => {
         if (!userAuthenticationStatus.isLoggedIn) {
             location.replace(userAuthenticationStatus.loginUrl);
-        }
-        else {
+        } else {
             addLinktoLogoutButton(userAuthenticationStatus.logoutUrl);
         }
     });
