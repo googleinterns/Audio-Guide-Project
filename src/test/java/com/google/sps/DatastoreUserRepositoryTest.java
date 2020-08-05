@@ -5,7 +5,7 @@ import com.google.sps.user.repository.UserRepository;
 import com.google.sps.user.repository.UserRepositoryFactory;
 import com.google.sps.user.repository.impl.DatastoreUserRepository;
 import com.google.sps.data.RepositoryType;
-import org.junit.Assert;
+import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.After;
 import org.junit.Test;
@@ -47,12 +47,12 @@ public final class DatastoreUserRepositoryTest {
     public void saveUserGetUser_existingUser_returnsUserEqualToSavedUser() {
         myUserRepository.saveUser(toSaveUser);
         toGetUser = myUserRepository.getUser(ID);
-        Assert.assertEquals(toSaveUser, toGetUser);
+        assertEquals(toSaveUser, toGetUser);
     }
 
     @Test
     public void getUser_inexistentUser_returnsNull() {
         toGetUser = myUserRepository.getUser(ID_B);
-        Assert.assertEquals(toGetUser, null);
+        assertEquals(null, toGetUser);
     }
 }
