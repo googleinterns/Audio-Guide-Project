@@ -14,27 +14,35 @@
 
 package com.google.sps.authentication;
 
-import 
+import org.jetbrains.annotations.Nullable;
 
 /** Class containing user's authentication status. */
 public class UserAuthenticationStatus {
 
     private final boolean isLoggedIn;
-    private final String loginUrl;
-    private final String logoutUrl;
+
+    @Nullable
+    private final String loginUrl, logoutUrl;
 
     public static class Builder {
         private final boolean isLoggedIn;
-        private String loginUrl;
-        private String logoutUrl;
+        private String loginUrl, logoutUrl;
         public Builder(boolean isLoggedIn) {
             this.isLoggedIn = isLoggedIn;
         }
         public Builder setLoginUrl(String loginUrl) {
+            if (this.isLoggedIn) {
+                throw new IllegalStateException(
+                            "User is already logged in, failed to create a login url!"); 
+            }
             this.loginUrl = loginUrl;
             return this;
         }
         public Builder setLogoutUrl(String logoutUrl) {
+            if (this.isLoggedOut) {
+                throw new IllegalStateException(
+                            "User is already logged out, failed to create a logout url!");
+            }
             this.logoutUrl = logoutUrl;
             return this;
         }
@@ -45,14 +53,21 @@ public class UserAuthenticationStatus {
 
     public UserAuthenticationStatus(Builder Builder) {
         this.isLoggedIn = isLoggedIn;
-        this.url = url;
+        this.loginUrl = loginUrl;
+        this.logoutUrl = logoutUrl;
     }
 
-    public boolean getIsLoggedIn() {
-        return isLoggedIn;        
+    public boolean isLoggedIn() {
+        return isLoggedIn;
     }
 
-    public String getUrl() {
-        return url;
+    @Nullable
+    public String getLoginUrl() {
+        return loginUrl;
+    }
+
+    @Nullable
+    public String getLogoutUrl() {
+        return logoutUrl;
     }
 }
