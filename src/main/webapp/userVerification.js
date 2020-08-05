@@ -13,6 +13,11 @@
 // limitations under the License.
 
 /**
+* This js file is to authenticate user and check if user 
+* has data stored already on the database.
+*/
+
+/**
 * Add a href link to the logout button if the user is logged in,
 * and prompt the user to Google login page if user is not logged
 * in.
@@ -25,10 +30,7 @@ function authenticateUser() {
             location.replace(userAuthenticationStatus.url);
         }
         else {
-            const logoutButton = document.getElementById('logout');
-            logoutButton.addEventListener('click', () => {
-            window.location.replace(logoutUrl);
-            });
+            addLinktoLogoutButton(userAuthenticationStatus.url);
         }
     });
 }
@@ -52,4 +54,11 @@ class QueryParams{
   constructor(currentUrl) {
     this.currentUrl = currentUrl;
   }
+}
+
+function addLinktoLogoutButton(logoutUrl) {
+    const logoutButton = document.getElementById('logout');
+    logoutButton.addEventListener('click', () => {
+    window.location.replace(logoutUrl);
+    });
 }
