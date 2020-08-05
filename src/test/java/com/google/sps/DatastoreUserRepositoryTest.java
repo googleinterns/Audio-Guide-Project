@@ -23,18 +23,15 @@ public final class DatastoreUserRepositoryTest {
     private static final String SELF_INTRODUCTION = "I am the user";
     private static final String IMG_URL = "/img.com";
 
-    private static User toSaveUser; 
+    private static User toSaveUser = new User.Builder(ID, EMAIL).setName(NAME).addSelfIntroduction(SELF_INTRODUCTION).addImgUrl(IMG_URL).build(); 
     private static User toGetUser; 
 
-    private static UserRepository myUserRepository; 
+    private static UserRepository myUserRepository = UserRepositoryFactory.getUserRepository(RepositoryType.DATASTORE); 
 
-    private static LocalServiceTestHelper helper;
+    private final static LocalServiceTestHelper helper = new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
 
     @Before
     public void setUp() {
-        helper = new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
-        toSaveUser = new User.Builder(ID, EMAIL).setName(NAME).addSelfIntroduction(SELF_INTRODUCTION).addImgUrl(IMG_URL).build();
-        myUserRepository = UserRepositoryFactory.getUserRepository(RepositoryType.DATASTORE);
         helper.setUp();
     }
 
