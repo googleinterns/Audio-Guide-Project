@@ -65,7 +65,7 @@ public class DatastoreUserRepository implements UserRepository {
 
     @Nullable
     private User getUserFromUserEntity(Entity userEntity) {
-        if (userEntity==null) {
+        if (userEntity == null) {
             return null;
         }
         String id = (String) userEntity.getKey().getName();
