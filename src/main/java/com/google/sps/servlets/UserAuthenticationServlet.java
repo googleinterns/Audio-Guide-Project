@@ -48,24 +48,19 @@ public class UserAuthenticationServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         String destinationUrl = request.getParameter("currentUrl");
-
+        UserAuthenticationStatus status;
+        
         if (userService.isUserLoggedIn()) {
             String logoutUrl = userService.createLogoutURL(destinationUrl);
-            sendResponse(response, true, logoutUrl);
+            status = new UserAuthenticationStatus.Builder(true).setLogoutUrl(logoutUrl).build();
         } else {
             String loginUrl = userService.createLoginURL(destinationUrl);
-            sendResponse(response, false, loginUrl);
+            status = new UserAuthenticationStatus.Builder(false).setLoginUrl(loginUrl).build();
         }
+        sendResponse(response, status);
     }
 
-    private void sendResponse(HttpServletResponse response, boolean isLoggedIn, String url) throws IOException {
-        UserAuthenticationStatus.Builder statusBuilder = new UserAuthenticationStatus.Builder(isLoggedIn);
-        UserAuthenticationStatus status;
-        if (isLoggedIn) {
-            status = statusBuilder.setLogoutUrl(url).build();
-        } else {
-            status = statusBuilder.setLoginUrl(url).build();
-        }
+    private void sendResponse(HttpServletResponse response, UserAuthenticationStatus status) throws IOException {
         response.setContentType("application/json;");
         response.getWriter().println(convertToJsonUsingGson(status));
     }
