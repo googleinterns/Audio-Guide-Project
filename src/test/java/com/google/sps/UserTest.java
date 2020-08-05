@@ -2,7 +2,7 @@ package com.google.sps;
 
 import com.google.sps.user.User;
 import static org.junit.Assert.assertEquals;
-import org.junit.Assert;
+import static org.junit.Assert.assertNotEquals;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,6 +11,7 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public final class UserTest {
     private static final String ID = "userid";
+    private static final String ID_B = "useridB";
     private static final String EMAIL = "user@gmail.com";
     private static final String EMAIL_B = "userB@gmail.com";
     private static final String NAME = "username";
@@ -47,7 +48,7 @@ public final class UserTest {
     public void getName_nameProvidedPlusOtherOptionalParameters_returnsName() {
         // User with preset selfIntroduction, and other fields.
         User newUser = new User.Builder(ID, EMAIL).setPublicPortfolio().setName(NAME).addSelfIntroduction(SELF_INTRODUCTION).build();
-        Assert.assertEquals(NAME, newUser.getName());
+        assertEquals(NAME, newUser.getName());
     }
 
     @Test
@@ -117,9 +118,16 @@ public final class UserTest {
     }
 
     @Test
-    public void equals() {
+    public void equals_usersHaveEqualIds_returnsTrue() {
          User newUserA = new User.Builder(ID, EMAIL).build();
          User newUserB = new User.Builder(ID, EMAIL_B).build();
-         Assert.assertEquals(newUserA, newUserB);
+         assertEquals(newUserA, newUserB);
+    }
+
+    @Test
+    public void equals_usersHaveDifferentIds_returnsFalse() {
+         User newUserA = new User.Builder(ID, EMAIL).build();
+         User newUserB = new User.Builder(ID_B, EMAIL_B).build();
+         assertNotEquals(newUserA, newUserB);
     }
 }
