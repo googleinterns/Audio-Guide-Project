@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 
-/** This servlet handles users' data */
+/** This servlet handles users' data. */
 @WebServlet("/user-data")
 public class UserServlet extends HttpServlet {
 
