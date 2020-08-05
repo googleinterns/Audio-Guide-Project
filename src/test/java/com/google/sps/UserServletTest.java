@@ -58,6 +58,9 @@ public final class UserServletTest {
     private Map<String, Object> attributeToValue = new HashMap<>();
     private LocalServiceTestHelper helper;
 
+    private HttpServletRequest request;
+    private HttpServletResponse response;
+
     @Before
     public void setup() {
         // Set the userdata that the Userservice will return. 
@@ -70,6 +73,9 @@ public final class UserServletTest {
         helper.setUp();
 
         userServlet = new UserServlet();
+
+        request = mock(HttpServletRequest.class);
+        response = mock(HttpServletResponse.class);
     }
 
     @After
@@ -79,9 +85,6 @@ public final class UserServletTest {
  
     @Test
     public void doPostDoGet_existingUserWithAllDataSet_returnsUserWithAllData() throws IOException, ServletException {
-        HttpServletRequest request = mock(HttpServletRequest.class);
-        HttpServletResponse response = mock(HttpServletResponse.class);
-
         when(request.getParameter(UserServlet.NAME_INPUT)).thenReturn(NAME);
         when(request.getParameter(UserServlet.SELF_INTRODUCTION_INPUT)).thenReturn(SELF_INTRODUCTION);
         when(request.getParameter(UserServlet.PUBLIC_PORTFOLIO_INPUT)).thenReturn(UserServlet.PUBLIC_PORTFOLIO_INPUT_PUBLIC_VALUE);
@@ -108,9 +111,6 @@ public final class UserServletTest {
 
     @Test
     public void doPostDoGet_existingUserWithNoDataSet_returnsUserWithMissingData() throws IOException, ServletException {
-        HttpServletRequest request = mock(HttpServletRequest.class);
-        HttpServletResponse response = mock(HttpServletResponse.class);
-
         when(request.getParameter(UserServlet.NAME_INPUT)).thenReturn("");
         when(request.getParameter(UserServlet.SELF_INTRODUCTION_INPUT)).thenReturn("");
         when(request.getParameter(UserServlet.PUBLIC_PORTFOLIO_INPUT)).thenReturn("private");
@@ -135,10 +135,10 @@ public final class UserServletTest {
         assertEquals(null, resultUser.getSelfIntroduction());
     }
 
-     @Test
+    @Test
     public void doGet_inexistentUser_returnsNull() throws IOException, ServletException {
-        HttpServletRequest request = mock(HttpServletRequest.class);
-        HttpServletResponse response = mock(HttpServletResponse.class);
+        // HttpServletRequest request = mock(HttpServletRequest.class);
+        // HttpServletResponse response = mock(HttpServletResponse.class);
 
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
