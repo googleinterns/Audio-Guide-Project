@@ -27,7 +27,7 @@ function authenticateUser() {
         else {
             const logoutButton = document.getElementById('logout');
             logoutButton.addEventListener('click', () => {
-                window.location.replace(userAuthenticationStatus.url);
+            window.location.replace(logoutUrl);
             });
         }
     });

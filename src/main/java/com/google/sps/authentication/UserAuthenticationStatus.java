@@ -14,16 +14,36 @@
 
 package com.google.sps.authentication;
 
+import 
+
 /** Class containing user's authentication status. */
 public class UserAuthenticationStatus {
 
     private final boolean isLoggedIn;
+    private final String loginUrl;
+    private final String logoutUrl;
 
-    // Depends on {@code isLoggedIn}, it will be a login link if logged in, and 
-    // logout link otherwise.
-    private final String url;
+    public static class Builder {
+        private final boolean isLoggedIn;
+        private String loginUrl;
+        private String logoutUrl;
+        public Builder(boolean isLoggedIn) {
+            this.isLoggedIn = isLoggedIn;
+        }
+        public Builder setLoginUrl(String loginUrl) {
+            this.loginUrl = loginUrl;
+            return this;
+        }
+        public Builder setLogoutUrl(String logoutUrl) {
+            this.logoutUrl = logoutUrl;
+            return this;
+        }
+        public UserAuthenticationStatus build() {
+            return new UserAuthenticationStatus(this);
+        }
+    }
 
-    public UserAuthenticationStatus(boolean isLoggedIn, String url) {
+    public UserAuthenticationStatus(Builder Builder) {
         this.isLoggedIn = isLoggedIn;
         this.url = url;
     }
