@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="UTF-8">
+    <meta charset = "UTF-8">
     <title>My Portfolio</title>
     <script src = "userVerification.js"></script>
   </head>
@@ -9,21 +9,21 @@
       <div id = "createProfile">
         <form action = "/user-data" method = "POST">
             <label for = "name">Name:</label><br>
-            <input type="text" name="name" id = "name"><br>
+            <input type = "text" name = "name" id = "name"><br>
 
             <label for = "imgUrl">Upload image</label>
-            <input type="file" name="imgUrl" id = "imgUrl">
+            <input type = "file" name = "imgUrl" id = "imgUrl">
 
             <label for = "selfIntroduction">Self Introduction:</label><br>
-            <textarea name="selfIntroduction" rows="4" cols="50" id = "selfIntroduction"></textarea>
+            <textarea name = "selfIntroduction" rows = "4" cols = "50" id = "selfIntroduction"></textarea>
 
             <label for = "publicPortfolio">Account Status:</label>
             <select name = "publicPortfolio" id = "publicPortfolio">
-                <option value="public">public</option>
-                <option value="private">private</option>
+                <option value = "public">public</option>
+                <option value = "private">private</option>
             </select>
 
-            <input type="submit" value="Submit">
+            <input type = "submit" value = "Submit">
         </form>
 
         <button id = "logout">Logout</button>
