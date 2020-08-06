@@ -23,7 +23,6 @@ function addBlobstoreUploadUrlToForm() {
       .then(uploadUrl => uploadUrl.text())
       .catch(error => console.log('blobstore-upload-portfolio: failed to convert to text: ' + error))
       .then(uploadUrl => {
-        console.log("the upload url is: " + uploadUrl);
         setFormActionUrl(uploadUrl);
       });
 }
