@@ -12,6 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+
+/*
+ * Fetches a url to which the files can be uploaded, relying on blobstore.
+ * Sets th action of the form to the fetche url.
+ */
 function addBlobstoreUploadUrlToForm() {
   fetch('/blobstore-upload-portfolio')
       .catch(error => console.log("blobstore-upload-portfolio: failed to fetch: " + error))
@@ -23,7 +28,7 @@ function addBlobstoreUploadUrlToForm() {
       });
 }
 
-/** Set the destination url of the post method for the portfolio form t */
+/** Set the destination url of the post method for the portfolio form to uploadUrl */
 function setFormActionUrl(uploadUrl){
   var form = document.getElementById("portfolioForm");
   form.action = uploadUrl;
