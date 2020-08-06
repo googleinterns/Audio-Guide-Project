@@ -21,7 +21,7 @@ import java.util.List;
 
 public interface PlaceGuideRepository {
 
-    public void createAndSavePlaceGuide(PlaceGuide placeGuide);
+    public void createAndStorePlaceGuide(PlaceGuide placeGuide);
 
     // For when user wants to save the user's own place guide or other user's place guide.
     public void savePlaceGuide(String creatorId, String placeId);
@@ -37,7 +37,8 @@ public interface PlaceGuideRepository {
 
     // For marking all the place guides that the user created on the current map window.
     @Nullable
-    public List<PlaceGuide> getCreatedPlaceGuidesList(String creatorId, List<PlaceCoordinate> coordinatesList);
+    public List<PlaceGuide> getCreatedPlaceGuidesList(String creatorId, 
+                                                    List<PlaceCoordinate> coordinatesList);
 
     // For when trying to get saved place guides for the info windows.
     @Nullable
@@ -45,8 +46,11 @@ public interface PlaceGuideRepository {
 
     // For marking all the place guides that the user saved on the current map window.
     @Nullable
-    public List<PlaceGuide> getSavedPlaceGuidesList(String saverId, List<PlaceCoordinate> coordinatesList);
+    public List<PlaceGuide> getSavedPlaceGuidesList(String saverId, 
+                                                    List<PlaceCoordinate> coordinatesList);
 
-    public void deleteSelectedPlaceGuide(String creatorId, String placeId);
+    public void deleteSelectedCreatedPlaceGuide(String creatorId, String placeId);
+
+    public void removeSelectedSavedPlaceGuide(String saverId, String placeId);
     
 }
