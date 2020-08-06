@@ -13,6 +13,10 @@ public class UserAuthenticationStatus {
   @Nullable
   private final String loginUrl;
 
+  /**
+  * @param url is a login URL when the user is logged in and logout URL when the user is 
+  * logged out.
+  */
   public UserAuthenticationStatus(boolean isLoggedIn, String url) {
     this.isLoggedIn = isLoggedIn;
     if (isLoggedIn) {
