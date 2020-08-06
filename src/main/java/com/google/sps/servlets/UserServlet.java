@@ -14,74 +14,83 @@
 
 package com.google.sps.servlets;
 
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
+import com.google.gson.Gson;
+import com.google.sps.data.RepositoryType;
 import com.google.sps.user.User;
 import com.google.sps.user.repository.UserRepository;
 import com.google.sps.user.repository.UserRepositoryFactory;
-import com.google.sps.data.RepositoryType;
+
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import com.google.appengine.api.users.UserService;
-import com.google.appengine.api.users.UserServiceFactory;
-import com.google.gson.Gson;
 import java.io.IOException;
 
-/** This servlet handles users' data. */
+
+/**
+ * This servlet handles users' data.
+ */
 @WebServlet("/user-data")
 public class UserServlet extends HttpServlet {
-    public static final String NAME_INPUT = "name";
-    public static final String PUBLIC_PORTFOLIO_INPUT = "publicPortfolio";
-    public static final String PUBLIC_PORTFOLIO_INPUT_PUBLIC_VALUE = "public";
-    public static final String SELF_INTRODUCTION_INPUT = "selfIntroduction";
-    public static final String IMG_URL_INPUT = "imgUrl";
+  public static final String NAME_INPUT = "name";
+  public static final String PUBLIC_PORTFOLIO_INPUT = "publicPortfolio";
+  public static final String PUBLIC_PORTFOLIO_INPUT_PUBLIC_VALUE = "public";
+  public static final String SELF_INTRODUCTION_INPUT = "selfIntroduction";
+  public static final String IMG_URL_INPUT = "imgUrl";
 
-    private final UserRepository userRepository;
-    private final UserService userService;
+  private final UserRepository userRepository;
+  private final UserService userService;
 
-    public UserServlet() {
-        userRepository = UserRepositoryFactory.getUserRepository(RepositoryType.DATASTORE);
-        userService = UserServiceFactory.getUserService();
+  public UserServlet() {
+    userRepository = UserRepositoryFactory.getUserRepository(RepositoryType.DATASTORE);
+    userService = UserServiceFactory.getUserService();
+  }
+
+  /**
+   * Saves the recently submitted userdata(updates it if the user already has some data saved).
+   */
+  @Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    User user = getUserFromRequest(request);
+    userRepository.saveUser(user);
+    response.sendRedirect("/index.html");
+  }
+
+  /**
+   * Returns the data of the user who is currently logged in.
+   */
+  @Override
+  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    User user = userRepository.getUser(userService.getCurrentUser().getUserId());
+    response.setContentType("application/json;");
+    response.getWriter().println(convertToJsonUsingGson(user));
+  }
+
+  private User getUserFromRequest(HttpServletRequest request) {
+    String id = userService.getCurrentUser().getUserId();
+    String email = userService.getCurrentUser().getEmail();
+    User.Builder newUserBuilder = new User.Builder(id, email);
+    String name = request.getParameter(NAME_INPUT);
+    if (!name.equals("")) {
+      newUserBuilder.setName(name);
     }
-
-     /** Saves the recently submitted userdata(updates it if the user already has some data saved). */
-    @Override
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException { 
-        User user = getUserFromRequest(request);
-        userRepository.saveUser(user);
-        response.sendRedirect("/index.html");
+    String selfIntroduction = request.getParameter(SELF_INTRODUCTION_INPUT);
+    if (!selfIntroduction.equals("")) {
+      newUserBuilder.addSelfIntroduction(selfIntroduction);
     }
-
-    /** Returns the data of the user who is currently logged in. */
-    @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException { 
-        User user = userRepository.getUser(userService.getCurrentUser().getUserId());
-        response.setContentType("application/json;");
-        response.getWriter().println(convertToJsonUsingGson(user));
+    String publicPortfolioStringValue = request.getParameter(PUBLIC_PORTFOLIO_INPUT);
+    if (publicPortfolioStringValue.equals(PUBLIC_PORTFOLIO_INPUT_PUBLIC_VALUE)) {
+      newUserBuilder.setPublicPortfolio(true); // False by default.
     }
+    return newUserBuilder.build();
+  }
 
-    private User getUserFromRequest(HttpServletRequest request) {
-        String id = userService.getCurrentUser().getUserId();
-        String email = userService.getCurrentUser().getEmail();
-        User.Builder newUserBuilder = new User.Builder(id, email);
-        String name = request.getParameter(NAME_INPUT);
-        if (!name.equals("")) {
-            newUserBuilder.setName(name);
-        }
-        String selfIntroduction = request.getParameter(SELF_INTRODUCTION_INPUT);
-        if (!selfIntroduction.equals("")) {
-            newUserBuilder.addSelfIntroduction(selfIntroduction);
-        }
-        String publicPortfolioStringValue = request.getParameter(PUBLIC_PORTFOLIO_INPUT);
-        if (publicPortfolioStringValue.equals(PUBLIC_PORTFOLIO_INPUT_PUBLIC_VALUE)) {
-            newUserBuilder.setPublicPortfolio();
-        }
-        return newUserBuilder.build();
-    }
-
-    private String convertToJsonUsingGson(Object o) {
-        Gson gson = new Gson();
-        String json = gson.toJson(o);
-        return json;
-    }
+  private String convertToJsonUsingGson(Object o) {
+    Gson gson = new Gson();
+    String json = gson.toJson(o);
+    return json;
+  }
 }
+
