@@ -4,10 +4,11 @@
     <meta charset = "UTF-8">
     <title>My Portfolio</title>
     <script src = "userVerification.js"></script>
+    <script src = "portfolioForm.js"></script>
   </head>
-  <body onload = "authenticateUser()">
+  <body onload = "authenticateUser(); addBlobstoreUploadUrlToForm()">
       <div id = "createProfile">
-        <form action = "/user-data" method = "POST" id = "portfolioForm">
+        <form method = "POST" id = "portfolioForm" enctype="multipart/form-data">
             <label for = "name">Name:</label><br>
             <input type = "text" name = "name" id = "name"><br>
 
