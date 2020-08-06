@@ -15,10 +15,13 @@
 package com.google.sps.servlets;
 
 import com.google.gson.Gson;
+
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 
-/** This servlet handles users' data. */
+/**
+ * This servlet handles users' data.
+ */
 @WebServlet("/user-data")
 public class UserServlet extends HttpServlet {
 
