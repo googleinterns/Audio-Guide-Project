@@ -16,89 +16,102 @@ package com.google.sps.user;
 
 import org.jetbrains.annotations.Nullable;
 
-/** Stores the data related to one user. */
+/**
+ * Stores the data related to one user.
+ */
 public class User {
-    private final String id, email;
-    private final boolean publicPortfolio;
-    @Nullable 
-    private final String name, selfIntroduction, imgKey;
+  private final String id;
+  private final String email;
+  private final boolean publicPortfolio;
+  @Nullable
+  private final String name;
+  @Nullable
+  private final String selfIntroduction;
+  @Nullable
+  private final String imgUrl;
 
-    public static class Builder {
-        // Required.
-        private final String id, email;
-        // Optional.
-        private String name, selfIntroduction, imgKey;
-        private boolean publicPortfolio = false;
+  public static class Builder {
+    // Required.
+    private final String id;
+    private final String email;
+    // Optional.
+    @Nullable
+    private String name;
+    @Nullable
+    private String selfIntroduction;
+    @Nullable
+    private String imgUrl;
+    private boolean publicPortfolio = false;
 
-        public Builder(String id, String email) {
-            this.id = id;
-            this.email = email;
-        }
-
-        public Builder setName(String name) {
-            this.name = name;
-            return this;
-        }
-
-        public Builder addImgKey(String imgKey) {
-            this.imgKey = imgKey;
-            return this;
-        }
-
-        public Builder addSelfIntroduction(String selfIntroduction) {
-            this.selfIntroduction = selfIntroduction;
-            return this;
-        }
-
-        public Builder setPublicPortfolio() {
-            this.publicPortfolio = true;
-            return this;
-        }
-
-        public User build() {
-            return new User(this);
-        }
+    public Builder(String id, String email) {
+      this.id = id;
+      this.email = email;
     }
 
-    private User(Builder builder) {
-        this.id = builder.id;
-        this.email = builder.email;
-        this.name = builder.name;
-        this.selfIntroduction = builder.selfIntroduction;
-        this.imgKey = builder.imgKey;
-        this.publicPortfolio = builder.publicPortfolio;
+    public Builder setName(String name) {
+      this.name = name;
+      return this;
     }
 
-    public String getId() {
-        return id; 
+    public Builder addImgUrl(String imgUrl) {
+      this.imgUrl = imgUrl;
+      return this;
     }
 
-    public String getEmail() {
-        return this.email;
+    public Builder addSelfIntroduction(String selfIntroduction) {
+      this.selfIntroduction = selfIntroduction;
+      return this;
     }
 
-    public String getName() {
-        return name;
+    public Builder setPublicPortfolio(boolean publicPortfolio) {
+      this.publicPortfolio = publicPortfolio;
+      return this;
     }
 
-    public String getSelfIntroduction() {
-        return selfIntroduction;
+    public User build() {
+      return new User(this);
     }
+  }
 
-    public String getImgKey() {
-        return imgKey;
-    }
+  private User(Builder builder) {
+    this.id = builder.id;
+    this.email = builder.email;
+    this.name = builder.name;
+    this.selfIntroduction = builder.selfIntroduction;
+    this.imgUrl = builder.imgUrl;
+    this.publicPortfolio = builder.publicPortfolio;
+  }
 
-    public boolean portfolioIsPublic() {
-        return publicPortfolio;
-    }
+  public String getId() {
+    return id;
+  }
 
-    @Override
-    public boolean equals(Object o){
-        if (!(o instanceof User)) { 
-            return false; 
-        } 
-        User user = (User) o;
-        return user.getId().equals(this.getId());
+  public String getEmail() {
+    return this.email;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public String getSelfIntroduction() {
+    return selfIntroduction;
+  }
+
+  public String getImgUrl() {
+    return imgUrl;
+  }
+
+  public boolean portfolioIsPublic() {
+    return publicPortfolio;
+  }
+
+  @Override
+  public boolean equals(Object o){
+    if (!(o instanceof User)) {
+      return false;
     }
+    User user = (User) o;
+    return user.getId().equals(this.getId());
+  }
 }
