@@ -1,3 +1,17 @@
+// Copyright 2020 Google LLC
+
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+
+//     https://www.apache.org/licenses/LICENSE-2.0
+
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 package com.google.sps;
 
 import com.google.appengine.api.datastore.*;
@@ -33,15 +47,17 @@ public final class DatastoreUserRepositoryTest {
   private static final String SELF_INTRODUCTION_C = "I am the user_C";
   private static final String IMG_URL_C = "/img.com_C";
 
-  private final static User toSaveUser =
+
+  private final User toSaveUser =
           new User.Builder(ID, EMAIL).setName(NAME).addSelfIntroduction(SELF_INTRODUCTION).addImgUrl(IMG_URL).build();
-  private final static User toSaveUser_C =
+  private final User toSaveUser_C =
           new User.Builder(ID_C, EMAIL_C).setName(NAME_C).addSelfIntroduction(SELF_INTRODUCTION_C).addImgUrl(IMG_URL_C).build();
-  private static User toGetUser;
+  private User toGetUser;
 
-  private final static UserRepository myUserRepository = UserRepositoryFactory.getUserRepository(RepositoryType.DATASTORE);
+  private final UserRepository myUserRepository = UserRepositoryFactory.getUserRepository(RepositoryType.DATASTORE);
 
-  private final static LocalServiceTestHelper helper = new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
+  private final LocalServiceTestHelper helper = new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
+
 
   @Before
   public void setUp() {
