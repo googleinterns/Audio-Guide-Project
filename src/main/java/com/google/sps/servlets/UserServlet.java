@@ -73,11 +73,11 @@ public class UserServlet extends HttpServlet {
     String email = userService.getCurrentUser().getEmail();
     User.Builder newUserBuilder = new User.Builder(id, email);
     String name = request.getParameter(NAME_INPUT);
-    if (!name.equals("")) {
+    if (!name.isEmpty()) {
       newUserBuilder.setName(name);
     }
     String selfIntroduction = request.getParameter(SELF_INTRODUCTION_INPUT);
-    if (!selfIntroduction.equals("")) {
+    if (!selfIntroduction.isEmpty()) {
       newUserBuilder.addSelfIntroduction(selfIntroduction);
     }
     String publicPortfolioStringValue = request.getParameter(PUBLIC_PORTFOLIO_INPUT);
