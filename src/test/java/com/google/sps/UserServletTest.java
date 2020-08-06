@@ -46,10 +46,10 @@ public final class UserServletTest {
   private static final String EMAIL = "user@gmail.com";
   private static final String NAME = "username";
   private static final String SELF_INTRODUCTION = "I am the user";
-  private static final String IMG_URL = "/img.com";
+  private static final String IMG_KEY = "/img.com";
 
   private final User toSaveUser =
-          new User.Builder(ID, EMAIL).setName(NAME).setPublicPortfolio(true).addSelfIntroduction(SELF_INTRODUCTION).addImgUrl(IMG_URL).build();
+          new User.Builder(ID, EMAIL).setName(NAME).setPublicPortfolio(true).addSelfIntroduction(SELF_INTRODUCTION).addImgKey(IMG_KEY).build();
   private User toGetUser;
 
   private UserServlet userServlet;
@@ -117,7 +117,7 @@ public final class UserServletTest {
     userEntity.setProperty(DatastoreUserRepository.EMAIL_PROPERTY, toSaveUser.getEmail());
     userEntity.setProperty(DatastoreUserRepository.PUBLIC_PORTFOLIO_PROPERTY, toSaveUser.portfolioIsPublic());
     userEntity.setProperty(DatastoreUserRepository.SELF_INTRODUCTION_PROPERTY, toSaveUser.getSelfIntroduction());
-    userEntity.setProperty(DatastoreUserRepository.IMG_URL_PROPERTY, toSaveUser.getImgUrl());
+    userEntity.setProperty(DatastoreUserRepository.IMG_KEY_PROPERTY, toSaveUser.getImgKey());
 
     // Save entity to datastore.
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();

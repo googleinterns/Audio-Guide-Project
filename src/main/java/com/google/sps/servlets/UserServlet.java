@@ -44,7 +44,7 @@ public class UserServlet extends HttpServlet {
   public static final String PUBLIC_PORTFOLIO_INPUT = "publicPortfolio";
   public static final String PUBLIC_PORTFOLIO_INPUT_PUBLIC_VALUE = "public";
   public static final String SELF_INTRODUCTION_INPUT = "selfIntroduction";
-  public static final String IMG_URL_INPUT = "imgUrl";
+  public static final String IMG_KEY_INPUT = "imgKey";
 
   private final UserRepository userRepository;
   private final UserService userService;
@@ -90,9 +90,9 @@ public class UserServlet extends HttpServlet {
     if (publicPortfolioStringValue.equals(PUBLIC_PORTFOLIO_INPUT_PUBLIC_VALUE)) {
       newUserBuilder.setPublicPortfolio(true); // False by default.
     }
-    String imgKey = getUploadedFileBlobKey(request, IMG_URL_INPUT);
+    String imgKey = getUploadedFileBlobKey(request, IMG_KEY_INPUT);
         if (imgKey != null) {
-            newUserBuilder.addImgUrl(imgKey);
+            newUserBuilder.addImgKey(imgKey);
         }
     return newUserBuilder.build();
   }

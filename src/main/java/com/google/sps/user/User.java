@@ -28,7 +28,7 @@ public class User {
   @Nullable
   private final String selfIntroduction;
   @Nullable
-  private final String imgUrl;
+  private final String imgKey;
 
   public static class Builder {
     // Required.
@@ -40,7 +40,7 @@ public class User {
     @Nullable
     private String selfIntroduction;
     @Nullable
-    private String imgUrl;
+    private String imgKey;
     private boolean publicPortfolio = false;
 
     public Builder(String id, String email) {
@@ -53,8 +53,8 @@ public class User {
       return this;
     }
 
-    public Builder addImgUrl(String imgUrl) {
-      this.imgUrl = imgUrl;
+    public Builder addImgKey(String imgKey) {
+      this.imgKey = imgKey;
       return this;
     }
 
@@ -78,7 +78,7 @@ public class User {
     this.email = builder.email;
     this.name = builder.name;
     this.selfIntroduction = builder.selfIntroduction;
-    this.imgUrl = builder.imgUrl;
+    this.imgKey = builder.imgKey;
     this.publicPortfolio = builder.publicPortfolio;
   }
 
@@ -98,8 +98,8 @@ public class User {
     return selfIntroduction;
   }
 
-  public String getImgUrl() {
-    return imgUrl;
+  public String getImgKey() {
+    return imgKey;
   }
 
   public boolean portfolioIsPublic() {

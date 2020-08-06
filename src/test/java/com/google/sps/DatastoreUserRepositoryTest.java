@@ -37,7 +37,7 @@ public final class DatastoreUserRepositoryTest {
   private static final String EMAIL = "user@gmail.com";
   private static final String NAME = "username";
   private static final String SELF_INTRODUCTION = "I am the user";
-  private static final String IMG_URL = "/img.com";
+  private static final String IMG_KEY = "img1234";
 
   private static final String ID_B = "useridB";
 
@@ -45,13 +45,13 @@ public final class DatastoreUserRepositoryTest {
   private static final String EMAIL_C = "user@gmail.com_C";
   private static final String NAME_C = "username_C";
   private static final String SELF_INTRODUCTION_C = "I am the user_C";
-  private static final String IMG_URL_C = "/img.com_C";
+  private static final String IMG_KEY_C = "img1234C";
 
 
   private final User toSaveUser =
-          new User.Builder(ID, EMAIL).setName(NAME).addSelfIntroduction(SELF_INTRODUCTION).addImgUrl(IMG_URL).build();
+          new User.Builder(ID, EMAIL).setName(NAME).addSelfIntroduction(SELF_INTRODUCTION).addImgKey(IMG_KEY).build();
   private final User toSaveUser_C =
-          new User.Builder(ID_C, EMAIL_C).setName(NAME_C).addSelfIntroduction(SELF_INTRODUCTION_C).addImgUrl(IMG_URL_C).build();
+          new User.Builder(ID_C, EMAIL_C).setName(NAME_C).addSelfIntroduction(SELF_INTRODUCTION_C).addImgKey(IMG_KEY_C).build();
   private User toGetUser;
 
   private final UserRepository myUserRepository = UserRepositoryFactory.getUserRepository(RepositoryType.DATASTORE);
@@ -77,7 +77,7 @@ public final class DatastoreUserRepositoryTest {
     userEntity.setProperty(DatastoreUserRepository.EMAIL_PROPERTY, toSaveUser.getEmail());
     userEntity.setProperty(DatastoreUserRepository.PUBLIC_PORTFOLIO_PROPERTY, toSaveUser.portfolioIsPublic());
     userEntity.setProperty(DatastoreUserRepository.SELF_INTRODUCTION_PROPERTY, toSaveUser.getSelfIntroduction());
-    userEntity.setProperty(DatastoreUserRepository.IMG_URL_PROPERTY, toSaveUser.getImgUrl());
+    userEntity.setProperty(DatastoreUserRepository.IMG_KEY_PROPERTY, toSaveUser.getImgKey());
 
     // Save entity to datastore.
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -107,7 +107,7 @@ public final class DatastoreUserRepositoryTest {
       assertEquals(EMAIL_C, userEntity.getProperty(DatastoreUserRepository.EMAIL_PROPERTY));
       assertEquals(SELF_INTRODUCTION_C, userEntity.getProperty(DatastoreUserRepository.SELF_INTRODUCTION_PROPERTY));
       assertEquals(false, userEntity.getProperty(DatastoreUserRepository.PUBLIC_PORTFOLIO_PROPERTY));
-      assertEquals(IMG_URL_C, userEntity.getProperty(DatastoreUserRepository.IMG_URL_PROPERTY));
+      assertEquals(IMG_KEY_C, userEntity.getProperty(DatastoreUserRepository.IMG_KEY_PROPERTY));
     } catch (EntityNotFoundException e) {
       fail("Entity not found: " + e);
     }
