@@ -8,18 +8,18 @@ public class User {
   private final String email;
   private final boolean publicPortfolio;
   @Nullable private final String name;
-  private final String selfIntroduction;
-  private final String imgUrl;
+  @Nullable private final String selfIntroduction;
+  @Nullable private final String imgUrl;
 
   public static class Builder {
     // Required.
     private final String id;
     private final String email;
     // Optional.
-    private String name;
-    private String selfIntroduction;
-    private String imgUrl;
-    private boolean publicPortfolio = false;
+    @Nullable private String name;
+    @Nullable private String selfIntroduction;
+    @Nullable private String imgUrl;
+    @Nullable private boolean publicPortfolio = false;
 
     public Builder(String id, String email) {
       this.id = id;
