@@ -69,7 +69,7 @@ public class NewUserServlet extends HttpServlet {
     response.getWriter().println(convertToJsonUsingGson(Boolean.valueOf(existingUser)));
   }
 
-  private User getLoggedInUser(HttpServletRequest request) {
+  private User getLoggedInUser() {
     String id = userService.getCurrentUser().getUserId();
     String email = userService.getCurrentUser().getEmail();
     User.Builder newUserBuilder = new User.Builder(id, email);

@@ -8,7 +8,7 @@
 * and prompt the user to Google login page if user is not logged
 * in.
 */
-function authenticateUser() {
+function authenticateAndSaveUser() {
   const currentWindowLocation = window.location.href;
   const currentUrl = new URL(currentWindowLocation);
   queryAuthenticationServer(currentUrl).then((userAuthenticationStatus) => {
@@ -16,6 +16,7 @@ function authenticateUser() {
       location.replace(userAuthenticationStatus.loginUrl);
     } else {
       addLinktoLogoutButton(userAuthenticationStatus.logoutUrl);
+      saveUserIfNotPresentInDatabase();
     }
   });
 }
@@ -47,4 +48,34 @@ function addLinktoLogoutButton(logoutUrl) {
   logoutButton.addEventListener('click', () => {
   window.location.replace(logoutUrl);
   });
+}
+
+
+/**
+ * Checks if the user is present in the database. If not, saves them.
+ */
+function saveUserIfNotPresentInDatabase(){
+    userPresentInDatabase().then (present => {
+         // Save the user in the database.
+        if (!present) {
+            fetch('/new-user-servlet', {method: 'POST'})
+            .catch(error => "user-servlet: failed to post new user: " + error); 
+        }
+        console.log("post user to database");
+    });
+}
+
+/** 
+ * Checks if the currently logged in user is already saved in the database.
+ */
+function userPresentInDatabase() {
+   return fetch('/new-user-servlet')
+        .catch (error => console.log("user-servlet: failed to fetch: " + error))
+        .then (response => response.json())
+        .catch (error => console.log('fillFormInputsWithData: failed to convert to json: ' + error))
+        .then (response => {
+            console.log(response);
+            console.log(response == true);
+            return response;
+        });
 }
