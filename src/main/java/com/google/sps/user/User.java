@@ -21,13 +21,13 @@ public class User {
     private final String id, email;
     private final boolean publicPortfolio;
     @Nullable 
-    private final String name, selfIntroduction, imgUrl;
+    private final String name, selfIntroduction, imgKey;
 
     public static class Builder {
         // Required.
         private final String id, email;
         // Optional.
-        private String name, selfIntroduction, imgUrl;
+        private String name, selfIntroduction, imgKey;
         private boolean publicPortfolio = false;
 
         public Builder(String id, String email) {
@@ -40,8 +40,8 @@ public class User {
             return this;
         }
 
-        public Builder addImgUrl(String imgUrl) {
-            this.imgUrl = imgUrl;
+        public Builder addImgKey(String imgKey) {
+            this.imgKey = imgKey;
             return this;
         }
 
@@ -65,7 +65,7 @@ public class User {
         this.email = builder.email;
         this.name = builder.name;
         this.selfIntroduction = builder.selfIntroduction;
-        this.imgUrl = builder.imgUrl;
+        this.imgKey = builder.imgKey;
         this.publicPortfolio = builder.publicPortfolio;
     }
 
@@ -85,8 +85,8 @@ public class User {
         return selfIntroduction;
     }
 
-    public String getImgUrl() {
-        return imgUrl;
+    public String getImgKey() {
+        return imgKey;
     }
 
     public boolean portfolioIsPublic() {

@@ -30,7 +30,7 @@ public final class UserTest {
     private static final String EMAIL_B = "userB@gmail.com";
     private static final String NAME = "username";
     private static final String SELF_INTRODUCTION = "I am the user";
-    private static final String IMG_URL = "/img.com";
+    private static final String IMG_KEY = "imgkey1234";
 
     @Test
     public void getId() {
@@ -87,24 +87,24 @@ public final class UserTest {
     }
 
     @Test
-    public void getImgUrl_noImgUrlProvided_returnsNull() {
-        // User with no preset imgUrl.
+    public void getImgKey_noImgKeyProvided_returnsNull() {
+        // User with no preset imgKey.
         User newUser = new User.Builder(ID, EMAIL).build();
-        assertEquals(null, newUser.getImgUrl());
+        assertEquals(null, newUser.getImgKey());
     }
 
     @Test
-    public void getImgUrl_imgUrlProvidedNoOtherOptionalParameters_returnsImgUrl() {
-        // User with preset imgUrl.
-        User newUser = new User.Builder(ID, EMAIL).addImgUrl(IMG_URL).build();
-        assertEquals(IMG_URL, newUser.getImgUrl());
+    public void getImgKey_imgKeyProvidedNoOtherOptionalParameters_returnsImgKey() {
+        // User with preset imgKey.
+        User newUser = new User.Builder(ID, EMAIL).addImgKey(IMG_KEY).build();
+        assertEquals(IMG_KEY, newUser.getImgKey());
     }
 
     @Test
-    public void getImgUrl_imgUrlProvidedPlusOtherOptionalParameters_returnsImgUrl() {
-        // User with preset imgUrl, and other fields.
-        User newUser = new User.Builder(ID, EMAIL).addSelfIntroduction(SELF_INTRODUCTION).addImgUrl(IMG_URL).build();
-        assertEquals(IMG_URL, newUser.getImgUrl());
+    public void getImgKey_imgKeyProvidedPlusOtherOptionalParameters_returnsImgKey() {
+        // User with preset imgKey, and other fields.
+        User newUser = new User.Builder(ID, EMAIL).addSelfIntroduction(SELF_INTRODUCTION).addImgKey(IMG_KEY).build();
+        assertEquals(IMG_KEY, newUser.getImgKey());
     }
 
     @Test 

@@ -33,7 +33,7 @@ public class DatastoreUserRepository implements UserRepository {
     public static final String EMAIL_PROPERTY = "email";
     public static final String PUBLIC_PORTFOLIO_PROPERTY = "publicPortfolio";
     public static final String SELF_INTRODUCTION_PROPERTY = "selfIntroduction";
-    public static final String IMG_URL_PROPERTY = "imgUrl";
+    public static final String IMG_KEY_PROPERTY = "imgKey";
 
     @Override
     public void saveUser(User user) {
@@ -47,7 +47,7 @@ public class DatastoreUserRepository implements UserRepository {
         userEntity.setProperty(EMAIL_PROPERTY, user.getEmail());
         userEntity.setProperty(PUBLIC_PORTFOLIO_PROPERTY, user.portfolioIsPublic());
         userEntity.setProperty(SELF_INTRODUCTION_PROPERTY, user.getSelfIntroduction());
-        userEntity.setProperty(IMG_URL_PROPERTY, user.getImgUrl());
+        userEntity.setProperty(IMG_KEY_PROPERTY, user.getImgKey());
         return userEntity;
     }
 
@@ -73,8 +73,8 @@ public class DatastoreUserRepository implements UserRepository {
         String email = (String) userEntity.getProperty(EMAIL_PROPERTY);
         Boolean publicPortfolio = (Boolean) userEntity.getProperty(PUBLIC_PORTFOLIO_PROPERTY);
         String selfIntroduction = (String) userEntity.getProperty(SELF_INTRODUCTION_PROPERTY);
-        String imgUrl = (String) userEntity.getProperty(IMG_URL_PROPERTY);
-        User.Builder newUserBuilder = new User.Builder(id, email).setName(name).addSelfIntroduction(selfIntroduction).addImgUrl(imgUrl);
+        String imgKey = (String) userEntity.getProperty(IMG_KEY_PROPERTY);
+        User.Builder newUserBuilder = new User.Builder(id, email).setName(name).addSelfIntroduction(selfIntroduction).addImgKey(imgKey);
         if (publicPortfolio) {
             newUserBuilder.setPublicPortfolio();
         }
