@@ -73,4 +73,8 @@ public class DatastoreUserRepository implements UserRepository {
             new User.Builder(id, email).setName(name).addSelfIntroduction(selfIntroduction).setPublicPortfolio(publicPortfolio).addImgKey(imgKey);
     return newUserBuilder.build();
   }
+
+  public boolean existingUser(String id) {
+      return getUser(id) != null;
+  }
 }

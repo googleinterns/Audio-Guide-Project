@@ -32,4 +32,6 @@ public interface UserRepository {
    */
   @Nullable
   User getUser(String id);
+
+  boolean existingUser(String id);
 }
