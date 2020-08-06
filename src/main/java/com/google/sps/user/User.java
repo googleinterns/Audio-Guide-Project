@@ -4,16 +4,22 @@ import org.jetbrains.annotations.Nullable;
 
 /** Stores the data related to one user. */
 public class User {
-    private final String id, email;
+    private final String id;
+    private final String email;
     private final boolean publicPortfolio;
     @Nullable 
-    private final String name, selfIntroduction, imgUrl;
+    private final String name;
+    private final String selfIntroduction;
+    private final String imgUrl;
 
     public static class Builder {
         // Required.
-        private final String id, email;
+        private final String id;
+        private final String email;
         // Optional.
-        private String name, selfIntroduction, imgUrl;
+        private String name;
+        private String selfIntroduction;
+        private String imgUrl;
         private boolean publicPortfolio = false;
 
         public Builder(String id, String email) {
