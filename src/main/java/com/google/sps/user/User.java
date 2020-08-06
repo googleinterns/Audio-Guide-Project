@@ -19,7 +19,7 @@ public class User {
     @Nullable private String name;
     @Nullable private String selfIntroduction;
     @Nullable private String imgUrl;
-    @Nullable private boolean publicPortfolio = false;
+    private boolean publicPortfolio = false;
 
     public Builder(String id, String email) {
       this.id = id;
