@@ -1,25 +1,26 @@
 package com.google.sps.user;
 
 import org.jetbrains.annotations.Nullable;
+import java.util.Optional;
 
 /** Stores the data related to one user. */
 public class User {
   private final String id;
   private final String email;
   private final boolean publicPortfolio;
-  @Nullable private final String name;
-  @Nullable private final String selfIntroduction;
-  @Nullable private final String imgUrl;
+  private final Optional<String> name;
+  private final Optional<String> selfIntroduction;
+  private final Optional<String> imgUrl;
 
   public static class Builder {
     // Required.
     private final String id;
     private final String email;
     // Optional.
-    @Nullable private String name;
-    @Nullable private String selfIntroduction;
-    @Nullable private String imgUrl;
-    @Nullable private boolean publicPortfolio = false;
+    private Optional<String> name = Optional.empty();
+    private Optional<String> selfIntroduction = Optional.empty();
+    private Optional<String> imgUrl = Optional.empty();
+    private boolean publicPortfolio = false;
 
     public Builder(String id, String email) {
       this.id = id;
@@ -27,17 +28,17 @@ public class User {
     }
 
     public Builder setName(String name) {
-      this.name = name;
+      this.name = Optional.of(name);
       return this;
     }
 
     public Builder addImgUrl(String imgUrl) {
-      this.imgUrl = imgUrl;
+      this.imgUrl = Optional.of(imgUrl);
       return this;
     }
 
     public Builder addSelfIntroduction(String selfIntroduction) {
-      this.selfIntroduction = selfIntroduction;
+      this.selfIntroduction = Optional.of(selfIntroduction);
       return this;
     }
 
@@ -68,15 +69,15 @@ public class User {
     return this.email;
   }
 
-  public String getName() {
+  public Optional<String> getName() {
     return name;
   }
 
-  public String getSelfIntroduction() {
+  public Optional<String> getSelfIntroduction() {
     return selfIntroduction;
   }
 
-  public String getImgUrl() {
+  public Optional<String> getImgUrl() {
     return imgUrl;
   }
 
