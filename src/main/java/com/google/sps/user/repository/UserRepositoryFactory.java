@@ -12,7 +12,7 @@ public class UserRepositoryFactory {
         if (repositoryType == null) {
             throw new IllegalArgumentException("repositoryType can't be null!");
         }
-        switch(repositoryType) {
+        switch (repositoryType) {
             case DATASTORE:
                 return new DatastoreUserRepository();
             default:
