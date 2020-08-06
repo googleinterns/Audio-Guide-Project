@@ -49,8 +49,8 @@ public class User {
       return this;
     }
 
-    public Builder setPublicPortfolio() {
-      this.publicPortfolio = true;
+    public Builder setPublicPortfolio(boolean publicPortfolio) {
+      this.publicPortfolio = publicPortfolio;
       return this;
     }
 

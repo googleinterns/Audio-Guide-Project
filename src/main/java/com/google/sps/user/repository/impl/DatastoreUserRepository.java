@@ -60,10 +60,7 @@ public class DatastoreUserRepository implements UserRepository {
         Boolean publicPortfolio = (Boolean) userEntity.getProperty(PUBLIC_PORTFOLIO_PROPERTY);
         String selfIntroduction = (String) userEntity.getProperty(SELF_INTRODUCTION_PROPERTY);
         String imgUrl = (String) userEntity.getProperty(IMG_URL_PROPERTY);
-        User.Builder newUserBuilder = new User.Builder(id, email).setName(name).addSelfIntroduction(selfIntroduction).addImgUrl(imgUrl);
-        if (publicPortfolio) {
-            newUserBuilder.setPublicPortfolio();
-        }
+        User.Builder newUserBuilder = new User.Builder(id, email).setName(name).addSelfIntroduction(selfIntroduction).addImgUrl(imgUrl).setPublicPortfolio(publicPortfolio);
         return newUserBuilder.build();
     }
 }
