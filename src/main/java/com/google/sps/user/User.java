@@ -2,23 +2,31 @@ package com.google.sps.user;
 
 import org.jetbrains.annotations.Nullable;
 
-/** Stores the data related to one user. */
+/**
+ * Stores the data related to one user.
+ */
 public class User {
   private final String id;
   private final String email;
   private final boolean publicPortfolio;
-  @Nullable private final String name;
-  @Nullable private final String selfIntroduction;
-  @Nullable private final String imgUrl;
+  @Nullable
+  private final String name;
+  @Nullable
+  private final String selfIntroduction;
+  @Nullable
+  private final String imgUrl;
 
   public static class Builder {
     // Required.
     private final String id;
     private final String email;
     // Optional.
-    @Nullable private String name;
-    @Nullable private String selfIntroduction;
-    @Nullable private String imgUrl;
+    @Nullable
+    private String name;
+    @Nullable
+    private String selfIntroduction;
+    @Nullable
+    private String imgUrl;
     private boolean publicPortfolio = false;
 
     public Builder(String id, String email) {
@@ -41,8 +49,8 @@ public class User {
       return this;
     }
 
-    public Builder setPublicPortfolio() {
-      this.publicPortfolio = true;
+    public Builder setPublicPortfolio(boolean publicPortfolio) {
+      this.publicPortfolio = publicPortfolio;
       return this;
     }
 
@@ -82,5 +90,14 @@ public class User {
 
   public boolean portfolioIsPublic() {
     return publicPortfolio;
+  }
+
+  @Override
+  public boolean equals(Object o){
+    if (!(o instanceof User)) {
+      return false;
+    }
+    User user = (User) o;
+    return user.getId().equals(this.getId());
   }
 }
