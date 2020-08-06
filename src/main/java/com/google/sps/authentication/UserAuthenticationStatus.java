@@ -17,8 +17,10 @@ public class UserAuthenticationStatus {
     this.isLoggedIn = isLoggedIn;
     if (isLoggedIn) {
       logoutUrl = url;
+      loginUrl = null;
     } else {
       loginUrl = url;
+      logoutUrl = null;
     }
   }
 

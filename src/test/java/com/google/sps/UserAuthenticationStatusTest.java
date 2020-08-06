@@ -1,17 +1,3 @@
-// Copyright 2019 Google LLC
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     https://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
 package com.google.sps;
 
 import com.google.gson.Gson;
@@ -26,56 +12,44 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public class UserAuthenticationStatusTest {
 
-    private static final boolean LOGGED_IN = true;
-    private static final boolean LOGGED_OUT = false;
-    private static final String MOCK_URL = "mock_url";
+  private static final boolean LOGGED_IN = true;
+  private static final boolean LOGGED_OUT = false;
+  private static final String MOCK_URL = "mock_url";
 
-    @Test
-    public void isLoggedIn_userIsLoggedIn_returnTrue() {
-        UserAuthenticationStatus status = new UserAuthenticationStatus(LOGGED_IN, MOCK_URL);
-        assertEquals(LOGGED_IN, status.isLoggedIn());
-    }
+  @Test
+  public void isLoggedIn_userIsLoggedIn_returnTrue() {
+    UserAuthenticationStatus status = new UserAuthenticationStatus(LOGGED_IN, MOCK_URL);
+    assertEquals(LOGGED_IN, status.isLoggedIn());
+  }
 
-    @Test
-    public void isLoggedIn_userIsLoggedOut_returnFalse() {
-        UserAuthenticationStatus status = new UserAuthenticationStatus(LOGGED_OUT, MOCK_URL);
-        assertEquals(LOGGED_OUT, status.isLoggedIn());
-    }
+  @Test
+  public void isLoggedIn_userIsLoggedOut_returnFalse() {
+    UserAuthenticationStatus status = new UserAuthenticationStatus(LOGGED_OUT, MOCK_URL);
+    assertEquals(LOGGED_OUT, status.isLoggedIn());
+  }
 
-    @Test
-    public void getLoginUrl_userIsLoggedOut_returnMockUrl() {
-        UserAuthenticationStatus status = new UserAuthenticationStatus
-                                                .Builder(LOGGED_OUT)
-                                                .setLoginUrl(MOCK_URL)
-                                                .build();
-        assertEquals(MOCK_URL, status.getLoginUrl());
-    }
+  @Test
+  public void getLoginUrl_userIsLoggedIn_returnNull() {
+    UserAuthenticationStatus status = new UserAuthenticationStatus(LOGGED_IN, MOCK_URL);
+    assertEquals(null, status.getLoginUrl());
+  }
 
-    @Test
-    public void getLoginUrl_userIsLoggedOut_returnMockUrl() {
-        UserAuthenticationStatus status = new UserAuthenticationStatus
-                                                .Builder(LOGGED_OUT)
-                                                .setLoginUrl(MOCK_URL)
-                                                .build();
-        assertEquals(MOCK_URL, status.getLoginUrl());
-    }
+  @Test
+  public void getLoginUrl_userIsLoggedOut_returnMockUrl() {
+    UserAuthenticationStatus status = new UserAuthenticationStatus(LOGGED_OUT, MOCK_URL);
+    assertEquals(MOCK_URL, status.getLoginUrl());
+  }
 
-    @Test
-    public void getLogoutUrl_userIsLoggedIn_returnMockUrl() {
-        UserAuthenticationStatus status = new UserAuthenticationStatus
-                                                .Builder(LOGGED_IN)
-                                                .setLogoutUrl(MOCK_URL)
-                                                .build();
-        assertEquals(MOCK_URL, status.getLogoutUrl());
-    }
+  @Test
+  public void getLogoutUrl_userIsLoggedIn_returnMockUrl() {
+    UserAuthenticationStatus status = new UserAuthenticationStatus(LOGGED_IN, MOCK_URL);
+    assertEquals(MOCK_URL, status.getLogoutUrl());
+  }
 
-    @Test
-    public void getLogoutUrl_userIsLoggedIn_returnMockUrl() {
-        UserAuthenticationStatus status = new UserAuthenticationStatus
-                                                .Builder(LOGGED_IN)
-                                                .setLogoutUrl(MOCK_URL)
-                                                .build();
-        assertEquals(MOCK_URL, status.getLogoutUrl());
-    }
+  @Test
+  public void getLogoutUrl_userIsLoggedOut_returnNull() {
+    UserAuthenticationStatus status = new UserAuthenticationStatus(LOGGED_OUT, MOCK_URL);
+    assertEquals(null, status.getLogoutUrl());
+  }
 
 }
