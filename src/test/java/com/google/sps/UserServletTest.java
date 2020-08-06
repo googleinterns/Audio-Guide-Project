@@ -48,9 +48,9 @@ public final class UserServletTest {
   private static final String SELF_INTRODUCTION = "I am the user";
   private static final String IMG_URL = "/img.com";
 
-  private static final User toSaveUser =
+  private final User toSaveUser =
           new User.Builder(ID, EMAIL).setName(NAME).setPublicPortfolio(true).addSelfIntroduction(SELF_INTRODUCTION).addImgUrl(IMG_URL).build();
-  private static User toGetUser;
+  private User toGetUser;
 
   private UserServlet userServlet;
   private Map<String, Object> attributeToValue = new HashMap<>();

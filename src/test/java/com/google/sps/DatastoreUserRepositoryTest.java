@@ -47,13 +47,14 @@ public final class DatastoreUserRepositoryTest {
   private static final String SELF_INTRODUCTION_C = "I am the user_C";
   private static final String IMG_URL_C = "/img.com_C";
 
-  private final static User toSaveUser = new User.Builder(ID, EMAIL).setName(NAME).addSelfIntroduction(SELF_INTRODUCTION).addImgUrl(IMG_URL).build();
-  private final static User toSaveUser_C = new User.Builder(ID_C, EMAIL_C).setName(NAME_C).addSelfIntroduction(SELF_INTRODUCTION_C).addImgUrl(IMG_URL_C).build();
-  private static User toGetUser;
+  private final User toSaveUser = new User.Builder(ID, EMAIL).setName(NAME).addSelfIntroduction(SELF_INTRODUCTION).addImgUrl(IMG_URL).build();
+  private final User toSaveUser_C = new User.Builder(ID_C, EMAIL_C).setName(NAME_C).addSelfIntroduction(SELF_INTRODUCTION_C).addImgUrl(IMG_URL_C).build();
+  private User toGetUser;
 
-  private final static UserRepository myUserRepository = UserRepositoryFactory.getUserRepository(RepositoryType.DATASTORE);
+  private final UserRepository myUserRepository =
+          UserRepositoryFactory.getUserRepository(RepositoryType.DATASTORE);
 
-  private final static LocalServiceTestHelper helper = new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
+  private final LocalServiceTestHelper helper = new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
 
   @Before
   public void setUp() {
