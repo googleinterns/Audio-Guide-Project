@@ -13,32 +13,52 @@
 // limitations under the License.
 
 
-/*
- * Fetches a url to which the files can be uploaded, relying on blobstore.
- * Sets th action of the form to the fetche url.
+/**
+ * Handles setting up the portfolio form whenever the page is loaded. 
  */
-function addBlobstoreUploadUrlToForm() {
-  fetch ('/blobstore-upload-portfolio')
-      .catch (error => console.log("blobstore-upload-portfolio: failed to fetch: " + error))
-      .then (uploadUrl => uploadUrl.text())
-      .catch (error => console.log('blobstore-upload-portfolio: failed to convert to text: ' + error))
-      .then (uploadUrl => {
-        setFormActionUrl(uploadUrl);
-      });
+function setUpPortfolioForm() {
+    addBlobstoreUploadUrlToForm();
+    fillFormInputsWithUserData();
 }
 
-/** Set the destination url of the post method for the portfolio form to uploadUrl. */
+/**
+ * Sets th action of the form to the url to which blobs can be uploaded.
+ */
+function addBlobstoreUploadUrlToForm() {
+  getBlobstoreUploadUrlFromServlet().then (uploadUrl => {
+    setFormActionUrl(uploadUrl);
+  });
+}
+
+/**
+ * Fetches a url to which the files can be uploaded, relying on Blobstore API.
+ */
+function getBlobstoreUploadUrlFromServlet() {
+    return fetch ('/blobstore-upload-portfolio')
+    .catch (error => console.log("blobstore-upload-portfolio: failed to fetch: " + error))
+    .then (uploadUrl => uploadUrl.text())
+    .catch (error => console.log('blobstore-upload-portfolio: failed to convert to text: ' + error))
+    .then (uploadUrl => {
+    return uploadUrl;
+    });
+}
+
+/** 
+ * Sets the destination url of the post method for the portfolio form to uploadUrl. 
+ */
 function setFormActionUrl(uploadUrl) {
   var form = document.getElementById("portfolioForm");
   form.action = uploadUrl;
 }
 
+/** 
+ * Gets the currently logged in user's data from the database
+ * and fill's the form inputs with this data.
+ */
 function fillFormInputsWithUserData() {
     getUserDataFromServlet().then (response => {
         document.getElementById("name").value = response.name;
         document.getElementById("selfIntroduction").value = response.selfIntroduction;
-        console.log(response.selfIntroduction);
-        console.log(response.publicPortfolio);
         if (response.publicPortfolio) {
             document.getElementById("publicPortfolio").value = "public";
         } else {
@@ -47,6 +67,9 @@ function fillFormInputsWithUserData() {
     });
 }
 
+/** 
+ * Gets the currently logged in user's data from the servlet.
+ */
 function getUserDataFromServlet() {
    return fetch('/user-servlet')
         .catch (error => console.log("user-servlet: failed to fetch: " + error))
