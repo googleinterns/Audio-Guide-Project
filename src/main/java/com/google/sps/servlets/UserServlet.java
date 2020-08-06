@@ -14,20 +14,17 @@
 
 package com.google.sps.servlets;
 
+import com.google.gson.Gson;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import com.google.gson.Gson;
 
 /** This servlet handles users' data. */
 @WebServlet("/user-data")
 public class UserServlet extends HttpServlet {
 
-    private String convertToJsonUsingGson(Object o) {
-        Gson gson = new Gson();
-        String json = gson.toJson(o);
-        return json;
-    }
-
+  private String convertToJsonUsingGson(Object o) {
+    Gson gson = new Gson();
+    String json = gson.toJson(o);
+    return json;
+  }
 }

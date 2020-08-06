@@ -4,84 +4,83 @@ import org.jetbrains.annotations.Nullable;
 
 /** Stores the data related to one user. */
 public class User {
+  private final String id;
+  private final String email;
+  private final boolean publicPortfolio;
+  @Nullable private final String name;
+  private final String selfIntroduction;
+  private final String imgUrl;
+
+  public static class Builder {
+    // Required.
     private final String id;
     private final String email;
-    private final boolean publicPortfolio;
-    @Nullable 
-    private final String name;
-    private final String selfIntroduction;
-    private final String imgUrl;
+    // Optional.
+    private String name;
+    private String selfIntroduction;
+    private String imgUrl;
+    private boolean publicPortfolio = false;
 
-    public static class Builder {
-        // Required.
-        private final String id;
-        private final String email;
-        // Optional.
-        private String name;
-        private String selfIntroduction;
-        private String imgUrl;
-        private boolean publicPortfolio = false;
-
-        public Builder(String id, String email) {
-            this.id = id;
-            this.email = email;
-        }
-
-        public Builder setName(String name) {
-            this.name = name;
-            return this;
-        }
-
-        public Builder addImgUrl(String imgUrl) {
-            this.imgUrl = imgUrl;
-            return this;
-        }
-
-        public Builder addSelfIntroduction(String selfIntroduction){
-            this.selfIntroduction = selfIntroduction;
-            return this;
-        }
-
-        public Builder setPublicPortfolio() {
-            this.publicPortfolio = true;
-            return this;
-        }
-
-        public User build() {
-            return new User(this);
-        }
+    public Builder(String id, String email) {
+      this.id = id;
+      this.email = email;
     }
 
-    private User(Builder builder) {
-        this.id = builder.id;
-        this.email = builder.email;
-        this.name = builder.name;
-        this.selfIntroduction = builder.selfIntroduction;
-        this.imgUrl = builder.imgUrl;
-        this.publicPortfolio = builder.publicPortfolio;
+    public Builder setName(String name) {
+      this.name = name;
+      return this;
     }
 
-    public String getId() {
-        return id;
+    public Builder addImgUrl(String imgUrl) {
+      this.imgUrl = imgUrl;
+      return this;
     }
 
-    public String getEmail() {
-        return this.email;
+    public Builder addSelfIntroduction(String selfIntroduction) {
+      this.selfIntroduction = selfIntroduction;
+      return this;
     }
 
-    public String getName() {
-        return name;
+    public Builder setPublicPortfolio() {
+      this.publicPortfolio = true;
+      return this;
     }
 
-    public String getSelfIntroduction() {
-        return selfIntroduction;
+    public User build() {
+      return new User(this);
     }
+  }
 
-    public String getImgUrl() {
-        return imgUrl;
-    }
+  private User(Builder builder) {
+    this.id = builder.id;
+    this.email = builder.email;
+    this.name = builder.name;
+    this.selfIntroduction = builder.selfIntroduction;
+    this.imgUrl = builder.imgUrl;
+    this.publicPortfolio = builder.publicPortfolio;
+  }
 
-    public boolean portfolioIsPublic() {
-        return publicPortfolio;
-    }
+  public String getId() {
+    return id;
+  }
+
+  public String getEmail() {
+    return this.email;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public String getSelfIntroduction() {
+    return selfIntroduction;
+  }
+
+  public String getImgUrl() {
+    return imgUrl;
+  }
+
+  public boolean portfolioIsPublic() {
+    return publicPortfolio;
+  }
 }
