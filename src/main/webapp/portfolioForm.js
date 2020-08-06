@@ -57,14 +57,25 @@ function setFormActionUrl(uploadUrl) {
  */
 function fillFormInputsWithUserData() {
     getUserDataFromServlet().then (user => {
-        document.getElementById("name").value = user.name;
-        document.getElementById("selfIntroduction").value = user.selfIntroduction;
+        setFormInputValue(document.getElementById("name"), user.name);
+        setFormInputValue(document.getElementById("selfIntroduction"), user.selfIntroduction);
         if (user.publicPortfolio) {
             document.getElementById("publicPortfolio").value = "public";
         } else {
             document.getElementById("publicPortfolio").value = "private";
         }
     });
+}
+
+/**
+ * Sets one form input's value to the given value.
+ */
+function setFormInputValue(input, value) {
+    if (value == undefined) {
+        input.value = "";
+    } else {
+        input.value = value;
+    }
 }
 
 /** 
