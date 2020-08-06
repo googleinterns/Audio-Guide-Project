@@ -43,7 +43,7 @@
         <scope>test</scope>
     </dependency>
 
-    <dependency>
+     <dependency>
         <groupId>com.google.appengine</groupId>
         <artifactId>appengine-api-1.0-sdk</artifactId>
         <version>1.9.59</version>
@@ -52,36 +52,22 @@
     <dependency>
         <groupId>com.google.appengine</groupId>
         <artifactId>appengine-testing</artifactId>
-        <version>1.9.80</version>
-        <scope>test</scope>
-    </dependency>
-
-    <dependency>
-        <groupId>com.google.appengine</groupId>
-        <artifactId>appengine-api-labs</artifactId>
-        <version>1.9.60</version>
+        <version>1.9.64</version>
         <scope>test</scope>
     </dependency>
 
     <dependency>
         <groupId>com.google.appengine</groupId>
         <artifactId>appengine-api-stubs</artifactId>
-        <version>1.9.60</version>
+        <version>1.9.64</version>
         <scope>test</scope>
     </dependency>
 
     <dependency>
-        <groupId>com.google.appengine</groupId>
-        <artifactId>appengine-tools-sdk</artifactId>
-        <version>1.9.60</version>
-        <scope>test</scope>
-    </dependency>
-
-    <dependency>
-        <groupId>org.mockito</groupId>
-        <artifactId>mockito-all</artifactId>
-        <version>2.0.2-beta</version>
-        <scope>test</scope>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-all</artifactId>
+      <version>2.0.2-beta</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 
