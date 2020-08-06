@@ -1,4 +1,7 @@
 target/
+<<<<<<< HEAD
+=======
 .idea/
 google-java-format-1.7-all-deps.jar
 step253-2020.iml
+>>>>>>> 64a19740c91b96e19f642f488f817444c39ba08e
