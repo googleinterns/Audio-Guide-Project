@@ -28,7 +28,7 @@ function addBlobstoreUploadUrlToForm() {
       });
 }
 
-/** Set the destination url of the post method for the portfolio form to uploadUrl */
+/** Set the destination url of the post method for the portfolio form to uploadUrl. */
 function setFormActionUrl(uploadUrl){
   var form = document.getElementById("portfolioForm");
   form.action = uploadUrl;
