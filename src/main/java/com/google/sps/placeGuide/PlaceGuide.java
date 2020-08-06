@@ -21,6 +21,10 @@ import java.util.List;
 public class PlaceGuide {
 
     private final String name, audioUrl, creatorId;
+
+    // Acquired using Places API.
+    private final String placeId;
+
     private final PlaceCoordinate coord;
 
     // Specify how long user usually spends to follow this place guide in minutes.
@@ -35,28 +39,38 @@ public class PlaceGuide {
     private final List<String> saverId;
 
     private PlaceGuide(String name, String audioUrl, String creatorId, 
-                                    PlaceCoordinate coord, int length, 
+                                    String placeId, PlaceCoordinate coord,
+                                    List<String> saverId, int length, 
                                     String desc, String imgUrl) {
         this.name = name;
         this.audioUrl = audioUrl;
         this.creatorId = creatorId;
+        this.placeId = placeId;
         this.coord = coord;
+        this.saverId = saverId;
         this.length = length;
         this.desc = desc;
         this.imgUrl = imgUrl;
     }
 
     public static class Builder {
-        private final String name, audioUrl, creatorId;
+        private final String name, audioUrl, creatorId, placeId;
         private final PlaceCoordinate coord;
+        private List<String> saverId;
         private int length;
         private String desc, imgUrl;
         
-        public Builder(String name, String audioUrl, String creatorId, PlaceCoordinate coord) {
+        public Builder(String name, String audioUrl, String creatorId, 
+                                            String placeId, PlaceCoordinate coord) {
             this.name = name;
             this.audioUrl = audioUrl;
             this.creatorId = creatorId;
+            this.placeId = placeId;
             this.coord = coord;
+        }
+        public Builder setSaverId(List<String> saverId) {
+            this.saverId = saverId;
+            return this;
         }
         public Builder setLength(int length) {
             this.length = length;
@@ -71,7 +85,8 @@ public class PlaceGuide {
             return this;
         }
         public UserAuthenticationStatus build() {
-            return new PlaceGuide(name, audioUrl, creatorId, coord, length, desc, imgUrl);
+            return new PlaceGuide(name, audioUrl, creatorId, placeId, coord, saverId, length, 
+                                                                                desc, imgUrl);
         }
     }
 
@@ -87,8 +102,16 @@ public class PlaceGuide {
         return creatorId;
     }
 
+    public String getPlaceId() {
+        return placeId;
+    }
+
     public PlaceCoordinate getCoordinate() {
         return coord;
+    }
+
+    public List<String> getSaverId() {
+        return saverId;
     }
 
     @Nullable
