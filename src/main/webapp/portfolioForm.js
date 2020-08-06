@@ -18,27 +18,39 @@
  * Sets th action of the form to the fetche url.
  */
 function addBlobstoreUploadUrlToForm() {
-  fetch('/blobstore-upload-portfolio')
-      .catch(error => console.log("blobstore-upload-portfolio: failed to fetch: " + error))
-      .then(uploadUrl => uploadUrl.text())
-      .catch(error => console.log('blobstore-upload-portfolio: failed to convert to text: ' + error))
-      .then(uploadUrl => {
+  fetch ('/blobstore-upload-portfolio')
+      .catch (error => console.log("blobstore-upload-portfolio: failed to fetch: " + error))
+      .then (uploadUrl => uploadUrl.text())
+      .catch (error => console.log('blobstore-upload-portfolio: failed to convert to text: ' + error))
+      .then (uploadUrl => {
         setFormActionUrl(uploadUrl);
       });
 }
 
 /** Set the destination url of the post method for the portfolio form to uploadUrl. */
-function setFormActionUrl(uploadUrl){
+function setFormActionUrl(uploadUrl) {
   var form = document.getElementById("portfolioForm");
   form.action = uploadUrl;
 }
 
-function getUserDataFromServlet(){
+function fillFormInputsWithUserData() {
+    getUserDataFromServlet().then (response => {
+        document.getElementById("name").value = response.name;
+        document.getElementById("selfIntroduction") = response.selfIntroduction;
+        if (response.publicPortfolio) {
+            document.getElementById("publicPortfolio").value = "public";
+        } else {
+            document.getElementById("publicPortfolio").value = "private";
+        }
+    });
+}
+
+function getUserDataFromServlet() {
    return fetch('/user-servlet')
-        .catch(error => console.log("user-servlet: failed to fetch: " + error))
-        .then(response => response.json())
-        .catch(error => console.log('fillFormInputsWithData: failed to convert to json: ' + error))
-        .then(response => {
+        .catch (error => console.log("user-servlet: failed to fetch: " + error))
+        .then (response => response.json())
+        .catch (error => console.log('fillFormInputsWithData: failed to convert to json: ' + error))
+        .then (response => {
             return response;
         });
 }
