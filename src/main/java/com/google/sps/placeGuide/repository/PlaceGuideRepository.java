@@ -12,25 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.google.sps.place;
+package com.google.sps.repository;
 
 import org.jetbrains.annotations.Nullable;
+import com.google.sps.placeGuide.PlaceGuide;
+import java.util.List;
 
-/** Class containing latitude and longitude of a place. */
-public class PlaceCoordinate {
-    private final double lat;
-    private final double lng;
+public interface PlaceGuideRepository {
 
-    public PlaceCoordinate(double lat, double lng) {
-        this.lat = lat;
-        this.lng = lng;
-    }
+    public void savePlaceGuide(PlaceGuide placeGuide);
 
-    public double getLatitude() {
-        return lat;
-    }
-
-    public double getLongitude() {
-        return lng;
-    }
+    public List<PlaceGuide> getPlaceGuidesList();
 }
