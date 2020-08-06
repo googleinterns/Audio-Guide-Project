@@ -60,6 +60,7 @@ public class UserServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     User user = getUserFromRequest(request);
+    System.out.println("Saving user: " + user.getId() + " " + user.getName());
     userRepository.saveUser(user);
     response.sendRedirect("/index.html");
   }
