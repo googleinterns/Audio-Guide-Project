@@ -2,12 +2,20 @@ package com.google.sps.user.repository;
 
 import com.google.sps.user.User;
 import org.jetbrains.annotations.Nullable;
-import java.util.HashMap;
 
-/** Handles the storage of User data. */
+/**
+ * Handles the storage of User data.
+ */
 public interface UserRepository {
-    void saveUser(User user);
+  /**
+   * Saves the user's data in the database.
+   */
+  void saveUser(User user);
 
-    @Nullable
-    User getUser(String id);
+  /**
+   * Returns the user with the given id data from the database.
+   * If no user exists with the given id, it returns null.
+   */
+  @Nullable
+  User getUser(String id);
 }
