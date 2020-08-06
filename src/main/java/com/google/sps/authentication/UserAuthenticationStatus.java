@@ -33,6 +33,6 @@ public class UserAuthenticationStatus {
   }
 
   public boolean isLoggedIn() {
-      return isLoggedIn;
+    return isLoggedIn;
   }
 }
