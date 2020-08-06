@@ -6,7 +6,6 @@ import com.google.sps.user.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import java.util.Optional;
 
 @RunWith(JUnit4.class)
 public final class UserTest {
@@ -32,14 +31,14 @@ public final class UserTest {
   public void getName_noNameProvided_returnsNull() {
     // User with no preset name.
     User newUser = new User.Builder(ID, EMAIL).build();
-    assertEquals(Optional.empty(), newUser.getName());
+    assertEquals(null, newUser.getName());
   }
 
   @Test
   public void getName_nameProvidedNoOtherOptionalParameters_returnsName() {
     // User with preset selfIntroduction.
     User newUser = new User.Builder(ID, EMAIL).setName(NAME).build();
-    assertEquals(Optional.of(NAME), newUser.getName());
+    assertEquals(NAME, newUser.getName());
   }
 
   @Test
@@ -51,14 +50,14 @@ public final class UserTest {
             .setName(NAME)
             .addSelfIntroduction(SELF_INTRODUCTION)
             .build();
-    assertEquals(Optional.of(NAME), newUser.getName());
+    assertEquals(NAME, newUser.getName());
   }
 
   @Test
   public void getSelfIntroduction_noSelfIntroductionProvided_returnsNull() {
     // User with no preset selfIntroduction.
     User newUser = new User.Builder(ID, EMAIL).build();
-    assertEquals(Optional.empty(), newUser.getSelfIntroduction());
+    assertEquals(null, newUser.getSelfIntroduction());
   }
 
   @Test
@@ -66,7 +65,7 @@ public final class UserTest {
       getSelfIntroduction_selfIntroductionProvidedNoOtherOptionalParameters_returnsSelfIntroduction() {
     // User with preset selfIntroduction.
     User newUser = new User.Builder(ID, EMAIL).addSelfIntroduction(SELF_INTRODUCTION).build();
-    assertEquals(Optional.of(SELF_INTRODUCTION), newUser.getSelfIntroduction());
+    assertEquals(SELF_INTRODUCTION, newUser.getSelfIntroduction());
   }
 
   @Test
@@ -79,21 +78,21 @@ public final class UserTest {
             .setName(NAME)
             .addSelfIntroduction(SELF_INTRODUCTION)
             .build();
-    assertEquals(Optional.of(SELF_INTRODUCTION), newUser.getSelfIntroduction());
+    assertEquals(SELF_INTRODUCTION, newUser.getSelfIntroduction());
   }
 
   @Test
   public void getImgUrl_noImgUrlProvided_returnsNull() {
     // User with no preset imgUrl.
     User newUser = new User.Builder(ID, EMAIL).build();
-    assertEquals(Optional.empty(), newUser.getImgUrl());
+    assertEquals(null, newUser.getImgUrl());
   }
 
   @Test
   public void getImgUrl_imgUrlProvidedNoOtherOptionalParameters_returnsImgUrl() {
     // User with preset imgUrl.
     User newUser = new User.Builder(ID, EMAIL).addImgUrl(IMG_URL).build();
-    assertEquals(Optional.of(IMG_URL), newUser.getImgUrl());
+    assertEquals(IMG_URL, newUser.getImgUrl());
   }
 
   @Test
@@ -104,7 +103,7 @@ public final class UserTest {
             .addSelfIntroduction(SELF_INTRODUCTION)
             .addImgUrl(IMG_URL)
             .build();
-    assertEquals(Optional.of(IMG_URL), newUser.getImgUrl());
+    assertEquals(IMG_URL, newUser.getImgUrl());
   }
 
   @Test
