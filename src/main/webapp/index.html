@@ -6,7 +6,7 @@
     <script src = "userVerification.js"></script>
     <script src = "portfolioForm.js"></script>
   </head>
-  <body onload = "authenticateUser(); addBlobstoreUploadUrlToForm()">
+  <body onload = "authenticateUser(); addBlobstoreUploadUrlToForm(); fillFormInputsWithUserData()">
       <div id = "createProfile">
         <form method = "POST" id = "portfolioForm" enctype="multipart/form-data">
             <label for = "name">Name:</label><br>

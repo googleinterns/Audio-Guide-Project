@@ -36,7 +36,9 @@ function setFormActionUrl(uploadUrl) {
 function fillFormInputsWithUserData() {
     getUserDataFromServlet().then (response => {
         document.getElementById("name").value = response.name;
-        document.getElementById("selfIntroduction") = response.selfIntroduction;
+        document.getElementById("selfIntroduction").value = response.selfIntroduction;
+        console.log(response.selfIntroduction);
+        console.log(response.publicPortfolio);
         if (response.publicPortfolio) {
             document.getElementById("publicPortfolio").value = "public";
         } else {
