@@ -16,11 +16,27 @@ package com.google.sps.repository;
 
 import org.jetbrains.annotations.Nullable;
 import com.google.sps.placeGuide.PlaceGuide;
+import com.google.sps.placeGuide.PlaceCoordinate;
 import java.util.List;
 
 public interface PlaceGuideRepository {
 
     public void savePlaceGuide(PlaceGuide placeGuide);
 
-    public List<PlaceGuide> getPlaceGuidesList();
+    // For when navigating from the map and get all the place guides data in the
+    // current window view.
+    public List<PlaceGuide> getPlaceGuidesList(List<PlaceCoordinate>);
+
+    // For when trying to get personal created place guides for the info windows.
+    public List<PlaceGuide> getCreatedPlaceGuidesList(String creatorId);
+
+    // For marking all the place guides that the user created on the current map window.
+    public List<PlaceGuide> getCreatedPlaceGuidesList(String creatorId, List<PlaceCoordinate>);
+
+    // For when trying to get saved place guides for the info windows.
+    public List<PlaceGuide> getSavedPlaceGuidesList(String saverId);
+
+    // For marking all the place guides that the user saved on the current map window.
+    public List<PlaceGuide> getSavedPlaceGuidesList(String saverId, List<PlaceCoordinate>);
+    
 }

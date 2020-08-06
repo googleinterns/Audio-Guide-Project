@@ -15,6 +15,7 @@
 package com.google.sps.placeGuide;
 
 import org.jetbrains.annotations.Nullable;
+import java.util.List;
 
 /** Class containing place guide's information. */
 public class PlaceGuide {
@@ -23,10 +24,15 @@ public class PlaceGuide {
     private final PlaceCoordinate coord;
 
     // Specify how long user usually spends to follow this place guide in minutes.
+    @Nullable
     private final int length;
 
     @Nullable
     private final String desc, imgUrl;
+
+    // List of ids that belonged to users that saved a particular place guide.
+    @Nullable
+    private final List<String> saverId;
 
     private PlaceGuide(String name, String audioUrl, String creatorId, 
                                     PlaceCoordinate coord, int length, 
@@ -43,16 +49,18 @@ public class PlaceGuide {
     public static class Builder {
         private final String name, audioUrl, creatorId;
         private final PlaceCoordinate coord;
-        private final int length;
+        private int length;
         private String desc, imgUrl;
         
-        public Builder(String name, String audioUrl, String creatorId, 
-                                    PlaceCoordinate coord, int length) {
+        public Builder(String name, String audioUrl, String creatorId, PlaceCoordinate coord) {
             this.name = name;
             this.audioUrl = audioUrl;
             this.creatorId = creatorId;
             this.coord = coord;
+        }
+        public Builder setLength(int length) {
             this.length = length;
+            return this;
         }
         public Builder setDescription(String desc) {
             this.desc = desc;
