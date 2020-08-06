@@ -76,6 +76,10 @@ public class UserServlet extends HttpServlet {
         if (publicPortfolioStringValue.equals(PUBLIC_PORTFOLIO_INPUT_PUBLIC_VALUE)) {
             newUserBuilder.setPublicPortfolio();
         }
+        String imgKey = getUploadedFileBlobKey(request, IMG_KEY_INPUT);
+        if (imgKey != null) {
+            newUserBuilder.addImgKey(imgKey);
+        }
         return newUserBuilder.build();
     }
 
