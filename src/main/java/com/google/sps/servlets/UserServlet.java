@@ -25,12 +25,20 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import com.google.appengine.api.blobstore.BlobInfo;
+import com.google.appengine.api.blobstore.BlobInfoFactory;
+import com.google.appengine.api.blobstore.BlobKey;
+import com.google.appengine.api.blobstore.BlobstoreService;
+import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import java.io.IOException;
+import org.jetbrains.annotations.Nullable;
+import java.util.List;
+import java.util.Map;
 
 /**
  * This servlet handles users' data.
  */
-@WebServlet("/user-data")
+@WebServlet("/user-servlet")
 public class UserServlet extends HttpServlet {
   public static final String NAME_INPUT = "name";
   public static final String PUBLIC_PORTFOLIO_INPUT = "publicPortfolio";
@@ -82,8 +90,32 @@ public class UserServlet extends HttpServlet {
     if (publicPortfolioStringValue.equals(PUBLIC_PORTFOLIO_INPUT_PUBLIC_VALUE)) {
       newUserBuilder.setPublicPortfolio(true); // False by default.
     }
+    String imgKey = getUploadedFileBlobKey(request, IMG_URL_INPUT);
+        if (imgKey != null) {
+            newUserBuilder.addImgUrl(imgKey);
+        }
     return newUserBuilder.build();
   }
+
+  @Nullable
+    private String getUploadedFileBlobKey(HttpServletRequest request, String formInputElementName) {
+        BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
+        Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);
+        List<BlobKey> blobKeys = blobs.get(formInputElementName);
+        // User submitted form without selecting a file, so we can't get a URL. (dev server)
+        if (blobKeys == null || blobKeys.isEmpty()) {
+            return null;
+        }
+        BlobKey blobKey = blobKeys.get(0);
+        // User submitted form without selecting a file, so we can't get a URL. (live server)
+        BlobInfo blobInfo = new BlobInfoFactory().loadBlobInfo(blobKey);
+        if (blobInfo.getSize() == 0) {
+            blobstoreService.delete(blobKey);
+            return null;
+        }
+        // Return the blobKey as a string. 
+        return blobKey.getKeyString();
+    }
 
   private String convertToJsonUsingGson(Object o) {
     Gson gson = new Gson();
