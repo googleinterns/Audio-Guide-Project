@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServletResponse;
  * the URL that allows a user to upload a file(an image for the portfolio in this case) to Blobstore. 
  */
 @WebServlet("/blobstore-upload-portfolio")
-public class BlobstoreUploadUrlServlet extends HttpServlet {
+public class BlobstoreUploadPortfolioServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {

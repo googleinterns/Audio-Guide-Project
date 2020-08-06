@@ -28,7 +28,7 @@ import javax.servlet.http.HttpServletResponse;
  * (an image and an audio file for the place guide in this case) to Blobstore. 
  */
 @WebServlet("/blobstore-upload-place-guide")
-public class BlobstoreUploadUrlServlet extends HttpServlet {
+public class BlobstoreUploadPlaceGuideServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
