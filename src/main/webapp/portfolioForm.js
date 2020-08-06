@@ -32,3 +32,13 @@ function setFormActionUrl(uploadUrl){
   var form = document.getElementById("portfolioForm");
   form.action = uploadUrl;
 }
+
+function getUserDataFromServlet(){
+   return fetch('/user-servlet')
+        .catch(error => console.log("user-servlet: failed to fetch: " + error))
+        .then(response => response.json())
+        .catch(error => console.log('fillFormInputsWithData: failed to convert to json: ' + error))
+        .then(response => {
+            return response;
+        });
+}
