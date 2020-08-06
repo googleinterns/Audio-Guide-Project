@@ -56,10 +56,10 @@ function setFormActionUrl(uploadUrl) {
  * and fill's the form inputs with this data.
  */
 function fillFormInputsWithUserData() {
-    getUserDataFromServlet().then (response => {
-        document.getElementById("name").value = response.name;
-        document.getElementById("selfIntroduction").value = response.selfIntroduction;
-        if (response.publicPortfolio) {
+    getUserDataFromServlet().then (user => {
+        document.getElementById("name").value = user.name;
+        document.getElementById("selfIntroduction").value = user.selfIntroduction;
+        if (user.publicPortfolio) {
             document.getElementById("publicPortfolio").value = "public";
         } else {
             document.getElementById("publicPortfolio").value = "private";
