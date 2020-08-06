@@ -24,7 +24,7 @@ function authenticateUser() {
 * Send GET request to UserAuthenticationServlet with the current page url
 * as the query parameters.
 */
-function  queryAuthenticationServer(currentUrl) {
+function queryAuthenticationServer(currentUrl) {
   const requestUrl = new URL('/user-authentication', currentUrl);
   const queryParams = new QueryParams(currentUrl);
   requestUrl.search = new URLSearchParams(queryParams).toString();
