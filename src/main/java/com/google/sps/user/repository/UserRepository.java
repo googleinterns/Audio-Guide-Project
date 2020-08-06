@@ -6,8 +6,8 @@ import java.util.HashMap;
 
 /** Handles the storage of User data. */
 public interface UserRepository {
-    public void saveUser(User user);
+    void saveUser(User user);
 
     @Nullable
-    public User getUser(String id);
+    User getUser(String id);
 }
