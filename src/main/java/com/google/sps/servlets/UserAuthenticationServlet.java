@@ -38,10 +38,10 @@ public class UserAuthenticationServlet extends HttpServlet {
         
         if (userService.isUserLoggedIn()) {
             String logoutUrl = userService.createLogoutURL(destinationUrl);
-            status = new UserAuthenticationStatus.Builder(true).setLogoutUrl(logoutUrl).build();
+            status = new UserAuthenticationStatus(true, logoutUrl);
         } else {
             String loginUrl = userService.createLoginURL(destinationUrl);
-            status = new UserAuthenticationStatus.Builder(false).setLoginUrl(loginUrl).build();
+            status = new UserAuthenticationStatus(false, loginUrl);
         }
         sendResponse(response, status);
     }
