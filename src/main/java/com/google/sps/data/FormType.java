@@ -15,18 +15,18 @@
 package com.google.sps.data;
 
 /**
- * Specifies the possible types of form handler servlets.
+ * Specifies the possible form types and their form handler servlets.
  */
-public enum FormHandlerType {
+public enum FormType {
   PORTFOLIO_HANDLER("/user-servlet");
 
-  private final String servletName;
+  private final String formHandlerServletName;
 
-  FormHandlerType(String servletName) {
-      this.servletName = servletName;
+  FormHandler(String formHandlerServletName) {
+      this.formHandlerServletName = servletName;
   }
 
-  private String getServletName(String servletName) {
-      return servletName;
+  private String getServletName(String formHandlerServletName) {
+      return formHandlerServletName;
   }
 }
