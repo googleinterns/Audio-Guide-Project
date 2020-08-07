@@ -14,6 +14,7 @@
 
 package com.google.sps.servlets;
 
+import com.google.sps.data.FormHandler;
 import com.google.appengine.api.blobstore.BlobstoreService;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import java.io.IOException;
@@ -24,15 +25,20 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * When the fetch() function requests the /blobstore-upload-url URL, the content of the response is
- * the URL that allows a user to upload a file(an image for the portfolio in this case) to Blobstore. 
+ * the URL that allows a user to upload files(blobs) through a form.
+ * @param request provides as parameter the form handler servlet's type 
+ * to which the submitted form needs to be redirected after the blobs being processed.
  */
-@WebServlet("/blobstore-upload-portfolio")
-public class BlobstoreUploadPortfolioServlet extends HttpServlet {
+@WebServlet("/blobstore-upload-url")
+public class BlobstoreUploadUrlServlet extends HttpServlet {
+  public static final String FORM_TYPE_PARAMETER = "formType";
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    String formType = request.getParameter(FORM_TYPE_PARAMETER);
+    String targetServletName = FormHandler.valueOf(formType).getFormHandlerServletName();
     BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
-    String uploadUrl = blobstoreService.createUploadUrl("/user-servlet");
+    String uploadUrl = blobstoreService.createUploadUrl(targetServletName);
     response.setContentType("text/html");
     response.getWriter().println(uploadUrl);
   }

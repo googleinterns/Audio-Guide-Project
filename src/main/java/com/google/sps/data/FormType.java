@@ -26,7 +26,7 @@ public enum FormType {
       this.formHandlerServletName = servletName;
   }
 
-  private String getServletName(String formHandlerServletName) {
+  private String getFormHandlerServletName(String formHandlerServletName) {
       return formHandlerServletName;
   }
 }
