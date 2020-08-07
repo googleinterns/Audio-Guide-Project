@@ -14,7 +14,7 @@
 
 package com.google.sps.servlets;
 
-import com.google.sps.data.FormHandler;
+import com.google.sps.data.FormType;
 import com.google.appengine.api.blobstore.BlobstoreService;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import java.io.IOException;
@@ -36,7 +36,7 @@ public class BlobstoreUploadUrlServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     String formType = request.getParameter(FORM_TYPE_PARAMETER);
-    String targetServletName = FormHandler.valueOf(formType).getFormHandlerServletName();
+    String targetServletName = FormType.valueOf(formType).getFormHandlerServletName();
     BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
     String uploadUrl = blobstoreService.createUploadUrl(targetServletName);
     response.setContentType("text/html");

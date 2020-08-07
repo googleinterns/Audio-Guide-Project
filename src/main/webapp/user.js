@@ -101,15 +101,15 @@ function userPresentInDatabase() {
  * Handles setting up the portfolio form whenever the page is loaded. 
  */
 function setUpPortfolioForm() {
-    addBlobstoreUploadUrlToForm();
+    addBlobstoreUploadUrlToForm("PORTFOLIO_FORM");
     fillFormWithUserData();
 }
 
 /**
  * Sets th action of the form to the url to which blobs can be uploaded.
  */
-function addBlobstoreUploadUrlToForm() {
-  getBlobstoreUploadUrlFromServlet().then (uploadUrl => {
+function addBlobstoreUploadUrlToForm(formType) {
+  getBlobstoreUploadUrlFromServlet(formType).then (uploadUrl => {
     setFormActionUrl(uploadUrl);
   });
 }
@@ -117,8 +117,10 @@ function addBlobstoreUploadUrlToForm() {
 /**
  * Fetches a url to which the files can be uploaded, relying on Blobstore API.
  */
-function getBlobstoreUploadUrlFromServlet() {
-    return fetch ('/blobstore-upload-portfolio')
+function getBlobstoreUploadUrlFromServlet(formType) {
+    var url = new URL("/blobstore-upload-url", document.URL);
+    url.searchParams.append('formType', formType)
+    return fetch (url)
     .catch (error => console.log("blobstore-upload-portfolio: failed to fetch: " + error))
     .then (uploadUrl => uploadUrl.text())
     .catch (error => console.log('blobstore-upload-portfolio: failed to convert to text: ' + error))
