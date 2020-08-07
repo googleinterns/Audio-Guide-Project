@@ -30,6 +30,8 @@ import org.junit.runners.JUnit4;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 @RunWith(JUnit4.class)
 public final class DatastoreUserRepositoryTest {
@@ -111,5 +113,31 @@ public final class DatastoreUserRepositoryTest {
     } catch (EntityNotFoundException e) {
       fail("Entity not found: " + e);
     }
+  }
+
+  @Test
+  public void existingUser_userExists_returnsTrue() {
+     // Create entity to save.
+    Entity userEntity = new Entity(DatastoreUserRepository.ENTITY_KIND, toSaveUser.getId());
+    userEntity.setProperty(DatastoreUserRepository.NAME_PROPERTY, toSaveUser.getName());
+    userEntity.setProperty(DatastoreUserRepository.EMAIL_PROPERTY, toSaveUser.getEmail());
+    userEntity.setProperty(DatastoreUserRepository.PUBLIC_PORTFOLIO_PROPERTY, toSaveUser.portfolioIsPublic());
+    userEntity.setProperty(DatastoreUserRepository.SELF_INTRODUCTION_PROPERTY, toSaveUser.getSelfIntroduction());
+    userEntity.setProperty(DatastoreUserRepository.IMG_KEY_PROPERTY, toSaveUser.getImgKey());
+
+    // Save entity to datastore.
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    datastore.put(userEntity);
+
+    // Check if user exists.
+    boolean userExists = myUserRepository.existingUser(ID);
+    assertTrue(userExists);
+  }
+
+  @Test
+  public void existingUser_userDoesntExist_returnsFalse() {
+    // Check if user exists.
+    boolean userExists = myUserRepository.existingUser(ID);
+    assertFalse(userExists);
   }
 }

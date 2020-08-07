@@ -100,7 +100,7 @@ public class UserDataServlet extends HttpServlet {
         // The user submitted a new photo, save it in the database, overwrite old one.
         newUserBuilder.addImgKey(imgKey);
     } else if (request.getParameterValues(DELETE_IMG_INPUT) == null) { 
-        //The user didn't submit a new photo, but they didn't choose to delete the old one either.
+        // The user didn't submit a new photo, but they didn't choose to delete the old one either.
         // Keep old photo in the database.
         imgKey = userRepository.getUser(userService.getCurrentUser().getUserId()).getImgKey();
         newUserBuilder.addImgKey(imgKey);
