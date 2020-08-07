@@ -8,6 +8,7 @@ public class PlaceGuide {
   private final String name;
   private final String audioKey; 
   private final String creatorId;
+  private final boolean isPublic;
 
   // Acquired using Places API.
   private final String placeId;
@@ -22,12 +23,14 @@ public class PlaceGuide {
   private final String desc, imgKey;
 
   private PlaceGuide(String name, String audioKey, String creatorId, 
-                                    String placeId, PlaceCoordinate coord,
-                                    int length, String desc, String imgKey) {
+                                    String placeId, boolean isPublic, 
+                                    PlaceCoordinate coord, int length, 
+                                    String desc, String imgKey) {
     this.name = name;
     this.audioKey = audioKey;
     this.creatorId = creatorId;
     this.placeId = placeId;
+    this.isPublic = isPublic;
     this.coord = coord;
     this.length = length;
     this.desc = desc;
@@ -38,6 +41,7 @@ public class PlaceGuide {
     private final String name;
     private final String audioKey;
     private final String creatorId; 
+    private boolean isPublic = false;
     private final String placeId;
     private final PlaceCoordinate coord;
     private int length;
@@ -50,6 +54,10 @@ public class PlaceGuide {
       this.creatorId = creatorId;
       this.placeId = placeId;
       this.coord = coord;
+    }
+    public Builder setPlaceGuideToPublic(boolean isPublic) {
+      this.isPublic = isPublic;
+      return this;
     }
     public Builder setLength(int length) {
       this.length = length;
@@ -64,7 +72,8 @@ public class PlaceGuide {
       return this;
     }
     public UserAuthenticationStatus build() {
-      return new PlaceGuide(name, audioKey, creatorId, placeId, coord, length, desc, imgKey);
+      return new PlaceGuide(name, audioKey, creatorId, placeId, isPublic, 
+                                            coord, length, desc, imgKey);
     }
   }
 
@@ -72,7 +81,7 @@ public class PlaceGuide {
     return name;
   }
 
-  public String getaudioKey() {
+  public String getAudioKey() {
     return audioKey;
   }
 
@@ -88,6 +97,10 @@ public class PlaceGuide {
     return coord;
   }
 
+  public boolean isPublic() {
+    return isPublic;
+  }
+
   @Nullable
   public String getLength() {
     return length;
@@ -99,7 +112,7 @@ public class PlaceGuide {
   }
 
   @Nullable
-  public String getImageUrl() {
+  public String getImageKey() {
     return imgKey;
   }
 }
