@@ -185,7 +185,7 @@ function createImgElement(srcBlobKey) {
  * Gets the currently logged in user's data from the servlet.
  */
 function getUserDataFromServlet() {
-   return fetch('/servlet')
+   return fetch('/user-data-servlet')
         .catch (error => console.log("user-servlet: failed to fetch: " + error))
         .then (response => response.json())
         .catch (error => console.log('fillFormInputsWithData: failed to convert to json: ' + error))

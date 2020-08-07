@@ -56,6 +56,10 @@ public class UserDataServlet extends HttpServlet {
 
   /**
    * Saves the recently submitted userdata(updates it if the user already has some data saved).
+   * Note: the user's name, self-introduction and portfolio status will be rewritten with the new data, whatewer it is.
+   * (even if the new data is empty and previously the user had some data saved)
+   * However, we keep the user's photo even if they didn't submit a new one, unless the user specifically
+   * exressed their preference to drop the photo from their profile.
    */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
