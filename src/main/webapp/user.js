@@ -102,7 +102,7 @@ function userPresentInDatabase() {
  */
 function setUpPortfolioForm() {
     addBlobstoreUploadUrlToForm();
-    fillFormInputsWithUserData();
+    fillFormWithUserData();
 }
 
 /**
@@ -139,7 +139,7 @@ function setFormActionUrl(uploadUrl) {
  * Gets the currently logged in user's data from the database
  * and fill's the form inputs with this data.
  */
-function fillFormInputsWithUserData() {
+function fillFormWithUserData() {
     getUserDataFromServlet().then (user => {
         setFormInputValue(document.getElementById("name"), user.name);
         setFormInputValue(document.getElementById("selfIntroduction"), user.selfIntroduction);
@@ -147,6 +147,10 @@ function fillFormInputsWithUserData() {
             document.getElementById("publicPortfolio").value = "public";
         } else {
             document.getElementById("publicPortfolio").value = "private";
+        }
+        if (user.imgKey != undefined) {
+            var img = createImgElement(user.imgKey);
+            document.getElementById("portfolioForm").appendChild(img);
         }
     });
 }
@@ -160,6 +164,19 @@ function setFormInputValue(input, value) {
     } else {
         input.value = value;
     }
+}
+
+
+/**
+ * Creates an img element with the given blobKey, 
+ * relying on the blobstore API for serving the blob.
+ */
+function createImgElement(srcBlobKey) {
+    var url = new URL("/serve-blob", document.URL);
+    url.searchParams.append('blob-key', srcBlobKey)
+    var img = document.createElement("img");
+    img.src = url;
+    return img;
 }
 
 /** 
