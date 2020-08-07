@@ -1,12 +1,13 @@
 package com.google.sps.placeGuide;
 
 import org.jetbrains.annotations.Nullable;
-import java.util.List;
 
 /** Class containing place guide's information. */
 public class PlaceGuide {
 
-  private final String name, audioUrl, creatorId;
+  private final String name;
+  private final String audioKey; 
+  private final String creatorId;
 
   // Acquired using Places API.
   private final String placeId;
@@ -18,45 +19,37 @@ public class PlaceGuide {
   private final int length;
 
   @Nullable
-  private final String desc, imgUrl;
+  private final String desc, imgKey;
 
-  // List of ids that belonged to users that saved a particular place guide.
-  @Nullable
-  private final List<String> saverId;
-
-  private PlaceGuide(String name, String audioUrl, String creatorId, 
+  private PlaceGuide(String name, String audioKey, String creatorId, 
                                     String placeId, PlaceCoordinate coord,
-                                    List<String> saverId, int length, 
-                                    String desc, String imgUrl) {
+                                    int length, String desc, String imgKey) {
     this.name = name;
-    this.audioUrl = audioUrl;
+    this.audioKey = audioKey;
     this.creatorId = creatorId;
     this.placeId = placeId;
     this.coord = coord;
-    this.saverId = saverId;
     this.length = length;
     this.desc = desc;
-    this.imgUrl = imgUrl;
+    this.imgKey = imgKey;
   }
 
   public static class Builder {
-    private final String name, audioUrl, creatorId, placeId;
+    private final String name;
+    private final String audioKey;
+    private final String creatorId; 
+    private final String placeId;
     private final PlaceCoordinate coord;
-    private List<String> saverId;
     private int length;
-    private String desc, imgUrl;
+    private String desc, imgKey;
         
-    public Builder(String name, String audioUrl, String creatorId, 
-                                            String placeId, PlaceCoordinate coord) {
+    public Builder(String name, String audioKey, String creatorId, String placeId, 
+                                                                   PlaceCoordinate coord) {
       this.name = name;
-      this.audioUrl = audioUrl;
+      this.audioKey = audioKey;
       this.creatorId = creatorId;
       this.placeId = placeId;
       this.coord = coord;
-    }
-    public Builder setSaverId(List<String> saverId) {
-      this.saverId = saverId;
-      return this;
     }
     public Builder setLength(int length) {
       this.length = length;
@@ -66,52 +59,47 @@ public class PlaceGuide {
       this.desc = desc;
       return this;
     }
-    public Builder setImageUrl(String imgUrl) {
-      this.imgUrl = imgUrl;
+    public Builder setImageUrl(String imgKey) {
+      this.imgKey = imgKey;
       return this;
     }
     public UserAuthenticationStatus build() {
-      return new PlaceGuide(name, audioUrl, creatorId, placeId, coord, saverId, length, 
-                                                                            desc, imgUrl);
+      return new PlaceGuide(name, audioKey, creatorId, placeId, coord, length, desc, imgKey);
     }
   }
 
-    public String getName() {
-        return name;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public String getAudioUrl() {
-        return audioUrl;
-    }
+  public String getaudioKey() {
+    return audioKey;
+  }
 
-    public String getCreatorId() {
-        return creatorId;
-    }
+  public String getCreatorId() {
+    return creatorId;
+  }
 
-    public String getPlaceId() {
-        return placeId;
-    }
+  public String getPlaceId() {
+    return placeId;
+  }
 
-    public PlaceCoordinate getCoordinate() {
-        return coord;
-    }
+  public PlaceCoordinate getCoordinate() {
+    return coord;
+  }
 
-    public List<String> getSaverId() {
-        return saverId;
-    }
+  @Nullable
+  public String getLength() {
+    return length;
+  }
 
-    @Nullable
-    public String getLength() {
-        return length;
-    }
+  @Nullable
+  public String getDescription() {
+    return desc;
+  }
 
-    @Nullable
-    public String getDescription() {
-        return desc;
-    }
-
-    @Nullable
-    public String getImageUrl() {
-        return imgUrl;
-    }
+  @Nullable
+  public String getImageUrl() {
+    return imgKey;
+  }
 }
