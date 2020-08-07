@@ -1,6 +1,7 @@
 package com.google.sps.placeGuide;
 
 import org.jetbrains.annotations.Nullable;
+import com.google.appengine.api.datastore.GeoPt;
 
 /** Class containing place guide's information. */
 public class PlaceGuide {
@@ -16,7 +17,7 @@ public class PlaceGuide {
   // This is not the unique identifier of a place guide.
   private final String placeId;
 
-  private final PlaceCoordinate coord;
+  private final GeoPt coord;
 
   // Specify how long user usually spends to follow this place guide in minutes.
   @Nullable
@@ -27,7 +28,7 @@ public class PlaceGuide {
 
   private PlaceGuide(long id, String name, String audioKey, String creatorId, 
                                     String placeId, boolean isPublic, 
-                                    PlaceCoordinate coord, int length, 
+                                    GeoPt coord, int length, 
                                     String desc, String imgKey) {
     this.id = id;
     this.name = name;
@@ -53,7 +54,7 @@ public class PlaceGuide {
     private String desc, imgKey;
         
     public Builder(String name, String audioKey, String creatorId, String placeId, 
-                                                                   PlaceCoordinate coord) {
+                                                                   GeoPt coord) {
       this.name = name;
       this.audioKey = audioKey;
       this.creatorId = creatorId;

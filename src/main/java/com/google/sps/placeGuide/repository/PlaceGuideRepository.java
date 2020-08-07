@@ -10,7 +10,7 @@ public interface PlaceGuideRepository {
   public void createAndStorePlaceGuide(PlaceGuide placeGuide);
 
   // For when user wants to save the user's own place guide or other user's place guide.
-  public void savePlaceGuide(String creatorId, String placeId);
+  public void savePlaceGuide(String saverId, String creatorId, String placeGuideId);
 
   // For when navigating from the map and get all the place guides data in the
   // current window view.
