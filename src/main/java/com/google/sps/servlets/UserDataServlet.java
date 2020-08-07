@@ -50,7 +50,19 @@ public class UserDataServlet extends HttpServlet {
   private final UserRepository userRepository;
   private final UserService userService;
 
+  private final BlobstoreService blobstoreService;
+  private final BlobInfoFactory blobInfoFactory;
+
   public UserDataServlet() {
+    blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
+    blobInfoFactory = new BlobInfoFactory();
+    userRepository = UserRepositoryFactory.getUserRepository(RepositoryType.DATASTORE);
+    userService = UserServiceFactory.getUserService();
+  }
+
+   public UserDataServlet(BlobstoreService blobstoreService, BlobInfoFactory blobInfoFactory) {
+    this.blobstoreService = blobstoreService;
+    this.blobInfoFactory = blobInfoFactory;
     userRepository = UserRepositoryFactory.getUserRepository(RepositoryType.DATASTORE);
     userService = UserServiceFactory.getUserService();
   }
@@ -110,7 +122,6 @@ public class UserDataServlet extends HttpServlet {
 
   @Nullable
     private String getUploadedFileBlobKey(HttpServletRequest request, String formInputElementName) {
-        BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
         Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);
         List<BlobKey> blobKeys = blobs.get(formInputElementName);
         // User submitted form without selecting a file, so we can't get a URL. (dev server)
@@ -119,7 +130,8 @@ public class UserDataServlet extends HttpServlet {
         }
         BlobKey blobKey = blobKeys.get(0);
         // User submitted form without selecting a file, so we can't get a URL. (live server)
-        BlobInfo blobInfo = new BlobInfoFactory().loadBlobInfo(blobKey);
+        System.out.println("!!!: ! "+ blobInfoFactory);
+        BlobInfo blobInfo = blobInfoFactory.loadBlobInfo(blobKey);
         if (blobInfo.getSize() == 0) {
             blobstoreService.delete(blobKey);
             return null;

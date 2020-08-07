@@ -16,6 +16,7 @@ package com.google.sps;
 
 import com.google.appengine.api.datastore.*;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
+import com.google.appengine.tools.development.testing.LocalBlobstoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.google.gson.Gson;
 import com.google.sps.servlets.UserDataServlet;
@@ -26,16 +27,49 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-
+import com.google.appengine.api.blobstore.BlobInfo;
+import com.google.appengine.api.blobstore.BlobInfoFactory;
+import com.google.appengine.api.blobstore.BlobKey;
+import com.google.appengine.api.blobstore.BlobstoreService;
+import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.http.client.methods.HttpPost;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
+import java.io.FileNotFoundException;
+import com.google.appengine.api.files.FinalizationException;
+import javax.jcr.lock.LockException;
+import com.google.appengine.api.files.FileService;
+import com.google.appengine.api.files.FileServiceFactory;
+import com.google.appengine.api.files.AppEngineFile;
+import com.google.appengine.api.files.FileWriteChannel;
+import java.nio.*; 
+import java.util.List;
+import java.util.Arrays;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.File;
+import java.util.Date;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.HttpEntity;
+import org.apache.http.entity.ContentType;
+import org.apache.http.client.HttpClient;
+import org.apache.http.impl.client.HttpClients;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -58,22 +92,24 @@ public final class UserDataServletTest {
 
   private HttpServletRequest request;
   private HttpServletResponse response;
+  private BlobstoreService blobstoreService;
+  private BlobInfoFactory blobInfoFactory;
 
   @Before
   public void setup() {
     // Set the userdata that the Userservice will return.
     attributeToValue.put("com.google.appengine.api.users.UserService.user_id_key", (Object) ID);
-    helper = new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig())
+    helper = new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig(), new LocalBlobstoreServiceTestConfig())
             .setEnvIsLoggedIn(true)
             .setEnvAuthDomain("localhost")
             .setEnvEmail(EMAIL)
             .setEnvAttributes(attributeToValue);
     helper.setUp();
 
-    userDataServlet = new UserDataServlet();
-
     request = mock(HttpServletRequest.class);
     response = mock(HttpServletResponse.class);
+    blobstoreService = mock(BlobstoreService.class);
+    blobInfoFactory = mock(BlobInfoFactory.class);
   }
 
   @After
@@ -81,33 +117,85 @@ public final class UserDataServletTest {
     helper.tearDown();
   }
 
-//   @Test
-//   public void doPost() throws IOException, ServletException {
-//     when(request.getParameter(UserServlet.NAME_INPUT)).thenReturn(NAME);
-//     when(request.getParameter(UserServlet.SELF_INTRODUCTION_INPUT)).thenReturn(SELF_INTRODUCTION);
-//     when(request.getParameter(UserServlet.PUBLIC_PORTFOLIO_INPUT)).thenReturn("private");
+   @Test
+   public void doPost() throws IOException, ServletException {
+//     BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
+//     String blobstoreUploadUrl = blobstoreService.createUploadUrl("/user-data-servlet");
+//     System.out.println(blobstoreUploadUrl);
+//     HttpPost post = new HttpPost(blobstoreUploadUrl);
+//     File file = new File("imgFile");
+//     FileBody fileBody = new FileBody(file, ContentType.MULTIPART_FORM_DATA);
+//     StringBody name = new StringBody(NAME, ContentType.MULTIPART_FORM_DATA);
+//     StringBody selfIntroduction = new StringBody(SELF_INTRODUCTION, ContentType.MULTIPART_FORM_DATA);
+//     StringBody publicPortfolio = new StringBody(UserDataServlet.PUBLIC_PORTFOLIO_INPUT_PUBLIC_VALUE, ContentType.MULTIPART_FORM_DATA);
 
-//     StringWriter sw = new StringWriter();
-//     PrintWriter pw = new PrintWriter(sw);
+//     MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+//     builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+//     builder.addPart("imgKey", fileBody);
+//     builder.addPart("name", name);
+//     builder.addPart("selfIntroduction", selfIntroduction);
+//     builder.addPart("publicPortfolio", publicPortfolio);
+//     HttpEntity entity = builder.build();    
+//     post.setEntity(entity);
 
-//     when(response.getWriter()).thenReturn(pw);
+//     CloseableHttpClient client = HttpClients.createDefault();
+//     client.execute(post);
+    when(request.getParameter(UserDataServlet.NAME_INPUT)).thenReturn(NAME);
+    when(request.getParameter(UserDataServlet.SELF_INTRODUCTION_INPUT)).thenReturn(SELF_INTRODUCTION);
+    when(request.getParameter(UserDataServlet.PUBLIC_PORTFOLIO_INPUT)).thenReturn("private");
 
-//     // Save the currenly logged in user's data
-//     userServlet.doPost(request, response);
+    Map<String, List<BlobKey>> blobs = new HashMap<>();
+    BlobKey blobKey = new BlobKey(IMG_KEY);
+    blobs.put(UserDataServlet.IMG_KEY_INPUT, Arrays.asList(blobKey));
+    when(blobstoreService.getUploads(request)).thenReturn(blobs);
+    //Entity userEntitySample = new Entity(DatastoreUserRepository.ENTITY_KIND, toSaveUser.getId());
+    BlobInfo blobInfo = new BlobInfo(blobKey, "img", new Date(), "file.img", 1);
+    when(blobInfoFactory.loadBlobInfo(blobKey)).thenReturn(blobInfo);
+    
+    StringWriter sw = new StringWriter();
+    PrintWriter pw = new PrintWriter(sw);
 
-//     // Get the currenly logged in user's previously saved data
-//     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-//     Key userKey = KeyFactory.createKey(DatastoreUserRepository.ENTITY_KIND, ID);
-//     try {
-//       Entity userEntity = datastore.get(userKey);
-//       assertEquals(NAME, userEntity.getProperty(DatastoreUserRepository.NAME_PROPERTY));
-//       assertEquals(EMAIL, userEntity.getProperty(DatastoreUserRepository.EMAIL_PROPERTY));
-//       assertEquals(SELF_INTRODUCTION, userEntity.getProperty(DatastoreUserRepository.SELF_INTRODUCTION_PROPERTY));
-//       assertEquals(false, userEntity.getProperty(DatastoreUserRepository.PUBLIC_PORTFOLIO_PROPERTY));
-//     } catch (EntityNotFoundException e) {
-//       fail("Entity not found: " + e);
-//     }
-//   }
+    when(response.getWriter()).thenReturn(pw);
+
+    // Save the currenly logged in user's data
+    userDataServlet = new UserDataServlet(blobstoreService, blobInfoFactory);
+    userDataServlet.doPost(request, response);
+
+    // Get the currenly logged in user's previously saved data
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    Key userKey = KeyFactory.createKey(DatastoreUserRepository.ENTITY_KIND, ID);
+    try {
+      Entity userEntity = datastore.get(userKey);
+      assertEquals(NAME, userEntity.getProperty(DatastoreUserRepository.NAME_PROPERTY));
+      assertEquals(EMAIL, userEntity.getProperty(DatastoreUserRepository.EMAIL_PROPERTY));
+      assertEquals(SELF_INTRODUCTION, userEntity.getProperty(DatastoreUserRepository.SELF_INTRODUCTION_PROPERTY));
+      assertEquals(false, userEntity.getProperty(DatastoreUserRepository.PUBLIC_PORTFOLIO_PROPERTY));
+    } catch (EntityNotFoundException e) {
+      fail("Entity not found: " + e);
+    }
+  }
+
+  public static BlobKey toBlobstore(Blob imageData) 
+        throws FileNotFoundException, FinalizationException, LockException, IOException {
+    if (null == imageData)
+        return null;
+    // Get a file service
+    FileService fileService = FileServiceFactory.getFileService();
+
+    // Create a new Blob file with mime-type "image/png"
+    AppEngineFile file = fileService.createNewBlobFile("image/jpeg");// png
+
+    // Open a channel to write to it
+    boolean lock = true;
+    FileWriteChannel writeChannel = fileService.openWriteChannel(file, lock);
+
+    // This time we write to the channel directly
+    writeChannel.write(ByteBuffer.wrap(imageData.getBytes()));
+
+    // Now finalize
+    writeChannel.closeFinally();
+    return fileService.getBlobKey(file);
+  }
 
   @Test
   public void doGet_existingUser_returnsUser() throws IOException, ServletException {
@@ -130,6 +218,7 @@ public final class UserDataServletTest {
     when(response.getWriter()).thenReturn(pw);
 
     // Get the currenly logged in user's previously saved data
+    userDataServlet = new UserDataServlet();
     userDataServlet.doGet(request, response);
 
     pw.flush();
@@ -151,6 +240,7 @@ public final class UserDataServletTest {
 
     // Try to get the currenly logged in user's data.
     // It is not saved.
+    userDataServlet = new UserDataServlet();
     userDataServlet.doGet(request, response);
 
     pw.flush();
