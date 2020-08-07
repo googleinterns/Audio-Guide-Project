@@ -18,7 +18,7 @@ import com.google.appengine.api.datastore.*;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.google.gson.Gson;
-import com.google.sps.servlets.UserServlet;
+import com.google.sps.servlets.UserDataServlet;
 import com.google.sps.user.User;
 import com.google.sps.user.repository.impl.DatastoreUserRepository;
 import org.junit.After;
@@ -41,7 +41,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(JUnit4.class)
-public final class UserServletTest {
+public final class UserDataServletTest {
   private static final String ID = "userid";
   private static final String EMAIL = "user@gmail.com";
   private static final String NAME = "username";
@@ -52,7 +52,7 @@ public final class UserServletTest {
           new User.Builder(ID, EMAIL).setName(NAME).setPublicPortfolio(true).addSelfIntroduction(SELF_INTRODUCTION).addImgKey(IMG_KEY).build();
   private User toGetUser;
 
-  private UserServlet userServlet;
+  private UserDataServlet userDataServlet;
   private Map<String, Object> attributeToValue = new HashMap<>();
   private LocalServiceTestHelper helper;
 
@@ -70,7 +70,7 @@ public final class UserServletTest {
             .setEnvAttributes(attributeToValue);
     helper.setUp();
 
-    userServlet = new UserServlet();
+    userDataServlet = new UserDataServlet();
 
     request = mock(HttpServletRequest.class);
     response = mock(HttpServletResponse.class);
@@ -130,7 +130,7 @@ public final class UserServletTest {
     when(response.getWriter()).thenReturn(pw);
 
     // Get the currenly logged in user's previously saved data
-    userServlet.doGet(request, response);
+    userDataServlet.doGet(request, response);
 
     pw.flush();
     Gson gson = new Gson();
@@ -151,7 +151,7 @@ public final class UserServletTest {
 
     // Try to get the currenly logged in user's data.
     // It is not saved.
-    userServlet.doGet(request, response);
+    userDataServlet.doGet(request, response);
 
     pw.flush();
     Gson gson = new Gson();

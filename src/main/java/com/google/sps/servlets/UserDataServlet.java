@@ -38,8 +38,8 @@ import java.util.Map;
 /**
  * This servlet handles users' data.
  */
-@WebServlet("/user-servlet")
-public class UserServlet extends HttpServlet {
+@WebServlet("/user-data-servlet")
+public class UserDataServlet extends HttpServlet {
   public static final String NAME_INPUT = "name";
   public static final String PUBLIC_PORTFOLIO_INPUT = "publicPortfolio";
   public static final String PUBLIC_PORTFOLIO_INPUT_PUBLIC_VALUE = "public";
@@ -49,7 +49,7 @@ public class UserServlet extends HttpServlet {
   private final UserRepository userRepository;
   private final UserService userService;
 
-  public UserServlet() {
+  public UserDataServlet() {
     userRepository = UserRepositoryFactory.getUserRepository(RepositoryType.DATASTORE);
     userService = UserServiceFactory.getUserService();
   }
@@ -60,7 +60,6 @@ public class UserServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     User user = getUserFromRequest(request);
-    System.out.println("Saving user: " + user.getId() + " " + user.getName());
     userRepository.saveUser(user);
     response.sendRedirect("/index.html");
   }
@@ -92,9 +91,9 @@ public class UserServlet extends HttpServlet {
       newUserBuilder.setPublicPortfolio(true); // False by default.
     }
     String imgKey = getUploadedFileBlobKey(request, IMG_KEY_INPUT);
-        if (imgKey != null) {
-            newUserBuilder.addImgKey(imgKey);
-        }
+    if (imgKey != null) {
+        newUserBuilder.addImgKey(imgKey);
+    }
     return newUserBuilder.build();
   }
 
