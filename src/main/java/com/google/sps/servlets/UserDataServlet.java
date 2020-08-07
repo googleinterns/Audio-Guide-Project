@@ -45,6 +45,7 @@ public class UserDataServlet extends HttpServlet {
   public static final String PUBLIC_PORTFOLIO_INPUT_PUBLIC_VALUE = "public";
   public static final String SELF_INTRODUCTION_INPUT = "selfIntroduction";
   public static final String IMG_KEY_INPUT = "imgKey";
+  public static final String DELETE_IMG_INPUT = "deleteImg";
 
   private final UserRepository userRepository;
   private final UserService userService;
@@ -58,7 +59,7 @@ public class UserDataServlet extends HttpServlet {
    * Saves the recently submitted userdata(updates it if the user already has some data saved).
    * Note: the user's name, self-introduction and portfolio status will be rewritten with the new data, whatewer it is.
    * (even if the new data is empty and previously the user had some data saved)
-   * However, we keep the user's photo even if they didn't submit a new one, unless the user specifically
+   * However, we keep the user's photo if they didn't submit a new one, unless the user specifically
    * exressed their preference to drop the photo from their profile.
    */
   @Override
@@ -95,7 +96,13 @@ public class UserDataServlet extends HttpServlet {
       newUserBuilder.setPublicPortfolio(true); // False by default.
     }
     String imgKey = getUploadedFileBlobKey(request, IMG_KEY_INPUT);
-    if (imgKey != null) {
+    if (imgKey != null) { 
+        // The user submitted a new photo, save it in the database, overwrite old one.
+        newUserBuilder.addImgKey(imgKey);
+    } else if (request.getParameterValues(DELETE_IMG_INPUT) == null) { 
+        //The user didn't submit a new photo, but they didn't choose to delete the old one either.
+        // Keep old photo in the database.
+        imgKey = userRepository.getUser(userService.getCurrentUser().getUserId()).getImgKey();
         newUserBuilder.addImgKey(imgKey);
     }
     return newUserBuilder.build();
