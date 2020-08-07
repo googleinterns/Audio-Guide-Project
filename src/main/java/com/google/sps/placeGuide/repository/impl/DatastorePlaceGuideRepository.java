@@ -12,6 +12,7 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository{
 
   private final DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
   public static final String USER_ENTITY_KIND = "User";
+  public static final String PLACEGUIDE_COORDINATE_ENTITY_KIND = "PlaceGuideCoordinate";
   public static final String PLACEGUIDE_ENTITY_KIND = "PlaceGuide";
   public static final String NAME_PROPERTY = "name";
   public static final String AUDIO_KEY_PROPERTY = "audioKey";
@@ -30,21 +31,28 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository{
     Key creatorKey = KeyFactory.createKey(USER_ENTITY_KIND, creatorId);
   }
 
+  // Create place guide entity as parent entity and coordinate entity as child entity.
   private Entity getPlaceGuideEntity(PlaceGuide placeGuide) {
+    
+    // Let the ID automatically be created since no identifiers can be used as an ID.
     Entity placeGuideEntity = new Entity(PLACEGUIDE_ENTITY_KIND);
     placeGuideEntity.setProperty(NAME_PROPERTY, placeGuide.getName());
     placeGuideEntity.setProperty(AUDIO_KEY_PROPERTY, placeGuide.getAudioKey());
     placeGuideEntity.setProperty(CREATOR_ID_PROPERTY, placeGuide.getCreatorId());
     placeGuideEntity.setProperty(PLACE_ID_PROPERTY, placeGuide.getPlaceId());
     placeGuideEntity.setProperty(IS_PUBLIC_PROPERTY, placeGuide.isPublic());
-    placeGuideEntity.setProperty(COORD_PROPERTY, placeGuide.getCoordinate());
     placeGuideEntity.setProperty(DESC_PROPERTY, placeGuide.getDescription());
     placeGuideEntity.setProperty(LENGTH_PROPERTY, placeGuide.getLength());
     placeGuideEntity.setProperty(IMG_KEY_PROPERTY, placeGuide.getImageKey());
+
+    placeGuideEntity.setProperty(COORD_PROPERTY, placeGuide.getCoordinate());
     return placeGuideEntity;
   }
 
-  /** Save public place guide and store it inside the user entity's savedPlaceGuidesList property. */
+  /** 
+  * Save public place guide and store it inside the user entity's 
+  * savedPlaceGuidesList property.
+  */
   public void savePlaceGuide(String creatorId, String placeId) {
 
   }

@@ -5,12 +5,15 @@ import org.jetbrains.annotations.Nullable;
 /** Class containing place guide's information. */
 public class PlaceGuide {
 
+  @Nullable
+  private long id;
+
   private final String name;
   private final String audioKey; 
   private final String creatorId;
   private final boolean isPublic;
 
-  // Acquired using Places API.
+  // This is not the unique identifier of a place guide.
   private final String placeId;
 
   private final PlaceCoordinate coord;
@@ -22,10 +25,11 @@ public class PlaceGuide {
   @Nullable
   private final String desc, imgKey;
 
-  private PlaceGuide(String name, String audioKey, String creatorId, 
+  private PlaceGuide(long id, String name, String audioKey, String creatorId, 
                                     String placeId, boolean isPublic, 
                                     PlaceCoordinate coord, int length, 
                                     String desc, String imgKey) {
+    this.id = id;
     this.name = name;
     this.audioKey = audioKey;
     this.creatorId = creatorId;
@@ -38,6 +42,7 @@ public class PlaceGuide {
   }
 
   public static class Builder {
+    private long id;
     private final String name;
     private final String audioKey;
     private final String creatorId; 
@@ -54,6 +59,9 @@ public class PlaceGuide {
       this.creatorId = creatorId;
       this.placeId = placeId;
       this.coord = coord;
+    }
+    public Builder setId(long id) {
+      this.id = id;
     }
     public Builder setPlaceGuideToPublic(boolean isPublic) {
       this.isPublic = isPublic;
@@ -72,9 +80,13 @@ public class PlaceGuide {
       return this;
     }
     public UserAuthenticationStatus build() {
-      return new PlaceGuide(name, audioKey, creatorId, placeId, isPublic, 
+      return new PlaceGuide(id, name, audioKey, creatorId, placeId, isPublic, 
                                             coord, length, desc, imgKey);
     }
+  }
+
+  public long getId() {
+    return id;
   }
 
   public String getName() {
