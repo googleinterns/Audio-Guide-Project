@@ -50,36 +50,35 @@
             <artifactId>appengine-api-1.0-sdk</artifactId>
             <version>1.9.59</version>
         </dependency>
-      
 
-    <dependency>
-        <groupId>com.google.appengine</groupId>
-        <artifactId>appengine-testing</artifactId>
-        <version>1.9.64</version>
-        <scope>test</scope>
-    </dependency>
+        <dependency>
+            <groupId>com.google.appengine</groupId>
+            <artifactId>appengine-testing</artifactId>
+            <version>1.9.64</version>
+            <scope>test</scope>
+        </dependency>
 
-    <dependency>
-        <groupId>com.google.appengine</groupId>
-        <artifactId>appengine-api-stubs</artifactId>
-        <version>1.9.64</version>
-        <scope>test</scope>
-    </dependency>
+        <dependency>
+            <groupId>com.google.appengine</groupId>
+            <artifactId>appengine-api-stubs</artifactId>
+            <version>1.9.64</version>
+            <scope>test</scope>
+        </dependency>
 
-    <dependency>
-      <groupId>org.mockito</groupId>
-      <artifactId>mockito-all</artifactId>
-      <version>2.0.2-beta</version>
-      <scope>test</scope>
-    </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>2.0.2-beta</version>
+            <scope>test</scope>
+        </dependency>
 
-    <!-- https://mvnrepository.com/artifact/javax.jcr/jcr -->
-    <dependency>
-        <groupId>javax.jcr</groupId>
-        <artifactId>jcr</artifactId>
-        <version>2.0</version>
-        <scope>provided</scope>
-    </dependency>
+        <!-- https://mvnrepository.com/artifact/javax.jcr/jcr -->
+        <dependency>
+            <groupId>javax.jcr</groupId>
+            <artifactId>jcr</artifactId>
+            <version>2.0</version>
+            <scope>provided</scope>
+        </dependency>
 
 
         <dependency>
@@ -87,25 +86,6 @@
             <artifactId>mockito-core</artifactId>
             <version>2.0.2-beta</version>
         </dependency>
-
-    <dependency>
-        <groupId>org.apache.httpcomponents</groupId>
-        <artifactId>httpclient</artifactId>
-        <version>4.5.10</version>
-    </dependency>
-
-    <dependency>
-        <groupId>org.apache.httpcomponents</groupId>
-        <artifactId>httpmime</artifactId>
-        <version>4.5.12</version>
-    </dependency>
-
-    <dependency>
-        <groupId>org.mockito</groupId> 
-        <artifactId>mockito-core</artifactId>
-        <version>2.21.0</version> 
-        <scope>test</scope>
-    </dependency>
     </dependencies>
 
     <build>
