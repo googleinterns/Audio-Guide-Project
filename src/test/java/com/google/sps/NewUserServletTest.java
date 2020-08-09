@@ -90,63 +90,27 @@ public final class NewUserServletTest {
     helper.tearDown();
   }
 
-//    @Test
-//    public void doPost() throws IOException, ServletException {
-// //     BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
-// //     String blobstoreUploadUrl = blobstoreService.createUploadUrl("/user-data-servlet");
-// //     System.out.println(blobstoreUploadUrl);
-// //     HttpPost post = new HttpPost(blobstoreUploadUrl);
-// //     File file = new File("imgFile");
-// //     FileBody fileBody = new FileBody(file, ContentType.MULTIPART_FORM_DATA);
-// //     StringBody name = new StringBody(NAME, ContentType.MULTIPART_FORM_DATA);
-// //     StringBody selfIntroduction = new StringBody(SELF_INTRODUCTION, ContentType.MULTIPART_FORM_DATA);
-// //     StringBody publicPortfolio = new StringBody(UserDataServlet.PUBLIC_PORTFOLIO_INPUT_PUBLIC_VALUE, ContentType.MULTIPART_FORM_DATA);
+   @Test
+   public void doPost() throws IOException, ServletException {
+    StringWriter sw = new StringWriter();
+    PrintWriter pw = new PrintWriter(sw);
 
-// //     MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-// //     builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
-// //     builder.addPart("imgKey", fileBody);
-// //     builder.addPart("name", name);
-// //     builder.addPart("selfIntroduction", selfIntroduction);
-// //     builder.addPart("publicPortfolio", publicPortfolio);
-// //     HttpEntity entity = builder.build();    
-// //     post.setEntity(entity);
+    when(response.getWriter()).thenReturn(pw);
 
-// //     CloseableHttpClient client = HttpClients.createDefault();
-// //     client.execute(post);
-//     when(request.getParameter(UserDataServlet.NAME_INPUT)).thenReturn(NAME);
-//     when(request.getParameter(UserDataServlet.SELF_INTRODUCTION_INPUT)).thenReturn(SELF_INTRODUCTION);
-//     when(request.getParameter(UserDataServlet.PUBLIC_PORTFOLIO_INPUT)).thenReturn("private");
+    // Get the currenly logged in user's previously saved data
+    newUserServlet = new NewUserServlet();
+    newUserServlet.doPost(request, response);
 
-//     Map<String, List<BlobKey>> blobs = new HashMap<>();
-//     BlobKey blobKey = new BlobKey(IMG_KEY);
-//     blobs.put(UserDataServlet.IMG_KEY_INPUT, Arrays.asList(blobKey));
-//     when(blobstoreService.getUploads(request)).thenReturn(blobs);
-//     //Entity userEntitySample = new Entity(DatastoreUserRepository.ENTITY_KIND, toSaveUser.getId());
-//     BlobInfo blobInfo = new BlobInfo(blobKey, "img", new Date(), "file.img", 1);
-//     when(blobInfoFactory.loadBlobInfo(blobKey)).thenReturn(blobInfo);
-    
-//     StringWriter sw = new StringWriter();
-//     PrintWriter pw = new PrintWriter(sw);
-
-//     when(response.getWriter()).thenReturn(pw);
-
-//     // Save the currenly logged in user's data
-//     userDataServlet = new UserDataServlet(blobstoreService, blobInfoFactory);
-//     userDataServlet.doPost(request, response);
-
-//     // Get the currenly logged in user's previously saved data
-//     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-//     Key userKey = KeyFactory.createKey(DatastoreUserRepository.ENTITY_KIND, ID);
-//     try {
-//       Entity userEntity = datastore.get(userKey);
-//       assertEquals(NAME, userEntity.getProperty(DatastoreUserRepository.NAME_PROPERTY));
-//       assertEquals(EMAIL, userEntity.getProperty(DatastoreUserRepository.EMAIL_PROPERTY));
-//       assertEquals(SELF_INTRODUCTION, userEntity.getProperty(DatastoreUserRepository.SELF_INTRODUCTION_PROPERTY));
-//       assertEquals(false, userEntity.getProperty(DatastoreUserRepository.PUBLIC_PORTFOLIO_PROPERTY));
-//     } catch (EntityNotFoundException e) {
-//       fail("Entity not found: " + e);
-//     }
-//   }
+    // Get the currenly logged in user's previously saved data
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    Key userKey = KeyFactory.createKey(DatastoreUserRepository.ENTITY_KIND, ID);
+    try {
+      Entity userEntity = datastore.get(userKey);
+      assertEquals(EMAIL, userEntity.getProperty(DatastoreUserRepository.EMAIL_PROPERTY));
+    } catch (EntityNotFoundException e) {
+      fail("Entity not found: " + e);
+    }
+  }
 
   @Test
   public void doGet_existingUser_returnsTrue() throws IOException, ServletException {
