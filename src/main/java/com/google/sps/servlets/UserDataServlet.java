@@ -130,7 +130,6 @@ public class UserDataServlet extends HttpServlet {
         }
         BlobKey blobKey = blobKeys.get(0);
         // User submitted form without selecting a file, so we can't get a URL. (live server)
-        System.out.println("!!!: ! "+ blobInfoFactory);
         BlobInfo blobInfo = blobInfoFactory.loadBlobInfo(blobKey);
         if (blobInfo.getSize() == 0) {
             blobstoreService.delete(blobKey);

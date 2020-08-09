@@ -42,12 +42,6 @@ import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 import java.io.FileNotFoundException;
-import com.google.appengine.api.files.FinalizationException;
-import javax.jcr.lock.LockException;
-import com.google.appengine.api.files.FileService;
-import com.google.appengine.api.files.FileServiceFactory;
-import com.google.appengine.api.files.AppEngineFile;
-import com.google.appengine.api.files.FileWriteChannel;
 import java.nio.*; 
 import java.util.List;
 import java.util.Arrays;
@@ -56,20 +50,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.File;
 import java.util.Date;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.entity.mime.content.FileBody;
-import org.apache.http.entity.mime.content.StringBody;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.entity.mime.HttpMultipartMode;
-import org.apache.http.HttpEntity;
-import org.apache.http.entity.ContentType;
-import org.apache.http.client.HttpClient;
-import org.apache.http.impl.client.HttpClients;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -173,28 +154,6 @@ public final class UserDataServletTest {
     } catch (EntityNotFoundException e) {
       fail("Entity not found: " + e);
     }
-  }
-
-  public static BlobKey toBlobstore(Blob imageData) 
-        throws FileNotFoundException, FinalizationException, LockException, IOException {
-    if (null == imageData)
-        return null;
-    // Get a file service
-    FileService fileService = FileServiceFactory.getFileService();
-
-    // Create a new Blob file with mime-type "image/png"
-    AppEngineFile file = fileService.createNewBlobFile("image/jpeg");// png
-
-    // Open a channel to write to it
-    boolean lock = true;
-    FileWriteChannel writeChannel = fileService.openWriteChannel(file, lock);
-
-    // This time we write to the channel directly
-    writeChannel.write(ByteBuffer.wrap(imageData.getBytes()));
-
-    // Now finalize
-    writeChannel.closeFinally();
-    return fileService.getBlobKey(file);
   }
 
   @Test
