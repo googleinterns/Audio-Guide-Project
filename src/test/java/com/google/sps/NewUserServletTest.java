@@ -16,7 +16,6 @@ package com.google.sps;
 
 import com.google.appengine.api.datastore.*;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
-import com.google.appengine.tools.development.testing.LocalBlobstoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.google.gson.Gson;
 import com.google.sps.servlets.NewUserServlet;
@@ -27,11 +26,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import com.google.appengine.api.blobstore.BlobInfo;
-import com.google.appengine.api.blobstore.BlobInfoFactory;
-import com.google.appengine.api.blobstore.BlobKey;
-import com.google.appengine.api.blobstore.BlobstoreService;
-import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -40,15 +35,6 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
-import java.io.FileNotFoundException;
-import java.nio.*; 
-import java.util.List;
-import java.util.Arrays;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.File;
-import java.util.Date;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
@@ -89,8 +75,8 @@ public final class NewUserServletTest {
     helper.tearDown();
   }
 
-   @Test
-   public void doPost() throws IOException, ServletException {
+  @Test
+  public void doPost() throws IOException, ServletException {
     // Save the new user.
     newUserServlet = new NewUserServlet();
     newUserServlet.doPost(request, response);

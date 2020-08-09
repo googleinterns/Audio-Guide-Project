@@ -14,6 +14,7 @@
 
 package com.google.sps.servlets;
 
+import com.google.appengine.api.blobstore.*;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
@@ -21,17 +22,13 @@ import com.google.sps.data.RepositoryType;
 import com.google.sps.user.User;
 import com.google.sps.user.repository.UserRepository;
 import com.google.sps.user.repository.UserRepositoryFactory;
+import org.jetbrains.annotations.Nullable;
+
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import com.google.appengine.api.blobstore.BlobInfo;
-import com.google.appengine.api.blobstore.BlobInfoFactory;
-import com.google.appengine.api.blobstore.BlobKey;
-import com.google.appengine.api.blobstore.BlobstoreService;
-import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import java.io.IOException;
-import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Map;
 
@@ -53,7 +50,9 @@ public class UserDataServlet extends HttpServlet {
   private final BlobstoreService blobstoreService;
   private final BlobInfoFactory blobInfoFactory;
 
-  /** For production. */
+  /**
+   * For production.
+   */
   public UserDataServlet() {
     blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
     blobInfoFactory = new BlobInfoFactory();
@@ -61,8 +60,10 @@ public class UserDataServlet extends HttpServlet {
     userService = UserServiceFactory.getUserService();
   }
 
-   /** For testing purposes. */
-   public UserDataServlet(BlobstoreService blobstoreService, BlobInfoFactory blobInfoFactory) {
+  /**
+   * For testing purposes.
+   */
+  public UserDataServlet(BlobstoreService blobstoreService, BlobInfoFactory blobInfoFactory) {
     this.blobstoreService = blobstoreService;
     this.blobInfoFactory = blobInfoFactory;
     userRepository = UserRepositoryFactory.getUserRepository(RepositoryType.DATASTORE);
@@ -82,9 +83,9 @@ public class UserDataServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     User user = getUserFromRequest(request);
     User prevUserData = userRepository.getUser(userService.getCurrentUser().getUserId());
-    if (prevUserData != null && prevUserData.getImgKey() != user.getImgKey()) { 
-        // Delete previous image blob from blobstore, because it was overwritten or deleted.
-        deleteBlobWithGivenKeyValue(prevUserData.getImgKey());
+    if (prevUserData != null && prevUserData.getImgKey() != user.getImgKey()) {
+      // Delete previous image blob from blobstore, because it was overwritten or deleted.
+      deleteBlobWithGivenKeyValue(prevUserData.getImgKey());
     }
     userRepository.saveUser(user);
     response.sendRedirect("/index.html");
@@ -100,11 +101,11 @@ public class UserDataServlet extends HttpServlet {
     response.getWriter().println(convertToJsonUsingGson(user));
   }
 
-  private void deleteBlobWithGivenKeyValue(String keyValue){
-      if (keyValue != null ) {
-        BlobKey blobKey = new BlobKey(keyValue);
-        blobstoreService.delete(blobKey);
-      }
+  private void deleteBlobWithGivenKeyValue(String keyValue) {
+    if (keyValue != null) {
+      BlobKey blobKey = new BlobKey(keyValue);
+      blobstoreService.delete(blobKey);
+    }
   }
 
   private User getUserFromRequest(HttpServletRequest request) {
@@ -124,36 +125,36 @@ public class UserDataServlet extends HttpServlet {
       newUserBuilder.setPublicPortfolio(true); // False by default.
     }
     String imgKey = getUploadedFileBlobKey(request, IMG_KEY_INPUT);
-    if (imgKey != null) { 
-        // The user submitted a new photo, save it in the database, later overwrite the old one.
-        newUserBuilder.addImgKey(imgKey);
-    } else if (request.getParameterValues(DELETE_IMG_INPUT) == null) { 
-        // The user didn't submit a new photo, but they didn't choose to delete the old one either.
-        // Keep old photo in the database.
-        imgKey = userRepository.getUser(userService.getCurrentUser().getUserId()).getImgKey();
-        newUserBuilder.addImgKey(imgKey);
+    if (imgKey != null) {
+      // The user submitted a new photo, save it in the database, later overwrite the old one.
+      newUserBuilder.addImgKey(imgKey);
+    } else if (request.getParameterValues(DELETE_IMG_INPUT) == null) {
+      // The user didn't submit a new photo, but they didn't choose to delete the old one either.
+      // Keep old photo in the database.
+      imgKey = userRepository.getUser(userService.getCurrentUser().getUserId()).getImgKey();
+      newUserBuilder.addImgKey(imgKey);
     }
     return newUserBuilder.build();
   }
 
   @Nullable
-    private String getUploadedFileBlobKey(HttpServletRequest request, String formInputElementName) {
-        Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);
-        List<BlobKey> blobKeys = blobs.get(formInputElementName);
-        // User submitted form without selecting a file, so we can't get a URL. (dev server)
-        if (blobKeys == null || blobKeys.isEmpty()) {
-            return null;
-        }
-        BlobKey blobKey = blobKeys.get(0);
-        // User submitted form without selecting a file, so we can't get a URL. (live server)
-        BlobInfo blobInfo = blobInfoFactory.loadBlobInfo(blobKey);
-        if (blobInfo.getSize() == 0) {
-            blobstoreService.delete(blobKey);
-            return null;
-        }
-        // Return the blobKey as a string. 
-        return blobKey.getKeyString();
+  private String getUploadedFileBlobKey(HttpServletRequest request, String formInputElementName) {
+    Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);
+    List<BlobKey> blobKeys = blobs.get(formInputElementName);
+    // User submitted form without selecting a file, so we can't get a URL. (dev server)
+    if (blobKeys == null || blobKeys.isEmpty()) {
+      return null;
     }
+    BlobKey blobKey = blobKeys.get(0);
+    // User submitted form without selecting a file, so we can't get a URL. (live server)
+    BlobInfo blobInfo = blobInfoFactory.loadBlobInfo(blobKey);
+    if (blobInfo.getSize() == 0) {
+      blobstoreService.delete(blobKey);
+      return null;
+    }
+    // Return the blobKey as a string.
+    return blobKey.getKeyString();
+  }
 
   private String convertToJsonUsingGson(Object o) {
     Gson gson = new Gson();

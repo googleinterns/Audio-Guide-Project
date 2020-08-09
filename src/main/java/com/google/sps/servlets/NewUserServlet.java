@@ -21,23 +21,16 @@ import com.google.sps.data.RepositoryType;
 import com.google.sps.user.User;
 import com.google.sps.user.repository.UserRepository;
 import com.google.sps.user.repository.UserRepositoryFactory;
+
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import com.google.appengine.api.blobstore.BlobInfo;
-import com.google.appengine.api.blobstore.BlobInfoFactory;
-import com.google.appengine.api.blobstore.BlobKey;
-import com.google.appengine.api.blobstore.BlobstoreService;
-import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import java.io.IOException;
-import org.jetbrains.annotations.Nullable;
-import java.util.List;
-import java.util.Map;
 
 /**
  * This servlet checks if the currently logged in user exists in the database
- * and saves a new user in the database. 
+ * and saves a new user in the database.
  */
 @WebServlet("/new-user-servlet")
 public class NewUserServlet extends HttpServlet {
