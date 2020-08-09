@@ -22,19 +22,16 @@ import com.google.sps.data.RepositoryType;
 import com.google.sps.user.User;
 import com.google.sps.user.repository.UserRepository;
 import com.google.sps.user.repository.UserRepositoryFactory;
-import org.jetbrains.annotations.Nullable;
-
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
+import org.jetbrains.annotations.Nullable;
 
-/**
- * This servlet handles users' data.
- */
+/** This servlet handles users' data. */
 @WebServlet("/user-data-servlet")
 public class UserDataServlet extends HttpServlet {
   public static final String NAME_INPUT = "name";
@@ -50,9 +47,7 @@ public class UserDataServlet extends HttpServlet {
   private final BlobstoreService blobstoreService;
   private final BlobInfoFactory blobInfoFactory;
 
-  /**
-   * For production.
-   */
+  /** For production. */
   public UserDataServlet() {
     blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
     blobInfoFactory = new BlobInfoFactory();
@@ -60,9 +55,7 @@ public class UserDataServlet extends HttpServlet {
     userService = UserServiceFactory.getUserService();
   }
 
-  /**
-   * For testing purposes.
-   */
+  /** For testing purposes. */
   public UserDataServlet(BlobstoreService blobstoreService, BlobInfoFactory blobInfoFactory) {
     this.blobstoreService = blobstoreService;
     this.blobInfoFactory = blobInfoFactory;
@@ -71,13 +64,13 @@ public class UserDataServlet extends HttpServlet {
   }
 
   /**
-   * Saves the recently submitted userdata(updates it if the user already has some data saved) in the database.
-   * Note: the user's name, self-introduction and portfolio status will be rewritten with the new data, whatewer it is.
-   * (even if the new data is empty and previously the user had some data saved)
-   * However, the user's photo is kept if they didn't submit a new one, unless the user specifically
-   * exressed their preference to drop the photo from their profile.
-   * Note: whenever this method is invoked in real-life, it's guaranteed that prevUserData is not null
-   * In case of tests, prevUserData is always null.
+   * Saves the recently submitted userdata(updates it if the user already has some data saved) in
+   * the database. Note: the user's name, self-introduction and portfolio status will be rewritten
+   * with the new data, whatewer it is. (even if the new data is empty and previously the user had
+   * some data saved) However, the user's photo is kept if they didn't submit a new one, unless the
+   * user specifically exressed their preference to drop the photo from their profile. Note:
+   * whenever this method is invoked in real-life, it's guaranteed that prevUserData is not null In
+   * case of tests, prevUserData is always null.
    */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -91,9 +84,7 @@ public class UserDataServlet extends HttpServlet {
     response.sendRedirect("/index.html");
   }
 
-  /**
-   * Returns the data of the user who is currently logged in.
-   */
+  /** Returns the data of the user who is currently logged in. */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     User user = userRepository.getUser(userService.getCurrentUser().getUserId());

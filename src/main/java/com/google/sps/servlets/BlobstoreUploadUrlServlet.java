@@ -14,9 +14,9 @@
 
 package com.google.sps.servlets;
 
-import com.google.sps.data.FormType;
 import com.google.appengine.api.blobstore.BlobstoreService;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
+import com.google.sps.data.FormType;
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -25,9 +25,11 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * When the fetch() function requests the /blobstore-upload-url URL, the content of the response is
- * the URL that allows a user to upload files(blobs) through a form(by setting the form's actin to that url).
- * @param request provides as parameter the form's type.
- * The form handler servlet is defined based on the formtype.
+ * the URL that allows a user to upload files(blobs) through a form(by setting the form's actin to
+ * that url).
+ *
+ * @param request provides as parameter the form's type. The form handler servlet is defined based
+ *     on the formtype.
  */
 @WebServlet("/blobstore-upload-url")
 public class BlobstoreUploadUrlServlet extends HttpServlet {
@@ -43,5 +45,3 @@ public class BlobstoreUploadUrlServlet extends HttpServlet {
     response.getWriter().println(uploadUrl);
   }
 }
-
-

@@ -14,6 +14,10 @@
 
 package com.google.sps;
 
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import com.google.appengine.api.datastore.*;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
@@ -21,32 +25,26 @@ import com.google.gson.Gson;
 import com.google.sps.servlets.NewUserServlet;
 import com.google.sps.user.User;
 import com.google.sps.user.repository.impl.DatastoreUserRepository;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.HashMap;
+import java.util.Map;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.util.HashMap;
-import java.util.Map;
-
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 @RunWith(JUnit4.class)
 public final class NewUserServletTest {
   private static final String ID = "userid";
   private static final String EMAIL = "user@gmail.com";
 
-  private final User toSaveUser =
-          new User.Builder(ID, EMAIL).build();
+  private final User toSaveUser = new User.Builder(ID, EMAIL).build();
 
   private NewUserServlet newUserServlet;
   private Map<String, Object> attributeToValue = new HashMap<>();
@@ -59,7 +57,8 @@ public final class NewUserServletTest {
   public void setup() {
     // Set the userdata that the Userservice will return.
     attributeToValue.put("com.google.appengine.api.users.UserService.user_id_key", (Object) ID);
-    helper = new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig())
+    helper =
+        new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig())
             .setEnvIsLoggedIn(true)
             .setEnvAuthDomain("localhost")
             .setEnvEmail(EMAIL)
@@ -98,8 +97,10 @@ public final class NewUserServletTest {
     Entity userEntity = new Entity(DatastoreUserRepository.ENTITY_KIND, toSaveUser.getId());
     userEntity.setProperty(DatastoreUserRepository.EMAIL_PROPERTY, toSaveUser.getEmail());
     userEntity.setProperty(DatastoreUserRepository.NAME_PROPERTY, toSaveUser.getName());
-    userEntity.setProperty(DatastoreUserRepository.PUBLIC_PORTFOLIO_PROPERTY, toSaveUser.portfolioIsPublic());
-    userEntity.setProperty(DatastoreUserRepository.SELF_INTRODUCTION_PROPERTY, toSaveUser.getSelfIntroduction());
+    userEntity.setProperty(
+        DatastoreUserRepository.PUBLIC_PORTFOLIO_PROPERTY, toSaveUser.portfolioIsPublic());
+    userEntity.setProperty(
+        DatastoreUserRepository.SELF_INTRODUCTION_PROPERTY, toSaveUser.getSelfIntroduction());
     userEntity.setProperty(DatastoreUserRepository.IMG_KEY_PROPERTY, toSaveUser.getImgKey());
 
     // Save entity to datastore.

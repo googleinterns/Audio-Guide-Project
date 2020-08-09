@@ -14,6 +14,10 @@
 
 package com.google.sps;
 
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import com.google.appengine.api.blobstore.BlobInfo;
 import com.google.appengine.api.blobstore.BlobInfoFactory;
 import com.google.appengine.api.blobstore.BlobKey;
@@ -26,23 +30,18 @@ import com.google.gson.Gson;
 import com.google.sps.servlets.UserDataServlet;
 import com.google.sps.user.User;
 import com.google.sps.user.repository.impl.DatastoreUserRepository;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.*;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.util.*;
-
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @RunWith(JUnit4.class)
 public final class UserDataServletTest {
@@ -53,7 +52,12 @@ public final class UserDataServletTest {
   private static final String IMG_KEY = "/img.com";
 
   private final User toSaveUser =
-          new User.Builder(ID, EMAIL).setName(NAME).setPublicPortfolio(true).addSelfIntroduction(SELF_INTRODUCTION).addImgKey(IMG_KEY).build();
+      new User.Builder(ID, EMAIL)
+          .setName(NAME)
+          .setPublicPortfolio(true)
+          .addSelfIntroduction(SELF_INTRODUCTION)
+          .addImgKey(IMG_KEY)
+          .build();
   private User toGetUser;
 
   private UserDataServlet userDataServlet;
@@ -69,7 +73,9 @@ public final class UserDataServletTest {
   public void setup() {
     // Set the userdata that the Userservice will return.
     attributeToValue.put("com.google.appengine.api.users.UserService.user_id_key", (Object) ID);
-    helper = new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig(), new LocalBlobstoreServiceTestConfig())
+    helper =
+        new LocalServiceTestHelper(
+                new LocalDatastoreServiceTestConfig(), new LocalBlobstoreServiceTestConfig())
             .setEnvIsLoggedIn(true)
             .setEnvAuthDomain("localhost")
             .setEnvEmail(EMAIL)
@@ -91,7 +97,8 @@ public final class UserDataServletTest {
   public void doPost() throws IOException, ServletException {
     // Mock request and response.
     when(request.getParameter(UserDataServlet.NAME_INPUT)).thenReturn(NAME);
-    when(request.getParameter(UserDataServlet.SELF_INTRODUCTION_INPUT)).thenReturn(SELF_INTRODUCTION);
+    when(request.getParameter(UserDataServlet.SELF_INTRODUCTION_INPUT))
+        .thenReturn(SELF_INTRODUCTION);
     when(request.getParameter(UserDataServlet.PUBLIC_PORTFOLIO_INPUT)).thenReturn("private");
     StringWriter sw = new StringWriter();
     PrintWriter pw = new PrintWriter(sw);
@@ -116,8 +123,11 @@ public final class UserDataServletTest {
       Entity userEntity = datastore.get(userKey);
       assertEquals(NAME, userEntity.getProperty(DatastoreUserRepository.NAME_PROPERTY));
       assertEquals(EMAIL, userEntity.getProperty(DatastoreUserRepository.EMAIL_PROPERTY));
-      assertEquals(SELF_INTRODUCTION, userEntity.getProperty(DatastoreUserRepository.SELF_INTRODUCTION_PROPERTY));
-      assertEquals(false, userEntity.getProperty(DatastoreUserRepository.PUBLIC_PORTFOLIO_PROPERTY));
+      assertEquals(
+          SELF_INTRODUCTION,
+          userEntity.getProperty(DatastoreUserRepository.SELF_INTRODUCTION_PROPERTY));
+      assertEquals(
+          false, userEntity.getProperty(DatastoreUserRepository.PUBLIC_PORTFOLIO_PROPERTY));
       assertEquals(IMG_KEY, userEntity.getProperty(DatastoreUserRepository.IMG_KEY_PROPERTY));
     } catch (EntityNotFoundException e) {
       fail("Entity not found: " + e);
@@ -130,8 +140,10 @@ public final class UserDataServletTest {
     Entity userEntity = new Entity(DatastoreUserRepository.ENTITY_KIND, toSaveUser.getId());
     userEntity.setProperty(DatastoreUserRepository.NAME_PROPERTY, toSaveUser.getName());
     userEntity.setProperty(DatastoreUserRepository.EMAIL_PROPERTY, toSaveUser.getEmail());
-    userEntity.setProperty(DatastoreUserRepository.PUBLIC_PORTFOLIO_PROPERTY, toSaveUser.portfolioIsPublic());
-    userEntity.setProperty(DatastoreUserRepository.SELF_INTRODUCTION_PROPERTY, toSaveUser.getSelfIntroduction());
+    userEntity.setProperty(
+        DatastoreUserRepository.PUBLIC_PORTFOLIO_PROPERTY, toSaveUser.portfolioIsPublic());
+    userEntity.setProperty(
+        DatastoreUserRepository.SELF_INTRODUCTION_PROPERTY, toSaveUser.getSelfIntroduction());
     userEntity.setProperty(DatastoreUserRepository.IMG_KEY_PROPERTY, toSaveUser.getImgKey());
 
     // Save entity to datastore.

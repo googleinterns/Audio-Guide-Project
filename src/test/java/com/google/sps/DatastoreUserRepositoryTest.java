@@ -14,6 +14,8 @@
 
 package com.google.sps;
 
+import static org.junit.Assert.*;
+
 import com.google.appengine.api.datastore.*;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
@@ -28,8 +30,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import static org.junit.Assert.*;
-
 @RunWith(JUnit4.class)
 public final class DatastoreUserRepositoryTest {
   private static final String ID = "userid";
@@ -39,13 +39,18 @@ public final class DatastoreUserRepositoryTest {
   private static final String IMG_KEY = "img1234";
 
   private final User toSaveUser =
-          new User.Builder(ID, EMAIL).setName(NAME).addSelfIntroduction(SELF_INTRODUCTION).addImgKey(IMG_KEY).build();
+      new User.Builder(ID, EMAIL)
+          .setName(NAME)
+          .addSelfIntroduction(SELF_INTRODUCTION)
+          .addImgKey(IMG_KEY)
+          .build();
   private User toGetUser;
 
-  private final UserRepository myUserRepository = UserRepositoryFactory.getUserRepository(RepositoryType.DATASTORE);
+  private final UserRepository myUserRepository =
+      UserRepositoryFactory.getUserRepository(RepositoryType.DATASTORE);
 
-  private final LocalServiceTestHelper helper = new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
-
+  private final LocalServiceTestHelper helper =
+      new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
 
   @Before
   public void setUp() {
@@ -63,8 +68,10 @@ public final class DatastoreUserRepositoryTest {
     Entity userEntity = new Entity(DatastoreUserRepository.ENTITY_KIND, toSaveUser.getId());
     userEntity.setProperty(DatastoreUserRepository.NAME_PROPERTY, toSaveUser.getName());
     userEntity.setProperty(DatastoreUserRepository.EMAIL_PROPERTY, toSaveUser.getEmail());
-    userEntity.setProperty(DatastoreUserRepository.PUBLIC_PORTFOLIO_PROPERTY, toSaveUser.portfolioIsPublic());
-    userEntity.setProperty(DatastoreUserRepository.SELF_INTRODUCTION_PROPERTY, toSaveUser.getSelfIntroduction());
+    userEntity.setProperty(
+        DatastoreUserRepository.PUBLIC_PORTFOLIO_PROPERTY, toSaveUser.portfolioIsPublic());
+    userEntity.setProperty(
+        DatastoreUserRepository.SELF_INTRODUCTION_PROPERTY, toSaveUser.getSelfIntroduction());
     userEntity.setProperty(DatastoreUserRepository.IMG_KEY_PROPERTY, toSaveUser.getImgKey());
 
     // Save entity to datastore.
@@ -93,8 +100,11 @@ public final class DatastoreUserRepositoryTest {
       Entity userEntity = datastore.get(userKey);
       assertEquals(NAME, userEntity.getProperty(DatastoreUserRepository.NAME_PROPERTY));
       assertEquals(EMAIL, userEntity.getProperty(DatastoreUserRepository.EMAIL_PROPERTY));
-      assertEquals(SELF_INTRODUCTION, userEntity.getProperty(DatastoreUserRepository.SELF_INTRODUCTION_PROPERTY));
-      assertEquals(false, userEntity.getProperty(DatastoreUserRepository.PUBLIC_PORTFOLIO_PROPERTY));
+      assertEquals(
+          SELF_INTRODUCTION,
+          userEntity.getProperty(DatastoreUserRepository.SELF_INTRODUCTION_PROPERTY));
+      assertEquals(
+          false, userEntity.getProperty(DatastoreUserRepository.PUBLIC_PORTFOLIO_PROPERTY));
       assertEquals(IMG_KEY, userEntity.getProperty(DatastoreUserRepository.IMG_KEY_PROPERTY));
     } catch (EntityNotFoundException e) {
       fail("Entity not found: " + e);
@@ -107,8 +117,10 @@ public final class DatastoreUserRepositoryTest {
     Entity userEntity = new Entity(DatastoreUserRepository.ENTITY_KIND, toSaveUser.getId());
     userEntity.setProperty(DatastoreUserRepository.NAME_PROPERTY, toSaveUser.getName());
     userEntity.setProperty(DatastoreUserRepository.EMAIL_PROPERTY, toSaveUser.getEmail());
-    userEntity.setProperty(DatastoreUserRepository.PUBLIC_PORTFOLIO_PROPERTY, toSaveUser.portfolioIsPublic());
-    userEntity.setProperty(DatastoreUserRepository.SELF_INTRODUCTION_PROPERTY, toSaveUser.getSelfIntroduction());
+    userEntity.setProperty(
+        DatastoreUserRepository.PUBLIC_PORTFOLIO_PROPERTY, toSaveUser.portfolioIsPublic());
+    userEntity.setProperty(
+        DatastoreUserRepository.SELF_INTRODUCTION_PROPERTY, toSaveUser.getSelfIntroduction());
     userEntity.setProperty(DatastoreUserRepository.IMG_KEY_PROPERTY, toSaveUser.getImgKey());
 
     // Save entity to datastore.

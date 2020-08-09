@@ -21,16 +21,15 @@ import com.google.sps.data.RepositoryType;
 import com.google.sps.user.User;
 import com.google.sps.user.repository.UserRepository;
 import com.google.sps.user.repository.UserRepositoryFactory;
-
+import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 /**
- * This servlet checks if the currently logged in user exists in the database
- * and saves a new user in the database.
+ * This servlet checks if the currently logged in user exists in the database and saves a new user
+ * in the database.
  */
 @WebServlet("/new-user-servlet")
 public class NewUserServlet extends HttpServlet {
@@ -42,9 +41,7 @@ public class NewUserServlet extends HttpServlet {
     userService = UserServiceFactory.getUserService();
   }
 
-  /**
-   * Saves the new user's data(id and email only, provided by the UserService) to the database.
-   */
+  /** Saves the new user's data(id and email only, provided by the UserService) to the database. */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     User user = getLoggedInUser();
@@ -53,7 +50,8 @@ public class NewUserServlet extends HttpServlet {
   }
 
   /**
-   * @return true if the currently logged in user is already present in the database, false otherwise.
+   * @return true if the currently logged in user is already present in the database, false
+   *     otherwise.
    */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
