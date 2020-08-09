@@ -35,7 +35,6 @@ import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.http.client.methods.HttpPost;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -92,12 +91,7 @@ public final class NewUserServletTest {
 
    @Test
    public void doPost() throws IOException, ServletException {
-    StringWriter sw = new StringWriter();
-    PrintWriter pw = new PrintWriter(sw);
-
-    when(response.getWriter()).thenReturn(pw);
-
-    // Get the currenly logged in user's previously saved data
+    // Save the new user.
     newUserServlet = new NewUserServlet();
     newUserServlet.doPost(request, response);
 

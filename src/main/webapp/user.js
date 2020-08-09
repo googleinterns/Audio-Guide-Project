@@ -77,11 +77,11 @@ function addLinktoLogoutButton(logoutUrl) {
 }
 
 /**
- * Checks if the user is present in the database. If not, saves them.
+ * Saves the currently logged in user in the database.
  */
 function saveUserInDatabase(){
     fetch('/new-user-servlet', {method: 'POST'})
-            .catch(error => "user-servlet: failed to post new user: " + error); 
+            .catch(error => "saveUserInDatabase: failed to post new user: " + error); 
 }
 
 /** 
@@ -89,9 +89,9 @@ function saveUserInDatabase(){
  */
 function userPresentInDatabase() {
    return fetch('/new-user-servlet')
-        .catch (error => console.log("user-servlet: failed to fetch: " + error))
+        .catch (error => console.log("userPresentInDatabase: failed to fetch: " + error))
         .then (response => response.json())
-        .catch (error => console.log('fillFormInputsWithData: failed to convert to json: ' + error))
+        .catch (error => console.log('userPresentInDatabase: failed to convert to json: ' + error))
         .then (response => {
             return response;
         });
@@ -101,16 +101,16 @@ function userPresentInDatabase() {
  * Handles setting up the portfolio form whenever the page is loaded. 
  */
 function setUpPortfolioForm() {
-    addBlobstoreUploadUrlToForm("PORTFOLIO_FORM");
-    fillFormWithUserData();
+    addBlobstoreUploadUrlToForm("PORTFOLIO_FORM", "portfolioForm");
+    fillPortfolioFormWithUserData();
 }
 
 /**
  * Sets th action of the form to the url to which blobs can be uploaded.
  */
-function addBlobstoreUploadUrlToForm(formType) {
+function addBlobstoreUploadUrlToForm(formType, formId) {
   getBlobstoreUploadUrlFromServlet(formType).then (uploadUrl => {
-    setFormActionUrl(uploadUrl);
+    setFormActionUrl(uploadUrl, formId);
   });
 }
 
@@ -121,19 +121,19 @@ function getBlobstoreUploadUrlFromServlet(formType) {
     var url = new URL("/blobstore-upload-url", document.URL);
     url.searchParams.append('formType', formType)
     return fetch (url)
-    .catch (error => console.log("blobstore-upload-portfolio: failed to fetch: " + error))
+    .catch (error => console.log("getBlobstoreUploadUrlFromServlet: failed to fetch: " + error))
     .then (uploadUrl => uploadUrl.text())
-    .catch (error => console.log('blobstore-upload-portfolio: failed to convert to text: ' + error))
+    .catch (error => console.log('getBlobstoreUploadUrlFromServlet: failed to convert to text: ' + error))
     .then (uploadUrl => {
-    return uploadUrl;
+        return uploadUrl;
     });
 }
 
 /** 
  * Sets the destination url of the post method for the portfolio form to uploadUrl. 
  */
-function setFormActionUrl(uploadUrl) {
-  var form = document.getElementById("portfolioForm");
+function setFormActionUrl(uploadUrl, formId) {
+  var form = document.getElementById(formId);
   form.action = uploadUrl;
 }
 
@@ -141,7 +141,7 @@ function setFormActionUrl(uploadUrl) {
  * Gets the currently logged in user's data from the database
  * and fill's the form inputs with this data.
  */
-function fillFormWithUserData() {
+function fillPortfolioFormWithUserData() {
     getUserDataFromServlet().then (user => {
         setFormInputValue(document.getElementById("name"), user.name);
         setFormInputValue(document.getElementById("selfIntroduction"), user.selfIntroduction);

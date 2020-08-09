@@ -53,6 +53,7 @@ public class UserDataServlet extends HttpServlet {
   private final BlobstoreService blobstoreService;
   private final BlobInfoFactory blobInfoFactory;
 
+  /** For production. */
   public UserDataServlet() {
     blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
     blobInfoFactory = new BlobInfoFactory();
@@ -60,6 +61,7 @@ public class UserDataServlet extends HttpServlet {
     userService = UserServiceFactory.getUserService();
   }
 
+   /** For testing purposes. */
    public UserDataServlet(BlobstoreService blobstoreService, BlobInfoFactory blobInfoFactory) {
     this.blobstoreService = blobstoreService;
     this.blobInfoFactory = blobInfoFactory;
@@ -68,15 +70,22 @@ public class UserDataServlet extends HttpServlet {
   }
 
   /**
-   * Saves the recently submitted userdata(updates it if the user already has some data saved).
+   * Saves the recently submitted userdata(updates it if the user already has some data saved) in the database.
    * Note: the user's name, self-introduction and portfolio status will be rewritten with the new data, whatewer it is.
    * (even if the new data is empty and previously the user had some data saved)
-   * However, we keep the user's photo if they didn't submit a new one, unless the user specifically
+   * However, the user's photo is kept if they didn't submit a new one, unless the user specifically
    * exressed their preference to drop the photo from their profile.
+   * Note: whenever this method is invoked in real-life, it's guaranteed that prevUserData is not null
+   * In case of tests, prevUserData is always null.
    */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     User user = getUserFromRequest(request);
+    User prevUserData = userRepository.getUser(userService.getCurrentUser().getUserId());
+    if (prevUserData != null && prevUserData.getImgKey() != user.getImgKey()) { 
+        // Delete previous image blob from blobstore, because it was overwritten or deleted.
+        deleteBlobWithGivenKeyValue(prevUserData.getImgKey());
+    }
     userRepository.saveUser(user);
     response.sendRedirect("/index.html");
   }
@@ -89,6 +98,13 @@ public class UserDataServlet extends HttpServlet {
     User user = userRepository.getUser(userService.getCurrentUser().getUserId());
     response.setContentType("application/json;");
     response.getWriter().println(convertToJsonUsingGson(user));
+  }
+
+  private void deleteBlobWithGivenKeyValue(String keyValue){
+      if (keyValue != null ) {
+        BlobKey blobKey = new BlobKey(keyValue);
+        blobstoreService.delete(blobKey);
+      }
   }
 
   private User getUserFromRequest(HttpServletRequest request) {
@@ -109,7 +125,7 @@ public class UserDataServlet extends HttpServlet {
     }
     String imgKey = getUploadedFileBlobKey(request, IMG_KEY_INPUT);
     if (imgKey != null) { 
-        // The user submitted a new photo, save it in the database, overwrite old one.
+        // The user submitted a new photo, save it in the database, later overwrite the old one.
         newUserBuilder.addImgKey(imgKey);
     } else if (request.getParameterValues(DELETE_IMG_INPUT) == null) { 
         // The user didn't submit a new photo, but they didn't choose to delete the old one either.

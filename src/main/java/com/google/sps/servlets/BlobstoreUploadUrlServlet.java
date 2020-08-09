@@ -25,9 +25,9 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * When the fetch() function requests the /blobstore-upload-url URL, the content of the response is
- * the URL that allows a user to upload files(blobs) through a form.
- * @param request provides as parameter the form handler servlet's type 
- * to which the submitted form needs to be redirected after the blobs being processed.
+ * the URL that allows a user to upload files(blobs) through a form(by setting the form's actin to that url).
+ * @param request provides as parameter the form's type.
+ * The form handler servlet is defined based on the formtype.
  */
 @WebServlet("/blobstore-upload-url")
 public class BlobstoreUploadUrlServlet extends HttpServlet {
