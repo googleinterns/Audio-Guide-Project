@@ -76,7 +76,7 @@ public class UserDataServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     User user = getUserFromRequest(request);
     User prevUserData = userRepository.getUser(userService.getCurrentUser().getUserId());
-    if (prevUserData != null && prevUserData.getImgKey() != user.getImgKey()) {
+    if (prevUserData != null && prevUserData.getImgKey() != null && !prevUserData.getImgKey().equals(user.getImgKey())) {
       // Delete previous image blob from blobstore, because it was overwritten or deleted.
       deleteBlobWithGivenKeyValue(prevUserData.getImgKey());
     }
@@ -93,10 +93,8 @@ public class UserDataServlet extends HttpServlet {
   }
 
   private void deleteBlobWithGivenKeyValue(String keyValue) {
-    if (keyValue != null) {
-      BlobKey blobKey = new BlobKey(keyValue);
-      blobstoreService.delete(blobKey);
-    }
+    BlobKey blobKey = new BlobKey(keyValue);
+    blobstoreService.delete(blobKey);
   }
 
   private User getUserFromRequest(HttpServletRequest request) {
