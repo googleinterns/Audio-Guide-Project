@@ -58,18 +58,6 @@ public final class DatastorePlaceGuideRepositoryTest{
     helper.tearDown();
   }
 
-  @Test
-  public void testMethod() {
-    Entity newEntity = new Entity("kindha");
-    int num = 30;
-    newEntity.setProperty("number", num);
-    datastore.put(newEntity);
-    Query query = new Query("kindha");
-    PreparedQuery result = datastore.prepare(query);
-    Entity placeGuide = result.asSingleEntity();
-    assertEquals(num, placeGuide.getProperty("number"));
-  }
-
 //   @Test
 //   public void savePlaceGuideTest() {
 //     placeGuideRepository.savePlaceGuide(CREATOR_ID, testPlaceGuide);
