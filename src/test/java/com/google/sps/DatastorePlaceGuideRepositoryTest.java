@@ -19,9 +19,7 @@ import static org.junit.Assert.assertEquals;
 @RunWith(JUnit4.class)
 public final class DatastorePlaceGuideRepositoryTest {
 
-  private final PlaceGuideRepository placeGuideRepository = PlaceGuideRepositoryFactory
-                                                .getPlaceGuideRepository(RepositoryType.DATASTORE);
-
+  private PlaceGuideRepository placeGuideRepository;
   private final LocalServiceTestHelper helper = new LocalServiceTestHelper(
                                                             new LocalDatastoreServiceTestConfig());
 
@@ -45,6 +43,8 @@ public final class DatastorePlaceGuideRepositoryTest {
   @Before
   public void setUp() {
     helper.setUp();
+    placeGuideRepository = PlaceGuideRepositoryFactory
+                                    .getPlaceGuideRepository(RepositoryType.DATASTORE);
   }
 
   @After
@@ -86,5 +86,8 @@ public final class DatastorePlaceGuideRepositoryTest {
     placeGuideEntity.setProperty(DatastorePlaceGuideRepository.DESC_PROPERTY, DESC);
     placeGuideEntity.setProperty(DatastorePlaceGuideRepository.LENGTH_PROPERTY, LENGTH);
     placeGuideEntity.setProperty(DatastorePlaceGuideRepository.IMG_KEY_PROPERTY, IMG_KEY);
+    datastore.put(placeGuideEntity);
+    List<PlaceGuide> result = placeGuideRepository.getAllPlaceGuides();
+    assertEquals(result, )
   }
 }
