@@ -16,8 +16,7 @@ function createMap() {
 
 function initSearchBox(map) {
   const input = document.getElementById("search-box");
-  const searchBox = new google.maps.places.SearchBox(input);
-  console.log("map = " + map);
+  var autocomplete = new google.maps.places.Autocomplete(input);
   map.controls[google.maps.ControlPosition.TOP_CENTER].push(input);
 }
 
