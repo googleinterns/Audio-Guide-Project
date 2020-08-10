@@ -1,6 +1,7 @@
 var currentLocationMarker = null;
 var trackUser;
 var watchPositionId;
+var placeZoom = 14;
 
 function createMap() {
     var myMapOptions = {
@@ -11,13 +12,43 @@ function createMap() {
     const map = new google.maps.Map(
         document.getElementById('map'), myMapOptions); 
     addGoToMyLocationControl(map);
-    initSearchBox(map)
+    initAutocomplete(map);
 }
 
-function initSearchBox(map) {
-  const input = document.getElementById("search-box");
-  var autocomplete = new google.maps.places.Autocomplete(input);
-  map.controls[google.maps.ControlPosition.TOP_CENTER].push(input);
+function initAutocomplete(map) {
+    const input = document.getElementById("search-box");
+    var autocomplete = new google.maps.places.Autocomplete(input);
+    map.controls[google.maps.ControlPosition.TOP_CENTER].push(input);
+
+    var searchedPlaceMarker = new google.maps.Marker({
+        map: map,
+    });
+    searchedPlaceMarker.setVisible(false);
+    searchedPlaceMarker.setMap(map);
+
+    autocomplete.setFields(['address_components', 'geometry', 'icon', 'name']);
+
+    autocomplete.addListener('place_changed', function() {
+        searchedPlaceMarker.setVisible(false);
+        var place = autocomplete.getPlace();
+        if (!place.geometry) {
+            // User entered the name of a Place that was not suggested and
+            // pressed the Enter key, or the Place Details request failed.
+            window.alert("Place not found: '" + place.name + "'");
+            return;
+        }
+
+        // If the place has a geometry, then present it on a map.
+        if (place.geometry.viewport) {
+            map.fitBounds(place.geometry.viewport);
+        } else {
+            map.setCenter(place.geometry.location);
+            map.setZoom(placeZoom);
+        }
+
+        searchedPlaceMarker.setPosition(place.geometry.location);
+        searchedPlaceMarker.setVisible(true);
+    });
 }
 
 function addGoToMyLocationControl(map) {
@@ -55,7 +86,7 @@ function centerMapToCurrentLocation(map) {
             lng: position.coords.longitude
         };
         map.setCenter(currentPos);
-        map.setZoom(12);
+        map.setZoom(placeZoom);
     },  error => {
         showError(error);
     });
