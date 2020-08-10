@@ -1,5 +1,4 @@
 function createMap() {
-    console.log("create map");
     var myMapOptions = {
         zoom: 2,
         center: new google.maps.LatLng(0, 0),
@@ -7,7 +6,16 @@ function createMap() {
     };
     const map = new google.maps.Map(
         document.getElementById('map'), myMapOptions); 
-    centerMapAtUsersLocation(map);
+    addGoToMyLocationControl(map);
+}
+
+function addGoToMyLocationControl(map) {
+    const myLocationControlDiv = createControlDiv("Go to my location", "./img/my_location.svg", null);
+    myLocationControlDiv.index = 1;
+    map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(myLocationControlDiv);
+    myLocationControlDiv.addEventListener("click", () => {
+        centerMapAtUsersLocation(map);
+    });
 }
 
 function centerMapAtUsersLocation(map) {
@@ -25,4 +33,18 @@ function centerMapAtUsersLocation(map) {
     } else {
         alert("The browser doesn't support geolocation.");
     }
+}
+
+function createControlDiv(title, imgSrc, text) {
+  const controlDiv = document.createElement("div");
+  controlDiv.setAttribute('class', 'control');
+  controlDiv.title = title;
+  if (imgSrc != null ) {
+    const controlImg = document.createElement("img");
+    controlImg.src = imgSrc;
+    controlDiv.appendChild(controlImg);
+  } else if (text != null) {
+      // add support for text;
+  }
+  return controlDiv;
 }
