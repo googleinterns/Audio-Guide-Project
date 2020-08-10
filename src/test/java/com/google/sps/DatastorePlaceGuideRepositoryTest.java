@@ -45,8 +45,6 @@ public final class DatastorePlaceGuideRepositoryTest{
                                             .setImageKey(IMG_KEY)
                                             .build();
 
-  private final Entity privatePlaceGuideEntity = 
-
   private DatastoreService datastore;
   private PlaceGuideRepository placeGuideRepository;
 
@@ -164,29 +162,46 @@ public final class DatastorePlaceGuideRepositoryTest{
     placeGuideEntity.setProperty(DatastorePlaceGuideRepository.NAME_PROPERTY, NAME);
     placeGuideEntity.setProperty(DatastorePlaceGuideRepository.AUDIO_KEY_PROPERTY, AUDIO_KEY);
     placeGuideEntity.setProperty(DatastorePlaceGuideRepository.CREATOR_ID_PROPERTY, CREATOR_ID);
+    placeGuideEntity.setProperty(DatastorePlaceGuideRepository.IS_PUBLIC_PROPERTY, IS_PUBLIC);
     placeGuideEntity.setProperty(DatastorePlaceGuideRepository.PLACE_ID_PROPERTY, PLACE_ID);
-    placeGuideEntity.setProperty(DatastorePlaceGuideRepository.IS_PUBLIC_PROPERTY, !IS_PUBLIC);
     placeGuideEntity.setProperty(DatastorePlaceGuideRepository.COORD_PROPERTY, COORD);
     placeGuideEntity.setProperty(DatastorePlaceGuideRepository.DESC_PROPERTY, DESC);
     placeGuideEntity.setProperty(DatastorePlaceGuideRepository.LENGTH_PROPERTY, LENGTH);
     placeGuideEntity.setProperty(DatastorePlaceGuideRepository.IMG_KEY_PROPERTY, IMG_KEY);
     datastore.put(placeGuideEntity);
-    List<PlaceGuide> results = placeGuideRepository.getCreatedPlaceGuides(OTHER_USER_ID);
+    List<PlaceGuide> results = placeGuideRepository.getCreatedPublicPlaceGuides(OTHER_USER_ID);
     assertTrue(results.isEmpty());
   }
 
   @Test
   public void getCreatedPublicPlaceGuides_placeGuideExistsAndPrivateAndNotOwnedByUser_placeGuideListIsEmpty() {
-    
+    Entity placeGuideEntity = new Entity(DatastorePlaceGuideRepository.ENTITY_KIND, ID);
+    placeGuideEntity.setProperty(DatastorePlaceGuideRepository.NAME_PROPERTY, NAME);
+    placeGuideEntity.setProperty(DatastorePlaceGuideRepository.AUDIO_KEY_PROPERTY, AUDIO_KEY);
+    placeGuideEntity.setProperty(DatastorePlaceGuideRepository.CREATOR_ID_PROPERTY, CREATOR_ID);
+    placeGuideEntity.setProperty(DatastorePlaceGuideRepository.PLACE_ID_PROPERTY, PLACE_ID);
+    placeGuideEntity.setProperty(DatastorePlaceGuideRepository.COORD_PROPERTY, COORD);
+    placeGuideEntity.setProperty(DatastorePlaceGuideRepository.DESC_PROPERTY, DESC);
+    placeGuideEntity.setProperty(DatastorePlaceGuideRepository.LENGTH_PROPERTY, LENGTH);
+    placeGuideEntity.setProperty(DatastorePlaceGuideRepository.IMG_KEY_PROPERTY, IMG_KEY);
+    datastore.put(placeGuideEntity);
+    List<PlaceGuide> results = placeGuideRepository.getCreatedPublicPlaceGuides(OTHER_USER_ID);
+    assertTrue(results.isEmpty());
   }
 
   @Test
   public void getCreatedPublicPlaceGuides_placeGuideExistsAndPrivateAndOwnedByUser_placeGuideListIsEmpty() {
-    
-  }
-
-  @Test
-  public void getCreatedPublicPlaceGuides_placeGuideExistsAndPrivateAndOwnedByUser_placeGuideListIsEmpty() {
-    
+    Entity placeGuideEntity = new Entity(DatastorePlaceGuideRepository.ENTITY_KIND, ID);
+    placeGuideEntity.setProperty(DatastorePlaceGuideRepository.NAME_PROPERTY, NAME);
+    placeGuideEntity.setProperty(DatastorePlaceGuideRepository.AUDIO_KEY_PROPERTY, AUDIO_KEY);
+    placeGuideEntity.setProperty(DatastorePlaceGuideRepository.CREATOR_ID_PROPERTY, CREATOR_ID);
+    placeGuideEntity.setProperty(DatastorePlaceGuideRepository.PLACE_ID_PROPERTY, PLACE_ID);
+    placeGuideEntity.setProperty(DatastorePlaceGuideRepository.COORD_PROPERTY, COORD);
+    placeGuideEntity.setProperty(DatastorePlaceGuideRepository.DESC_PROPERTY, DESC);
+    placeGuideEntity.setProperty(DatastorePlaceGuideRepository.LENGTH_PROPERTY, LENGTH);
+    placeGuideEntity.setProperty(DatastorePlaceGuideRepository.IMG_KEY_PROPERTY, IMG_KEY);
+    datastore.put(placeGuideEntity);
+    List<PlaceGuide> results = placeGuideRepository.getCreatedPublicPlaceGuides(CREATOR_ID);
+    assertTrue(results.isEmpty());
   }
 }

@@ -98,19 +98,16 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository{
       String audioKey = (String) placeGuideEntity.getProperty(AUDIO_KEY_PROPERTY);
       String creatorId = (String) placeGuideEntity.getProperty(CREATOR_ID_PROPERTY);
       String placeId = (String) placeGuideEntity.getProperty(PLACE_ID_PROPERTY);
-      boolean isPublic = (boolean) placeGuideEntity.getProperty(IS_PUBLIC_PROPERTY);
       GeoPt coord = (GeoPt) placeGuideEntity.getProperty(COORD_PROPERTY);
+      boolean isPublic = (boolean) placeGuideEntity.getProperty(IS_PUBLIC_PROPERTY);
       String desc = (String) placeGuideEntity.getProperty(DESC_PROPERTY);
       long length = (long) placeGuideEntity.getProperty(LENGTH_PROPERTY);
       String imgKey = (String) placeGuideEntity.getProperty(IMG_KEY_PROPERTY);
-      PlaceGuide.Builder placeGuideBuilder = new PlaceGuide
+      PlaceGuide placeGuide = new PlaceGuide
                               .Builder(name, audioKey, creatorId, placeId, coord)
                               .setId(id).setLength(length).setDescription(desc)
-                              .setImageKey(imgKey);
-      if (isPublic != null) {
-        placeGuideBuilder.setPlaceGuideToPublic(isPublic);
-      }
-      PlaceGuide placeGuide = placeGuideBuilder.build();
+                              .setImageKey(imgKey).setPlaceGuideToPublic(isPublic)
+                              .build();
       createdPlaceGuides.add(placeGuide);
     }
     return Collections.unmodifiableList(createdPlaceGuides);
