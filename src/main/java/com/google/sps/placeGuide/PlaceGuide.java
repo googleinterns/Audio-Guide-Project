@@ -89,6 +89,28 @@ public class PlaceGuide {
                                                 coord, length, desc, imgKey);
     }
   }
+  
+  @Override
+  public boolean equals(Object o){
+    if(o == null) { 
+      return false; 
+    }
+    if(!(o instanceof PlaceGuide)) { 
+      return false; 
+    }
+    PlaceGuide placeGuide = (PlaceGuide) o;
+
+    return (this.name.equals(placeGuide.getName()) &&
+           this.id == placeGuide.getId() &&
+           this.audioKey.equals(placeGuide.getAudioKey()) &&
+           this.creatorId.equals(placeGuide.getCreatorId()) &&
+           this.placeId.equals(placeGuide.getPlaceId()) &&
+           this.isPublic == placeGuide.isPublic() &&
+           this.coord.equals(placeGuide.getCoordinate()) &&
+           this.length == placeGuide.getLength() &&
+           this.desc.equals(placeGuide.getDescription()) &&
+           this.imgKey.equals(placeGuide.getImageKey()));
+  }
 
   public long getId() {
     return id;

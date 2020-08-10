@@ -101,7 +101,7 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository{
       boolean isPublic = (boolean) placeGuideEntity.getProperty(IS_PUBLIC_PROPERTY);
       GeoPt coord = (GeoPt) placeGuideEntity.getProperty(COORD_PROPERTY);
       String desc = (String) placeGuideEntity.getProperty(DESC_PROPERTY);
-      int length = (Integer) placeGuideEntity.getProperty(LENGTH_PROPERTY);
+      long length = (long) placeGuideEntity.getProperty(LENGTH_PROPERTY);
       String imgKey = (String) placeGuideEntity.getProperty(IMG_KEY_PROPERTY);
       PlaceGuide placeGuide = new PlaceGuide
                               .Builder(name, audioKey, creatorId, placeId, coord)

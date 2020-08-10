@@ -1,5 +1,6 @@
 package com.google.sps;
 
+import com.google.gson.Gson;
 import com.google.appengine.api.datastore.*;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
@@ -16,6 +17,7 @@ import org.junit.runners.JUnit4;
 import java.util.List;
 import java.util.ArrayList;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(JUnit4.class)
 public final class DatastorePlaceGuideRepositoryTest{
@@ -30,7 +32,7 @@ public final class DatastorePlaceGuideRepositoryTest{
   private static final String PLACE_ID = "placeId";
   private static final GeoPt COORD = new GeoPt((float) 3.14, (float) 2.56);
   private static final boolean IS_PUBLIC = true;
-  private static final int LENGTH = 60;
+  private static final long LENGTH = new Long(60);
   private static final String DESC = "desc";
   private static final String IMG_KEY = "imgKey";
   private final PlaceGuide testPlaceGuide = new PlaceGuide
@@ -58,44 +60,60 @@ public final class DatastorePlaceGuideRepositoryTest{
     helper.tearDown();
   }
 
-//   @Test
-//   public void savePlaceGuideTest() {
-//     placeGuideRepository.savePlaceGuide(CREATOR_ID, testPlaceGuide);
-//     datastore = DatastoreServiceFactory.getDatastoreService();
-//     Query query = new Query(DatastorePlaceGuideRepository.ENTITY_KIND);
-//     PreparedQuery result = datastore.prepare(query);
-//     Entity placeGuide = result.asSingleEntity();
-//     assertEquals(NAME, placeGuide.getProperty(DatastorePlaceGuideRepository.NAME_PROPERTY));
-//     assertEquals(AUDIO_KEY, placeGuide.getProperty(
-//                                             DatastorePlaceGuideRepository.AUDIO_KEY_PROPERTY));
-//     assertEquals(CREATOR_ID, placeGuide.getProperty(
-//                                             DatastorePlaceGuideRepository.CREATOR_ID_PROPERTY));
-//     assertEquals(PLACE_ID, placeGuide.getProperty(
-//                                             DatastorePlaceGuideRepository.PLACE_ID_PROPERTY));
-//     assertEquals(COORD, placeGuide.getProperty(DatastorePlaceGuideRepository.COORD_PROPERTY));
-//     assertEquals(IS_PUBLIC, placeGuide.getProperty(
-//                                             DatastorePlaceGuideRepository.IS_PUBLIC_PROPERTY));
-//     assertEquals(LENGTH, placeGuide.getProperty(DatastorePlaceGuideRepository.LENGTH_PROPERTY));
-//     assertEquals(DESC, placeGuide.getProperty(DatastorePlaceGuideRepository.DESC_PROPERTY));
-//     assertEquals(IMG_KEY, placeGuide.getProperty(DatastorePlaceGuideRepository.IMG_KEY_PROPERTY));
-//   }
+  @Test
+  public void savePlaceGuideTest() {
+    placeGuideRepository.savePlaceGuide(CREATOR_ID, testPlaceGuide);
+    datastore = DatastoreServiceFactory.getDatastoreService();
+    Query query = new Query(DatastorePlaceGuideRepository.ENTITY_KIND);
+    PreparedQuery result = datastore.prepare(query);
+    Entity placeGuide = result.asSingleEntity();
+    assertEquals(NAME, placeGuide.getProperty(DatastorePlaceGuideRepository.NAME_PROPERTY));
+    assertEquals(AUDIO_KEY, placeGuide.getProperty(
+                                            DatastorePlaceGuideRepository.AUDIO_KEY_PROPERTY));
+    assertEquals(CREATOR_ID, placeGuide.getProperty(
+                                            DatastorePlaceGuideRepository.CREATOR_ID_PROPERTY));
+    assertEquals(PLACE_ID, placeGuide.getProperty(
+                                            DatastorePlaceGuideRepository.PLACE_ID_PROPERTY));
+    assertEquals(COORD, placeGuide.getProperty(DatastorePlaceGuideRepository.COORD_PROPERTY));
+    assertEquals(IS_PUBLIC, placeGuide.getProperty(
+                                            DatastorePlaceGuideRepository.IS_PUBLIC_PROPERTY));
+    assertEquals(LENGTH, placeGuide.getProperty(DatastorePlaceGuideRepository.LENGTH_PROPERTY));
+    assertEquals(DESC, placeGuide.getProperty(DatastorePlaceGuideRepository.DESC_PROPERTY));
+    assertEquals(IMG_KEY, placeGuide.getProperty(DatastorePlaceGuideRepository.IMG_KEY_PROPERTY));
+  }
 
-//   @Test
-//   public void getAllPlaceGuides() {
-//     Entity placeGuideEntity = new Entity(DatastorePlaceGuideRepository.ENTITY_KIND, ID);
-//     placeGuideEntity.setProperty(DatastorePlaceGuideRepository.NAME_PROPERTY, NAME);
-//     placeGuideEntity.setProperty(DatastorePlaceGuideRepository.AUDIO_KEY_PROPERTY, AUDIO_KEY);
-//     placeGuideEntity.setProperty(DatastorePlaceGuideRepository.CREATOR_ID_PROPERTY, CREATOR_ID);
-//     placeGuideEntity.setProperty(DatastorePlaceGuideRepository.PLACE_ID_PROPERTY, PLACE_ID);
-//     placeGuideEntity.setProperty(DatastorePlaceGuideRepository.IS_PUBLIC_PROPERTY, IS_PUBLIC);
-//     placeGuideEntity.setProperty(DatastorePlaceGuideRepository.COORD_PROPERTY, COORD);
-//     placeGuideEntity.setProperty(DatastorePlaceGuideRepository.DESC_PROPERTY, DESC);
-//     placeGuideEntity.setProperty(DatastorePlaceGuideRepository.LENGTH_PROPERTY, LENGTH);
-//     placeGuideEntity.setProperty(DatastorePlaceGuideRepository.IMG_KEY_PROPERTY, IMG_KEY);
-//     datastore.put(placeGuideEntity);
-//     List<PlaceGuide> result = placeGuideRepository.getAllPlaceGuides();
-//     List<PlaceGuide> expected = new ArrayList<>();
-//     expected.add(testPlaceGuide);
-//     assertEquals(expected, result);
-//   }
+  @Test
+  public void getAllPlaceGuides() {
+    Entity placeGuideEntity = new Entity(DatastorePlaceGuideRepository.ENTITY_KIND, ID);
+    placeGuideEntity.setProperty(DatastorePlaceGuideRepository.NAME_PROPERTY, NAME);
+    placeGuideEntity.setProperty(DatastorePlaceGuideRepository.AUDIO_KEY_PROPERTY, AUDIO_KEY);
+    placeGuideEntity.setProperty(DatastorePlaceGuideRepository.CREATOR_ID_PROPERTY, CREATOR_ID);
+    placeGuideEntity.setProperty(DatastorePlaceGuideRepository.PLACE_ID_PROPERTY, PLACE_ID);
+    placeGuideEntity.setProperty(DatastorePlaceGuideRepository.IS_PUBLIC_PROPERTY, IS_PUBLIC);
+    placeGuideEntity.setProperty(DatastorePlaceGuideRepository.COORD_PROPERTY, COORD);
+    placeGuideEntity.setProperty(DatastorePlaceGuideRepository.DESC_PROPERTY, DESC);
+    placeGuideEntity.setProperty(DatastorePlaceGuideRepository.LENGTH_PROPERTY, LENGTH);
+    placeGuideEntity.setProperty(DatastorePlaceGuideRepository.IMG_KEY_PROPERTY, IMG_KEY);
+    datastore.put(placeGuideEntity);
+    List<PlaceGuide> results = placeGuideRepository.getAllPlaceGuides();
+    PlaceGuide result = results.get(0);
+    assertEquals(1, results.size());
+    Gson gson = new Gson();
+    String json = gson.toJson(result);
+    System.out.println(json);
+    String json2 = gson.toJson(testPlaceGuide);
+    System.out.println(json2);
+    System.out.println(testPlaceGuide.equals(result));
+    assertEquals(testPlaceGuide.getId(), result.getId());
+    assertEquals(testPlaceGuide.getName(), result.getName());
+    assertEquals(testPlaceGuide.getAudioKey(), result.getAudioKey());
+    assertEquals(testPlaceGuide.getCreatorId(), result.getCreatorId());
+    assertEquals(testPlaceGuide.getPlaceId(), result.getPlaceId());
+    assertEquals(testPlaceGuide.getCoordinate(), result.getCoordinate());
+    assertEquals(testPlaceGuide.isPublic(), result.isPublic());
+    assertEquals(testPlaceGuide.getLength(), result.getLength());
+    assertEquals(testPlaceGuide.getDescription(), result.getDescription());
+    assertEquals(testPlaceGuide.getImageKey(), result.getImageKey());
+    
+  }
 }
