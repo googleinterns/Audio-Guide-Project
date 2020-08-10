@@ -1,4 +1,5 @@
 var currentLocationMarker;
+var trackUser;
 
 function createMap() {
     var myMapOptions = {
@@ -12,11 +13,20 @@ function createMap() {
 }
 
 function addGoToMyLocationControl(map) {
-    const myLocationControlDiv = createControlDiv("Go to my location", "./img/my_location.svg", null);
+    var imgId = "myLocationIcon";
+    const myLocationControlDiv = createControlDiv("Go to my location", "./img/my_location.svg", imgId);
     myLocationControlDiv.index = 1;
     map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(myLocationControlDiv);
+    trackUser = false;
     myLocationControlDiv.addEventListener("click", () => {
         showCurrentLocation(map);
+        var img = document.getElementById(imgId);
+        trackUser = !trackUser;
+        if (trackUser) {
+            img.src = "./img/my_location_active.svg";
+        } else {
+            img.src = "./img/my_location.svg";
+        }
     });
 }
 
@@ -75,16 +85,15 @@ function showError(error) {
   }
 }
 
-function createControlDiv(title, imgSrc, text) {
+function createControlDiv(title, imgSrc, imgId) {
   const controlDiv = document.createElement("div");
   controlDiv.setAttribute('class', 'control');
   controlDiv.title = title;
   if (imgSrc != null ) {
     const controlImg = document.createElement("img");
+    controlImg.setAttribute('id', imgId);
     controlImg.src = imgSrc;
     controlDiv.appendChild(controlImg);
-  } else if (text != null) {
-      // Add support for text.
-  }
+  } 
   return controlDiv;
 }
