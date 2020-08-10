@@ -1,5 +1,6 @@
-var currentLocationMarker;
+var currentLocationMarker = null;
 var trackUser;
+var watchPositionId;
 
 function createMap() {
     var myMapOptions = {
@@ -19,47 +20,62 @@ function addGoToMyLocationControl(map) {
     map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(myLocationControlDiv);
     trackUser = false;
     myLocationControlDiv.addEventListener("click", () => {
-        showCurrentLocation(map);
         var img = document.getElementById(imgId);
         trackUser = !trackUser;
+        console.log("trackuser=" + trackUser);
         if (trackUser) {
             img.src = "./img/my_location_active.svg";
+            if (navigator.geolocation) {
+                console.log("start watchPosition");
+                watchPositionId = navigator.geolocation.watchPosition(
+                        position => {showCurrentlocation(position, map); centerMapToCurrentLocation(position, map)},
+                        error => watchPositionError(error));
+            } else {
+                alert("The browser doesn't support geolocation.");
+            }
         } else {
+            console.log("stop watchPosition");
+            navigator.geolocation.clearWatch(watchPositionId);
+            removeCurrentLocationMarker();
             img.src = "./img/my_location.svg";
         }
     });
 }
 
-function showCurrentLocation(map) {
-    if (navigator.geolocation) {
-        var pos = null;
-        navigator.geolocation.getCurrentPosition(function(position) {
-            currentPos = {
-                lat: position.coords.latitude,
-                lng: position.coords.longitude
-            };
-            showCurrentLocationMarker(map, currentPos);
-            map.setCenter(currentPos);
-            map.setZoom(15);
-        },  error => {
-            showError(error);
-            removeCurrentLocationMarker();
-        });
-    } else {
-        alert("The browser doesn't support geolocation.");
-        removeCurrentLocationMarker();
-    }
+function centerMapToCurrentLocation(position, map) {
+    currentPos = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+    };
+    map.setCenter(currentPos);
+    map.setZoom(14);
+}
+
+function showCurrentlocation(position, map) {
+    console.log("new position displayed");
+    currentPos = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+    };
+    showCurrentLocationMarker(map, currentPos);
+}
+
+function watchPositionError(error) {
+    showError(error);
+    removeCurrentLocationMarker();
 }
 
 function showCurrentLocationMarker(map, currentPos) {
-    removeCurrentLocationMarker();
-    currentLocationMarker = new google.maps.Marker({
-        map: map,
-        animation: google.maps.Animation.DROP,
-        position: currentPos,
-        icon: "./img/blue_dot.png"
-    });
+    if (currentLocationMarker === null) {
+        currentLocationMarker = new google.maps.Marker({
+            map: map,
+            position: currentPos,
+            icon: "./img/blue_dot.png"
+        });
+    } 
+    console.log("currentLocationMarker: " + currentLocationMarker);
     currentLocationMarker.setMap(map);
+    currentLocationMarker.setPosition(currentPos);
 }
 
 function removeCurrentLocationMarker(){
