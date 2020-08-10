@@ -34,11 +34,11 @@ function centerMapAtUsersLocation(map) {
                 map: map,
                 animation: google.maps.Animation.DROP,
                 position: pos,
-                //icon: "./bluedot.png
+                icon: "./img/blue_dot.png"
             });
             currentLocationMarker.setMap(map);
             map.setCenter(pos);
-            map.setZoom(10);
+            map.setZoom(15);
         }, function() {
             alert("The geolocation service failed.");
         });
