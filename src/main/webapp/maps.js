@@ -1,3 +1,5 @@
+var currentLocationMarker;
+
 function createMap() {
     var myMapOptions = {
         zoom: 2,
@@ -25,8 +27,18 @@ function centerMapAtUsersLocation(map) {
                 lat: position.coords.latitude,
                 lng: position.coords.longitude
             };
+            if (currentLocationMarker != null) {
+                currentLocationMarker.setMap(null);
+            }
+            currentLocationMarker = new google.maps.Marker({
+                map: map,
+                animation: google.maps.Animation.DROP,
+                position: pos,
+                //icon: "./bluedot.png
+            });
+            currentLocationMarker.setMap(map);
             map.setCenter(pos);
-            map.setZoom(7);
+            map.setZoom(10);
         }, function() {
             alert("The geolocation service failed.");
         });
