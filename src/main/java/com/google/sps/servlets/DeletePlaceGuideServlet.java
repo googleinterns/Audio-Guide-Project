@@ -27,10 +27,8 @@ public class DeletePlaceGuideServlet extends HttpServlet {
   */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String placeGuideId = request.getParameter("id");
-    Key placeGuideEntityKey = KeyFactory.createKey("PlaceGuide", id);
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    datastore.delete(placeGuideEntityKey);
+    String id = request.getParameter("id");
+    long parsedId = Long.parseLong(id);
     response.sendRedirect("/myPlaceGuides.html");
   }
 }
