@@ -1,3 +1,5 @@
+const GEOCODER_FAIL_MSG = "Geocoder failed due to: ";
+
 function initAutocomplete(map) {
     const input = document.getElementById("search-box");
     var autocomplete = new google.maps.places.Autocomplete(input);
@@ -58,7 +60,7 @@ function showPlaceBasedOnId(map, id, placeMarker) {
     const geocoder = new google.maps.Geocoder();
     geocoder.geocode({placeId: id}, (results, status) => {
       if (status !== "OK") {
-        window.alert("Geocoder failed due to: " + status);
+        window.alert(GEOCODER_FAIL_MSG + status);
         return;
       }
       displaySearchResultOnMap(map, results[0], placeMarker, true);

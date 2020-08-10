@@ -3,12 +3,19 @@ var trackUser = false;
 var watchPositionId;
 var currentLocation;
 
+const NO_GEOLOCATION_SUPPORT_MSG = "The browser doesn't support geolocation.";
+const ENABLE_GEOLOCATION_MSG = "Please enable geolocation first!";
+const NO_LOCATION_PERMISSION_MSG = "Please allow location permission!.";
+const NO_LOCATION_INFORMATION_MSG = "Location information is unavailable.";
+const REQUEST_TIMEOUT_MSG = "The request to get user location timed out.";
+const UNKNOWN_ERROR_MSG = "An unknown error occurred while geolocating.";
+
 function addEnableGeolocationControl(map) {
-    var imgId = "enableGeolocationIcon";
-    var enableTitle = "Enable geolocation";
-    var disabledImgSrc = "./img/geolocation.svg"
-    var disableTitle = "Disable geolocation";
-    var enabledImgSrc = "./img/geolocation_active.svg"
+    const imgId = "enableGeolocationIcon";
+    const enableTitle = "Enable geolocation";
+    const disabledImgSrc = "./img/geolocation.svg"
+    const disableTitle = "Disable geolocation";
+    const enabledImgSrc = "./img/geolocation_active.svg"
     const geolocationControlDiv = createControlDiv(enableTitle, disabledImgSrc, imgId);
     geolocationControlDiv.index = 1;
     map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(geolocationControlDiv);
@@ -24,7 +31,7 @@ function addEnableGeolocationControl(map) {
                     position => {saveCurrentlocation(position, map); showCurrentLocationMarker(map)},
                     error => watchPositionError(error));
             } else {
-                alert("The browser doesn't support geolocation.");
+                alert(NO_GEOLOCATION_SUPPORT_MSG);
             }
         } else {
             navigator.geolocation.clearWatch(watchPositionId);
@@ -36,7 +43,7 @@ function addEnableGeolocationControl(map) {
 }
 
 function addGoToMyLocationControl(map) {
-    var imgId = "goToMyLocationIcon";
+    const imgId = "goToMyLocationIcon";
     const myLocationControlDiv = createControlDiv("Go to my location", "./img/my_location.svg", imgId);
     myLocationControlDiv.index = 1;
     map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(myLocationControlDiv);
@@ -46,10 +53,10 @@ function addGoToMyLocationControl(map) {
             if (navigator.geolocation) {
                 centerMapToCurrentLocation(map);
             } else {
-                alert("The browser doesn't support geolocation.");
+                alert(NO_GEOLOCATION_SUPPORT_MSG);
             }
         } else {
-            alert("Please enable geolocation first!");
+            alert(ENABLE_GEOLOCATION_MSG);
         }
     });
 }
@@ -92,16 +99,16 @@ function removeCurrentLocationMarker(){
 function showError(error) {
   switch(error.code) {
     case error.PERMISSION_DENIED:
-      alert("Please allow location permission!.");
+      alert(NO_LOCATION_PERMISSION_MSG);
       break;
     case error.POSITION_UNAVAILABLE:
-      alert("Location information is unavailable.");
+      alert(NO_LOCATION_INFORMATION_MSG);
       break;
     case error.TIMEOUT:
-      alert("The request to get user location timed out.");
+      alert(REQUEST_TIMEOUT_MSG);
       break;
     case error.UNKNOWN_ERROR:
-     alert("An unknown error occurred while geolocating.");
+     alert(UNKNOWN_ERROR_MSG);
       break;
   }
 }
