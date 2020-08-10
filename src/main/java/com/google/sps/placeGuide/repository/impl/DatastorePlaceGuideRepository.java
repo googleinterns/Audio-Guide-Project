@@ -103,11 +103,14 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository{
       String desc = (String) placeGuideEntity.getProperty(DESC_PROPERTY);
       long length = (long) placeGuideEntity.getProperty(LENGTH_PROPERTY);
       String imgKey = (String) placeGuideEntity.getProperty(IMG_KEY_PROPERTY);
-      PlaceGuide placeGuide = new PlaceGuide
+      PlaceGuide.Builder placeGuideBuilder = new PlaceGuide
                               .Builder(name, audioKey, creatorId, placeId, coord)
                               .setId(id).setLength(length).setDescription(desc)
-                              .setPlaceGuideToPublic(isPublic).setImageKey(imgKey)
-                              .build();
+                              .setImageKey(imgKey);
+      if (isPublic != null) {
+        placeGuideBuilder.setPlaceGuideToPublic(isPublic);
+      }
+      PlaceGuide placeGuide = placeGuideBuilder.build();
       createdPlaceGuides.add(placeGuide);
     }
     return Collections.unmodifiableList(createdPlaceGuides);
