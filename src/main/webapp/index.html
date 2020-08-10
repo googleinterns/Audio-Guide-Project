@@ -6,27 +6,34 @@
     <script src = "userVerification.js"></script>
   </head>
   <body onload = "authenticateUser()">
-      <div id = "createProfile">
-        <form action = "/user-data" method = "POST">
-            <label for = "name">Name:</label><br>
-            <input type = "text" name = "name" id = "name"><br>
+    <header> 
+        <ul>
+            <li><a href = "index.html">Home</a></li>
+            <li><a href = "discover.html">Discover</a><li>
+        </ul>
+    </header>
 
-            <label for = "imgUrl">Upload image</label>
-            <input type = "file" name = "imgUrl" id = "imgUrl">
+    <div id = "createProfile">
+    <form action = "/user-data" method = "POST">
+        <label for = "name">Name:</label><br>
+        <input type = "text" name = "name" id = "name"><br>
 
-            <label for = "selfIntroduction">Self Introduction:</label><br>
-            <textarea name = "selfIntroduction" rows = "4" cols = "50" id = "selfIntroduction"></textarea>
+        <label for = "imgUrl">Upload image</label>
+        <input type = "file" name = "imgUrl" id = "imgUrl">
 
-            <label for = "publicPortfolio">Account Status:</label>
-            <select name = "publicPortfolio" id = "publicPortfolio">
-                <option value = "public">public</option>
-                <option value = "private">private</option>
-            </select>
+        <label for = "selfIntroduction">Self Introduction:</label><br>
+        <textarea name = "selfIntroduction" rows = "4" cols = "50" id = "selfIntroduction"></textarea>
 
-            <input type = "submit" value = "Submit">
-        </form>
+        <label for = "publicPortfolio">Account Status:</label>
+        <select name = "publicPortfolio" id = "publicPortfolio">
+            <option value = "public">public</option>
+            <option value = "private">private</option>
+        </select>
 
-        <button id = "logout">Logout</button>
-      </div>
+        <input type = "submit" value = "Submit">
+    </form>
+
+    <button id = "logout">Logout</button>
+    </div>
   </body>
 </html>
