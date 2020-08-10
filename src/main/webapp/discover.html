@@ -4,8 +4,7 @@
     <meta charset = "UTF-8">
     <title>Discover</title>
     <script src = "maps.js"></script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBzpdeVwp-tAv0hxqqMWWxtELzDDeCisjc&callback=createMap"></script>
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBzpdeVwp-tAv0hxqqMWWxtELzDDeCisjc&libraries=places"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBzpdeVwp-tAv0hxqqMWWxtELzDDeCisjc&callback=createMap&libraries=places"></script>
     <link rel = "stylesheet" href = "style.css">
 </head>
 <body>
@@ -16,7 +15,7 @@
         </ul>
     </header>
 
-    <input id="search-box" class="control" type="text" placeholder="Search for a new place!"/>
+    <input id="search-box" type="text" placeholder="Search for a new place!"/>
     <div id = "map"></div>
 </body>
 </html>

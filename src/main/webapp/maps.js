@@ -11,6 +11,14 @@ function createMap() {
     const map = new google.maps.Map(
         document.getElementById('map'), myMapOptions); 
     addGoToMyLocationControl(map);
+    initSearchBox(map)
+}
+
+function initSearchBox(map) {
+  const input = document.getElementById("search-box");
+  const searchBox = new google.maps.places.SearchBox(input);
+  console.log("map = " + map);
+  map.controls[google.maps.ControlPosition.TOP_CENTER].push(input);
 }
 
 function addGoToMyLocationControl(map) {
