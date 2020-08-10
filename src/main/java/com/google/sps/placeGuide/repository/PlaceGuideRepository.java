@@ -23,7 +23,5 @@ public interface PlaceGuideRepository {
   @Nullable
   public List<PlaceGuide> getCreatedPrivatePlaceGuides(String creatorId);
 
-  public void deletePlaceGuides(String creatorId);
-
   public void deleteSelectedPlaceGuide(String creatorId, String placeGuideId);
 }

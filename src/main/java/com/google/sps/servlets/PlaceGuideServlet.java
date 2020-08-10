@@ -34,6 +34,7 @@ public class PlaceGuideServlet extends HttpServlet {
   public static final String DESC_INPUT = "desc";
   public static final String LENGTH_INPUT = "length";
   public static final String IMG_KEY_INPUT = "imgKey";
+  public static final String PLACE_GUIDE_TYPE_PARAMETER = "placeGuideType";
 
   private final PlaceGuideRepository placeGuideRepository;
   private final UserService userService;
@@ -59,9 +60,9 @@ public class PlaceGuideServlet extends HttpServlet {
    */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String placeGuideType = request.getParameter("type");
+    String placeGuideType = request.getParameter(PLACE_GUIDE_TYPE_PARAMETER);
     String creatorId = userService.getCurrentUser().getUserId();
-    List<PlaceGuide> placeGuides;
+    List<PlaceGuide> placeGuides = null;
     switch(placeGuideType) {
       case ALL:
         placeGuides = placeGuideRepository.getAllPlaceGuides();
@@ -78,7 +79,7 @@ public class PlaceGuideServlet extends HttpServlet {
     response.getWriter().println(convertToJsonUsingGson(placeGuides));
   }
 
-  private User getPlaceGuideFromRequest(HttpServletRequest request) {
+  private PlaceGuide getPlaceGuideFromRequest(HttpServletRequest request) {
     String creatorId = userService.getCurrentUser().getUserId();
     String name = request.getParameter(NAME_INPUT);
     String audioKey = request.getParameter(AUDIO_KEY_INPUT); // Get from Blobstore.
@@ -88,7 +89,7 @@ public class PlaceGuideServlet extends HttpServlet {
                                                                      placeId, coord);
     String publicPlaceGuideStringValue = request.getParameter(IS_PUBLIC_INPUT);
     if (publicPlaceGuideStringValue.equals(IS_PUBLIC_INPUT_VALUE)) {
-      newPlaceGuideBuilder.setPlaceGuideToPublic(true); // False by default.
+      newPlaceGuideBuilder.setPlaceGuideToPublic(true);
     }
     String length = request.getParameter(LENGTH_INPUT);
     if (!length.isEmpty()) {
