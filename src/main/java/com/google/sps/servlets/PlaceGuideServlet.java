@@ -62,12 +62,16 @@ public class PlaceGuideServlet extends HttpServlet {
     switch(placeGuideType) {
       case ALL:
         placeGuides = placeGuideRepository.getAllPlaceGuides();
+        break;
       case CREATED_ALL:
         placeGuides = placeGuideRepository.getCreatedPlaceGuides(userId);
+        break;
       case CREATED_PUBLIC:
         placeGuides = placeGuideRepository.getCreatedPublicPlaceGuides(userId);
+        break;
       case CREATED_PRIVATE:
         placeGuides = placeGuideRepository.getCreatedPrivatePlaceGuides(userId);
+        break;
       default:
         throw new IllegalStateException("Place Guide type does not exist!");
     }
@@ -88,9 +92,9 @@ public class PlaceGuideServlet extends HttpServlet {
     if (publicPlaceGuideStringValue.equals(IS_PUBLIC_INPUT_VALUE)) {
       newPlaceGuideBuilder.setPlaceGuideToPublic(true);
     }
-    int length = Integer.parseInt(request.getParameter(LENGTH_INPUT));
-    if (length != null) {
-      newPlaceGuideBuilder.setLength(length);
+    String length = request.getParameter(LENGTH_INPUT);
+    if (!length.isEmpty()) {
+      newPlaceGuideBuilder.setLength(Integer.parseInt(length));
     }
     String description = request.getParameter(DESC_INPUT);
     if (!description.isEmpty()) {

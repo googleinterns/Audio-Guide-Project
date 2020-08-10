@@ -24,14 +24,14 @@ public class PlaceGuide {
 
   // Specify how long user usually spends to follow this place guide in minutes.
   @Nullable
-  private final int length;
+  private final long length;
 
   @Nullable
   private final String desc, imgKey;
 
   private PlaceGuide(long id, String name, String audioKey, String creatorId, 
                                             String placeId, boolean isPublic, 
-                                            GeoPt coord, int length, 
+                                            GeoPt coord, long length, 
                                             String desc, String imgKey) {
     this.id = id;
     this.name = name;
@@ -53,7 +53,7 @@ public class PlaceGuide {
     private boolean isPublic = false;
     private final String placeId;
     private final GeoPt coord;
-    private int length;
+    private long length;
     private String desc, imgKey;
         
     public Builder(String name, String audioKey, String creatorId, String placeId, 
@@ -72,7 +72,7 @@ public class PlaceGuide {
       this.isPublic = setToPublic;
       return this;
     }
-    public Builder setLength(int length) {
+    public Builder setLength(long length) {
       this.length = length;
       return this;
     }
@@ -119,7 +119,7 @@ public class PlaceGuide {
   }
 
   @Nullable
-  public int getLength() {
+  public long getLength() {
     return length;
   }
 

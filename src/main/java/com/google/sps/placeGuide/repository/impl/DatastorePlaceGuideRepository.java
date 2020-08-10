@@ -1,10 +1,16 @@
 package com.google.sps.placeGuide.repository.impl;
 
 import com.google.appengine.api.datastore.*;
+import com.google.appengine.api.datastore.Query.Filter;
+import com.google.appengine.api.datastore.Query.FilterPredicate;
+import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.appengine.api.datastore.Query.CompositeFilter;
+import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
 import com.google.sps.placeGuide.PlaceGuide;
 import com.google.appengine.api.datastore.GeoPt;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import org.jetbrains.annotations.Nullable;
 import com.google.sps.placeGuide.repository.PlaceGuideRepository;
@@ -57,36 +63,28 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository{
   @Nullable
   @Override
   public List<PlaceGuide> getCreatedPlaceGuides(String creatorId) {
-    Query query = new Query(ENTITY_KIND)
-                  .setFilter(Query.FieldPredicate(CREATOR_ID_PROPERTY,
-                                                  Query.FieldOperator.EQUAL,
-                                                  creatorId));
+    Filter queryFilter = new FilterPredicate(CREATOR_ID_PROPERTY, FilterOperator.EQUAL, creatorId);
+    Query query = new Query(ENTITY_KIND).setFilter(queryFilter);
     return getPlaceGuidesList(query);
   }
 
   @Nullable
   @Override
   public List<PlaceGuide> getCreatedPublicPlaceGuides(String creatorId) {
-    Query query = new Query(ENTITY_KIND)
-                  .setFilter(Query.FieldPredicate(CREATOR_ID_PROPERTY, 
-                                                  Query.FieldOperator.EQUAL, 
-                                                  creatorId))   
-                  .setFilter(Query.FieldPredicate(IS_PUBLIC_PROPERTY,
-                                                  Query.FieldOperator.EQUAL,
-                                                  true));
+    Filter queryFilter = CompositeFilterOperator.and(Arrays.asList(
+                        new FilterPredicate(CREATOR_ID_PROPERTY, FilterOperator.EQUAL, creatorId),
+                        new FilterPredicate(IS_PUBLIC_PROPERTY, FilterOperator.EQUAL, true)));
+    Query query = new Query(ENTITY_KIND).setFilter(queryFilter);
     return getPlaceGuidesList(query);
   }
 
   @Nullable
   @Override
   public List<PlaceGuide> getCreatedPrivatePlaceGuides(String creatorId) {
-    Query query = new Query(ENTITY_KIND)
-                  .setFilter(Query.FieldPredicate(CREATOR_ID_PROPERTY, 
-                                                  Query.FieldOperator.EQUAL, 
-                                                  creatorId))   
-                  .setFilter(Query.FieldPredicate(IS_PUBLIC_PROPERTY,
-                                                  Query.FieldOperator.EQUAL,
-                                                  false));
+    Filter queryFilter = CompositeFilterOperator.and(Arrays.asList(
+                        new FilterPredicate(CREATOR_ID_PROPERTY, FilterOperator.EQUAL, creatorId),
+                        new FilterPredicate(IS_PUBLIC_PROPERTY, FilterOperator.EQUAL, false)));
+    Query query = new Query(ENTITY_KIND).setFilter(queryFilter);
     return getPlaceGuidesList(query);
   }
 
