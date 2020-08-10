@@ -4,10 +4,11 @@
     <meta charset = "UTF-8">
     <title>Discover</title>
     <script src = "maps.js"></script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBzpdeVwp-tAv0hxqqMWWxtELzDDeCisjc&callback=createMap&libraries=places"></script>
+    <script src = "maps_key.js"></script>
+    <script id = "maps-api" async defer></script>
     <link rel = "stylesheet" href = "style.css">
 </head>
-<body>
+<body onload = "setApiKey()">
     <header> 
         <ul>
             <li><a href = "index.html">Home</a></li>
