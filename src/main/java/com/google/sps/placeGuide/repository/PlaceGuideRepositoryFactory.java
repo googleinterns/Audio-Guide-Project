@@ -2,6 +2,7 @@ package com.google.sps.placeGuide.repository;
 
 import com.google.sps.data.RepositoryType;
 import com.google.sps.placeGuide.repository.impl.DatastorePlaceGuideRepository;
+import com.google.appengine.api.datastore.*;
 
 /**
  * Creates a PlaceGuideRepository according to the requested type.

@@ -13,7 +13,7 @@ import com.google.sps.placeGuide.repository.PlaceGuideRepository;
 public class DatastorePlaceGuideRepository implements PlaceGuideRepository{
 
   private final DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-  public static final String PLACEGUIDE_ENTITY_KIND = "PlaceGuide";
+  public static final String ENTITY_KIND = "PlaceGuide";
   public static final String ID_PROPERTY = "id";
   public static final String NAME_PROPERTY = "name";
   public static final String AUDIO_KEY_PROPERTY = "audioKey";
@@ -35,7 +35,7 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository{
   private Entity createPlaceGuideEntity(PlaceGuide placeGuide) {
 
     // Let the ID be automatically created.
-    Entity placeGuideEntity = new Entity(PLACEGUIDE_ENTITY_KIND);
+    Entity placeGuideEntity = new Entity(ENTITY_KIND);
     placeGuideEntity.setProperty(NAME_PROPERTY, placeGuide.getName());
     placeGuideEntity.setProperty(AUDIO_KEY_PROPERTY, placeGuide.getAudioKey());
     placeGuideEntity.setProperty(CREATOR_ID_PROPERTY, placeGuide.getCreatorId());
@@ -52,14 +52,14 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository{
   @Nullable
   @Override
   public List<PlaceGuide> getAllPlaceGuides() {
-    Query query = new Query(PLACEGUIDE_ENTITY_KIND);
+    Query query = new Query(ENTITY_KIND);
     return getPlaceGuidesList(query);
   }
 
   @Nullable
   @Override
   public List<PlaceGuide> getCreatedPlaceGuides(String creatorId) {
-    Query query = new Query(PLACEGUIDE_ENTITY_KIND)
+    Query query = new Query(ENTITY_KIND)
                   .setFilter(Query.FieldPredicate(CREATOR_ID_PROPERTY,
                                                   Query.FieldOperator.EQUAL,
                                                   creatorId));
@@ -69,7 +69,7 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository{
   @Nullable
   @Override
   public List<PlaceGuide> getCreatedPublicPlaceGuides(String creatorId) {
-    Query query = new Query(PLACEGUIDE_ENTITY_KIND)
+    Query query = new Query(ENTITY_KIND)
                   .setFilter(Query.FieldPredicate(CREATOR_ID_PROPERTY, 
                                                   Query.FieldOperator.EQUAL, 
                                                   creatorId))   
@@ -82,7 +82,7 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository{
   @Nullable
   @Override
   public List<PlaceGuide> getCreatedPrivatePlaceGuides(String creatorId) {
-    Query query = new Query(PLACEGUIDE_ENTITY_KIND)
+    Query query = new Query(ENTITY_KIND)
                   .setFilter(Query.FieldPredicate(CREATOR_ID_PROPERTY, 
                                                   Query.FieldOperator.EQUAL, 
                                                   creatorId))   
@@ -118,7 +118,7 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository{
   }
 
   public void deleteSelectedPlaceGuide(String creatorId, String placeGuideId) {
-    Query query = new Query(PLACEGUIDE_ENTITY_KIND)
+    Query query = new Query(ENTITY_KIND)
                   .setFilter(Query.FieldPredicate(CREATOR_ID_PROPERTY,
                                                   Query.FieldOperator.EQUAL,
                                                   creatorId))

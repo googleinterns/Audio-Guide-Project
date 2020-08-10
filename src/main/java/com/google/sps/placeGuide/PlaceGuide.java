@@ -6,9 +6,6 @@ import com.google.appengine.api.datastore.GeoPt;
 /** Class containing place guide's information. */
 public class PlaceGuide {
 
-  @Nullable
-  private long id;
-
   private final String name;
   private final String audioKey; 
   private final String creatorId;
@@ -26,11 +23,10 @@ public class PlaceGuide {
   @Nullable
   private final String desc, imgKey;
 
-  private PlaceGuide(long id, String name, String audioKey, String creatorId, 
+  private PlaceGuide(String name, String audioKey, String creatorId, 
                                     String placeId, boolean isPublic, 
                                     GeoPt coord, int length, 
                                     String desc, String imgKey) {
-    this.id = id;
     this.name = name;
     this.audioKey = audioKey;
     this.creatorId = creatorId;
@@ -43,7 +39,6 @@ public class PlaceGuide {
   }
 
   public static class Builder {
-    private long id;
     private final String name;
     private final String audioKey;
     private final String creatorId; 
@@ -60,10 +55,6 @@ public class PlaceGuide {
       this.creatorId = creatorId;
       this.placeId = placeId;
       this.coord = coord;
-    }
-    public Builder setId(long id) {
-      this.id = id;
-      return this;
     }
     public Builder setPlaceGuideToPublic(boolean setToPublic) {
       this.isPublic = setToPublic;
@@ -85,10 +76,6 @@ public class PlaceGuide {
       return new PlaceGuide(id, name, audioKey, creatorId, placeId, isPublic, 
                                             coord, length, desc, imgKey);
     }
-  }
-
-  public long getId() {
-    return id;
   }
 
   public String getName() {
