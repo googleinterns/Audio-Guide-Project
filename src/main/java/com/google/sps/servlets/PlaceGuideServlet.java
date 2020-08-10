@@ -17,7 +17,7 @@ import java.lang.IllegalStateException;
 import java.io.IOException;
 
 /**
- * This servlet handles users' data.
+ * This servlet handles placeguide's data.
  */
 @WebServlet("/place-guide-data")
 public class PlaceGuideServlet extends HttpServlet {

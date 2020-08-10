@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * This servlet handles deleting place guide's data.
+ * This servlet handles deleting placeguide's data.
  */
 @WebServlet("/delete-place-guide-data")
 public class DeletePlaceGuideServlet extends HttpServlet {
@@ -25,6 +25,6 @@ public class DeletePlaceGuideServlet extends HttpServlet {
     Key placeGuideEntityKey = KeyFactory.createKey("PlaceGuide", id);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.delete(placeGuideEntityKey);
-    response.sendRedirect("/createPlaceGuide.html");
+    response.sendRedirect("/myPlaceGuides.html");
   }
 }
