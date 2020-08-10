@@ -13,7 +13,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-
+import java.util.List;
+import java.util.ArrayList;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(JUnit4.class)
@@ -23,6 +24,7 @@ public final class DatastorePlaceGuideRepositoryTest {
   private final LocalServiceTestHelper helper = new LocalServiceTestHelper(
                                                             new LocalDatastoreServiceTestConfig());
 
+  private static final long ID = 12345;
   private static final String NAME = "name";
   private static final String AUDIO_KEY = "audioKey";
   private static final String CREATOR_ID = "creatorId";
@@ -32,13 +34,14 @@ public final class DatastorePlaceGuideRepositoryTest {
   private static final int LENGTH = 60;
   private static final String DESC = "desc";
   private static final String IMG_KEY = "imgKey";
-  private final PlaceGuide testPlaceGuide = new PlaceGuide
+  private final PlaceGuide placeGuideToSave = new PlaceGuide
                                             .Builder(NAME, AUDIO_KEY, CREATOR_ID, PLACE_ID, COORD)
                                             .setPlaceGuideToPublic(IS_PUBLIC);
                                             .setLength(LENGTH)
                                             .setDescription(DESC)
                                             .setImageKey(IMG_KEY)
                                             .build();
+  private PlaceGuide placeGuideToGet; 
 
   @Before
   public void setUp() {
@@ -76,7 +79,7 @@ public final class DatastorePlaceGuideRepositoryTest {
 
   @Test
   public getAllPlaceGuides() {
-    Entity placeGuideEntity = new Entity(DatastorePlaceGuideRepository.ENTITY_KIND);
+    Entity placeGuideEntity = new Entity(DatastorePlaceGuideRepository.ENTITY_KIND, ID);
     placeGuideEntity.setProperty(DatastorePlaceGuideRepository.NAME_PROPERTY, NAME);
     placeGuideEntity.setProperty(DatastorePlaceGuideRepository.AUDIO_KEY_PROPERTY, AUDIO_KEY);
     placeGuideEntity.setProperty(DatastorePlaceGuideRepository.CREATOR_ID_PROPERTY, CREATOR_ID);
@@ -88,6 +91,8 @@ public final class DatastorePlaceGuideRepositoryTest {
     placeGuideEntity.setProperty(DatastorePlaceGuideRepository.IMG_KEY_PROPERTY, IMG_KEY);
     datastore.put(placeGuideEntity);
     List<PlaceGuide> result = placeGuideRepository.getAllPlaceGuides();
-    assertEquals(result, )
+    List<PlaceGuide> expected = new ArrayList<>();
+    expected.add(testPlaceGuide);
+    assertEquals(expected, result);
   }
 }

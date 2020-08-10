@@ -36,14 +36,9 @@ public class PlaceGuideServlet extends HttpServlet {
   public static final String IMG_KEY_INPUT = "imgKey";
   public static final String PLACE_GUIDE_TYPE_PARAMETER = "placeGuideType";
 
-  private final PlaceGuideRepository placeGuideRepository;
-  private final UserService userService;
-
-  public PlaceGuideServlet() {
-    placeGuideRepository = PlaceGuideRepositoryFactory
-                            .getPlaceGuideRepository(RepositoryType.DATASTORE);
-    userService = UserServiceFactory.getUserService();
-  }
+  private final PlaceGuideRepository placeGuideRepository = PlaceGuideRepositoryFactory
+                                                .getPlaceGuideRepository(RepositoryType.DATASTORE);
+  private final UserService userService = UserServiceFactory.getUserService();
 
   /**
    * Saves the recently submitted place guide data.

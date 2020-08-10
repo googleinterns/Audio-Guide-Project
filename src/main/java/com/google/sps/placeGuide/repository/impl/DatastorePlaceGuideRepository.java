@@ -115,15 +115,8 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository{
     return Collections.unmodifiableList(createdPlaceGuides);
   }
 
-  public void deleteSelectedPlaceGuide(String creatorId, String placeGuideId) {
-    Query query = new Query(ENTITY_KIND)
-                  .setFilter(Query.FieldPredicate(CREATOR_ID_PROPERTY,
-                                                  Query.FieldOperator.EQUAL,
-                                                  creatorId))
-                  .setFilter(Query.FieldPredicate(ID_PROPERTY,
-                                                  Query.FieldOperator.EQUAL,
-                                                  placeGuideId));
-    PreparedQuery result = datastore.prepare(query);
-    datastore.delete(result.asSingleEntity().getKey());
+  public void deleteSelectedPlaceGuide(String placeGuideId) {
+    Key placeGuideEntityKey = KeyFactory.createKey(ENTITY_KIND, placeGuideId);
+    datastore.delete(placeGuideEntityKey);
   }
 }
