@@ -16,35 +16,63 @@ function addGoToMyLocationControl(map) {
     myLocationControlDiv.index = 1;
     map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(myLocationControlDiv);
     myLocationControlDiv.addEventListener("click", () => {
-        centerMapAtUsersLocation(map);
+        showCurrentLocation(map);
     });
 }
 
-function centerMapAtUsersLocation(map) {
+function showCurrentLocation(map) {
     if (navigator.geolocation) {
+        var pos = null;
         navigator.geolocation.getCurrentPosition(function(position) {
-            var pos = {
+            currentPos = {
                 lat: position.coords.latitude,
                 lng: position.coords.longitude
             };
-            if (currentLocationMarker != null) {
-                currentLocationMarker.setMap(null);
-            }
-            currentLocationMarker = new google.maps.Marker({
-                map: map,
-                animation: google.maps.Animation.DROP,
-                position: pos,
-                icon: "./img/blue_dot.png"
-            });
-            currentLocationMarker.setMap(map);
-            map.setCenter(pos);
+            showCurrentLocationMarker(map, currentPos);
+            map.setCenter(currentPos);
             map.setZoom(15);
-        }, function() {
-            alert("The geolocation service failed.");
+        },  error => {
+            showError(error);
+            removeCurrentLocationMarker();
         });
     } else {
         alert("The browser doesn't support geolocation.");
+        removeCurrentLocationMarker();
     }
+}
+
+function showCurrentLocationMarker(map, currentPos) {
+    removeCurrentLocationMarker();
+    currentLocationMarker = new google.maps.Marker({
+        map: map,
+        animation: google.maps.Animation.DROP,
+        position: currentPos,
+        icon: "./img/blue_dot.png"
+    });
+    currentLocationMarker.setMap(map);
+}
+
+function removeCurrentLocationMarker(){
+    if (currentLocationMarker != null) {
+        currentLocationMarker.setMap(null);
+    }
+}
+
+function showError(error) {
+  switch(error.code) {
+    case error.PERMISSION_DENIED:
+      alert("Please allow location permission!.");
+      break;
+    case error.POSITION_UNAVAILABLE:
+      alert("Location information is unavailable.");
+      break;
+    case error.TIMEOUT:
+      alert("The request to get user location timed out.");
+      break;
+    case error.UNKNOWN_ERROR:
+     alert("An unknown error occurred while geolocating.");
+      break;
+  }
 }
 
 function createControlDiv(title, imgSrc, text) {
@@ -56,7 +84,7 @@ function createControlDiv(title, imgSrc, text) {
     controlImg.src = imgSrc;
     controlDiv.appendChild(controlImg);
   } else if (text != null) {
-      // add support for text;
+      // Add support for text.
   }
   return controlDiv;
 }
