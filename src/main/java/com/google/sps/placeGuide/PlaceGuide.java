@@ -63,9 +63,10 @@ public class PlaceGuide {
     }
     public Builder setId(long id) {
       this.id = id;
+      return this;
     }
-    public Builder setPlaceGuideToPublic(boolean isPublic) {
-      this.isPublic = isPublic;
+    public Builder setPlaceGuideToPublic(boolean setToPublic) {
+      this.isPublic = setToPublic;
       return this;
     }
     public Builder setLength(int length) {
@@ -76,7 +77,7 @@ public class PlaceGuide {
       this.desc = desc;
       return this;
     }
-    public Builder setImageUrl(String imgKey) {
+    public Builder setImageKey(String imgKey) {
       this.imgKey = imgKey;
       return this;
     }

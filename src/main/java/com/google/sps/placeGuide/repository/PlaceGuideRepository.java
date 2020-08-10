@@ -8,8 +8,22 @@ import java.util.List;
 /** Interface for handling place guide. */
 public interface PlaceGuideRepository {
 
-  public void savePlaceGuide(PlaceGuide placeGuide);
+  public void savePlaceGuide(String creatorId, PlaceGuide placeGuide);
+
+  // @return all public {@code PlaceGuide}.
+  @Nullable
+  public List<PlaceGuide> getAllPlaceGuides();
 
   @Nullable
-  public List<PlaceGuide> getPlaceGuidesList();
+  public List<PlaceGuide> getCreatedPlaceGuides(String creatorId);
+
+  @Nullable
+  public List<PlaceGuide> getCreatedPublicPlaceGuides(String creatorId);
+
+  @Nullable
+  public List<PlaceGuide> getCreatedPrivatePlaceGuides(String creatorId);
+
+  public void deletePlaceGuides(String creatorId);
+
+  public void deleteSelectedPlaceGuide(String creatorId, String placeGuideId);
 }
