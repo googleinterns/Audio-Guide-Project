@@ -27,14 +27,13 @@ function addGoToMyLocationControl(map) {
             img.src = "./img/my_location_active.svg";
             if (navigator.geolocation) {
                 console.log("start watchPosition");
-                watchPositionId = navigator.geolocation.watchPosition(
-                        position => {showCurrentlocation(position, map); centerMapToCurrentLocation(position, map)},
-                        error => watchPositionError(error));
+                watchPositionId = navigator.geolocation.watchPosition(position => showCurrentlocation(position, map), error => watchPositionError(error));
+                centerMapToCurrentLocation(map);
             } else {
                 alert("The browser doesn't support geolocation.");
             }
         } else {
-            console.log("stop watchPosition");
+             console.log("stop watchPosition");
             navigator.geolocation.clearWatch(watchPositionId);
             removeCurrentLocationMarker();
             img.src = "./img/my_location.svg";
@@ -42,13 +41,17 @@ function addGoToMyLocationControl(map) {
     });
 }
 
-function centerMapToCurrentLocation(position, map) {
-    currentPos = {
-        lat: position.coords.latitude,
-        lng: position.coords.longitude
-    };
-    map.setCenter(currentPos);
-    map.setZoom(14);
+function centerMapToCurrentLocation(map) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+        currentPos = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+        };
+        map.setCenter(currentPos);
+        map.setZoom(12);
+    },  error => {
+        showError(error);
+    });
 }
 
 function showCurrentlocation(position, map) {
