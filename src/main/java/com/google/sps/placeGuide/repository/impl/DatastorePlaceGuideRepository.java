@@ -2,7 +2,7 @@ package com.google.sps.placeGuide.repository.impl;
 
 import com.google.appengine.api.datastore.*;
 import com.google.sps.placeGuide.PlaceGuide;
-import com.google.sps.placeGuide.PlaceCoordinate;
+import com.google.appengine.api.datastore.GeoPt;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -115,7 +115,7 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository{
     return Collections.unmodifiableList(createdPlaceGuides);
   }
 
-  public void deleteSelectedPlaceGuide(String placeGuideId) {
+  public void deleteSelectedPlaceGuide(long placeGuideId) {
     Key placeGuideEntityKey = KeyFactory.createKey(ENTITY_KIND, placeGuideId);
     datastore.delete(placeGuideEntityKey);
   }

@@ -52,7 +52,7 @@ public class PlaceGuide {
     private final String creatorId; 
     private boolean isPublic = false;
     private final String placeId;
-    private final PlaceCoordinate coord;
+    private final GeoPt coord;
     private int length;
     private String desc, imgKey;
         
@@ -84,7 +84,7 @@ public class PlaceGuide {
       this.imgKey = imgKey;
       return this;
     }
-    public UserAuthenticationStatus build() {
+    public PlaceGuide build() {
       return new PlaceGuide(id, name, audioKey, creatorId, placeId, isPublic, 
                                                 coord, length, desc, imgKey);
     }
@@ -110,7 +110,7 @@ public class PlaceGuide {
     return placeId;
   }
 
-  public PlaceCoordinate getCoordinate() {
+  public GeoPt getCoordinate() {
     return coord;
   }
 
@@ -119,7 +119,7 @@ public class PlaceGuide {
   }
 
   @Nullable
-  public String getLength() {
+  public int getLength() {
     return length;
   }
 

@@ -2,7 +2,6 @@ package com.google.sps.placeGuide.repository;
 
 import org.jetbrains.annotations.Nullable;
 import com.google.sps.placeGuide.PlaceGuide;
-import com.google.sps.placeGuide.PlaceCoordinate;
 import java.util.List;
 
 /** Interface for handling place guide. */
@@ -23,5 +22,5 @@ public interface PlaceGuideRepository {
   @Nullable
   public List<PlaceGuide> getCreatedPrivatePlaceGuides(String creatorId);
 
-  public void deleteSelectedPlaceGuide(String creatorId, String placeGuideId);
+  public void deleteSelectedPlaceGuide(long placeGuideId);
 }
