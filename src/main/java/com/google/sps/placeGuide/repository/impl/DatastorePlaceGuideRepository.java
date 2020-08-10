@@ -14,7 +14,6 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository{
 
   private final DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
   public static final String ENTITY_KIND = "PlaceGuide";
-  public static final String ID_PROPERTY = "id";
   public static final String NAME_PROPERTY = "name";
   public static final String AUDIO_KEY_PROPERTY = "audioKey";
   public static final String CREATOR_ID_PROPERTY = "creatorId";
@@ -24,7 +23,6 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository{
   public static final String DESC_PROPERTY = "desc";
   public static final String LENGTH_PROPERTY = "length";
   public static final String IMG_KEY_PROPERTY = "imgKey";
-  public static final String SAVED_PLACEGUIDES_LIST_PROPERTY = "savedPlaceGuidesList";
   
   @Override
   public void savePlaceGuide(String creatorId, PlaceGuide placeGuide) {
@@ -97,7 +95,7 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository{
     PreparedQuery results = datastore.prepare(query);
     List<PlaceGuide> createdPlaceGuides = new ArrayList<>();
     for (Entity placeGuideEntity : results.asIterable()) {
-      long id = (long) placeGuideEntity.getProperty(ID_PROPERTY);
+      long id = placeGuideEntity.getKey().getId();
       String name = (String) placeGuideEntity.getProperty(NAME_PROPERTY);
       String audioKey = (String) placeGuideEntity.getProperty(AUDIO_KEY_PROPERTY);
       String creatorId = (String) placeGuideEntity.getProperty(CREATOR_ID_PROPERTY);
