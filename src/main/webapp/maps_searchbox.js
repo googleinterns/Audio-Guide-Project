@@ -72,7 +72,6 @@ function showClosestResult(map, input, autocomplete) {
  * corresponding to an id, provided by the Places API,
  * and then display it as the new search result.
  */
-
 function showPlaceBasedOnId(map, id) {
   const geocoder = new google.maps.Geocoder();
   geocoder.geocode({placeId: id}, (results, status) => {
