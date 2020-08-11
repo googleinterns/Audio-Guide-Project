@@ -4,8 +4,6 @@ import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.users.UserService;
-import com.google.appengine.api.users.UserServiceFactory;
 import com.google.sps.placeGuide.repository.PlaceGuideRepository;
 import com.google.sps.placeGuide.repository.PlaceGuideRepositoryFactory;
 import com.google.sps.data.RepositoryType;
@@ -21,7 +19,6 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/delete-place-guide-data")
 public class DeletePlaceGuideServlet extends HttpServlet {
 
-  private final UserService userService = UserServiceFactory.getUserService();
   private final PlaceGuideRepository placeGuideRepository = PlaceGuideRepositoryFactory
                                                 .getPlaceGuideRepository(RepositoryType.DATASTORE);
 
