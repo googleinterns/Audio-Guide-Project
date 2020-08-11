@@ -40,7 +40,7 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository{
 
     Entity placeGuideEntity;
     long placeGuideId = placeGuide.getId();
-    if (placeGuideId != null) {
+    if (Long.valueOf(placeGuideId) != null) {
       // Use the original placeGuide's ID for when user edits a place guide.
       placeGuideEntity = new Entity(ENTITY_KIND, placeGuideId);
     } else {
