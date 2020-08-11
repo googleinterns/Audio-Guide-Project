@@ -44,8 +44,9 @@ public class UserDataServlet extends HttpServlet {
   public static final String IMG_KEY_INPUT = "imgKey";
   public static final String DELETE_IMG_INPUT = "deleteImg";
 
-  private final UserRepository userRepository;
-  private final UserService userService;
+  private final UserRepository userRepository =
+          UserRepositoryFactory.getUserRepository(RepositoryType.DATASTORE);;
+  private final UserService userService = UserServiceFactory.getUserService();;
 
   private final BlobstoreService blobstoreService;
   private final BlobInfoFactory blobInfoFactory;
@@ -56,8 +57,6 @@ public class UserDataServlet extends HttpServlet {
   public UserDataServlet() {
     blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
     blobInfoFactory = new BlobInfoFactory();
-    userRepository = UserRepositoryFactory.getUserRepository(RepositoryType.DATASTORE);
-    userService = UserServiceFactory.getUserService();
   }
 
   /**
@@ -66,8 +65,6 @@ public class UserDataServlet extends HttpServlet {
   public UserDataServlet(BlobstoreService blobstoreService, BlobInfoFactory blobInfoFactory) {
     this.blobstoreService = blobstoreService;
     this.blobInfoFactory = blobInfoFactory;
-    userRepository = UserRepositoryFactory.getUserRepository(RepositoryType.DATASTORE);
-    userService = UserServiceFactory.getUserService();
   }
 
   /**
