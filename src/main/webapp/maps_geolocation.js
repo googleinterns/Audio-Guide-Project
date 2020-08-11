@@ -42,7 +42,6 @@ function addEnableGeolocationControl(map) {
           event => geolocationControlEvent(map, geolocationControlDiv));
 }
 
-
 /**
  * When the geolocation button gets clicked, its status is toggled.
  * If geolocation is on, then each time the user's loctaion changes,
@@ -73,7 +72,6 @@ function geolocationControlEvent(map, geolocationControlDiv) {
     geolocationControlDiv.title = ENABLE_GEOLOCATION_TITLE;
   }
 }
-
 
 /**
  * Adds a button to the map which lets the user center the map around their current location.
@@ -163,7 +161,6 @@ function showError(error) {
       break;
   }
 }
-
 
 /** Creates a div with the style of control elements and with the given image. */
 function createControlDiv(title, imgSrc, imgId) {
