@@ -16,7 +16,7 @@
 
 const GEOCODER_FAIL_MSG = "Geocoder failed due to: ";
 var searchedPlaceMarker;
-var serachedPlaceId;
+var searchedPlaceId;
 
 function initAutocomplete(map) {
   const input = document.getElementById("search-box");
@@ -47,7 +47,7 @@ function showNewSearchResult(map, autocomplete, input) {
     showClosestResult(map, input, autocomplete);
     return;
   }
-  serachedPlaceId = place.place_id;
+  searchedPlaceId = place.place_id;
   displaySearchResultOnMap(map, place, true);
 }
 
@@ -62,7 +62,7 @@ function showClosestResult(map, input, autocomplete) {
       alert(status);
       return;
     }
-    serachedPlaceId = predictions[0].place_id;
+    searchedPlaceId = predictions[0].place_id;
     showPlaceBasedOnId(map, predictions[0].place_id);
   });
 }
