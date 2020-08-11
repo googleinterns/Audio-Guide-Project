@@ -23,5 +23,5 @@ public interface PlaceGuideRepository {
   // (not available to be viewed by other users).
   public List<PlaceGuide> getCreatedPrivatePlaceGuides(String creatorId);
 
-  public void deleteSelectedPlaceGuide(long placeGuideId);
+  public void deletePlaceGuide(long placeGuideId);
 }
