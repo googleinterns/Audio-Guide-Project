@@ -50,7 +50,6 @@ function addEnableGeolocationControl(map) {
  */
 function geolocationControlEvent(map, geolocationControlDiv) {
   var img = document.getElementById(GEOLOCATION_IMG_ID);
-  console.log(img);
   trackUser = !trackUser;
   if (trackUser) {
     geolocationControlDiv.title = DISABLE_GEOLOCATION_TITLE;
@@ -95,7 +94,7 @@ function addGoToMyLocationControl(map) {
 function goToMyLocationControlEvent(map) {
   if (trackUser) {
     if (navigator.geolocation) {
-      //centerMapToCurrentLocation(map);
+      centerMapToCurrentLocation(map);
     } else {
       alert(NO_GEOLOCATION_SUPPORT_MSG);
     }
