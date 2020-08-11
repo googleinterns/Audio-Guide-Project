@@ -5,12 +5,12 @@
     <title>Discover</title>
     <script src = "maps_setup.js"></script>
     <script src = "maps_geolocation.js"></script>
-     <script src = "maps_searchbox.js"></script>
+    <script src = "maps_searchbox.js"></script>
     <script src = "maps_key.js"></script>
     <script id = "maps-api" async defer></script>
     <link rel = "stylesheet" href = "style.css">
 </head>
-<body onload = "setApiKey()">
+<body onload = "setApiKeyAndMapsCallback()">
     <header> 
         <ul>
             <li><a href = "index.html">Home</a></li>
@@ -18,7 +18,7 @@
         </ul>
     </header>
 
-    <input id="search-box" type="text" placeholder="Search for a new place!"/>
+    <input id = "search-box" type = "text" placeholder = "Search for a new place!"/>
     <div id = "map"></div>
 </body>
 </html>

@@ -1,3 +1,10 @@
+/**
+ * {@code addGoToMyLocationControl} allows the user to center the map
+ * at their location by clicking a button.
+ * {@code addEnableGeolocationControl} allows the user to turn on/off
+ * the geolocation feature, which displays the user's current location continuously. 
+ */
+
 var currentLocationMarker = null;
 var trackUser = false;
 var watchPositionId;
@@ -10,55 +17,85 @@ const NO_LOCATION_INFORMATION_MSG = "Location information is unavailable.";
 const REQUEST_TIMEOUT_MSG = "The request to get user location timed out.";
 const UNKNOWN_ERROR_MSG = "An unknown error occurred while geolocating.";
 
+const GEOLOCATION_IMG_ID = "enableGeolocationIcon";
+const ENABLE_GEOLOCATION_TITLE = "Enable geolocation";
+const DISABLED_GEOLOCATION_IMG_SRC = "./img/geolocation.svg"
+const DISABLE_GEOLOCATION_TITLE = "Disable geolocation";
+const ENABLE_GEOLOCATION_IMG_SRC = "./img/geolocation_active.svg";
+
+const GO_TO_MY_LOCATION_IMG_ID = "goToMyLocationIcon";
+const GO_TO_MY_LOCATION_TITLE = "Go to my location";
+
+/**
+ * Adds a button to the map which turns on/off geolocation.
+ * Geolocation can be battery-consuming, and the user should be able
+ * to tund it off.
+ * Remark that the audio-guide creation process doesn't require the user's location at all.
+ */
 function addEnableGeolocationControl(map) {
-    const imgId = "enableGeolocationIcon";
-    const enableTitle = "Enable geolocation";
-    const disabledImgSrc = "./img/geolocation.svg"
-    const disableTitle = "Disable geolocation";
-    const enabledImgSrc = "./img/geolocation_active.svg"
-    const geolocationControlDiv = createControlDiv(enableTitle, disabledImgSrc, imgId);
+    const geolocationControlDiv = createControlDiv(ENABLE_GEOLOCATION_TITLE, DISABLED_GEOLOCATION_IMG_SRC, GEOLOCATION_IMG_ID);
     geolocationControlDiv.index = 1;
     map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(geolocationControlDiv);
     trackUser = false;
-    geolocationControlDiv.addEventListener("click", () => {
-        var img = document.getElementById(imgId);
-        trackUser = !trackUser;
-        if (trackUser) {
-            geolocationControlDiv.title = disableTitle;
-            img.src = enabledImgSrc;
-            if (navigator.geolocation) {
-                watchPositionId = navigator.geolocation.watchPosition(
-                    position => {saveCurrentlocation(position, map); showCurrentLocationMarker(map)},
-                    error => watchPositionError(error));
-            } else {
-                alert(NO_GEOLOCATION_SUPPORT_MSG);
-            }
-        } else {
-            navigator.geolocation.clearWatch(watchPositionId);
-            removeCurrentLocationMarker();
-            img.src = disabledImgSrc;
-            geolocationControlDiv.title = enableTitle;
-        }
-    });
+    geolocationControlDiv.addEventListener("click", event => geolocationControlEvent(map, geolocationControlDiv));
 }
 
+
+/**
+ * When the geolocation button gets clicked, its status is toggled.
+ * If geolocation is on, then each time the user's loctaion changes, 
+ * and event will be triggered, 
+ * and the currentLocationMarker and currentlocation will be reset
+ */
+function geolocationControlEvent(map, geolocationControlDiv) {
+    var img = document.getElementById(GEOLOCATION_IMG_ID);
+    console.log(img);
+    trackUser = !trackUser;
+    if (trackUser) {
+        geolocationControlDiv.title = DISABLE_GEOLOCATION_TITLE;
+        img.src = ENABLE_GEOLOCATION_IMG_SRC;
+        if (navigator.geolocation) {
+            watchPositionId = navigator.geolocation.watchPosition(
+                position => {saveCurrentlocation(position, map); showCurrentLocationMarker(map)},
+                error => watchPositionError(error));
+        } else {
+            alert(NO_GEOLOCATION_SUPPORT_MSG);
+        }
+    } else {
+        navigator.geolocation.clearWatch(watchPositionId);
+        removeCurrentLocationMarker();
+        img.src = DISABLED_GEOLOCATION_IMG_SRC;
+        geolocationControlDiv.title = ENABLE_GEOLOCATION_TITLE;
+    }
+}
+
+
+/**
+ * Adds a button to the map which lets the user center the map around their current location.
+ */
 function addGoToMyLocationControl(map) {
-    const imgId = "goToMyLocationIcon";
-    const myLocationControlDiv = createControlDiv("Go to my location", "./img/my_location.svg", imgId);
+    const myLocationControlDiv = createControlDiv(GO_TO_MY_LOCATION_TITLE, "./img/my_location.svg", GO_TO_MY_LOCATION_IMG_ID);
     myLocationControlDiv.index = 1;
     map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(myLocationControlDiv);
     trackUser = false;
-    myLocationControlDiv.addEventListener("click", () => {
-        if (trackUser) {
-            if (navigator.geolocation) {
-                centerMapToCurrentLocation(map);
-            } else {
-                alert(NO_GEOLOCATION_SUPPORT_MSG);
-            }
+    myLocationControlDiv.addEventListener("click", event => goToMyLocationControlEvent(map));
+}
+
+/**
+ * When the goToMyLocation-button is clicked, if the user's location is available, 
+ * the maps gets centered around it.
+ * Otherwise, a message will be displayed to enable geolocation.
+ */
+function goToMyLocationControlEvent(map) {
+    if (trackUser) {
+        if (navigator.geolocation) {
+            //centerMapToCurrentLocation(map);
         } else {
-            alert(ENABLE_GEOLOCATION_MSG);
+            alert(NO_GEOLOCATION_SUPPORT_MSG);
         }
-    });
+    } else {
+        alert(ENABLE_GEOLOCATION_MSG);
+    }
 }
 
 function centerMapToCurrentLocation(map) {
@@ -73,6 +110,11 @@ function saveCurrentlocation(position, map) {
     };
 }
 
+/**
+ * This function is called when an error occurs in watchPosition. 
+ * It displays a message suggetsing the cause of the error and
+ * stops displayin the user's location.
+ */
 function watchPositionError(error) {
     showError(error);
     removeCurrentLocationMarker();
@@ -96,6 +138,7 @@ function removeCurrentLocationMarker(){
     }
 }
 
+/** Displays a message corresponding to the error occured in watchposition */
 function showError(error) {
   switch(error.code) {
     case error.PERMISSION_DENIED:
@@ -113,6 +156,8 @@ function showError(error) {
   }
 }
 
+
+/** Creates a div with the style of control elements and with the given image. */
 function createControlDiv(title, imgSrc, imgId) {
   const controlDiv = document.createElement("div");
   controlDiv.setAttribute('class', 'control');
