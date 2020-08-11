@@ -38,8 +38,15 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository{
 
   private Entity createPlaceGuideEntity(PlaceGuide placeGuide) {
 
-    // Let the ID be automatically created.
-    Entity placeGuideEntity = new Entity(ENTITY_KIND);
+    Entity placeGuideEntity;
+    long placeGuideId = placeGuide.getId();
+    if (placeGuideId != null) {
+      // Use the original placeGuide's ID for when user edits a place guide.
+      placeGuideEntity = new Entity(ENTITY_KIND, placeGuideId);
+    } else {
+      // Let the ID be automatically created if the place guide is new.
+      placeGuideEntity = new Entity(ENTITY_KIND);
+    }
     placeGuideEntity.setProperty(NAME_PROPERTY, placeGuide.getName());
     placeGuideEntity.setProperty(AUDIO_KEY_PROPERTY, placeGuide.getAudioKey());
     placeGuideEntity.setProperty(CREATOR_ID_PROPERTY, placeGuide.getCreatorId());
