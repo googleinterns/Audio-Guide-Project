@@ -26,7 +26,7 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository{
   public static final String PLACE_ID_PROPERTY = "placeId";
   public static final String IS_PUBLIC_PROPERTY = "isPublic";
   public static final String COORD_PROPERTY = "coord";
-  public static final String DESC_PROPERTY = "desc";
+  public static final String DESCRIPTION_PROPERTY = "description";
   public static final String LENGTH_PROPERTY = "length";
   public static final String IMG_KEY_PROPERTY = "imgKey";
   
@@ -46,7 +46,7 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository{
     placeGuideEntity.setProperty(PLACE_ID_PROPERTY, placeGuide.getPlaceId());
     placeGuideEntity.setProperty(IS_PUBLIC_PROPERTY, placeGuide.isPublic());
     placeGuideEntity.setProperty(COORD_PROPERTY, placeGuide.getCoordinate());
-    placeGuideEntity.setProperty(DESC_PROPERTY, placeGuide.getDescription());
+    placeGuideEntity.setProperty(DESCRIPTION_PROPERTY, placeGuide.getDescription());
     placeGuideEntity.setProperty(LENGTH_PROPERTY, placeGuide.getLength());
     placeGuideEntity.setProperty(IMG_KEY_PROPERTY, placeGuide.getImageKey());
 
@@ -101,12 +101,12 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository{
       String placeId = (String) placeGuideEntity.getProperty(PLACE_ID_PROPERTY);
       GeoPt coord = (GeoPt) placeGuideEntity.getProperty(COORD_PROPERTY);
       boolean isPublic = (boolean) placeGuideEntity.getProperty(IS_PUBLIC_PROPERTY);
-      String desc = (String) placeGuideEntity.getProperty(DESC_PROPERTY);
+      String description = (String) placeGuideEntity.getProperty(DESCRIPTION_PROPERTY);
       long length = (long) placeGuideEntity.getProperty(LENGTH_PROPERTY);
       String imgKey = (String) placeGuideEntity.getProperty(IMG_KEY_PROPERTY);
       PlaceGuide placeGuide = new PlaceGuide
                               .Builder(name, audioKey, creatorId, placeId, coord)
-                              .setId(id).setLength(length).setDescription(desc)
+                              .setId(id).setLength(length).setDescription(description)
                               .setImageKey(imgKey).setPlaceGuideToPublic(isPublic)
                               .build();
       createdPlaceGuides.add(placeGuide);
