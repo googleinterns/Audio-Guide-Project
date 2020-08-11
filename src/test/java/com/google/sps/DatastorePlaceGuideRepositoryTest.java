@@ -22,6 +22,9 @@ import static org.junit.Assert.assertTrue;
 
 @RunWith(JUnit4.class)
 public final class DatastorePlaceGuideRepositoryTest{
+
+  @Rule
+  private final ExpectedException thrown = ExpectedException.none();
   
   private final LocalServiceTestHelper helper = new LocalServiceTestHelper(
                                                             new LocalDatastoreServiceTestConfig());
@@ -258,8 +261,16 @@ public final class DatastorePlaceGuideRepositoryTest{
     assertTrue(compare(expected, result));
   }
 
-  @Test
-  public void deletePlaceGuideTest() {
-      
+  @Test(expected = EntityNotFoundException.class)
+  public void deletePlaceGuideTest() throws Exception{
+    List<PlaceGuide> testPlaceGuidesList = Arrays.asList(testPublicPlaceGuideA,
+                                                         testPublicPlaceGuideB,
+                                                         testPrivatePlaceGuideB,
+                                                         testPrivatePlaceGuideA);
+    saveTestPlaceGuidesEntities(testPlaceGuidesList);
+    placeGuideRepository.deletePlaceGuide(A_PUBLIC_ID);
+    Key deletedEntityKey = KeyFactory.createKey(DatastorePlaceGuideRepository.ENTITY_KIND, 
+                                                                             A_PUBLIC_ID);
+    Entity deletedEntity = datastore.get(deletedEntityKey);
   }
 }
