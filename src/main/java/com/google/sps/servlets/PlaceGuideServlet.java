@@ -82,12 +82,11 @@ public class PlaceGuideServlet extends HttpServlet {
   private PlaceGuide getPlaceGuideFromRequest(HttpServletRequest request) {
     String name = request.getParameter(NAME_INPUT);
     String audioKey = request.getParameter(AUDIO_KEY_INPUT); // Get from Blobstore.
-    String placeId = request.getParameter(PLACE_ID_INPUT);
     float latitude = Float.parseFloat(request.getParameter(LATITUDE_INPUT));
     float longitude = Float.parseFloat(request.getParameter(LONGITUDE_INPUT));
     GeoPt coord = new GeoPt(latitude, longitude);
     PlaceGuide.Builder newPlaceGuideBuilder = new PlaceGuide.Builder(name, audioKey, userId, 
-                                                                     placeId, coord);
+                                                                     coord);
     String publicPlaceGuideStringValue = request.getParameter(IS_PUBLIC_INPUT);
     if (publicPlaceGuideStringValue.equals(IS_PUBLIC_INPUT_VALUE)) {
       newPlaceGuideBuilder.setPlaceGuideToPublic(true);
@@ -95,6 +94,10 @@ public class PlaceGuideServlet extends HttpServlet {
     String length = request.getParameter(LENGTH_INPUT);
     if (!length.isEmpty()) {
       newPlaceGuideBuilder.setLength(Integer.parseInt(length));
+    }
+    String placeId = request.getParameter(PLACE_ID_INPUT);
+    if (!placeId.isEmpty()) {
+      newPlaceGuideBuilder.setPlaceId(placeId);
     }
     String description = request.getParameter(DESCRIPTION_INPUT);
     if (!description.isEmpty()) {
