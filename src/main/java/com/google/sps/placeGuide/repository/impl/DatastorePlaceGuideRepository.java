@@ -108,7 +108,7 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository{
                               .Builder(name, audioKey, creatorId, coord)
                               .setId(id).setPlaceId(placeId).setLength(length)
                               .setDescription(description).setImageKey(imgKey)
-                              .setPlaceGuideToPublic(isPublic).build();
+                              .setPlaceGuideStatus(isPublic).build();
       createdPlaceGuides.add(placeGuide);
     }
     return Collections.unmodifiableList(createdPlaceGuides);

@@ -89,7 +89,7 @@ public class PlaceGuideServlet extends HttpServlet {
                                                                      coord);
     String publicPlaceGuideStringValue = request.getParameter(IS_PUBLIC_INPUT);
     if (publicPlaceGuideStringValue.equals(IS_PUBLIC_INPUT_VALUE)) {
-      newPlaceGuideBuilder.setPlaceGuideToPublic(true);
+      newPlaceGuideBuilder.setPlaceGuideStatus(true);
     }
     String length = request.getParameter(LENGTH_INPUT);
     if (!length.isEmpty()) {

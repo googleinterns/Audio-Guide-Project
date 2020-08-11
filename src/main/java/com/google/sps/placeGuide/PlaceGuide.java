@@ -72,7 +72,7 @@ public class PlaceGuide {
       this.id = id;
       return this;
     }
-    public Builder setPlaceGuideToPublic(boolean setToPublic) {
+    public Builder setPlaceGuideStatus(boolean setToPublic) {
       this.isPublic = setToPublic;
       return this;
     }

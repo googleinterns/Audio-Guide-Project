@@ -38,9 +38,9 @@ public final class DatastorePlaceGuideRepositoryTest{
   private static final String IMG_KEY = "imgKey";
   private final PlaceGuide testPlaceGuide = new PlaceGuide
                                             .Builder(NAME, AUDIO_KEY, CREATOR_ID, COORD)
-                                            .setPlaceId(PLACE_ID);
+                                            .setPlaceId(PLACE_ID)
                                             .setId(ID)
-                                            .setPlaceGuideToPublic(IS_PUBLIC)
+                                            .setPlaceGuideStatus(IS_PUBLIC)
                                             .setLength(LENGTH)
                                             .setDescription(DESCRIPTION)
                                             .setImageKey(IMG_KEY)
