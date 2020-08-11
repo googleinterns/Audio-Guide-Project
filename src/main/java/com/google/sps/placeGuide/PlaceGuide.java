@@ -18,7 +18,8 @@ public class PlaceGuide {
   private final boolean isPublic;
 
   // This is not the unique identifier of a place guide.
-  private final String placeId;
+  @Nullable
+  private String placeId;
 
   private final GeoPt coord;
 
@@ -51,18 +52,21 @@ public class PlaceGuide {
     private final String audioKey;
     private final String creatorId; 
     private boolean isPublic = false;
-    private final String placeId;
+    private String placeId;
     private final GeoPt coord;
     private long length;
     private String description, imgKey;
         
-    public Builder(String name, String audioKey, String creatorId, String placeId, 
-                                                                   GeoPt coord) {
+    public Builder(String name, String audioKey, String creatorId, GeoPt coord) {
       this.name = name;
       this.audioKey = audioKey;
       this.creatorId = creatorId;
       this.placeId = placeId;
       this.coord = coord;
+    }
+    public Builder setPlaceId(String placeId) {
+      this.placeId = placeId;
+      return this;
     }
     public Builder setId(long id) { 
       this.id = id;
