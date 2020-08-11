@@ -115,7 +115,7 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository{
   }
 
   @Override
-  public void deleteSelectedPlaceGuide(long placeGuideId) {
+  public void deletePlaceGuide(long placeGuideId) {
     Key placeGuideEntityKey = KeyFactory.createKey(ENTITY_KIND, placeGuideId);
     datastore.delete(placeGuideEntityKey);
   }
