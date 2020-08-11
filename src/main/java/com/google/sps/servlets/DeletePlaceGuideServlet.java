@@ -23,7 +23,7 @@ public class DeletePlaceGuideServlet extends HttpServlet {
                                                 .getPlaceGuideRepository(RepositoryType.DATASTORE);
 
   /**
-  * Delete the key of the selected place guide from datastore.
+  * Delete the entity corresponding to the specified key.
   */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
