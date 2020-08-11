@@ -33,7 +33,7 @@ public class PlaceGuideServlet extends HttpServlet {
   public static final String IS_PUBLIC_INPUT_VALUE = "public";
   public static final String LATITUDE_INPUT = "latitude";
   public static final String LONGITUDE_INPUT = "longitude";
-  public static final String DESC_INPUT = "desc";
+  public static final String DESCRIPTION_INPUT = "description";
   public static final String LENGTH_INPUT = "length";
   public static final String IMG_KEY_INPUT = "imgKey";
   public static final String PLACE_GUIDE_TYPE_PARAMETER = "placeGuideType";
@@ -96,7 +96,7 @@ public class PlaceGuideServlet extends HttpServlet {
     if (!length.isEmpty()) {
       newPlaceGuideBuilder.setLength(Integer.parseInt(length));
     }
-    String description = request.getParameter(DESC_INPUT);
+    String description = request.getParameter(DESCRIPTION_INPUT);
     if (!description.isEmpty()) {
       newPlaceGuideBuilder.setDescription(description);
     }
