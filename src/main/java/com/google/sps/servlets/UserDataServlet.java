@@ -22,16 +22,19 @@ import com.google.sps.data.RepositoryType;
 import com.google.sps.user.User;
 import com.google.sps.user.repository.UserRepository;
 import com.google.sps.user.repository.UserRepositoryFactory;
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
+import org.jetbrains.annotations.Nullable;
+
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.jetbrains.annotations.Nullable;
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
-/** This servlet handles users' data. */
+/**
+ * This servlet handles users' data.
+ */
 @WebServlet("/user-data-servlet")
 public class UserDataServlet extends HttpServlet {
   public static final String NAME_INPUT = "name";
@@ -47,7 +50,9 @@ public class UserDataServlet extends HttpServlet {
   private final BlobstoreService blobstoreService;
   private final BlobInfoFactory blobInfoFactory;
 
-  /** For production. */
+  /**
+   * For production.
+   */
   public UserDataServlet() {
     blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
     blobInfoFactory = new BlobInfoFactory();
@@ -55,7 +60,9 @@ public class UserDataServlet extends HttpServlet {
     userService = UserServiceFactory.getUserService();
   }
 
-  /** For testing purposes. */
+  /**
+   * For testing purposes.
+   */
   public UserDataServlet(BlobstoreService blobstoreService, BlobInfoFactory blobInfoFactory) {
     this.blobstoreService = blobstoreService;
     this.blobInfoFactory = blobInfoFactory;
@@ -76,7 +83,9 @@ public class UserDataServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     User user = getUserFromRequest(request);
     User prevUserData = userRepository.getUser(userService.getCurrentUser().getUserId());
-    if (prevUserData != null && prevUserData.getImgKey() != null && !prevUserData.getImgKey().equals(user.getImgKey())) {
+    if (prevUserData != null
+            && prevUserData.getImgKey() != null
+            && !prevUserData.getImgKey().equals(user.getImgKey())) {
       // Delete previous image blob from blobstore, because it was overwritten or deleted.
       deleteBlobWithGivenKeyValue(prevUserData.getImgKey());
     }
@@ -84,7 +93,9 @@ public class UserDataServlet extends HttpServlet {
     response.sendRedirect("/index.html");
   }
 
-  /** Returns the data of the user who is currently logged in. */
+  /**
+   * Returns the data of the user who is currently logged in.
+   */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     User user = userRepository.getUser(userService.getCurrentUser().getUserId());

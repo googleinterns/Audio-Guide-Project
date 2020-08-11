@@ -24,7 +24,8 @@ function getBlobstoreUploadUrlFromServlet(formType) {
   return fetch(url)
       .catch(error => console.log("getBlobstoreUploadUrlFromServlet: failed to fetch: " + error))
       .then(uploadUrl => uploadUrl.text())
-      .catch(error => console.log('getBlobstoreUploadUrlFromServlet: failed to convert to text: ' + error))
+      .catch(error =>
+          console.log('getBlobstoreUploadUrlFromServlet: failed to convert to text: ' + error))
       .then(uploadUrl => {
         return uploadUrl;
       });
