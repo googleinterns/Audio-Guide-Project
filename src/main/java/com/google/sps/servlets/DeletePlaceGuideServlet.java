@@ -32,7 +32,7 @@ public class DeletePlaceGuideServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     String id = request.getParameter("id");
     long parsedId = Long.parseLong(id);
-    placeGuideRepository.deleteSelectedPlaceGuide(parsedId);
+    placeGuideRepository.deletePlaceGuide(parsedId);
     response.sendRedirect("/myPlaceGuides.html");
   }
 }
