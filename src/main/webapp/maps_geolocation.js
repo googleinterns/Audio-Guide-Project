@@ -33,11 +33,13 @@ const GO_TO_MY_LOCATION_TITLE = "Go to my location";
  * Remark that the audio-guide creation process doesn't require the user's location at all.
  */
 function addEnableGeolocationControl(map) {
-  const geolocationControlDiv = createControlDiv(ENABLE_GEOLOCATION_TITLE, DISABLED_GEOLOCATION_IMG_SRC, GEOLOCATION_IMG_ID);
+  const geolocationControlDiv =
+      createControlDiv(ENABLE_GEOLOCATION_TITLE, DISABLED_GEOLOCATION_IMG_SRC, GEOLOCATION_IMG_ID);
   geolocationControlDiv.index = 1;
   map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(geolocationControlDiv);
   trackUser = false;
-  geolocationControlDiv.addEventListener("click", event => geolocationControlEvent(map, geolocationControlDiv));
+  geolocationControlDiv.addEventListener("click",
+          event => geolocationControlEvent(map, geolocationControlDiv));
 }
 
 
@@ -77,11 +79,14 @@ function geolocationControlEvent(map, geolocationControlDiv) {
  * Adds a button to the map which lets the user center the map around their current location.
  */
 function addGoToMyLocationControl(map) {
-  const myLocationControlDiv = createControlDiv(GO_TO_MY_LOCATION_TITLE, "./img/my_location.svg", GO_TO_MY_LOCATION_IMG_ID);
+  const myLocationControlDiv =
+      createControlDiv(GO_TO_MY_LOCATION_TITLE,
+              "./img/my_location.svg", GO_TO_MY_LOCATION_IMG_ID);
   myLocationControlDiv.index = 1;
   map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(myLocationControlDiv);
   trackUser = false;
-  myLocationControlDiv.addEventListener("click", event => goToMyLocationControlEvent(map));
+  myLocationControlDiv.addEventListener("click",
+      event => goToMyLocationControlEvent(map));
 }
 
 /**

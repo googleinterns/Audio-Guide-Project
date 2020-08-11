@@ -28,7 +28,8 @@ function initAutocomplete(map) {
   searchedPlaceMarker.setMap(map);
 
   autocomplete.setFields(['address_components', 'geometry', 'icon', 'name']);
-  autocomplete.addListener('place_changed', result => showNewSearchResult(map, autocomplete, input));
+  autocomplete.addListener('place_changed',
+      result => showNewSearchResult(map, autocomplete, input));
 }
 
 /**
