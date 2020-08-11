@@ -53,7 +53,6 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository{
     return placeGuideEntity;
   }
 
-  @Nullable
   @Override
   public List<PlaceGuide> getAllPlaceGuides() {
     Filter queryFilter = new FilterPredicate(IS_PUBLIC_PROPERTY, FilterOperator.EQUAL, true);
@@ -61,7 +60,6 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository{
     return getPlaceGuidesList(query);
   }
 
-  @Nullable
   @Override
   public List<PlaceGuide> getCreatedPlaceGuides(String creatorId) {
     Filter queryFilter = new FilterPredicate(CREATOR_ID_PROPERTY, FilterOperator.EQUAL, creatorId);
@@ -69,7 +67,6 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository{
     return getPlaceGuidesList(query);
   }
 
-  @Nullable
   @Override
   public List<PlaceGuide> getCreatedPublicPlaceGuides(String creatorId) {
     Filter queryFilter = CompositeFilterOperator.and(Arrays.asList(
@@ -79,7 +76,6 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository{
     return getPlaceGuidesList(query);
   }
 
-  @Nullable
   @Override
   public List<PlaceGuide> getCreatedPrivatePlaceGuides(String creatorId) {
     Filter queryFilter = CompositeFilterOperator.and(Arrays.asList(
@@ -89,7 +85,6 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository{
     return getPlaceGuidesList(query);
   }
 
-  @Nullable 
   private List<PlaceGuide> getPlaceGuidesList(Query query) {
     PreparedQuery results = datastore.prepare(query);
     List<PlaceGuide> createdPlaceGuides = new ArrayList<>();
@@ -119,6 +114,7 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository{
     return placeGuide;
   }
 
+  @Override
   public void deleteSelectedPlaceGuide(long placeGuideId) {
     Key placeGuideEntityKey = KeyFactory.createKey(ENTITY_KIND, placeGuideId);
     datastore.delete(placeGuideEntityKey);
