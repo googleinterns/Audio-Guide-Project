@@ -157,6 +157,10 @@ public final class DatastorePlaceGuideRepositoryTest{
 
   @Test
   public void getAllPlaceGuides_placeGuideExists_returnPlaceGuide() {
+    List<PlaceGuide> testPlaceGuidesList = Arrays.asList(testPublicPlaceGuideA,
+                                                         testPublicPlaceGuideB,
+                                                         testPrivatePlaceGuideB,
+                                                         testPrivatePlaceGuideA);
     saveTestPlaceGuidesEntities(testPlaceGuidesList);
     List<PlaceGuide> result = placeGuideRepository.getAllPlaceGuides();
     List<PlaceGuide> expected = Arrays.asList(testPublicPlaceGuideA, testPublicPlaceGuideB);
@@ -170,14 +174,22 @@ public final class DatastorePlaceGuideRepositoryTest{
   }
 
   @Test
-  public void getCreatedPlaceGuides_placeGuidesExistButNotOwnedByUser_resultIsEmpty() {
+  public void getCreatedPlaceGuides_UserDoesntOwnAnyPlaceGuides_resultIsEmpty() {
+    List<PlaceGuide> testPlaceGuidesList = Arrays.asList(testPublicPlaceGuideA,
+                                                         testPublicPlaceGuideB,
+                                                         testPrivatePlaceGuideB,
+                                                         testPrivatePlaceGuideA);
     saveTestPlaceGuidesEntities(testPlaceGuidesList);
     List<PlaceGuide> result = placeGuideRepository.getCreatedPlaceGuides(OTHER_USER_ID);
     assertTrue(result.isEmpty());
   }
 
   @Test
-  public void getCreatedPlaceGuides_placeGuideExistsAndOwnedByUser_resultContainsPlaceGuide() {
+  public void getCreatedPlaceGuides_UserOwnsPublicAndPrivate_resultContainsPlaceGuide() {
+    List<PlaceGuide> testPlaceGuidesList = Arrays.asList(testPublicPlaceGuideA,
+                                                         testPublicPlaceGuideB,
+                                                         testPrivatePlaceGuideB,
+                                                         testPrivatePlaceGuideA);
     saveTestPlaceGuidesEntities(testPlaceGuidesList);
     List<PlaceGuide> result = placeGuideRepository.getCreatedPlaceGuides(CREATOR_A_ID);
     List<PlaceGuide> expected = Arrays.asList(testPublicPlaceGuideA, testPrivatePlaceGuideA);
@@ -185,28 +197,69 @@ public final class DatastorePlaceGuideRepositoryTest{
   }
 
   @Test
-  public void getCreatedPlaceGuides_placeGuideDoesntExist_placeGuideListIsEmpty() {
+  public void getCreatedPlaceGuides_placeGuideDoesntExist_resultIsEmpty() {
     List<PlaceGuide> result = placeGuideRepository.getCreatedPlaceGuides(CREATOR_A_ID);
     assertTrue(result.isEmpty());
   }
 
   @Test
-  public void getCreatedPublicPlaceGuides_placeGuideDoesntExist_placeGuideListIsEmpty() {
+  public void getCreatedPublicPlaceGuides_placeGuideDoesntExist_resultIsEmpty() {
     List<PlaceGuide> result = placeGuideRepository.getCreatedPublicPlaceGuides(CREATOR_A_ID);
     assertTrue(result.isEmpty());
   }
 
   @Test
   public void getCreatedPublicPlaceGuides_userDoesntOwnAnyPublicPlaceGuides_resultIsEmpty() {
+    List<PlaceGuide> testPlaceGuidesList = Arrays.asList(testPublicPlaceGuideB,
+                                                         testPrivatePlaceGuideB,
+                                                         testPrivatePlaceGuideA);
     saveTestPlaceGuidesEntities(testPlaceGuidesList);
-    List<PlaceGuide> result = placeGuideRepository.getCreatedPublicPlaceGuides(OTHER_USER_ID);
+    List<PlaceGuide> result = placeGuideRepository.getCreatedPublicPlaceGuides(CREATOR_A_ID);
     assertTrue(result.isEmpty());
   }
 
   @Test
-  public void getCreatedPublicPlaceGuides_UserHasOnly_placeGuideListIsEmpty() {
-    saveTestPlaceGuideEntity(testPlaceGuidesList);
-    List<PlaceGuide> results = placeGuideRepository.getCreatedPublicPlaceGuides(CREATOR_ID);
-    assertTrue(results.isEmpty());
+  public void getCreatedPublicPlaceGuides_UserHasPublicPlaceGuide_resultHasPlaceGuide() {
+    List<PlaceGuide> testPlaceGuidesList = Arrays.asList(testPublicPlaceGuideA,
+                                                         testPublicPlaceGuideB,
+                                                         testPrivatePlaceGuideB,
+                                                         testPrivatePlaceGuideA);
+    saveTestPlaceGuidesEntities(testPlaceGuidesList);
+    List<PlaceGuide> result = placeGuideRepository.getCreatedPublicPlaceGuides(CREATOR_A_ID);
+    List<PlaceGuide> expected = Arrays.asList(testPublicPlaceGuideA);
+    assertTrue(compare(expected, result));
+  }
+
+  @Test
+  public void getCreatedPrivatePlaceGuides_placeGuideDoesntExist_resultIsEmpty() {
+    List<PlaceGuide> result = placeGuideRepository.getCreatedPrivatePlaceGuides(CREATOR_A_ID);
+    assertTrue(result.isEmpty());
+  }
+
+  @Test
+  public void getCreatedPrivatePlaceGuides_userDoesntOwnAnyPrivatePlaceGuides_resultIsEmpty() {
+    List<PlaceGuide> testPlaceGuidesList = Arrays.asList(testPublicPlaceGuideB,
+                                                         testPrivatePlaceGuideB,
+                                                         testPublicPlaceGuideA);
+    saveTestPlaceGuidesEntities(testPlaceGuidesList);
+    List<PlaceGuide> result = placeGuideRepository.getCreatedPrivatePlaceGuides(CREATOR_A_ID);
+    assertTrue(result.isEmpty());
+  }
+
+  @Test
+  public void getCreatedPrivatePlaceGuides_UserHasPrivatePlaceGuide_resultHasPlaceGuide() {
+    List<PlaceGuide> testPlaceGuidesList = Arrays.asList(testPublicPlaceGuideA,
+                                                         testPublicPlaceGuideB,
+                                                         testPrivatePlaceGuideB,
+                                                         testPrivatePlaceGuideA);
+    saveTestPlaceGuidesEntities(testPlaceGuidesList);
+    List<PlaceGuide> result = placeGuideRepository.getCreatedPrivatePlaceGuides(CREATOR_A_ID);
+    List<PlaceGuide> expected = Arrays.asList(testPrivatePlaceGuideA);
+    assertTrue(compare(expected, result));
+  }
+
+  @Test
+  public void deletePlaceGuideTest() {
+      
   }
 }
