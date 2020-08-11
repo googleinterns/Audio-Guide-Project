@@ -13,12 +13,17 @@ public interface PlaceGuideRepository {
   @Nullable
   public List<PlaceGuide> getAllPlaceGuides();
 
+  // Finds all of the user's created place guides.
   @Nullable
   public List<PlaceGuide> getCreatedPlaceGuides(String creatorId);
 
+  // Finds all of the user's created place guides that are public 
+  // (available to be viewed by other users).
   @Nullable
   public List<PlaceGuide> getCreatedPublicPlaceGuides(String creatorId);
 
+  // Finds all of the user's created place guides that are private
+  // (not available to be viewed by other users).
   @Nullable
   public List<PlaceGuide> getCreatedPrivatePlaceGuides(String creatorId);
 
