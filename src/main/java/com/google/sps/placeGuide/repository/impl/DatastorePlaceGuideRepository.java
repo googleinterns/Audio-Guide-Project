@@ -94,24 +94,29 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository{
     PreparedQuery results = datastore.prepare(query);
     List<PlaceGuide> createdPlaceGuides = new ArrayList<>();
     for (Entity placeGuideEntity : results.asIterable()) {
-      long id = placeGuideEntity.getKey().getId();
-      String name = (String) placeGuideEntity.getProperty(NAME_PROPERTY);
-      String audioKey = (String) placeGuideEntity.getProperty(AUDIO_KEY_PROPERTY);
-      String creatorId = (String) placeGuideEntity.getProperty(CREATOR_ID_PROPERTY);
-      String placeId = (String) placeGuideEntity.getProperty(PLACE_ID_PROPERTY);
-      GeoPt coord = (GeoPt) placeGuideEntity.getProperty(COORD_PROPERTY);
-      boolean isPublic = (boolean) placeGuideEntity.getProperty(IS_PUBLIC_PROPERTY);
-      String description = (String) placeGuideEntity.getProperty(DESCRIPTION_PROPERTY);
-      long length = (long) placeGuideEntity.getProperty(LENGTH_PROPERTY);
-      String imgKey = (String) placeGuideEntity.getProperty(IMG_KEY_PROPERTY);
-      PlaceGuide placeGuide = new PlaceGuide
-                              .Builder(name, audioKey, creatorId, coord)
-                              .setId(id).setPlaceId(placeId).setLength(length)
-                              .setDescription(description).setImageKey(imgKey)
-                              .setPlaceGuideStatus(isPublic).build();
+      PlaceGuide placeGuide = getPlaceGuideFromEntity(placeGuideEntity);
       createdPlaceGuides.add(placeGuide);
     }
     return Collections.unmodifiableList(createdPlaceGuides);
+  }
+
+  private PlaceGuide getPlaceGuideFromEntity(Entity placeGuideEntity) {
+    long id = placeGuideEntity.getKey().getId();
+    String name = (String) placeGuideEntity.getProperty(NAME_PROPERTY);
+    String audioKey = (String) placeGuideEntity.getProperty(AUDIO_KEY_PROPERTY);
+    String creatorId = (String) placeGuideEntity.getProperty(CREATOR_ID_PROPERTY);
+    String placeId = (String) placeGuideEntity.getProperty(PLACE_ID_PROPERTY);
+    GeoPt coord = (GeoPt) placeGuideEntity.getProperty(COORD_PROPERTY);
+    boolean isPublic = (boolean) placeGuideEntity.getProperty(IS_PUBLIC_PROPERTY);
+    String description = (String) placeGuideEntity.getProperty(DESCRIPTION_PROPERTY);
+    long length = (long) placeGuideEntity.getProperty(LENGTH_PROPERTY);
+    String imgKey = (String) placeGuideEntity.getProperty(IMG_KEY_PROPERTY);
+    PlaceGuide placeGuide = new PlaceGuide
+                            .Builder(name, audioKey, creatorId, coord)
+                            .setId(id).setPlaceId(placeId).setLength(length)
+                            .setDescription(description).setImageKey(imgKey)
+                            .setPlaceGuideStatus(isPublic).build();
+    return placeGuide;
   }
 
   public void deleteSelectedPlaceGuide(long placeGuideId) {
