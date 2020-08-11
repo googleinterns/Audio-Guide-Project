@@ -31,7 +31,7 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository{
   public static final String IMG_KEY_PROPERTY = "imgKey";
   
   @Override
-  public void savePlaceGuide(String creatorId, PlaceGuide placeGuide) {
+  public void savePlaceGuide(PlaceGuide placeGuide) {
     Entity placeGuideEntity = createPlaceGuideEntity(placeGuide);
     datastore.put(placeGuideEntity);
   }

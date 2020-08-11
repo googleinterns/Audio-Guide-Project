@@ -64,7 +64,7 @@ public final class DatastorePlaceGuideRepositoryTest{
 
   @Test
   public void savePlaceGuideTest() {
-    placeGuideRepository.savePlaceGuide(CREATOR_ID, testPlaceGuide);
+    placeGuideRepository.savePlaceGuide(testPlaceGuide);
     datastore = DatastoreServiceFactory.getDatastoreService();
     Query query = new Query(DatastorePlaceGuideRepository.ENTITY_KIND);
     PreparedQuery result = datastore.prepare(query);

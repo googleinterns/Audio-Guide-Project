@@ -7,7 +7,7 @@ import java.util.List;
 /** Interface for handling place guide. */
 public interface PlaceGuideRepository {
 
-  public void savePlaceGuide(String creatorId, PlaceGuide placeGuide);
+  public void savePlaceGuide(PlaceGuide placeGuide);
 
   // @return all public {@code PlaceGuide}.
   @Nullable

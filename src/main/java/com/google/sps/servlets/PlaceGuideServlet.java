@@ -48,7 +48,7 @@ public class PlaceGuideServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     PlaceGuide placeGuide = getPlaceGuideFromRequest(request);
-    placeGuideRepository.savePlaceGuide(userId, placeGuide);
+    placeGuideRepository.savePlaceGuide(placeGuide);
     response.sendRedirect("/createPlaceGuide.html");
   }
 
