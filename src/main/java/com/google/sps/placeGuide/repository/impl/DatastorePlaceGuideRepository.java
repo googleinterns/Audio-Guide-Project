@@ -39,7 +39,18 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository{
   private Entity createPlaceGuideEntity(PlaceGuide placeGuide) {
 
     Entity placeGuideEntity;
+
     long placeGuideId = placeGuide.getId();
+    String name = placeGuide.getName();
+    String audioKey = placeGuide.getAudioKey();
+    String creatorId = placeGuide.getCreatorId();
+    String placeId = placeGuide.getPlaceId();
+    boolean isPublic = placeGuide.isPublic();
+    GeoPt coord = placeGuide.getCoordinate();
+    String description = placeGuide.getDescription();
+    long length = placeGuide.getLength();
+    String imgKey = placeGuide.getImageKey();
+
     if (Long.valueOf(placeGuideId) != null) {
       // Use the original placeGuide's ID for when user edits a place guide.
       placeGuideEntity = new Entity(ENTITY_KIND, placeGuideId);
@@ -47,23 +58,17 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository{
       // Let the ID be automatically created if the place guide is new.
       placeGuideEntity = new Entity(ENTITY_KIND);
 
-      // Update the current placeGuide with the newly generated id.
-      long id = placeGuideEntity.getKey().getId();
-      String name = placeGuide.getName();
-      String audioKey = placeGuide.getAudioKey();
-      String creatorId = placeGuide.getCreatorId();
-      String placeId = placeGuide.getPlaceId();
-      boolean isPublic = placeGuide.isPublic();
-      GeoPt coord = placeGuide.getCoordinate();
-      String description = placeGuide.getDescription();
-      long length = placeGuide.getLength();
-      String imgKey = placeGuide.getImageKey();
+      // Update as the newly generated id.
+      placeGuideId = placeGuideEntity.getKey().getId();
+
+      // Update the {@code PlaceGuide} object with the updated {@code placeGuideId}.
       placeGuide = new PlaceGuide
-                   .Builder(name, audioKey, creatorId, coord)
-                   .setId(id).setPlaceId(placeId).setLength(length)
-                   .setDescription(description).setImageKey(imgKey)
-                   .setPlaceGuideStatus(isPublic).build();
+               .Builder(name, audioKey, creatorId, coord)
+               .setId(placeGuideId).setPlaceId(placeId).setLength(length)
+               .setDescription(description).setImageKey(imgKey)
+               .setPlaceGuideStatus(isPublic).build();
     }
+
     placeGuideEntity.setProperty(NAME_PROPERTY, name);
     placeGuideEntity.setProperty(AUDIO_KEY_PROPERTY, audioKey);
     placeGuideEntity.setProperty(CREATOR_ID_PROPERTY, creatorId);
