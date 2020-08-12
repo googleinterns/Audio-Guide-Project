@@ -155,20 +155,20 @@ public final class DatastorePlaceGuideRepositoryTest{
   }
 
   @Test
-  public void getAllPlaceGuides_placeGuideExists_returnPlaceGuide() {
+  public void getAllPublicPlaceGuides_placeGuideExists_returnPlaceGuide() {
     List<PlaceGuide> testPlaceGuidesList = Arrays.asList(testPublicPlaceGuideA,
                                                          testPublicPlaceGuideB,
                                                          testPrivatePlaceGuideB,
                                                          testPrivatePlaceGuideA);
     saveTestPlaceGuidesEntities(testPlaceGuidesList);
-    List<PlaceGuide> result = placeGuideRepository.getAllPlaceGuides();
+    List<PlaceGuide> result = placeGuideRepository.getAllPublicPlaceGuides();
     List<PlaceGuide> expected = Arrays.asList(testPublicPlaceGuideA, testPublicPlaceGuideB);
     assertTrue(compare(expected, result));
   }
 
   @Test
-  public void getAllPlaceGuides_placeGuideDoesntExists_resultIsEmpty() {
-    List<PlaceGuide> result = placeGuideRepository.getAllPlaceGuides();
+  public void getAllPublicPlaceGuides_placeGuideDoesntExists_resultIsEmpty() {
+    List<PlaceGuide> result = placeGuideRepository.getAllPublicPlaceGuides();
     assertTrue(result.isEmpty());
   }
 
