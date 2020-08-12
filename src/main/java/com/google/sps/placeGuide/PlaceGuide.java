@@ -28,12 +28,12 @@ public class PlaceGuide {
   private final long length;
 
   @Nullable
-  private final String description, imgKey;
+  private final String description, imageKey;
 
   private PlaceGuide(long id, String name, String audioKey, String creatorId, 
                                             String placeId, boolean isPublic, 
                                             GeoPt coordinate, long length, 
-                                            String description, String imgKey) {
+                                            String description, String imageKey) {
     this.id = id;
     this.name = name;
     this.audioKey = audioKey;
@@ -43,7 +43,7 @@ public class PlaceGuide {
     this.coordinate = coordinate;
     this.length = length;
     this.description = description;
-    this.imgKey = imgKey;
+    this.imageKey = imageKey;
   }
 
   public static class Builder {
@@ -55,7 +55,7 @@ public class PlaceGuide {
     private String placeId;
     private final GeoPt coordinate;
     private long length;
-    private String description, imgKey;
+    private String description, imageKey;
         
     public Builder(String name, String audioKey, String creatorId, GeoPt coordinate) {
       this.name = name;
@@ -84,13 +84,13 @@ public class PlaceGuide {
       this.description = description;
       return this;
     }
-    public Builder setImageKey(String imgKey) {
-      this.imgKey = imgKey;
+    public Builder setImageKey(String imageKey) {
+      this.imageKey = imageKey;
       return this;
     }
     public PlaceGuide build() {
       return new PlaceGuide(id, name, audioKey, creatorId, placeId, isPublic, 
-                                                coordinate, length, description, imgKey);
+                                                coordinate, length, description, imageKey);
     }
   }
   
@@ -113,7 +113,7 @@ public class PlaceGuide {
            this.coordinate.equals(placeGuide.getCoordinate()) &&
            this.length == placeGuide.getLength() &&
            this.description.equals(placeGuide.getDescription()) &&
-           this.imgKey.equals(placeGuide.getImageKey()));
+           this.imageKey.equals(placeGuide.getImageKey()));
   }
 
   public long getId() {
@@ -157,6 +157,6 @@ public class PlaceGuide {
 
   @Nullable
   public String getImageKey() {
-    return imgKey;
+    return imageKey;
   }
 }

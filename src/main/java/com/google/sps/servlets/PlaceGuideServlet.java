@@ -22,7 +22,7 @@ import java.io.IOException;
  */
 @WebServlet("/place-guide-data")
 public class PlaceGuideServlet extends HttpServlet {
-
+  
   private final String userId;
 
   // For production.
