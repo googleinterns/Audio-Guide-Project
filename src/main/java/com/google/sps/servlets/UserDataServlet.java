@@ -68,7 +68,7 @@ public class UserDataServlet extends HttpServlet {
   }
 
   /**
-   * Saves the recently submitted userdata(updates it if the user already has some data saved) in
+   * Saves the recently submitted userdata (updates it if the user already has some data saved) in
    * the database. Note: the user's name, self-introduction and portfolio status will be rewritten
    * with the new data, whatewer it is. (even if the new data is empty and previously the user had
    * some data saved) However, the user's photo is kept if they didn't submit a new one, unless the
