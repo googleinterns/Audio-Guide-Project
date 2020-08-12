@@ -78,29 +78,20 @@ public class PlaceGuideServletTest{
                                           .setPlaceGuideStatus(IS_PUBLIC)
                                           .build();
 
-  private Entity getTestPlaceGuideEntity(PlaceGuide placeGuide) {
-    Entity testPlaceGuideEntity = new Entity(DatastorePlaceGuideRepository.ENTITY_KIND, placeGuide.getId);
-    testPlaceGuideEntity.setProperty(DatastorePlaceGuideRepository.NAME_PROPERTY, placeGuide.getName());
-    testPlaceGuideEntity.setProperty(DatastorePlaceGuideRepository.AUDIO_KEY_PROPERTY, placeGuide.getAudioKey());
-    testPlaceGuideEntity.setProperty(DatastorePlaceGuideRepository.CREATOR_ID_PROPERTY, placeGuide.getCreatorId());
-    testPlaceGuideEntity.setProperty(DatastorePlaceGuideRepository.PLACE_ID_PROPERTY, placeGuide.getPlaceId());
-    testPlaceGuideEntity.setProperty(DatastorePlaceGuideRepository.IS_PUBLIC_PROPERTY, placeGuide.isPublic());
+  private Entity getTestPlaceGuideEntity(PlaceGuide testPlaceGuide) {
+    Entity testPlaceGuideEntity = new Entity(DatastorePlaceGuideRepository.ENTITY_KIND, testPlaceGuide.getId());
+    testPlaceGuideEntity.setProperty(DatastorePlaceGuideRepository.NAME_PROPERTY, testPlaceGuide.getName());
+    testPlaceGuideEntity.setProperty(DatastorePlaceGuideRepository.AUDIO_KEY_PROPERTY, testPlaceGuide.getAudioKey());
+    testPlaceGuideEntity.setProperty(DatastorePlaceGuideRepository.CREATOR_ID_PROPERTY, testPlaceGuide.getCreatorId());
+    testPlaceGuideEntity.setProperty(DatastorePlaceGuideRepository.PLACE_ID_PROPERTY, testPlaceGuide.getPlaceId());
+    testPlaceGuideEntity.setProperty(DatastorePlaceGuideRepository.IS_PUBLIC_PROPERTY, testPlaceGuide.isPublic());
     testPlaceGuideEntity.setProperty(DatastorePlaceGuideRepository.COORDINATE_PROPERTY,
-                                                                           placeGuide.getCoordinate());
+                                                                           testPlaceGuide.getCoordinate());
     testPlaceGuideEntity.setProperty(DatastorePlaceGuideRepository.DESCRIPTION_PROPERTY, 
-                                                                          placeGuide.getDescription());
-    testPlaceGuideEntity.setProperty(DatastorePlaceGuideRepository.LENGTH_PROPERTY, placeGuide.getLength());
-    testPlaceGuideEntity.setProperty(DatastorePlaceGuideRepository.IMAGE_KEY_PROPERTY, placeGuide.getImageKey());
+                                                                          testPlaceGuide.getDescription());
+    testPlaceGuideEntity.setProperty(DatastorePlaceGuideRepository.LENGTH_PROPERTY, testPlaceGuide.getLength());
+    testPlaceGuideEntity.setProperty(DatastorePlaceGuideRepository.IMAGE_KEY_PROPERTY, testPlaceGuide.getImageKey());
     return testPlaceGuideEntity;
-  }
-
-  private PlaceGuide getTestPlaceGuide() {
-    PlaceGuide testPlaceGuide = new PlaceGuide
-                        .Builder(NAME, AUDIO_KEY, USER_ID, COORDINATE)
-                        .setId(ID).setPlaceId(PLACE_ID).setLength(LENGTH)
-                        .setDescription(DESCRIPTION).setImageKey(IMAGE_KEY)
-                        .setPlaceGuideStatus(IS_PUBLIC).build();
-    return testPlaceGuide;
   }
 
   @Before
@@ -116,7 +107,6 @@ public class PlaceGuideServletTest{
 
   @Test
   public void doPost_noPreviousPlaceGuideWithSameId_databaseContainsCreatedPlaceGuide() throws IOException, EntityNotFoundException {
-    
     when(request.getParameter(PlaceGuideServlet.NAME_INPUT)).thenReturn(NAME_INPUT_STUB);
     when(request.getParameter(PlaceGuideServlet.AUDIO_KEY_INPUT)).thenReturn(AUDIO_KEY_INPUT_STUB);
     when(request.getParameter(PlaceGuideServlet.LATITUDE_INPUT)).thenReturn(LATITUDE_INPUT_STUB);
@@ -130,8 +120,51 @@ public class PlaceGuideServletTest{
     placeGuideServlet.doPost(request, response);
     Key placeGuideKey = KeyFactory.createKey(DatastorePlaceGuideRepository.ENTITY_KIND, ID);
     Entity result = datastore.get(placeGuideKey);
-    Entity testPlaceGuideEntity = getTestPlaceGuideEntity();
+    Entity testPlaceGuideEntity = getTestPlaceGuideEntity(testPublicPlaceGuide);
     assertTrue(testPlaceGuideEntity.equals(result));
+  }
+
+  @Test
+  public void doPost_previousPlaceGuideWithSameIdExists_databaseContainsEditedPlaceGuide() throws IOException, EntityNotFoundException {
+    when(request.getParameter(PlaceGuideServlet.NAME_INPUT)).thenReturn(NAME_INPUT_STUB);
+    when(request.getParameter(PlaceGuideServlet.AUDIO_KEY_INPUT)).thenReturn(AUDIO_KEY_INPUT_STUB);
+    when(request.getParameter(PlaceGuideServlet.LATITUDE_INPUT)).thenReturn(LATITUDE_INPUT_STUB);
+    when(request.getParameter(PlaceGuideServlet.LONGITUDE_INPUT)).thenReturn(LONGITUDE_INPUT_STUB);
+    when(request.getParameter(PlaceGuideServlet.ID_INPUT)).thenReturn(ID_INPUT_STUB);
+    when(request.getParameter(PlaceGuideServlet.IS_PUBLIC_INPUT)).thenReturn(IS_PUBLIC_INPUT_STUB);
+    when(request.getParameter(PlaceGuideServlet.LENGTH_INPUT)).thenReturn(LENGTH_INPUT_STUB);
+    when(request.getParameter(PlaceGuideServlet.PLACE_ID_INPUT)).thenReturn(PLACE_ID_INPUT_STUB);
+    when(request.getParameter(PlaceGuideServlet.DESCRIPTION_INPUT)).thenReturn(DESCRIPTION_INPUT_STUB);
+    when(request.getParameter(PlaceGuideServlet.IMAGE_KEY_INPUT)).thenReturn(IMAGE_KEY_INPUT_STUB);
+
+    Entity previousPlaceGuideEntity = getTestPlaceGuideEntity(previousTestPublicPlaceGuide);
+    datastore.put(previousPlaceGuideEntity);
+    placeGuideServlet.doPost(request, response);
+    Key placeGuideKey = KeyFactory.createKey(DatastorePlaceGuideRepository.ENTITY_KIND, ID);
+    Entity result = datastore.get(placeGuideKey);
+    Entity testPlaceGuideEntity = getTestPlaceGuideEntity(testPublicPlaceGuide);
+    assertTrue(testPlaceGuideEntity.equals(result));
+  }
+
+  @Test
+  public void doGet_queryAllPublicPlaceGuides_returnAllPublicPlaceGuides() throws IOException{
+    when(request.getParameter(PLACE_GUIDE_TYPE_PARAMETER)).thenReturn("ALL");
+    placeGuideServlet.doGet(request, response);
+  }
+
+  @Test
+  public void doGet_queryAllCreatedPlaceGuides_returnAllPublicPlaceGuides() throws IOException{
+    when(request.getParameter(PLACE_GUIDE_TYPE_PARAMETER)).thenReturn("CREATED_ALL");
+  }
+
+  @Test
+  public void doGet_queryAllCreatedPublicPlaceGuides_returnAllPublicPlaceGuides() throws IOException{
+    when(request.getParameter(PLACE_GUIDE_TYPE_PARAMETER)).thenReturn("CREATED-PUBLIC");
+  }
+
+  @Test
+  public void doGet_queryAllCreatedPrivatePlaceGuides_returnAllPublicPlaceGuides() throws IOException{
+    when(request.getParameter(PLACE_GUIDE_TYPE_PARAMETER)).thenReturn("CREATED-PRIVATE");
   }
 
   @After
