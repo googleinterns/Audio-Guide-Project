@@ -30,4 +30,5 @@ function createMap() {
   addEnableGeolocationControl(map);
   initAutocomplete(map);
   displayPublicPlaceGuides(map);
+  showClickedPlace(map);
 }

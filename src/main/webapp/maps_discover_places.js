@@ -4,6 +4,8 @@ function displayPublicPlaceGuides(map) {
         placeGuide.addMarkerToMap(map);
         return placeGuide._marker;
     });
+    var markerCluster = new MarkerClusterer(map, markers,
+             {imagePath: './img/m'});
 }
 
 // This is for demonstrational purposes only. data will be fetched from the server.
