@@ -91,7 +91,7 @@ public class PlaceGuideServlet extends HttpServlet {
         placeGuides = placeGuideRepository.getCreatedPrivatePlaceGuides(userId);
         break;
       default:
-        throw new IllegalStateException("Place Guide type does not exist!");
+        throw new llegalStateException("Place Guide type does not exist!");
     }
     return placeGuides;
   }

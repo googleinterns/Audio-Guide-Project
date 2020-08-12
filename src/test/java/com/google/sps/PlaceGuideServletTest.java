@@ -38,6 +38,7 @@ public class PlaceGuideServletTest{
   private static final String LENGTH_INPUT_STUB = "2";
   private static final String PLACE_ID_INPUT_STUB = "FWFWEF423423";
   private static final String DESCRIPTION_INPUT_STUB = "desc";
+  private static final String IMAGE_KEY_INPUT_STUB = "imageKey";
 
   private static final String USER_ID = "userId";
   private static final String NAME = "name";
@@ -48,6 +49,7 @@ public class PlaceGuideServletTest{
   private static final long LENGTH = 2;
   private static final String PLACE_ID = "FWFWEF423423";
   private static final String DESCRIPTION = "desc";
+  private static final String IMAGE_KEY = "imageKey";
 
   private PlaceGuide getTestPlaceGuide() {
     PlaceGuide testPlaceGuide = new PlaceGuide.Builder()
@@ -84,7 +86,7 @@ public class PlaceGuideServletTest{
     when(request.getParameter(LENGTH_INPUT)).thenReturn(LENGTH_INPUT_STUB);
     when(request.getParameter(PLACE_ID_INPUT)).thenReturn(PLACE_ID_INPUT_STUB);
     when(request.getParameter(DESCRIPTION_INPUT)).thenReturn(DESCRIPTION_INPUT_STUB);
-    when(request.getParameter(IMG_KEY_INPUT)).thenReturn(IMG_KEY_INPUT_STUB)
+    when(request.getParameter(IMAGE_KEY_INPUT)).thenReturn(IMAGE_KEY_INPUT_STUB)
     placeGuideServlet.doPost(request, response);
     try {
       Key placeGuideKey = KeyFactory.createKey(DatastorePlaceGuideRepository.ENTITY_KIND);
