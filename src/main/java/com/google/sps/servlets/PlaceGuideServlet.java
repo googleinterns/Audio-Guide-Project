@@ -58,7 +58,7 @@ public class PlaceGuideServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     String placeGuideType = request.getParameter(PLACE_GUIDE_TYPE_PARAMETER);
-    List<PlaceGuide> placeGuides = null;
+    List<PlaceGuide> placeGuides;
     switch(placeGuideType) {
       case ALL:
         placeGuides = placeGuideRepository.getAllPlaceGuides();
