@@ -25,21 +25,21 @@ public final class DatastorePlaceGuideRepositoryTest{
   private final LocalServiceTestHelper helper = new LocalServiceTestHelper(
                                                             new LocalDatastoreServiceTestConfig());
 
-  private static final long A_PUBLIC_ID = 12345;
-  private static final long B_PUBLIC_ID = 23456;
-  private static final long A_PRIVATE_ID = 34567;
-  private static final long B_PRIVATE_ID = 45678;
-  private static final String NAME = "name";
-  private static final String AUDIO_KEY = "audioKey";
-  private static final String CREATOR_A_ID = "creatorA_Id";
-  private static final String CREATOR_B_ID = "creatorB_Id";
-  private static final String OTHER_USER_ID = "otherUserId";
-  private static final String PLACE_ID = "placeId";
-  private static final GeoPt COORD = new GeoPt((float) 3.14, (float) 2.56);
-  private static final boolean IS_PUBLIC = true;
-  private static final long LENGTH = new Long(60);
-  private static final String DESCRIPTION = "description";
-  private static final String IMG_KEY = "imgKey";
+  public static final long A_PUBLIC_ID = 12345;
+  public static final long B_PUBLIC_ID = 23456;
+  public static final long A_PRIVATE_ID = 34567;
+  public static final long B_PRIVATE_ID = 45678;
+  public static final String NAME = "name";
+  public static final String AUDIO_KEY = "audioKey";
+  public static final String CREATOR_A_ID = "creatorA_Id";
+  public static final String CREATOR_B_ID = "creatorB_Id";
+  public static final String OTHER_USER_ID = "otherUserId";
+  public static final String PLACE_ID = "placeId";
+  public static final GeoPt COORD = new GeoPt((float) 3.14, (float) 2.56);
+  public static final boolean IS_PUBLIC = true;
+  public static final long LENGTH = new Long(60);
+  public static final String DESCRIPTION = "description";
+  public static final String IMG_KEY = "imgKey";
 
   private final PlaceGuide testPublicPlaceGuideA = new PlaceGuide
                                             .Builder(NAME, AUDIO_KEY, CREATOR_A_ID, COORD)

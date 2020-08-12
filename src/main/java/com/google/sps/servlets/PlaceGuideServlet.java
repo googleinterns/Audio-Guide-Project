@@ -64,24 +64,24 @@ public class PlaceGuideServlet extends HttpServlet {
   }
 
   private List<PlaceGuide> getPlaceGuides(PlaceGuideQueryType placeGuideQueryType) {
-      List<PlaceGuide> placeGuides;
-      switch(placeGuideQueryType) {
-        case ALL:
-          placeGuides = placeGuideRepository.getAllPublicPlaceGuides();
-          break;
-        case CREATED_ALL:
-          placeGuides = placeGuideRepository.getCreatedPlaceGuides(userId);
-          break;
-        case CREATED_PUBLIC:
-          placeGuides = placeGuideRepository.getCreatedPublicPlaceGuides(userId);
-          break;
-        case CREATED_PRIVATE:
-          placeGuides = placeGuideRepository.getCreatedPrivatePlaceGuides(userId);
-          break;
-        default:
-          throw new IllegalStateException("Place Guide type does not exist!");
-      }
-      return placeGuides;
+    List<PlaceGuide> placeGuides;
+    switch(placeGuideQueryType) {
+      case ALL:
+        placeGuides = placeGuideRepository.getAllPublicPlaceGuides();
+        break;
+      case CREATED_ALL:
+        placeGuides = placeGuideRepository.getCreatedPlaceGuides(userId);
+        break;
+      case CREATED_PUBLIC:
+        placeGuides = placeGuideRepository.getCreatedPublicPlaceGuides(userId);
+        break;
+      case CREATED_PRIVATE:
+        placeGuides = placeGuideRepository.getCreatedPrivatePlaceGuides(userId);
+        break;
+      default:
+        throw new IllegalStateException("Place Guide type does not exist!");
+    }
+    return placeGuides;
   }
 
   private PlaceGuide getPlaceGuideFromRequest(HttpServletRequest request) {
@@ -112,6 +112,10 @@ public class PlaceGuideServlet extends HttpServlet {
     String description = request.getParameter(DESCRIPTION_INPUT);
     if (!description.isEmpty()) {
       newPlaceGuideBuilder.setDescription(description);
+    }
+    String imgKey = request.getParameter(IMG_KEY_INPUT);
+    if (!imgKey.isEmpty()) {
+      newPlaceGuideBuilder.setImageKey
     }
     return newPlaceGuideBuilder.build();
   }

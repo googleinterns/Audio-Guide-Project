@@ -21,7 +21,7 @@ public class PlaceGuide {
   @Nullable
   private String placeId;
 
-  private final GeoPt coord;
+  private final GeoPt coordinate;
 
   // Specify how long user usually spends to follow this place guide in minutes.
   @Nullable
@@ -32,7 +32,7 @@ public class PlaceGuide {
 
   private PlaceGuide(long id, String name, String audioKey, String creatorId, 
                                             String placeId, boolean isPublic, 
-                                            GeoPt coord, long length, 
+                                            GeoPt coordinate, long length, 
                                             String description, String imgKey) {
     this.id = id;
     this.name = name;
@@ -40,7 +40,7 @@ public class PlaceGuide {
     this.creatorId = creatorId;
     this.placeId = placeId;
     this.isPublic = isPublic;
-    this.coord = coord;
+    this.coordinate = coordinate;
     this.length = length;
     this.description = description;
     this.imgKey = imgKey;
@@ -53,16 +53,16 @@ public class PlaceGuide {
     private final String creatorId; 
     private boolean isPublic = false;
     private String placeId;
-    private final GeoPt coord;
+    private final GeoPt coordinate;
     private long length;
     private String description, imgKey;
         
-    public Builder(String name, String audioKey, String creatorId, GeoPt coord) {
+    public Builder(String name, String audioKey, String creatorId, GeoPt coordinate) {
       this.name = name;
       this.audioKey = audioKey;
       this.creatorId = creatorId;
       this.placeId = placeId;
-      this.coord = coord;
+      this.coordinate = coordinate;
     }
     public Builder setPlaceId(String placeId) {
       this.placeId = placeId;
@@ -90,7 +90,7 @@ public class PlaceGuide {
     }
     public PlaceGuide build() {
       return new PlaceGuide(id, name, audioKey, creatorId, placeId, isPublic, 
-                                                coord, length, description, imgKey);
+                                                coordinate, length, description, imgKey);
     }
   }
   
@@ -110,7 +110,7 @@ public class PlaceGuide {
            this.creatorId.equals(placeGuide.getCreatorId()) &&
            this.placeId.equals(placeGuide.getPlaceId()) &&
            this.isPublic == placeGuide.isPublic() &&
-           this.coord.equals(placeGuide.getCoordinate()) &&
+           this.coordinate.equals(placeGuide.getCoordinate()) &&
            this.length == placeGuide.getLength() &&
            this.description.equals(placeGuide.getDescription()) &&
            this.imgKey.equals(placeGuide.getImageKey()));
@@ -138,7 +138,7 @@ public class PlaceGuide {
   }
 
   public GeoPt getCoordinate() {
-    return coord;
+    return coordinate;
   }
 
   public boolean isPublic() {
