@@ -66,7 +66,7 @@ public class PlaceGuideServlet extends HttpServlet {
       List<PlaceGuide> placeGuides;
       switch(placeGuideQueryType) {
         case ALL:
-          placeGuides = placeGuideRepository.getAllPlaceGuides();
+          placeGuides = placeGuideRepository.getAllPublicPlaceGuides();
           break;
         case CREATED_ALL:
           placeGuides = placeGuideRepository.getCreatedPlaceGuides(userId);
