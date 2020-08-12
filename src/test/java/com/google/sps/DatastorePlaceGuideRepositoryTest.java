@@ -168,7 +168,7 @@ public final class DatastorePlaceGuideRepositoryTest{
 
   @Test
   public void getAllPlaceGuides_placeGuideDoesntExists_resultIsEmpty() {
-    List<PlaceGuide> result = placeGuideRepository.getAllPlaceGuides(CREATOR_A_ID);
+    List<PlaceGuide> result = placeGuideRepository.getAllPlaceGuides();
     assertTrue(result.isEmpty());
   }
 
