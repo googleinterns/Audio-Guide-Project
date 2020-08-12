@@ -55,8 +55,7 @@ public class UserDataServlet extends HttpServlet {
    * For production.
    */
   public UserDataServlet() {
-    blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
-    blobInfoFactory = new BlobInfoFactory();
+    this(BlobstoreServiceFactory.getBlobstoreService(), new BlobInfoFactory());
   }
 
   /**
@@ -72,9 +71,7 @@ public class UserDataServlet extends HttpServlet {
    * the database. Note: the user's name, self-introduction and portfolio status will be rewritten
    * with the new data, whatewer it is. (even if the new data is empty and previously the user had
    * some data saved) However, the user's photo is kept if they didn't submit a new one, unless the
-   * user specifically exressed their preference to drop the photo from their profile. Note:
-   * whenever this method is invoked in real-life, it's guaranteed that prevUserData is not null In
-   * case of tests, prevUserData is always null.
+   * user specifically exressed their preference to drop the photo from their profile.
    */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
