@@ -61,7 +61,7 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository{
   }
 
   @Override
-  public List<PlaceGuide> getAllPlaceGuides() {
+  public List<PlaceGuide> getAllPublicPlaceGuides() {
     Filter queryFilter = new FilterPredicate(IS_PUBLIC_PROPERTY, FilterOperator.EQUAL, true);
     Query query = new Query(ENTITY_KIND).setFilter(queryFilter);
     return getPlaceGuidesList(query);

@@ -10,7 +10,7 @@ public interface PlaceGuideRepository {
   public void savePlaceGuide(PlaceGuide placeGuide);
 
   // @return all public {@code PlaceGuide}.
-  public List<PlaceGuide> getAllPlaceGuides();
+  public List<PlaceGuide> getAllPublicPlaceGuides();
 
   // Finds all of the user's created place guides.
   public List<PlaceGuide> getCreatedPlaceGuides(String creatorId);
