@@ -132,6 +132,7 @@ public class PlaceGuide {
     return creatorId;
   }
 
+  @Nullable
   public String getPlaceId() {
     return placeId;
   }
