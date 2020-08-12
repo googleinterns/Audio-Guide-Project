@@ -93,7 +93,7 @@ public class PlaceGuideServlet extends HttpServlet {
     }
     String length = request.getParameter(LENGTH_INPUT);
     if (!length.isEmpty()) {
-      newPlaceGuideBuilder.setLength(Integer.parseInt(length));
+      newPlaceGuideBuilder.setLength(Long.parseLong(length));
     }
     String placeId = request.getParameter(PLACE_ID_INPUT);
     if (!placeId.isEmpty()) {
