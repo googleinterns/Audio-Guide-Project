@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.lang.IllegalStateException;
 import java.io.IOException;
-import com.google.sps.data.PlaceGuideQueryType;
 
 /**
  * This servlet handles placeguide's data.
@@ -39,7 +38,7 @@ public class PlaceGuideServlet extends HttpServlet {
                                                 .getPlaceGuideRepository(RepositoryType.DATASTORE);
   private final String userId = UserServiceFactory.getUserService().getCurrentUser().getUserId();
 
-  private final enum PlaceGuideQueryType {ALL, CREATED_ALL, CREATED_PUBLIC, CREATED_PRIVATE }
+  private enum PlaceGuideQueryType {ALL, CREATED_ALL, CREATED_PUBLIC, CREATED_PRIVATE }
 
   /**
    * Saves the recently submitted place guide data.
