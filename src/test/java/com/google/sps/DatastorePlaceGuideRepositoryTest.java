@@ -35,14 +35,14 @@ public final class DatastorePlaceGuideRepositoryTest{
   public static final String CREATOR_B_ID = "creatorB_Id";
   public static final String OTHER_USER_ID = "otherUserId";
   public static final String PLACE_ID = "placeId";
-  public static final GeoPt COORD = new GeoPt((float) 3.14, (float) 2.56);
+  public static final GeoPt COORDINATE = new GeoPt((float) 3.14, (float) 2.56);
   public static final boolean IS_PUBLIC = true;
   public static final long LENGTH = new Long(60);
   public static final String DESCRIPTION = "description";
   public static final String IMG_KEY = "imgKey";
 
   private final PlaceGuide testPublicPlaceGuideA = new PlaceGuide
-                                            .Builder(NAME, AUDIO_KEY, CREATOR_A_ID, COORD)
+                                            .Builder(NAME, AUDIO_KEY, CREATOR_A_ID, COORDINATE)
                                             .setPlaceId(PLACE_ID)
                                             .setId(A_PUBLIC_ID)
                                             .setPlaceGuideStatus(IS_PUBLIC)
@@ -52,7 +52,7 @@ public final class DatastorePlaceGuideRepositoryTest{
                                             .build();
 
   private final PlaceGuide testPrivatePlaceGuideA = new PlaceGuide
-                                            .Builder(NAME, AUDIO_KEY, CREATOR_A_ID, COORD)
+                                            .Builder(NAME, AUDIO_KEY, CREATOR_A_ID, COORDINATE)
                                             .setPlaceId(PLACE_ID)
                                             .setId(A_PRIVATE_ID)
                                             .setLength(LENGTH)
@@ -61,7 +61,7 @@ public final class DatastorePlaceGuideRepositoryTest{
                                             .build();
 
   private final PlaceGuide testPublicPlaceGuideB = new PlaceGuide
-                                            .Builder(NAME, AUDIO_KEY, CREATOR_B_ID, COORD)
+                                            .Builder(NAME, AUDIO_KEY, CREATOR_B_ID, COORDINATE)
                                             .setPlaceId(PLACE_ID)
                                             .setId(B_PUBLIC_ID)
                                             .setPlaceGuideStatus(IS_PUBLIC)
@@ -71,7 +71,7 @@ public final class DatastorePlaceGuideRepositoryTest{
                                             .build();
 
   private final PlaceGuide testPrivatePlaceGuideB = new PlaceGuide
-                                            .Builder(NAME, AUDIO_KEY, CREATOR_B_ID, COORD)
+                                            .Builder(NAME, AUDIO_KEY, CREATOR_B_ID, COORDINATE)
                                             .setPlaceId(PLACE_ID)
                                             .setId(B_PRIVATE_ID)
                                             .setLength(LENGTH)
@@ -89,7 +89,7 @@ public final class DatastorePlaceGuideRepositoryTest{
     placeGuideEntity.setProperty(DatastorePlaceGuideRepository.IS_PUBLIC_PROPERTY, 
                                                           placeGuide.isPublic());
     placeGuideEntity.setProperty(DatastorePlaceGuideRepository.PLACE_ID_PROPERTY, PLACE_ID);
-    placeGuideEntity.setProperty(DatastorePlaceGuideRepository.COORD_PROPERTY, COORD);
+    placeGuideEntity.setProperty(DatastorePlaceGuideRepository.COORDINATE_PROPERTY, COORDINATE);
     placeGuideEntity.setProperty(DatastorePlaceGuideRepository.DESCRIPTION_PROPERTY, 
                                                           DESCRIPTION);
     placeGuideEntity.setProperty(DatastorePlaceGuideRepository.LENGTH_PROPERTY, LENGTH);
