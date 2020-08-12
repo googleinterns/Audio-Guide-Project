@@ -32,7 +32,7 @@ public class PlaceGuideServlet extends HttpServlet {
 
   // For testing.
   public PlaceGuideServlet(String userId) {
-    userId = this.userId;
+    this.userId = userId;
   }
 
   public static final String ID_INPUT = "id";
@@ -91,7 +91,7 @@ public class PlaceGuideServlet extends HttpServlet {
         placeGuides = placeGuideRepository.getCreatedPrivatePlaceGuides(userId);
         break;
       default:
-        throw new llegalStateException("Place Guide type does not exist!");
+        throw new IllegalStateException("Place Guide type does not exist!");
     }
     return placeGuides;
   }
@@ -127,7 +127,7 @@ public class PlaceGuideServlet extends HttpServlet {
     }
     String imageKey = request.getParameter(IMAGE_KEY_INPUT);
     if (!imageKey.isEmpty()) {
-      newPlaceGuideBuilder.setImageKey
+      newPlaceGuideBuilder.setImageKey(imageKey);
     }
     return newPlaceGuideBuilder.build();
   }

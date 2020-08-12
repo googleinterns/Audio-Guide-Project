@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 @RunWith(JUnit4.class)
 public final class DatastorePlaceGuideRepositoryTest{
@@ -39,6 +40,7 @@ public final class DatastorePlaceGuideRepositoryTest{
   public static final boolean IS_PUBLIC = true;
   public static final long LENGTH = new Long(60);
   public static final String DESCRIPTION = "description";
+  public static final String PREVIOUS_DESCRIPTION = "previous description";
   public static final String IMAGE_KEY = "imageKey";
 
   private final PlaceGuide testPublicPlaceGuideA = new PlaceGuide
@@ -49,6 +51,12 @@ public final class DatastorePlaceGuideRepositoryTest{
                                             .setLength(LENGTH)
                                             .setDescription(DESCRIPTION)
                                             .setImageKey(IMAGE_KEY)
+                                            .build();
+
+  private final PlaceGuide previousTestPublicPlaceGuideA = new PlaceGuide
+                                            .Builder(NAME, AUDIO_KEY, CREATOR_A_ID, COORDINATE)
+                                            .setId(A_PUBLIC_ID)
+                                            .setPlaceGuideStatus(IS_PUBLIC)
                                             .build();
 
   private final PlaceGuide testPrivatePlaceGuideA = new PlaceGuide
@@ -78,6 +86,12 @@ public final class DatastorePlaceGuideRepositoryTest{
                                             .setDescription(DESCRIPTION)
                                             .setImageKey(IMAGE_KEY)
                                             .build();
+
+  private void saveTestPlaceGuidesEntities(List<PlaceGuide> placeGuides) {
+    for (PlaceGuide placeGuide : placeGuides) {
+      datastore.put(getEntityFromPlaceGuide(placeGuide));
+    }
+  }
   
   private Entity getEntityFromPlaceGuide(PlaceGuide placeGuide) {
     Entity placeGuideEntity = new Entity(DatastorePlaceGuideRepository.ENTITY_KIND, 
@@ -95,12 +109,6 @@ public final class DatastorePlaceGuideRepositoryTest{
     placeGuideEntity.setProperty(DatastorePlaceGuideRepository.LENGTH_PROPERTY, LENGTH);
     placeGuideEntity.setProperty(DatastorePlaceGuideRepository.IMAGE_KEY_PROPERTY, IMAGE_KEY);
     return placeGuideEntity;
-  }
-
-  private void saveTestPlaceGuidesEntities(List<PlaceGuide> placeGuides) {
-    for (PlaceGuide placeGuide : placeGuides) {
-      datastore.put(getEntityFromPlaceGuide(placeGuide));
-    }
   }
 
   // Find out if the 2 lists of placeguides are equal.
@@ -138,20 +146,36 @@ public final class DatastorePlaceGuideRepositoryTest{
                                                                         RepositoryType.DATASTORE);
   }
 
-  @After
-  public void tearDown() {
-    helper.tearDown();
+  @Test
+  public void savePlaceGuide_noPreviousPlaceGuide_databaseContainsCreatedPlaceGuide() {
+    placeGuideRepository.savePlaceGuide(testPublicPlaceGuideA);
+    Key placeGuideKey = KeyFactory.createKey(DatastorePlaceGuideRepository.ENTITY_KIND, A_PUBLIC_ID);
+    try {
+      Entity result = datastore.get(placeGuideKey);
+      Entity expected = getEntityFromPlaceGuide(testPublicPlaceGuideA);
+      assertTrue(result.equals(expected));
+    } catch (EntityNotFoundException e) {
+      fail("Entity not found: " + e);
+    }
+
   }
 
   @Test
-  public void savePlaceGuideTest() {
+  public void savePlaceGuide_previousPlaceGuideExists_databaseContainsEditedPlaceGuide() {
+    List<PlaceGuide> testPlaceGuidesList = Arrays.asList(previousTestPublicPlaceGuideA, 
+                                                         testPublicPlaceGuideB,
+                                                         testPrivatePlaceGuideB);
+    saveTestPlaceGuidesEntities(testPlaceGuidesList);
     placeGuideRepository.savePlaceGuide(testPublicPlaceGuideA);
-    datastore = DatastoreServiceFactory.getDatastoreService();
-    Query query = new Query(DatastorePlaceGuideRepository.ENTITY_KIND);
-    PreparedQuery preparedResult = datastore.prepare(query);
-    Entity result = preparedResult.asSingleEntity();
-    Entity expected = getEntityFromPlaceGuide(testPublicPlaceGuideA);
-    assertTrue(result.equals(expected));
+    Key placeGuideKey = KeyFactory.createKey(DatastorePlaceGuideRepository.ENTITY_KIND, A_PUBLIC_ID);
+
+    try {
+      Entity result = datastore.get(placeGuideKey);
+      Entity expected = getEntityFromPlaceGuide(testPublicPlaceGuideA);
+      assertTrue(result.equals(expected));
+    } catch (EntityNotFoundException e) {
+      fail("Entity not found: " + e);
+    }
   }
 
   @Test
@@ -269,5 +293,10 @@ public final class DatastorePlaceGuideRepositoryTest{
                                                                               A_PUBLIC_ID);
     Entity deletedEntity = datastore.get(deletedEntityKey);
     
+  }
+
+  @After
+  public void tearDown() {
+    helper.tearDown();
   }
 }
