@@ -17,14 +17,10 @@ import org.junit.runners.JUnit4;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(JUnit4.class)
 public final class DatastorePlaceGuideRepositoryTest{
-
-  @Rule
-  private final ExpectedException thrown = ExpectedException.none();
   
   private final LocalServiceTestHelper helper = new LocalServiceTestHelper(
                                                             new LocalDatastoreServiceTestConfig());
@@ -262,7 +258,7 @@ public final class DatastorePlaceGuideRepositoryTest{
   }
 
   @Test(expected = EntityNotFoundException.class)
-  public void deletePlaceGuideTest() throws Exception{
+  public void deletePlaceGuideTest() throws EntityNotFoundException{
     List<PlaceGuide> testPlaceGuidesList = Arrays.asList(testPublicPlaceGuideA,
                                                          testPublicPlaceGuideB,
                                                          testPrivatePlaceGuideB,
@@ -270,7 +266,8 @@ public final class DatastorePlaceGuideRepositoryTest{
     saveTestPlaceGuidesEntities(testPlaceGuidesList);
     placeGuideRepository.deletePlaceGuide(A_PUBLIC_ID);
     Key deletedEntityKey = KeyFactory.createKey(DatastorePlaceGuideRepository.ENTITY_KIND, 
-                                                                             A_PUBLIC_ID);
+                                                                              A_PUBLIC_ID);
     Entity deletedEntity = datastore.get(deletedEntityKey);
+    
   }
 }
