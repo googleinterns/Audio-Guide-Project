@@ -28,7 +28,7 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository{
   public static final String COORDINATE_PROPERTY = "coordinate";
   public static final String DESCRIPTION_PROPERTY = "description";
   public static final String LENGTH_PROPERTY = "length";
-  public static final String IMG_KEY_PROPERTY = "imgKey";
+  public static final String IMAGE_KEY_PROPERTY = "imageKey";
   
   @Override
   public void savePlaceGuide(PlaceGuide placeGuide) {
@@ -49,7 +49,7 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository{
     GeoPt coordinate = placeGuide.getCoordinate();
     String description = placeGuide.getDescription();
     long length = placeGuide.getLength();
-    String imgKey = placeGuide.getImageKey();
+    String imageKey = placeGuide.getImageKey();
 
     if (Long.valueOf(placeGuideId) != null) {
       // Use the original placeGuide's ID for when user edits a place guide.
@@ -65,7 +65,7 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository{
       placeGuide = new PlaceGuide
                .Builder(name, audioKey, creatorId, coordinate)
                .setId(placeGuideId).setPlaceId(placeId).setLength(length)
-               .setDescription(description).setImageKey(imgKey)
+               .setDescription(description).setImageKey(imageKey)
                .setPlaceGuideStatus(isPublic).build();
     }
 
@@ -77,7 +77,7 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository{
     placeGuideEntity.setProperty(COORDINATE_PROPERTY, coordinate);
     placeGuideEntity.setProperty(DESCRIPTION_PROPERTY, description);
     placeGuideEntity.setProperty(LENGTH_PROPERTY, length);
-    placeGuideEntity.setProperty(IMG_KEY_PROPERTY, imgKey);
+    placeGuideEntity.setProperty(IMAGE_KEY_PROPERTY, imageKey);
 
     return placeGuideEntity;
   }
@@ -134,11 +134,11 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository{
     boolean isPublic = (boolean) placeGuideEntity.getProperty(IS_PUBLIC_PROPERTY);
     String description = (String) placeGuideEntity.getProperty(DESCRIPTION_PROPERTY);
     long length = (long) placeGuideEntity.getProperty(LENGTH_PROPERTY);
-    String imgKey = (String) placeGuideEntity.getProperty(IMG_KEY_PROPERTY);
+    String imageKey = (String) placeGuideEntity.getProperty(IMAGE_KEY_PROPERTY);
     PlaceGuide placeGuide = new PlaceGuide
                             .Builder(name, audioKey, creatorId, coordinate)
                             .setId(id).setPlaceId(placeId).setLength(length)
-                            .setDescription(description).setImageKey(imgKey)
+                            .setDescription(description).setImageKey(imageKey)
                             .setPlaceGuideStatus(isPublic).build();
     return placeGuide;
   }
