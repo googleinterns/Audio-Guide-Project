@@ -1,16 +1,31 @@
-var iconBase = 'https://maps.google.com/mapfiles/kml/';
+// Get icons from the charts API
+function getMarkerIcon(color) {
+    var iconBase = 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|';
+    var markerIcon = {
+        url: iconBase + color,
+        scaledSize: new google.maps.Size(30, 46), // scaled size
+        origin: new google.maps.Point(0,0), // origin
+        anchor: new google.maps.Point(15, 45) // anchor
+    }
+    return markerIcon;
+}
+
 var PlaceType = {
     PUBLIC: {
-        icon: iconBase + 'paddle/orange-blank.png'
+        // Orange icon
+        iconColor: "de8a0b", 
     },
     PRIVATE: {
-        icon: iconBase + "paddle/ylw-blank.png",
+        // Yellow icon
+        iconColor: "f7ff05",
     },
     SEARCH_RESULT: {
-        icon: iconBase + 'paddle/blu-blank.png'
+        // Green icon
+        iconColor: "82d613",
     },
     SAVED_LOCATION: {
-        icon: iconBase + 'paddle/grn-blank.png'
+        // Blue icon
+        iconColor: "1d2480",
     }
 };
 
@@ -41,9 +56,7 @@ class PlaceGuide {
         this._marker = new google.maps.Marker( {
             position: this._position, 
             title: this._name, 
-            icon: { 
-                url: this._placeType.icon,
-            }
+            icon: getMarkerIcon(this._placeType.iconColor)
         });
     }
 

@@ -4,7 +4,7 @@ var clickedPlacePosition;
 function showClickedPlace(map) {
     clickedPlaceMarker = new google.maps.Marker({
         map: map,
-        icon: PlaceType.SEARCH_RESULT.icon,
+        icon: getMarkerIcon(PlaceType.SEARCH_RESULT.iconColor),
         draggable:true,
     });
     map.addListener('click', function(mapsMouseEvent) {

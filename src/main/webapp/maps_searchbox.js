@@ -23,7 +23,10 @@ function initAutocomplete(map) {
   var autocomplete = new google.maps.places.Autocomplete(input);
   map.controls[google.maps.ControlPosition.TOP_CENTER].push(input);
 
-  searchedPlaceMarker = new google.maps.Marker({map: map});
+  searchedPlaceMarker = new google.maps.Marker({
+      map: map,
+      icon: getMarkerIcon(PlaceType.SEARCH_RESULT.iconColor),
+  });
   searchedPlaceMarker.setVisible(false);
   searchedPlaceMarker.setMap(map);
 
