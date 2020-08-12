@@ -45,7 +45,7 @@ public class PlaceGuideServlet extends HttpServlet {
   public static final String LONGITUDE_INPUT = "longitude";
   public static final String DESCRIPTION_INPUT = "description";
   public static final String LENGTH_INPUT = "length";
-  public static final String IMG_KEY_INPUT = "imgKey";
+  public static final String IMAGE_KEY_INPUT = "imageKey";
   public static final String PLACE_GUIDE_TYPE_PARAMETER = "placeGuideType";
 
   private final PlaceGuideRepository placeGuideRepository = PlaceGuideRepositoryFactory
@@ -125,8 +125,8 @@ public class PlaceGuideServlet extends HttpServlet {
     if (!description.isEmpty()) {
       newPlaceGuideBuilder.setDescription(description);
     }
-    String imgKey = request.getParameter(IMG_KEY_INPUT);
-    if (!imgKey.isEmpty()) {
+    String imageKey = request.getParameter(IMAGE_KEY_INPUT);
+    if (!imageKey.isEmpty()) {
       newPlaceGuideBuilder.setImageKey
     }
     return newPlaceGuideBuilder.build();
