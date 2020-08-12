@@ -39,7 +39,7 @@ public final class DatastorePlaceGuideRepositoryTest{
   public static final boolean IS_PUBLIC = true;
   public static final long LENGTH = new Long(60);
   public static final String DESCRIPTION = "description";
-  public static final String IMG_KEY = "imgKey";
+  public static final String IMAGE_KEY = "imageKey";
 
   private final PlaceGuide testPublicPlaceGuideA = new PlaceGuide
                                             .Builder(NAME, AUDIO_KEY, CREATOR_A_ID, COORDINATE)
@@ -48,7 +48,7 @@ public final class DatastorePlaceGuideRepositoryTest{
                                             .setPlaceGuideStatus(IS_PUBLIC)
                                             .setLength(LENGTH)
                                             .setDescription(DESCRIPTION)
-                                            .setImageKey(IMG_KEY)
+                                            .setImageKey(IMAGE_KEY)
                                             .build();
 
   private final PlaceGuide testPrivatePlaceGuideA = new PlaceGuide
@@ -57,7 +57,7 @@ public final class DatastorePlaceGuideRepositoryTest{
                                             .setId(A_PRIVATE_ID)
                                             .setLength(LENGTH)
                                             .setDescription(DESCRIPTION)
-                                            .setImageKey(IMG_KEY)
+                                            .setImageKey(IMAGE_KEY)
                                             .build();
 
   private final PlaceGuide testPublicPlaceGuideB = new PlaceGuide
@@ -67,7 +67,7 @@ public final class DatastorePlaceGuideRepositoryTest{
                                             .setPlaceGuideStatus(IS_PUBLIC)
                                             .setLength(LENGTH)
                                             .setDescription(DESCRIPTION)
-                                            .setImageKey(IMG_KEY)
+                                            .setImageKey(IMAGE_KEY)
                                             .build();
 
   private final PlaceGuide testPrivatePlaceGuideB = new PlaceGuide
@@ -76,7 +76,7 @@ public final class DatastorePlaceGuideRepositoryTest{
                                             .setId(B_PRIVATE_ID)
                                             .setLength(LENGTH)
                                             .setDescription(DESCRIPTION)
-                                            .setImageKey(IMG_KEY)
+                                            .setImageKey(IMAGE_KEY)
                                             .build();
   
   private Entity getEntityFromPlaceGuide(PlaceGuide placeGuide) {
@@ -93,7 +93,7 @@ public final class DatastorePlaceGuideRepositoryTest{
     placeGuideEntity.setProperty(DatastorePlaceGuideRepository.DESCRIPTION_PROPERTY, 
                                                           DESCRIPTION);
     placeGuideEntity.setProperty(DatastorePlaceGuideRepository.LENGTH_PROPERTY, LENGTH);
-    placeGuideEntity.setProperty(DatastorePlaceGuideRepository.IMG_KEY_PROPERTY, IMG_KEY);
+    placeGuideEntity.setProperty(DatastorePlaceGuideRepository.IMAGE_KEY_PROPERTY, IMAGE_KEY);
     return placeGuideEntity;
   }
 
