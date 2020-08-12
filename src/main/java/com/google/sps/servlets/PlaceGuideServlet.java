@@ -22,6 +22,7 @@ import java.io.IOException;
  */
 @WebServlet("/place-guide-data")
 public class PlaceGuideServlet extends HttpServlet {
+  public static final String ID_INPUT = "id";
   public static final String NAME_INPUT = "name";
   public static final String AUDIO_KEY_INPUT = "audioKey";
   public static final String PLACE_ID_INPUT = "placeId";
@@ -91,6 +92,11 @@ public class PlaceGuideServlet extends HttpServlet {
     GeoPt coord = new GeoPt(latitude, longitude);
     PlaceGuide.Builder newPlaceGuideBuilder = new PlaceGuide.Builder(name, audioKey, userId, 
                                                                      coord);
+    String id = request.getParameter(ID_PROPERTY);
+    if (!id.isEmpty()) {
+        newPlaceGuideBuilder.setId(Long.parseLong(id));
+    }
+    
     String publicPlaceGuideStringValue = request.getParameter(IS_PUBLIC_INPUT);
     if (publicPlaceGuideStringValue.equals(IS_PUBLIC_INPUT_VALUE)) {
       newPlaceGuideBuilder.setPlaceGuideStatus(true);
