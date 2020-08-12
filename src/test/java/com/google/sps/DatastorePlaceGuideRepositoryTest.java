@@ -96,18 +96,18 @@ public final class DatastorePlaceGuideRepositoryTest{
   private Entity getEntityFromPlaceGuide(PlaceGuide placeGuide) {
     Entity placeGuideEntity = new Entity(DatastorePlaceGuideRepository.ENTITY_KIND, 
                                                           placeGuide.getId());
-    placeGuideEntity.setProperty(DatastorePlaceGuideRepository.NAME_PROPERTY, NAME);
-    placeGuideEntity.setProperty(DatastorePlaceGuideRepository.AUDIO_KEY_PROPERTY, AUDIO_KEY);
+    placeGuideEntity.setProperty(DatastorePlaceGuideRepository.NAME_PROPERTY, placeGuide.getName());
+    placeGuideEntity.setProperty(DatastorePlaceGuideRepository.AUDIO_KEY_PROPERTY, placeGuide.getAudioKey());
     placeGuideEntity.setProperty(DatastorePlaceGuideRepository.CREATOR_ID_PROPERTY, 
                                                           placeGuide.getCreatorId());
     placeGuideEntity.setProperty(DatastorePlaceGuideRepository.IS_PUBLIC_PROPERTY, 
                                                           placeGuide.isPublic());
-    placeGuideEntity.setProperty(DatastorePlaceGuideRepository.PLACE_ID_PROPERTY, PLACE_ID);
-    placeGuideEntity.setProperty(DatastorePlaceGuideRepository.COORDINATE_PROPERTY, COORDINATE);
+    placeGuideEntity.setProperty(DatastorePlaceGuideRepository.PLACE_ID_PROPERTY, placeGuide.getPlaceId());
+    placeGuideEntity.setProperty(DatastorePlaceGuideRepository.COORDINATE_PROPERTY, placeGuide.getCoordinate());
     placeGuideEntity.setProperty(DatastorePlaceGuideRepository.DESCRIPTION_PROPERTY, 
-                                                          DESCRIPTION);
-    placeGuideEntity.setProperty(DatastorePlaceGuideRepository.LENGTH_PROPERTY, LENGTH);
-    placeGuideEntity.setProperty(DatastorePlaceGuideRepository.IMAGE_KEY_PROPERTY, IMAGE_KEY);
+                                                          placeGuide.getDescription());
+    placeGuideEntity.setProperty(DatastorePlaceGuideRepository.LENGTH_PROPERTY, placeGuide.getLength());
+    placeGuideEntity.setProperty(DatastorePlaceGuideRepository.IMAGE_KEY_PROPERTY, placeGuide.getImageKey());
     return placeGuideEntity;
   }
 
