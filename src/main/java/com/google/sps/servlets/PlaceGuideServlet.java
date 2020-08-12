@@ -16,16 +16,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.lang.IllegalStateException;
 import java.io.IOException;
+import com.google.sps.data.PlaceGuideQueryType;
 
 /**
  * This servlet handles placeguide's data.
  */
 @WebServlet("/place-guide-data")
 public class PlaceGuideServlet extends HttpServlet {
-  public static final String ALL = "all";
-  public static final String CREATED_ALL = "created-all";
-  public static final String CREATED_PUBLIC = "created-public";
-  public static final String CREATED_PRIVATE = "created-private";
   public static final String NAME_INPUT = "name";
   public static final String AUDIO_KEY_INPUT = "audioKey";
   public static final String PLACE_ID_INPUT = "placeId";
@@ -41,6 +38,8 @@ public class PlaceGuideServlet extends HttpServlet {
   private final PlaceGuideRepository placeGuideRepository = PlaceGuideRepositoryFactory
                                                 .getPlaceGuideRepository(RepositoryType.DATASTORE);
   private final String userId = UserServiceFactory.getUserService().getCurrentUser().getUserId();
+
+  private final enum PlaceGuideQueryType {ALL, CREATED_ALL, CREATED_PUBLIC, CREATED_PRIVATE }
 
   /**
    * Saves the recently submitted place guide data.
@@ -58,25 +57,32 @@ public class PlaceGuideServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     String placeGuideType = request.getParameter(PLACE_GUIDE_TYPE_PARAMETER);
-    List<PlaceGuide> placeGuides;
-    switch(placeGuideType) {
-      case ALL:
-        placeGuides = placeGuideRepository.getAllPlaceGuides();
-        break;
-      case CREATED_ALL:
-        placeGuides = placeGuideRepository.getCreatedPlaceGuides(userId);
-        break;
-      case CREATED_PUBLIC:
-        placeGuides = placeGuideRepository.getCreatedPublicPlaceGuides(userId);
-        break;
-      case CREATED_PRIVATE:
-        placeGuides = placeGuideRepository.getCreatedPrivatePlaceGuides(userId);
-        break;
-      default:
-        throw new IllegalStateException("Place Guide type does not exist!");
-    }
+    PlaceGuideQueryType queryType = PlaceGuideQueryType.valueOf(placeGuideType);
+    List<PlaceGuide> placeGuides = getPlaceGuides(queryType);
     response.setContentType("application/json;");
     response.getWriter().println(convertToJsonUsingGson(placeGuides));
+  }
+
+  private List<PlaceGuide> getPlaceGuides(PlaceGuideQueryType placeGuideQueryType) {
+      List<PlaceGuide> placeGuides;
+      switch(placeGuideQueryType) {
+        case ALL:
+          placeGuides = placeGuideRepository.getAllPlaceGuides();
+          break;
+        case CREATED_ALL:
+          placeGuides = placeGuideRepository.getCreatedPlaceGuides(userId);
+          break;
+        case CREATED_PUBLIC:
+          placeGuides = placeGuideRepository.getCreatedPublicPlaceGuides(userId);
+          break;
+        case CREATED_PRIVATE:
+          placeGuides = placeGuideRepository.getCreatedPrivatePlaceGuides(userId);
+          break;
+        default:
+          throw new IllegalStateException("Place Guide type does not exist!");
+          return null;
+      }
+      return placeGuides;
   }
 
   private PlaceGuide getPlaceGuideFromRequest(HttpServletRequest request) {
