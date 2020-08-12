@@ -108,7 +108,6 @@ public class PlaceGuideServlet extends HttpServlet {
     if (!id.isEmpty()) {
         newPlaceGuideBuilder.setId(Long.parseLong(id));
     }
-    
     String publicPlaceGuideStringValue = request.getParameter(IS_PUBLIC_INPUT);
     if (publicPlaceGuideStringValue.equals(IS_PUBLIC_INPUT_VALUE)) {
       newPlaceGuideBuilder.setPlaceGuideStatus(true);
