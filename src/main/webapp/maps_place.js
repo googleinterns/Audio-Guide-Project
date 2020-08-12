@@ -48,7 +48,13 @@ class PlaceGuide {
         this.setupMarker();
         this.setupInfoWindow();
         this._marker.addListener('click', () => {
-            this._infoWindow.open(map, this._marker);
+            if (this._infoWindowClosed) {
+                this._infoWindow.open(map, this._marker);
+            }
+            else {
+                this._infoWindow.close();
+            }
+            this._infoWindowClosed = !this._infoWindowClosed;
         });
     }
 
@@ -61,8 +67,10 @@ class PlaceGuide {
     }
 
     setupInfoWindow() {
+        this._infoWindowClosed = true;
         this._infoWindow = new google.maps.InfoWindow({
             content: this.getInfoWindowContent(),
+            maxWidth: 200, 
         });
     }
 
