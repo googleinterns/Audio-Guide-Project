@@ -27,18 +27,14 @@ class PlaceGuide {
         this._creatorName = creatorName;
         this._placeType = placeType;
         this.setupRepresentationOnMap();
-        this.setUpMarker();
-        this.setupInfoWindow();
     }
 
     setupRepresentationOnMap() {
         this.setupMarker();
         this.setupInfoWindow();
-        if(this._infoWindow !== undefined) {
-            this._marker.addListener('click', () => {
-                this._infoWindow.open(map, this._marker);
-            });
-        }
+        this._marker.addListener('click', () => {
+            this._infoWindow.open(map, this._marker);
+        });
     }
 
     setupMarker() {
@@ -46,7 +42,7 @@ class PlaceGuide {
             position: this._position, 
             title: this._name, 
             icon: { 
-                url: PlaceType[this._placeType].icon,
+                url: this._placeType.icon,
             }
         });
     }

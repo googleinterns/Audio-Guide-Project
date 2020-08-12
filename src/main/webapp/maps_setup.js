@@ -29,4 +29,5 @@ function createMap() {
   addGoToMyLocationControl(map);
   addEnableGeolocationControl(map);
   initAutocomplete(map);
+  displayPublicPlaceGuides(map);
 }
