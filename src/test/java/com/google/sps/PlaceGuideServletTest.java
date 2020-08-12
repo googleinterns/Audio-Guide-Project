@@ -20,6 +20,8 @@ import static org.mockito.Mockito.*;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.google.appengine.api.datastore.*;
 import com.google.sps.placeGuide.repository.impl.DatastorePlaceGuideRepository;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 
 @RunWith(JUnit4.class)
 public class PlaceGuideServletTest{
@@ -28,6 +30,7 @@ public class PlaceGuideServletTest{
   private HttpServletRequest request;
   private HttpServletResponse response;
   private PlaceGuideServlet PlaceGuideServlet;
+  private UserService userService;
 
   private static final String NAME_INPUT_STUB = "name";
   private static final String AUDIO_KEY_INPUT_STUB = "audioKey";
@@ -41,7 +44,7 @@ public class PlaceGuideServletTest{
 
   private static final String NAME = "name";
   private static final String AUDIO_KEY = "audioKey";
-  private static final GeoPt COORD = new GeoPt(3.14, 2,56);
+  private static final GeoPt COORDINATE = new GeoPt(3.14, 2,56);
   private static final long ID = 12345;
   private static final boolean IS_PUBLIC = true;
   private static final long LENGTH = 2;
@@ -62,8 +65,10 @@ public class PlaceGuideServletTest{
 
     request = mock(HttpServletRequest.class);
     response = mock(HttpServletResponse.class);
+    userService = mock()
 
-    placeGuideServlet = new PlaceGuideServlet();
+    userService = UserServiceFactory.getUserService();
+    placeGuideServlet = new PlaceGuideServlet(userService);
   }
 
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {

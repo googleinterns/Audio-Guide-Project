@@ -22,6 +22,19 @@ import java.io.IOException;
  */
 @WebServlet("/place-guide-data")
 public class PlaceGuideServlet extends HttpServlet {
+
+  private final String userId;
+
+  // For production.
+  public PlaceGuideServlet() {
+    userId = UserServiceFactory.getUserService().getCurrentUser().getUserId();
+  }
+
+  // For testing.
+  public PlaceGuideServlet(String userId) {
+    userId = this.userId;
+  }
+
   public static final String ID_INPUT = "id";
   public static final String NAME_INPUT = "name";
   public static final String AUDIO_KEY_INPUT = "audioKey";
@@ -37,7 +50,6 @@ public class PlaceGuideServlet extends HttpServlet {
 
   private final PlaceGuideRepository placeGuideRepository = PlaceGuideRepositoryFactory
                                                 .getPlaceGuideRepository(RepositoryType.DATASTORE);
-  private final String userId = UserServiceFactory.getUserService().getCurrentUser().getUserId();
 
   private enum PlaceGuideQueryType {ALL, CREATED_ALL, CREATED_PUBLIC, CREATED_PRIVATE }
 
