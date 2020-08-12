@@ -79,7 +79,6 @@ public class PlaceGuideServlet extends HttpServlet {
           break;
         default:
           throw new IllegalStateException("Place Guide type does not exist!");
-          return null;
       }
       return placeGuides;
   }
