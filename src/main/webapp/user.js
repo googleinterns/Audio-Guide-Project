@@ -45,16 +45,3 @@ function saveUserInDatabase() {
   return fetch('/user-creation-servlet', {method: 'POST'})
       .catch(error => "saveUserInDatabase: failed to post new user: " + error);
 }
-
-/**
- * Checks if the currently logged in user is already saved in the database.
- */
-function userPresentInDatabase() {
-  return fetch('/user-creation-servlet')
-      .catch(error => console.log("userPresentInDatabase: failed to fetch: " + error))
-      .then(response => response.json())
-      .catch(error => console.log('userPresentInDatabase: failed to convert to json: ' + error))
-      .then(response => {
-        return response;
-      });
-}

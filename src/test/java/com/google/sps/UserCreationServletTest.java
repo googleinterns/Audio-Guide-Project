@@ -43,8 +43,16 @@ import org.junit.runners.JUnit4;
 public final class UserCreationServletTest {
   private static final String ID = "userid";
   private static final String EMAIL = "user@gmail.com";
+  private static final String NAME = "username";
+  private static final String SELF_INTRODUCTION = "I am the user";
+  private static final String IMG_KEY = "img1234";
 
-  private final User toSaveUser = new User.Builder(ID, EMAIL).build();
+  private final User toSaveUser =
+      new User.Builder(ID, EMAIL)
+          .setName(NAME)
+          .addSelfIntroduction(SELF_INTRODUCTION)
+          .addImgKey(IMG_KEY)
+          .build();
 
   private UserCreationServlet userCreationServlet;
   private Map<String, Object> attributeToValue = new HashMap<>();
@@ -75,7 +83,44 @@ public final class UserCreationServletTest {
   }
 
   @Test
-  public void doPost() throws IOException, ServletException {
+  public void doPost_exitingUser_doesntUpdate() throws IOException, ServletException {
+    // Create entity to save.
+    Entity userEntity = new Entity(DatastoreUserRepository.ENTITY_KIND, toSaveUser.getId());
+    userEntity.setProperty(DatastoreUserRepository.EMAIL_PROPERTY, toSaveUser.getEmail());
+    userEntity.setProperty(DatastoreUserRepository.NAME_PROPERTY, toSaveUser.getName());
+    userEntity.setProperty(
+        DatastoreUserRepository.PUBLIC_PORTFOLIO_PROPERTY, toSaveUser.portfolioIsPublic());
+    userEntity.setProperty(
+        DatastoreUserRepository.SELF_INTRODUCTION_PROPERTY, toSaveUser.getSelfIntroduction());
+    userEntity.setProperty(DatastoreUserRepository.IMG_KEY_PROPERTY, toSaveUser.getImgKey());
+     // Save entity to datastore.
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    datastore.put(userEntity);
+
+    // Post to servlet the same user, who is already present in the database.
+    userCreationServlet = new UserCreationServlet();
+    userCreationServlet.doPost(request, response);
+
+    // Get the currenly logged in user's saved data. 
+    // Check that the previously saved userdata is not rewritten by the servlet.
+    Key userKey = KeyFactory.createKey(DatastoreUserRepository.ENTITY_KIND, ID);
+    try {
+      userEntity = datastore.get(userKey);
+      assertEquals(NAME, userEntity.getProperty(DatastoreUserRepository.NAME_PROPERTY));
+      assertEquals(EMAIL, userEntity.getProperty(DatastoreUserRepository.EMAIL_PROPERTY));
+      assertEquals(
+          SELF_INTRODUCTION,
+          userEntity.getProperty(DatastoreUserRepository.SELF_INTRODUCTION_PROPERTY));
+      assertEquals(
+          false, userEntity.getProperty(DatastoreUserRepository.PUBLIC_PORTFOLIO_PROPERTY));
+      assertEquals(IMG_KEY, userEntity.getProperty(DatastoreUserRepository.IMG_KEY_PROPERTY));
+    } catch (EntityNotFoundException e) {
+      fail("Entity not found: " + e);
+    }
+  }
+
+   @Test
+  public void doPost_inexistentUser_savesNewUser() throws IOException, ServletException {
     // Save the new user.
     userCreationServlet = new UserCreationServlet();
     userCreationServlet.doPost(request, response);
@@ -89,55 +134,5 @@ public final class UserCreationServletTest {
     } catch (EntityNotFoundException e) {
       fail("Entity not found: " + e);
     }
-  }
-
-  @Test
-  public void doGet_existingUser_returnsTrue() throws IOException, ServletException {
-    // Create entity to save.
-    Entity userEntity = new Entity(DatastoreUserRepository.ENTITY_KIND, toSaveUser.getId());
-    userEntity.setProperty(DatastoreUserRepository.EMAIL_PROPERTY, toSaveUser.getEmail());
-    userEntity.setProperty(DatastoreUserRepository.NAME_PROPERTY, toSaveUser.getName());
-    userEntity.setProperty(
-        DatastoreUserRepository.PUBLIC_PORTFOLIO_PROPERTY, toSaveUser.portfolioIsPublic());
-    userEntity.setProperty(
-        DatastoreUserRepository.SELF_INTRODUCTION_PROPERTY, toSaveUser.getSelfIntroduction());
-    userEntity.setProperty(DatastoreUserRepository.IMG_KEY_PROPERTY, toSaveUser.getImgKey());
-
-    // Save entity to datastore.
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    datastore.put(userEntity);
-
-    // Get User corresponding to entity from servlet
-    StringWriter sw = new StringWriter();
-    PrintWriter pw = new PrintWriter(sw);
-
-    when(response.getWriter()).thenReturn(pw);
-
-    // Get the currenly logged in user's previously saved data
-    userCreationServlet = new UserCreationServlet();
-    userCreationServlet.doGet(request, response);
-
-    pw.flush();
-    Gson gson = new Gson();
-    Boolean existingUser = gson.fromJson(sw.toString(), Boolean.class);
-    assertEquals(Boolean.valueOf(true), existingUser);
-  }
-
-  @Test
-  public void doGet_inexistentUser_returnsFalse() throws IOException, ServletException {
-    StringWriter sw = new StringWriter();
-    PrintWriter pw = new PrintWriter(sw);
-
-    when(response.getWriter()).thenReturn(pw);
-
-    // Try to get the currenly logged in user's data.
-    // It is not saved.
-    userCreationServlet = new UserCreationServlet();
-    userCreationServlet.doGet(request, response);
-
-    pw.flush();
-    Gson gson = new Gson();
-    Boolean existingUser = gson.fromJson(sw.toString(), Boolean.class);
-    assertEquals(Boolean.valueOf(false), existingUser);
   }
 }

@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
+ * This servlet is used for saving the user in the database the first time when they access our website. 
  * This servlet checks if the currently logged in user exists in the database and saves a new user
  * in the database.
  */
@@ -41,23 +42,17 @@ public class UserCreationServlet extends HttpServlet {
     userService = UserServiceFactory.getUserService();
   }
 
-  /** Saves the new user's data(id and email only, provided by the UserService) to the database. */
-  @Override
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    User user = getLoggedInUser();
-    userRepository.saveUser(user);
-    response.sendRedirect("/index.html");
-  }
-
-  /**
-   * @return true if the currently logged in user is already present in the database, false
-   *     otherwise.
+  /** 
+   * Saves the new user's data(id and email only, provided by the UserService) to the database, 
+   * if they are not saved already. 
    */
   @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     boolean existingUser = userRepository.existingUser(userService.getCurrentUser().getUserId());
-    response.setContentType("application/json;");
-    response.getWriter().println(convertToJsonUsingGson(Boolean.valueOf(existingUser)));
+    if (!existingUser) {
+        User user = getLoggedInUser();
+        userRepository.saveUser(user);
+    }
   }
 
   private User getLoggedInUser() {
