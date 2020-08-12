@@ -1,6 +1,8 @@
+const placeZoom = 14;
+
 // Get icons from the charts API
 function getMarkerIcon(color) {
-    var iconBase = 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|';
+    var iconBase = 'https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|';
     var markerIcon = {
         url: iconBase + color,
         scaledSize: new google.maps.Size(30, 46), // scaled size
@@ -29,17 +31,19 @@ var PlaceType = {
     }
 };
 
-class PlaceGuide {
-    constructor(id, name, description, audioKey, audioLength, imgKey, positionLat, positionLng, placeId, creatorId, creatorName, placeType) {
-        this._id = id;
-        this._name = name;
-        this._description = description;
-        this._audioKey = audioKey;
-        this._imgKey = imgKey;
-        this._position = new google.maps.LatLng(positionLat, positionLng);
-        this._placeId = placeId;
-        this._creatorId = creatorId;
-        this._creatorName = creatorName;
+class Place {
+    // Either positionLat, positionLng and name, or mapsPlace will be specified.
+    // The others will be null.
+    // placeType is a value from PlaceType
+    constructor(positionLat, positionLng, name, mapsPlace, placeType) {
+        this._mapsPlace = mapsPlace;
+        if (this._mapsPlace != null) {
+            this._position = this._mapsPlace.geometry.location;
+            this.name = this._mapsPlace.name;
+        } else {
+            this._position = new google.maps.LatLng(positionLat, positionLng);
+            this._name = name;
+        }
         this._placeType = placeType;
         this.setupRepresentationOnMap();
     }
@@ -75,9 +79,7 @@ class PlaceGuide {
     }
 
     getInfoWindowContent() {
-        var content = "<h3>" + this._name + "</h3>" +
-        "<h4> Created by: " + this._creatorName + "</h4>" + 
-        "<p>" + this._description + "</p>";
+        var content = "<h3>" + this._name + "</h3>";
         return content;
     }
 
@@ -95,6 +97,40 @@ class PlaceGuide {
 
     set position(pos) {
         this._position = pos;
+    }
+
+    centerMapAround(map) {
+        if (this._mapsPlace != null && this._mapsPlace.geometry.viewPort) {
+            map.fitBounds(mapsPlace.geometry.viewport);
+        } else {
+            map.setCenter(this._position);
+            map.setZoom(placeZoom);
+        }
+    }
+}
+
+class PlaceGuide extends Place {
+    constructor(databaseId, name, description, audioKey, audioLength, imgKey, positionLat, positionLng, placeId, creatorId, creatorName, placeType) {
+        super(positionLat, positionLng, name, null, placeType);
+        this._databaseId = databaseId;
+        this._name = name;
+        this._description = description;
+        this._audioKey = audioKey;
+        this._imgKey = imgKey;
+        this._creatorId = creatorId;
+        this._creatorName = creatorName;
+        this.setupRepresentationOnMap();
+    }
+
+    getInfoWindowContent() {
+        var content = "<h3>" + this._name + "</h3>" +
+        "<h4> Created by: " + this._creatorName + "</h4>" + 
+        "<p>" + this._description + "</p>";
+        return content;
+    }
+
+    set position(pos) {
+        super.position = pos;
         this._marker.setPosition(this._position);
     }
 }

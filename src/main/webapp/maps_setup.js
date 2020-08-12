@@ -7,8 +7,6 @@
  * At this stage, the modules are included rather for demonstrational purposes.
  */
 
-const placeZoom = 14;
-
 /** This function initialises the map and adds some functionalities to it:
  * {@code addGoToMyLocationControl} allows the user to center the map
  * at their location by clicking a button.
@@ -30,5 +28,5 @@ function createMap() {
   addEnableGeolocationControl(map);
   initAutocomplete(map);
   displayPublicPlaceGuides(map);
-  showClickedPlace(map);
+  enableChoosingPlaceByClick(map);
 }

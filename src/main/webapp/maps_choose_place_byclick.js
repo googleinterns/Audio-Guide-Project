@@ -1,17 +1,21 @@
-var clickedPlaceMarker;
-var clickedPlacePosition;
+var chosenPlaceMarker;
+var chosenPlacePosition;
 
-function showClickedPlace(map) {
-    clickedPlaceMarker = new google.maps.Marker({
+function enableChoosingPlaceByClick(map) {
+    chosenPlaceMarker = new google.maps.Marker({
         map: map,
         icon: getMarkerIcon(PlaceType.SEARCH_RESULT.iconColor),
         draggable:true,
     });
     map.addListener('click', function(mapsMouseEvent) {
-        clickedPlacePosition = mapsMouseEvent.latLng;
-        clickedPlaceMarker.setPosition(clickedPlacePosition);
+        if (mapsMouseEvent.placeId) {
+            console.log("you clicked on place with id " + mapsMouseEvent.placeId);
+        } else {
+            chosenPlacePosition = mapsMouseEvent.latLng;
+            chosenPlaceMarker.setPosition(chosenPlacePosition);
+        }
     });
-    clickedPlaceMarker.addListener('drag', function() {
-        clickedPlaceMarker.setTitle(clickedPlaceMarker.getPosition().toString());
+    chosenPlaceMarker.addListener('drag', function() {
+        chosenPlaceMarker.setTitle(clickedPlaceMarker.getPosition().toString());
     });
 }
