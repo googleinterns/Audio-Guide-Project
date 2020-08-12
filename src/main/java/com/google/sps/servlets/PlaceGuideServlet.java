@@ -89,9 +89,9 @@ public class PlaceGuideServlet extends HttpServlet {
     String audioKey = request.getParameter(AUDIO_KEY_INPUT); // Get from Blobstore.
     float latitude = Float.parseFloat(request.getParameter(LATITUDE_INPUT));
     float longitude = Float.parseFloat(request.getParameter(LONGITUDE_INPUT));
-    GeoPt coord = new GeoPt(latitude, longitude);
+    GeoPt coordinate = new GeoPt(latitude, longitude);
     PlaceGuide.Builder newPlaceGuideBuilder = new PlaceGuide.Builder(name, audioKey, userId, 
-                                                                     coord);
+                                                                     coordinate);
     String id = request.getParameter(ID_INPUT);
     if (!id.isEmpty()) {
         newPlaceGuideBuilder.setId(Long.parseLong(id));
