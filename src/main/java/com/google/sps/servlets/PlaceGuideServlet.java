@@ -92,7 +92,7 @@ public class PlaceGuideServlet extends HttpServlet {
     GeoPt coord = new GeoPt(latitude, longitude);
     PlaceGuide.Builder newPlaceGuideBuilder = new PlaceGuide.Builder(name, audioKey, userId, 
                                                                      coord);
-    String id = request.getParameter(ID_PROPERTY);
+    String id = request.getParameter(ID_INPUT);
     if (!id.isEmpty()) {
         newPlaceGuideBuilder.setId(Long.parseLong(id));
     }
