@@ -31,12 +31,12 @@ import javax.servlet.http.HttpServletResponse;
  * This servlet checks if the currently logged in user exists in the database and saves a new user
  * in the database.
  */
-@WebServlet("/new-user-servlet")
-public class NewUserServlet extends HttpServlet {
+@WebServlet("/user-creation-servlet")
+public class UserCreationServlet extends HttpServlet {
   private final UserRepository userRepository;
   private final UserService userService;
 
-  public NewUserServlet() {
+  public UserCreationServlet() {
     userRepository = UserRepositoryFactory.getUserRepository(RepositoryType.DATASTORE);
     userService = UserServiceFactory.getUserService();
   }

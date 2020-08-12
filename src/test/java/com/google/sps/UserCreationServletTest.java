@@ -22,7 +22,7 @@ import com.google.appengine.api.datastore.*;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.google.gson.Gson;
-import com.google.sps.servlets.NewUserServlet;
+import com.google.sps.servlets.UserCreationServlet;
 import com.google.sps.user.User;
 import com.google.sps.user.repository.impl.DatastoreUserRepository;
 import java.io.IOException;
@@ -40,13 +40,13 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
-public final class NewUserServletTest {
+public final class UserCreationServletTest {
   private static final String ID = "userid";
   private static final String EMAIL = "user@gmail.com";
 
   private final User toSaveUser = new User.Builder(ID, EMAIL).build();
 
-  private NewUserServlet newUserServlet;
+  private UserCreationServlet userCreationServlet;
   private Map<String, Object> attributeToValue = new HashMap<>();
   private LocalServiceTestHelper helper;
 
@@ -77,8 +77,8 @@ public final class NewUserServletTest {
   @Test
   public void doPost() throws IOException, ServletException {
     // Save the new user.
-    newUserServlet = new NewUserServlet();
-    newUserServlet.doPost(request, response);
+    userCreationServlet = new UserCreationServlet();
+    userCreationServlet.doPost(request, response);
 
     // Get the currenly logged in user's previously saved data
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -114,8 +114,8 @@ public final class NewUserServletTest {
     when(response.getWriter()).thenReturn(pw);
 
     // Get the currenly logged in user's previously saved data
-    newUserServlet = new NewUserServlet();
-    newUserServlet.doGet(request, response);
+    userCreationServlet = new UserCreationServlet();
+    userCreationServlet.doGet(request, response);
 
     pw.flush();
     Gson gson = new Gson();
@@ -132,8 +132,8 @@ public final class NewUserServletTest {
 
     // Try to get the currenly logged in user's data.
     // It is not saved.
-    newUserServlet = new NewUserServlet();
-    newUserServlet.doGet(request, response);
+    userCreationServlet = new UserCreationServlet();
+    userCreationServlet.doGet(request, response);
 
     pw.flush();
     Gson gson = new Gson();
