@@ -129,7 +129,7 @@ public final class DatastoreUserRepositoryTest {
 
     // Check if user exists.
     boolean userExists = myUserRepository.existingUser(ID);
-    assertTrue(userExists);
+    assertFalse(userExists);
   }
 
   @Test
