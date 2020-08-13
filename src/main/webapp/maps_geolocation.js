@@ -50,8 +50,7 @@ function addEnableGeolocationControl(map) {
  */
 function onGeolocationControlEvent(map, geolocationControlDiv) {
   var img = document.getElementById(GEOLOCATION_IMG_ID);
-  trackLocation = !trackLocation;
-  if (trackLocation) {
+  if (!trackLocation) {
     enableLocationTracking(map, geolocationControlDiv, img);
   } else {
     disableLocationTracking(geolocationControlDiv, img);
@@ -59,6 +58,7 @@ function onGeolocationControlEvent(map, geolocationControlDiv) {
 }
 
 function enableLocationTracking(map, geolocationControlDiv, img) {
+    trackLocation = true;
     geolocationControlDiv.title = DISABLE_GEOLOCATION_TITLE;
     img.src = ENABLE_GEOLOCATION_IMG_SRC;
     if (navigator.geolocation) {
@@ -69,11 +69,13 @@ function enableLocationTracking(map, geolocationControlDiv, img) {
           },
           error => watchPositionError(error));
     } else {
+      disableLocationTracking(geolocationControlDiv, img);
       alert(NO_GEOLOCATION_SUPPORT_MSG);
     }
 }
 
 function disableLocationTracking(geolocationControlDiv, img) {
+    trackLocation = false;
     navigator.geolocation.clearWatch(watchPositionId);
     removeCurrentLocationMarker();
     img.src = DISABLED_GEOLOCATION_IMG_SRC;
@@ -104,6 +106,7 @@ function onGoToMyLocationControlEvent(map) {
     if (navigator.geolocation) {
       centerMapToCurrentLocation(map);
     } else {
+      disableLocationTracking(geolocationControlDiv, img);
       alert(NO_GEOLOCATION_SUPPORT_MSG);
     }
   } else {
