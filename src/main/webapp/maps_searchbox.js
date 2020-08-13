@@ -25,11 +25,9 @@ class SearchBox {
         this._map.controls[google.maps.ControlPosition.TOP_CENTER].push(this._input);
     }
 
-    initAutocomplete() {
+    init() {
         this._autocomplete.setFields(['address_components', 'geometry', 'name']);
-        this._autocomplete.addListener('place_changed',
-            result => this._setNewSearchResult(map, autocomplete, input, searchResult));
-        }
+        this._autocomplete.addListener('place_changed', result => this.setNewSearchResult());
     }
 
     /**
@@ -38,30 +36,32 @@ class SearchBox {
     * If the user didn't choose an existing place, display
     * the best suggestion instead. 
     */
-    setNewSearchResult(map, autocomplete, input, searchResult) {
-    var place = autocomplete.getPlace();
-    if (!place.geometry) {
-        // If the user didn't choose a suggestion, but pressed enter,
-        // then "place" may have no geometry.
-        // In this case, search for the "closest" place with geometry and show that.
-        setClosestResult(map, input, autocomplete, searchResult);
-        return;
-    }
-    searchResult.updatePlaceAndCenter(map, place);
+    setNewSearchResult() {
+        var place = this._autocomplete.getPlace();
+        if (!place.geometry) {
+            // If the user didn't choose a suggestion, but pressed enter,
+            // then "place" may have no geometry.
+            // In this case, search for the "closest" place with geometry and show that.
+            this.setClosestResult();
+            return;
+        }
+        this._searchResult.updatePlaceAndCenter(this._map, place);
     }
 
     /**
     * This function gets the best result(prediction) for the submitted search query
     * and displays it as the new search result.
     */
-    function setClosestResult(map, input, autocomplete, searchResult) {
-    var service = new google.maps.places.AutocompleteService();
-    service.getPlacePredictions({input: input.value}, function (predictions, status) {
-        if (status != google.maps.places.PlacesServiceStatus.OK) {
-        alert(status);
-        return;
-        }
-        searchResult.updatePlaceAndCenterBasedOnId(map, predictions[0].place_id);
-    });
+    setClosestResult() {
+        var service = new google.maps.places.AutocompleteService();
+        var searchResult = this._searchResult;
+        var map = this._map;
+        service.getPlacePredictions({input: this._input.value}, function (predictions, status) {
+            if (status != google.maps.places.PlacesServiceStatus.OK) {
+                alert(status);
+                return;
+            }
+            searchResult.updatePlaceAndCenterBasedOnId(map, predictions[0].place_id);
+        });
     }
 }
