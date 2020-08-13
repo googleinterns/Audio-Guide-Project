@@ -9,7 +9,8 @@
 
 const PLACE_ZOOM = 14;
 
-/** This function initialises the map and adds some functionalities to it:
+/** 
+ * This function initialises the map and adds some functionalities to it:
  * {@code addGoToMyLocationControl} allows the user to center the map
  * at their location by clicking a button.
  * {@code addEnableGeolocationControl} allows the user to turn on/off
