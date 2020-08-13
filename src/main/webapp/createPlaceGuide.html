@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset = "UTF-8">
-    <title>Discover</title>
+    <title>Create Place Guide</title>
     <script src = "maps_key.js"></script>
     <script id = "maps-api" async defer></script>
     <link rel = "stylesheet" href = "style.css">
@@ -23,7 +23,8 @@
     <script src = "maps_searchbox.js"></script>
     <script src = "maps_place.js"></script>
     <script src = "maps_show_places.js"></script>
-    <script src = "maps_choose_place_byclick.js"></script>
+    <script src = "maps_click_location.js"></script>
+    <script src = "maps_save_location.js"></script>
     <script src="https://unpkg.com/@google/markerclustererplus@4.0.1/dist/markerclustererplus.min.js"></script>
     <script> 
         /** This function initialises the map and adds some functionalities to it:
@@ -55,6 +56,9 @@
             var searchBox = new SearchBox(map, searchResult, "search-box");
             searchBox.init();
             enableChoosingPlaceByClick(map, searchResult);
+
+            // Save location functionality.
+            var locationSaver = new LocationSaver(map, searchResult);
 
             // Display user's place guides functionality.
             var userId = "test";
