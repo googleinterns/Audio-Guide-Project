@@ -37,7 +37,6 @@ function addEnableGeolocationControl(map) {
       createControlDiv(ENABLE_GEOLOCATION_TITLE, DISABLED_GEOLOCATION_IMG_SRC, GEOLOCATION_IMG_ID);
   geolocationControlDiv.index = 1;
   map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(geolocationControlDiv);
-  trackLocation = false;
   geolocationControlDiv.addEventListener("click",
           event => onGeolocationControlEvent(map, geolocationControlDiv));
 }
