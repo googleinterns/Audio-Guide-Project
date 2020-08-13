@@ -1,7 +1,7 @@
 function displayPublicPlaceGuides(map) {
     var placeGuides = getPublicPlaceGuides();
+    placeGuides.forEach(placeGuide => placeGuide.map = map);
     var markers = placeGuides.map(function(placeGuide) { 
-        placeGuide.addMarkerToMap(map);
         return placeGuide._marker;
     });
     var markerCluster = new MarkerClusterer(map, markers,

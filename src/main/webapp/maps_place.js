@@ -178,7 +178,7 @@ class Place {
 
 class PlaceGuide extends Place {
     constructor(databaseId, name, description, audioKey, audioLength, imgKey, positionLat, positionLng, placeId, creatorId, creatorName, placeType) {
-        super(positionLat, positionLng, name, null, placeType);
+        super(positionLat, positionLng, name, null, placeType, true);
         this._databaseId = databaseId;
         this._name = name;
         this._description = description;
