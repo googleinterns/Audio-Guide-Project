@@ -39,7 +39,7 @@ function addEnableGeolocationControl(map) {
   map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(geolocationControlDiv);
   trackUser = false;
   geolocationControlDiv.addEventListener("click",
-          event => geolocationControlEvent(map, geolocationControlDiv));
+          event => onGeolocationControlEvent(map, geolocationControlDiv));
 }
 
 /**
@@ -48,7 +48,7 @@ function addEnableGeolocationControl(map) {
  * and event will be triggered,
  * and the currentLocationMarker and currentlocation will be reset
  */
-function geolocationControlEvent(map, geolocationControlDiv) {
+function onGeolocationControlEvent(map, geolocationControlDiv) {
   var img = document.getElementById(GEOLOCATION_IMG_ID);
   trackUser = !trackUser;
   if (trackUser) {
@@ -83,7 +83,7 @@ function addGoToMyLocationControl(map) {
   map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(myLocationControlDiv);
   trackUser = false;
   myLocationControlDiv.addEventListener("click",
-      event => goToMyLocationControlEvent(map));
+      event => onGoToMyLocationControlEvent(map));
 }
 
 /**
@@ -91,7 +91,7 @@ function addGoToMyLocationControl(map) {
  * the maps gets centered around it.
  * Otherwise, a message will be displayed to enable geolocation.
  */
-function goToMyLocationControlEvent(map) {
+function onGoToMyLocationControlEvent(map) {
   if (trackUser) {
     if (navigator.geolocation) {
       centerMapToCurrentLocation(map);
