@@ -15,15 +15,24 @@
 package com.google.sps;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import com.google.appengine.api.datastore.*;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
-import com.google.sps.data.RepositoryType;
+import com.google.gson.Gson;
+import com.google.sps.servlets.UserCreationServlet;
 import com.google.sps.user.User;
-import com.google.sps.user.repository.UserRepository;
-import com.google.sps.user.repository.UserRepositoryFactory;
 import com.google.sps.user.repository.impl.DatastoreUserRepository;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.HashMap;
+import java.util.Map;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,7 +40,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
-public final class DatastoreUserRepositoryTest {
+public final class UserCreationServletTest {
   private static final String ID = "userid";
   private static final String EMAIL = "user@gmail.com";
   private static final String NAME = "username";
@@ -44,17 +53,28 @@ public final class DatastoreUserRepositoryTest {
           .addSelfIntroduction(SELF_INTRODUCTION)
           .addImgKey(IMG_KEY)
           .build();
-  private User toGetUser;
 
-  private final UserRepository myUserRepository =
-      UserRepositoryFactory.getUserRepository(RepositoryType.DATASTORE);
+  private UserCreationServlet userCreationServlet;
+  private Map<String, Object> attributeToValue = new HashMap<>();
+  private LocalServiceTestHelper helper;
 
-  private final LocalServiceTestHelper helper =
-      new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
+  private HttpServletRequest request;
+  private HttpServletResponse response;
 
   @Before
-  public void setUp() {
+  public void setup() {
+    // Set the userdata that the Userservice will return.
+    attributeToValue.put("com.google.appengine.api.users.UserService.user_id_key", (Object) ID);
+    helper =
+        new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig())
+            .setEnvIsLoggedIn(true)
+            .setEnvAuthDomain("localhost")
+            .setEnvEmail(EMAIL)
+            .setEnvAttributes(attributeToValue);
     helper.setUp();
+
+    request = mock(HttpServletRequest.class);
+    response = mock(HttpServletResponse.class);
   }
 
   @After
@@ -63,41 +83,29 @@ public final class DatastoreUserRepositoryTest {
   }
 
   @Test
-  public void getUser_existingUser_returnsUserEqualToSavedUser() {
+  public void doPost_exitingUser_doesntUpdate() throws IOException, ServletException {
     // Create entity to save.
     Entity userEntity = new Entity(DatastoreUserRepository.ENTITY_KIND, toSaveUser.getId());
-    userEntity.setProperty(DatastoreUserRepository.NAME_PROPERTY, toSaveUser.getName());
     userEntity.setProperty(DatastoreUserRepository.EMAIL_PROPERTY, toSaveUser.getEmail());
+    userEntity.setProperty(DatastoreUserRepository.NAME_PROPERTY, toSaveUser.getName());
     userEntity.setProperty(
         DatastoreUserRepository.PUBLIC_PORTFOLIO_PROPERTY, toSaveUser.portfolioIsPublic());
     userEntity.setProperty(
         DatastoreUserRepository.SELF_INTRODUCTION_PROPERTY, toSaveUser.getSelfIntroduction());
     userEntity.setProperty(DatastoreUserRepository.IMG_KEY_PROPERTY, toSaveUser.getImgKey());
-
-    // Save entity to datastore.
+     // Save entity to datastore.
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(userEntity);
 
-    // Get user.
-    toGetUser = myUserRepository.getUser(ID);
-    assertEquals(toSaveUser, toGetUser);
-  }
+    // Post to servlet the same user, who is already present in the database.
+    userCreationServlet = new UserCreationServlet();
+    userCreationServlet.doPost(request, response);
 
-  @Test
-  public void getUser_inexistentUser_returnsNull() {
-    toGetUser = myUserRepository.getUser(ID);
-    assertEquals(null, toGetUser);
-  }
-
-  @Test
-  public void saveUser() {
-    myUserRepository.saveUser(toSaveUser);
-
-    // Get user.
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    // Get the currenly logged in user's saved data. 
+    // Check that the previously saved userdata is not rewritten by the servlet.
     Key userKey = KeyFactory.createKey(DatastoreUserRepository.ENTITY_KIND, ID);
     try {
-      Entity userEntity = datastore.get(userKey);
+      userEntity = datastore.get(userKey);
       assertEquals(NAME, userEntity.getProperty(DatastoreUserRepository.NAME_PROPERTY));
       assertEquals(EMAIL, userEntity.getProperty(DatastoreUserRepository.EMAIL_PROPERTY));
       assertEquals(
@@ -111,31 +119,20 @@ public final class DatastoreUserRepositoryTest {
     }
   }
 
-  @Test
-  public void existingUser_userExists_returnsTrue() {
-    // Create entity to save.
-    Entity userEntity = new Entity(DatastoreUserRepository.ENTITY_KIND, toSaveUser.getId());
-    userEntity.setProperty(DatastoreUserRepository.NAME_PROPERTY, toSaveUser.getName());
-    userEntity.setProperty(DatastoreUserRepository.EMAIL_PROPERTY, toSaveUser.getEmail());
-    userEntity.setProperty(
-        DatastoreUserRepository.PUBLIC_PORTFOLIO_PROPERTY, toSaveUser.portfolioIsPublic());
-    userEntity.setProperty(
-        DatastoreUserRepository.SELF_INTRODUCTION_PROPERTY, toSaveUser.getSelfIntroduction());
-    userEntity.setProperty(DatastoreUserRepository.IMG_KEY_PROPERTY, toSaveUser.getImgKey());
+   @Test
+  public void doPost_inexistentUser_savesNewUser() throws IOException, ServletException {
+    // Save the new user.
+    userCreationServlet = new UserCreationServlet();
+    userCreationServlet.doPost(request, response);
 
-    // Save entity to datastore.
+    // Get the currenly logged in user's previously saved data
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    datastore.put(userEntity);
-
-    // Check if user exists.
-    boolean userExists = myUserRepository.existingUser(ID);
-    assertTrue(userExists);
-  }
-
-  @Test
-  public void existingUser_userDoesntExist_returnsFalse() {
-    // Check if user exists.
-    boolean userExists = myUserRepository.existingUser(ID);
-    assertFalse(userExists);
+    Key userKey = KeyFactory.createKey(DatastoreUserRepository.ENTITY_KIND, ID);
+    try {
+      Entity userEntity = datastore.get(userKey);
+      assertEquals(EMAIL, userEntity.getProperty(DatastoreUserRepository.EMAIL_PROPERTY));
+    } catch (EntityNotFoundException e) {
+      fail("Entity not found: " + e);
+    }
   }
 }
