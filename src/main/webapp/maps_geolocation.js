@@ -105,7 +105,7 @@ function onGoToMyLocationControlEvent(map) {
 
 function centerMapToCurrentLocation(map) {
   map.setCenter(currentLocation);
-  map.setZoom(placeZoom);
+  map.setZoom(PLACE_ZOOM);
 }
 
 function saveCurrentlocation(position, map) {

@@ -102,6 +102,6 @@ function centerMapAroundPlace(map, place) {
     map.fitBounds(place.geometry.viewport);
   } else {
     map.setCenter(place.geometry.location);
-    map.setZoom(placeZoom);
+    map.setZoom(PLACE_ZOOM);
   }
 }
