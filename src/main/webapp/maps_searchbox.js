@@ -9,9 +9,9 @@
  * supports only submitting queries for one of the suggetsions.
  * This makes the searching process quite uncomportable, since the user can't press enter
  * if they didn't write the exact name of the place, they had a typo, etc.
- * To avoid this issue, I extended the autocomplete widget's eventlistener
+ * To avoid this issue, the autocomplete widget's eventlistener was extended
  * so that if the user didn't choose one of the suggestions explicitly,
- * then I programatically choose the first place suggestion when the query is submitted.
+ * then the first place suggestion is chosen programatically when the query is submitted.
  */
 
 class SearchBox {

@@ -12,26 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.google.sps.user.repository;
+package com.google.sps.data;
 
-import com.google.sps.user.User;
-import org.jetbrains.annotations.Nullable;
+/** Specifies the possible form types and their form handler servlets. */
+public enum FormType {
+  PORTFOLIO_FORM("/user-data-servlet");
 
-/**
- * Handles the storage of User data.
- */
-public interface UserRepository {
-  /**
-   * Saves the user's data in the database.
-   */
-  void saveUser(User user);
+  private final String formHandlerServletName;
 
-  /**
-   * Returns the user with the given id data from the database.
-   * If no user exists with the given id, it returns null.
-   */
-  @Nullable
-  User getUser(String id);
+  FormType(String formHandlerServletName) {
+    this.formHandlerServletName = formHandlerServletName;
+  }
 
-  boolean existingUser(String id);
+  public String getFormHandlerServletName() {
+    return formHandlerServletName;
+  }
 }

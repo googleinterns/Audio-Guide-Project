@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <meta charset = "UTF-8">
     <title>My Portfolio</title>
-    <script src = "userVerification.js"></script>
-  </head>
-  <body onload = "authenticateUser()">
+    <script src = "user.js"></script>
+    <script src = "portfolioForm.js"></script>
+    <script src = "setupIndex.js"></script>
+    <link rel = "stylesheet" href = "style.css">
+</head>
+<body onload="setUpUserAndForm()">
     <header> 
         <ul>
             <li><a href = "index.html">Home</a></li>
@@ -13,14 +16,16 @@
             <li><a href = "createPlaceGuide.html">Create PlaceGuide</a></li>
         </ul>
     </header>
-
-    <div id = "createProfile">
-    <form action = "/user-data" method = "POST">
+  <div id="createProfile">
+    <form method = "POST" id = "portfolioForm" enctype = "multipart/form-data">
         <label for = "name">Name:</label><br>
         <input type = "text" name = "name" id = "name"><br>
 
-        <label for = "imgUrl">Upload image</label>
-        <input type = "file" name = "imgUrl" id = "imgUrl">
+        <label for = "imgKey">Upload image</label>
+        <input type = "file" name = "imgKey" id = "imgKey">
+
+        <label for = "deleteImg"></label>
+        <input type = "checkbox" name = "deleteImg" value = "delete" id = "deleteImg">Delete previous image
 
         <label for = "selfIntroduction">Self Introduction:</label><br>
         <textarea name = "selfIntroduction" rows = "4" cols = "50" id = "selfIntroduction"></textarea>
@@ -33,8 +38,7 @@
 
         <input type = "submit" value = "Submit">
     </form>
-
     <button id = "logout">Logout</button>
-    </div>
-  </body>
+  </div>
+</body>
 </html>

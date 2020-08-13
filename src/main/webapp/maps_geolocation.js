@@ -24,7 +24,7 @@ class Geolocator {
 
     constructor(map){
         this._map = map;
-        this._trackUser = false;
+        this._trackLocation = false;
         this._watchPositionId = -1;
         this._currentLocation = new Place(0, 0, Geolocator.MY_LOCATION_TITLE, null, PlaceType.CURRENT_LOCATION, false);
         this._currentLocation.visible = false;
@@ -33,7 +33,6 @@ class Geolocator {
             this.createControlDiv(Geolocator.ENABLE_GEOLOCATION_TITLE, 
                     Geolocator.DISABLED_GEOLOCATION_IMG_SRC, Geolocator.GEOLOCATION_IMG_ID);
         this._map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(this._geolocationControlDiv);
-        //this._geolocationControlDiv.index = 1;
         this._myLocationControlDiv =
             this.createControlDiv(Geolocator.GO_TO_MY_LOCATION_TITLE,
                     "./img/my_location.svg", Geolocator.GO_TO_MY_LOCATION_IMG_ID);
@@ -48,28 +47,34 @@ class Geolocator {
     /**
     * Adds a button to the map which turns on/off geolocation.
     * Geolocation can be battery-consuming, and the user should be able
-    * to tund it off.
+    * to turn it off.
     * Remark that the audio-guide creation process doesn't require the user's location at all.
     */
     enableGeolocationControl() {
-        this._trackUser = false;
         this._geolocationControlDiv.addEventListener("click",
-                event => this.geolocationControlEvent());
+                event => this.onGeolocationControlEvent());
     }
 
     /**
     * When the geolocation button gets clicked, its status is toggled.
-    * If geolocation is on, then each time the user's loctaion changes,
-    * and event will be triggered,
-    * and the currentLocationMarker and currentlocation will be reset
+    * If geolocation is on, then each time the user's location changes,
+    * an event will be triggered,
+    * and the currentLocationMarker and currentlocation will be reset.
     */
-    geolocationControlEvent() {
+    onGeolocationControlEvent() {
+        if (!this._trackLocation) {
+            this.enableLocationTracking();
+        } else {
+            this.disableLocationTracking();
+        }
+    }
+
+    enableLocationTracking(img) {
+        this._trackLocation = true;
         var img = document.getElementById(Geolocator.GEOLOCATION_IMG_ID);
-        this._trackUser = !this._trackUser;
-        if (this._trackUser) {
-            this._geolocationControlDiv.title = Geolocator.DISABLE_GEOLOCATION_TITLE;
-            img.src = Geolocator.ENABLE_GEOLOCATION_IMG_SRC;
-            if (navigator.geolocation) {
+        this._geolocationControlDiv.title = Geolocator.DISABLE_GEOLOCATION_TITLE;
+        img.src = Geolocator.ENABLE_GEOLOCATION_IMG_SRC;
+        if (navigator.geolocation) {
             this._watchPositionId = navigator.geolocation.watchPosition(
                 position => {
                     this._currentLocation.position = Geolocator.convertCurrentLocationToLatLng(position);
@@ -80,24 +85,25 @@ class Geolocator {
                     showError(error);
                 }
             );
-            } else {
-            alert(Geolocator.NO_GEOLOCATION_SUPPORT_MSG);
-            }
         } else {
-            navigator.geolocation.clearWatch(this._watchPositionId);
-            this._currentLocation.visible = false;
-            img.src = Geolocator.DISABLED_GEOLOCATION_IMG_SRC;
-            this._geolocationControlDiv.title = Geolocator.ENABLE_GEOLOCATION_TITLE;
+            alert(Geolocator.NO_GEOLOCATION_SUPPORT_MSG);
         }
+    }
+
+    disableLocationTracking(geolocationControlDiv, img) {
+        this._trackLocation = false;
+        navigator.geolocation.clearWatch(this._watchPositionId);
+        this._currentLocation.visible = false;
+        img.src = Geolocator.DISABLED_GEOLOCATION_IMG_SRC;
+        this._geolocationControlDiv.title = Geolocator.ENABLE_GEOLOCATION_TITLE;
     }
 
     /**
     * Adds a button to the map which lets the user center the map around their current location.
     */
     enableGoToMyLocationControl() {
-        this._trackUser = false;
         this._myLocationControlDiv.addEventListener("click",
-            event => this.goToMyLocationControlEvent());
+            event => this.onGoToMyLocationControlEvent());
     }
 
     /**
@@ -105,8 +111,8 @@ class Geolocator {
     * the maps gets centered around it.
     * Otherwise, a message will be displayed to enable geolocation.
     */
-    goToMyLocationControlEvent() {
-        if (this._trackUser) {
+    onGoToMyLocationControlEvent() {
+        if (this._trackLocation) {
             if (navigator.geolocation) {
                 this._currentLocation.centerMapAround(this._map);
             } else {

@@ -14,66 +14,78 @@
 
 package com.google.sps;
 
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import com.google.appengine.api.blobstore.BlobInfo;
+import com.google.appengine.api.blobstore.BlobInfoFactory;
+import com.google.appengine.api.blobstore.BlobKey;
+import com.google.appengine.api.blobstore.BlobstoreService;
 import com.google.appengine.api.datastore.*;
+import com.google.appengine.tools.development.testing.LocalBlobstoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.google.gson.Gson;
-import com.google.sps.servlets.UserServlet;
+import com.google.sps.servlets.UserDataServlet;
 import com.google.sps.user.User;
 import com.google.sps.user.repository.impl.DatastoreUserRepository;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.*;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.util.HashMap;
-import java.util.Map;
-
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 @RunWith(JUnit4.class)
-public final class UserServletTest {
+public final class UserDataServletTest {
   private static final String ID = "userid";
   private static final String EMAIL = "user@gmail.com";
   private static final String NAME = "username";
   private static final String SELF_INTRODUCTION = "I am the user";
-  private static final String IMG_URL = "/img.com";
+  private static final String IMG_KEY = "/img.com";
 
   private final User toSaveUser =
-          new User.Builder(ID, EMAIL).setName(NAME).setPublicPortfolio(true).addSelfIntroduction(SELF_INTRODUCTION).addImgUrl(IMG_URL).build();
+      new User.Builder(ID, EMAIL)
+          .setName(NAME)
+          .setPublicPortfolio(true)
+          .addSelfIntroduction(SELF_INTRODUCTION)
+          .addImgKey(IMG_KEY)
+          .build();
   private User toGetUser;
 
-  private UserServlet userServlet;
+  private UserDataServlet userDataServlet;
   private Map<String, Object> attributeToValue = new HashMap<>();
   private LocalServiceTestHelper helper;
 
   private HttpServletRequest request;
   private HttpServletResponse response;
+  private BlobstoreService blobstoreService;
+  private BlobInfoFactory blobInfoFactory;
 
   @Before
   public void setup() {
     // Set the userdata that the Userservice will return.
     attributeToValue.put("com.google.appengine.api.users.UserService.user_id_key", (Object) ID);
-    helper = new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig())
+    helper =
+        new LocalServiceTestHelper(
+                new LocalDatastoreServiceTestConfig(), new LocalBlobstoreServiceTestConfig())
             .setEnvIsLoggedIn(true)
             .setEnvAuthDomain("localhost")
             .setEnvEmail(EMAIL)
             .setEnvAttributes(attributeToValue);
     helper.setUp();
 
-    userServlet = new UserServlet();
-
     request = mock(HttpServletRequest.class);
     response = mock(HttpServletResponse.class);
+    blobstoreService = mock(BlobstoreService.class);
+    blobInfoFactory = mock(BlobInfoFactory.class);
   }
 
   @After
@@ -83,27 +95,40 @@ public final class UserServletTest {
 
   @Test
   public void doPost() throws IOException, ServletException {
-    when(request.getParameter(UserServlet.NAME_INPUT)).thenReturn(NAME);
-    when(request.getParameter(UserServlet.SELF_INTRODUCTION_INPUT)).thenReturn(SELF_INTRODUCTION);
-    when(request.getParameter(UserServlet.PUBLIC_PORTFOLIO_INPUT)).thenReturn("private");
-
+    // Mock request and response.
+    when(request.getParameter(UserDataServlet.NAME_INPUT)).thenReturn(NAME);
+    when(request.getParameter(UserDataServlet.SELF_INTRODUCTION_INPUT))
+        .thenReturn(SELF_INTRODUCTION);
+    when(request.getParameter(UserDataServlet.PUBLIC_PORTFOLIO_INPUT)).thenReturn("private");
     StringWriter sw = new StringWriter();
     PrintWriter pw = new PrintWriter(sw);
-
     when(response.getWriter()).thenReturn(pw);
 
-    // Save the currenly logged in user's data
-    userServlet.doPost(request, response);
+    // Mock blobstoreService and blobInfoFactory.
+    Map<String, List<BlobKey>> blobs = new HashMap<>();
+    BlobKey blobKey = new BlobKey(IMG_KEY);
+    blobs.put(UserDataServlet.IMG_KEY_INPUT, Arrays.asList(blobKey));
+    when(blobstoreService.getUploads(request)).thenReturn(blobs);
+    BlobInfo blobInfo = new BlobInfo(blobKey, "img", new Date(), "file.img", 1);
+    when(blobInfoFactory.loadBlobInfo(blobKey)).thenReturn(blobInfo);
 
-    // Get the currenly logged in user's previously saved data
+    // Save the currenly logged in user's data.
+    userDataServlet = new UserDataServlet(blobstoreService, blobInfoFactory);
+    userDataServlet.doPost(request, response);
+
+    // Get the currenly logged in user's previously saved data.
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     Key userKey = KeyFactory.createKey(DatastoreUserRepository.ENTITY_KIND, ID);
     try {
       Entity userEntity = datastore.get(userKey);
       assertEquals(NAME, userEntity.getProperty(DatastoreUserRepository.NAME_PROPERTY));
       assertEquals(EMAIL, userEntity.getProperty(DatastoreUserRepository.EMAIL_PROPERTY));
-      assertEquals(SELF_INTRODUCTION, userEntity.getProperty(DatastoreUserRepository.SELF_INTRODUCTION_PROPERTY));
-      assertEquals(false, userEntity.getProperty(DatastoreUserRepository.PUBLIC_PORTFOLIO_PROPERTY));
+      assertEquals(
+          SELF_INTRODUCTION,
+          userEntity.getProperty(DatastoreUserRepository.SELF_INTRODUCTION_PROPERTY));
+      assertEquals(
+          false, userEntity.getProperty(DatastoreUserRepository.PUBLIC_PORTFOLIO_PROPERTY));
+      assertEquals(IMG_KEY, userEntity.getProperty(DatastoreUserRepository.IMG_KEY_PROPERTY));
     } catch (EntityNotFoundException e) {
       fail("Entity not found: " + e);
     }
@@ -115,22 +140,24 @@ public final class UserServletTest {
     Entity userEntity = new Entity(DatastoreUserRepository.ENTITY_KIND, toSaveUser.getId());
     userEntity.setProperty(DatastoreUserRepository.NAME_PROPERTY, toSaveUser.getName());
     userEntity.setProperty(DatastoreUserRepository.EMAIL_PROPERTY, toSaveUser.getEmail());
-    userEntity.setProperty(DatastoreUserRepository.PUBLIC_PORTFOLIO_PROPERTY, toSaveUser.portfolioIsPublic());
-    userEntity.setProperty(DatastoreUserRepository.SELF_INTRODUCTION_PROPERTY, toSaveUser.getSelfIntroduction());
-    userEntity.setProperty(DatastoreUserRepository.IMG_URL_PROPERTY, toSaveUser.getImgUrl());
+    userEntity.setProperty(
+        DatastoreUserRepository.PUBLIC_PORTFOLIO_PROPERTY, toSaveUser.portfolioIsPublic());
+    userEntity.setProperty(
+        DatastoreUserRepository.SELF_INTRODUCTION_PROPERTY, toSaveUser.getSelfIntroduction());
+    userEntity.setProperty(DatastoreUserRepository.IMG_KEY_PROPERTY, toSaveUser.getImgKey());
 
     // Save entity to datastore.
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(userEntity);
 
-    // Get User corresponding to entity from servlet
+    // Mock response.
     StringWriter sw = new StringWriter();
     PrintWriter pw = new PrintWriter(sw);
-
     when(response.getWriter()).thenReturn(pw);
 
     // Get the currenly logged in user's previously saved data
-    userServlet.doGet(request, response);
+    userDataServlet = new UserDataServlet();
+    userDataServlet.doGet(request, response);
 
     pw.flush();
     Gson gson = new Gson();
@@ -140,18 +167,20 @@ public final class UserServletTest {
     assertEquals(NAME, resultUser.getName());
     assertTrue(resultUser.portfolioIsPublic());
     assertEquals(SELF_INTRODUCTION, resultUser.getSelfIntroduction());
+    assertEquals(IMG_KEY, resultUser.getImgKey());
   }
 
   @Test
   public void doGet_inexistentUser_returnsNull() throws IOException, ServletException {
+    // Mock response.
     StringWriter sw = new StringWriter();
     PrintWriter pw = new PrintWriter(sw);
-
     when(response.getWriter()).thenReturn(pw);
 
     // Try to get the currenly logged in user's data.
     // It is not saved.
-    userServlet.doGet(request, response);
+    userDataServlet = new UserDataServlet();
+    userDataServlet.doGet(request, response);
 
     pw.flush();
     Gson gson = new Gson();

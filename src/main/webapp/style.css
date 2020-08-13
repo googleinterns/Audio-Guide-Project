@@ -49,3 +49,8 @@ html, body{
   text-overflow: ellipsis;
   padding: 0 1em;
 }
+
+form img {
+    max-width: 100px;
+    max-height: 100px;
+}
