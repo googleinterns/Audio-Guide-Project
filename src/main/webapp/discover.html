@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset = "UTF-8">
+    <title>Discover</title>
+    <script src = "maps_key.js"></script>
+    <script id = "maps-api" async defer></script>
+    <link rel = "stylesheet" href = "style.css">
+</head>
+<body onload = "setApiKeyAndMapsCallback()">
+    <header> 
+        <ul>
+            <li><a href = "index.html">Home</a></li>
+            <li><a href = "discover.html">Discover</a><li>
+        </ul>
+    </header>
+
+    <input id = "search-box" type = "text" placeholder = "Search for a new place!"/>
+    <div id = "map"></div>
+
+    <script src = "maps_setup.js"></script>
+    <script src = "maps_geolocation.js"></script>
+    <script src = "maps_searchbox.js"></script>
+</body>
+</html>

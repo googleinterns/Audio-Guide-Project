@@ -1,3 +1,55 @@
+*{
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+html, body{
+    height: 100%;
+}
+
+#map {
+    height: 90%; 
+    margin: 0 auto; 
+}
+
+.control{
+    width: 40px;
+    height: 40px;
+    background-color: #fff;
+    border: 2px solid #fff;
+    border-radius: 3px;
+    box-shadow: 0 2px 6px rgba(0,0,0,.3);
+    cursor: pointer;
+    margin: 10px;
+    text-align: center;
+}
+
+.control img{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    height: 25px;
+    opacity: 80%;
+}
+
+#map .control img:hover{
+    opacity: 100%;
+}
+
+#search-box {
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
+  font-size: 15px;
+  border-radius: 3px;
+  border: 0;
+  margin-top: 10px;
+  width: 270px;
+  height: 40px;
+  text-overflow: ellipsis;
+  padding: 0 1em;
+}
+
 form img {
     max-width: 100px;
     max-height: 100px;
