@@ -52,12 +52,12 @@
             var searchResult = new Place(0, 0, "Picked Location", null, PlaceType.SEARCH_RESULT, true);
             searchResult.draggable = true;
             searchResult.map = map;
-            searchResult.visible = false;
 
             var searchBox = new SearchBox(map, searchResult, "search-box");
             searchBox.init();
 
-            displayPublicPlaceGuides(map);
+            var userId = "test";
+            displayPlaceGuidesOfUser(map, userId);
             enableChoosingPlaceByClick(map, searchResult);
         }
     </script>
