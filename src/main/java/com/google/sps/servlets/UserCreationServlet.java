@@ -21,67 +21,44 @@ import com.google.sps.data.RepositoryType;
 import com.google.sps.user.User;
 import com.google.sps.user.repository.UserRepository;
 import com.google.sps.user.repository.UserRepositoryFactory;
+import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 /**
- * This servlet handles users' data.
+ * This servlet is used for saving the user in the database the first time when they access our website. 
+ * This servlet checks if the currently logged in user exists in the database and saves a new user
+ * in the database.
  */
-@WebServlet("/user-data")
-public class UserServlet extends HttpServlet {
-  public static final String NAME_INPUT = "name";
-  public static final String PUBLIC_PORTFOLIO_INPUT = "publicPortfolio";
-  public static final String PUBLIC_PORTFOLIO_INPUT_PUBLIC_VALUE = "public";
-  public static final String SELF_INTRODUCTION_INPUT = "selfIntroduction";
-  public static final String IMG_URL_INPUT = "imgUrl";
-
+@WebServlet("/user-creation-servlet")
+public class UserCreationServlet extends HttpServlet {
   private final UserRepository userRepository;
   private final UserService userService;
 
-  public UserServlet() {
+  public UserCreationServlet() {
     userRepository = UserRepositoryFactory.getUserRepository(RepositoryType.DATASTORE);
     userService = UserServiceFactory.getUserService();
   }
 
-  /**
-   * Saves the recently submitted userdata(updates it if the user already has some data saved).
+  /** 
+   * Saves the new user's data(id and email only, provided by the UserService) to the database, 
+   * if they are not saved already. 
    */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    User user = getUserFromRequest(request);
-    userRepository.saveUser(user);
-    response.sendRedirect("/index.html");
+    boolean existingUser = userRepository.existingUser(userService.getCurrentUser().getUserId());
+    if (!existingUser) {
+        User user = getLoggedInUser();
+        userRepository.saveUser(user);
+    }
   }
 
-  /**
-   * Returns the data of the user who is currently logged in.
-   */
-  @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    User user = userRepository.getUser(userService.getCurrentUser().getUserId());
-    response.setContentType("application/json;");
-    response.getWriter().println(convertToJsonUsingGson(user));
-  }
-
-  private User getUserFromRequest(HttpServletRequest request) {
+  private User getLoggedInUser() {
     String id = userService.getCurrentUser().getUserId();
     String email = userService.getCurrentUser().getEmail();
     User.Builder newUserBuilder = new User.Builder(id, email);
-    String name = request.getParameter(NAME_INPUT);
-    if (!name.isEmpty()) {
-      newUserBuilder.setName(name);
-    }
-    String selfIntroduction = request.getParameter(SELF_INTRODUCTION_INPUT);
-    if (!selfIntroduction.isEmpty()) {
-      newUserBuilder.addSelfIntroduction(selfIntroduction);
-    }
-    String publicPortfolioStringValue = request.getParameter(PUBLIC_PORTFOLIO_INPUT);
-    if (publicPortfolioStringValue.equals(PUBLIC_PORTFOLIO_INPUT_PUBLIC_VALUE)) {
-      newUserBuilder.setPublicPortfolio(true); // False by default.
-    }
     return newUserBuilder.build();
   }
 
@@ -91,4 +68,3 @@ public class UserServlet extends HttpServlet {
     return json;
   }
 }
-

@@ -1,32 +1,38 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <meta charset = "UTF-8">
     <title>My Portfolio</title>
-    <script src = "userVerification.js"></script>
-  </head>
-  <body onload = "authenticateUser()">
-      <div id = "createProfile">
-        <form action = "/user-data" method = "POST">
-            <label for = "name">Name:</label><br>
-            <input type = "text" name = "name" id = "name"><br>
+    <script src = "user.js"></script>
+    <script src = "portfolioForm.js"></script>
+    <script src = "setupIndex.js"></script>
+    <link rel = "stylesheet" href = "style.css">
+</head>
+<body onload="setUpUserAndForm()">
+<div id="createProfile">
+    <form method = "POST" id = "portfolioForm" enctype = "multipart/form-data">
+        <label for = "name">Name:</label><br>
+        <input type = "text" name = "name" id = "name"><br>
 
-            <label for = "imgUrl">Upload image</label>
-            <input type = "file" name = "imgUrl" id = "imgUrl">
+        <label for = "imgKey">Upload image</label>
+        <input type = "file" name = "imgKey" id = "imgKey">
 
-            <label for = "selfIntroduction">Self Introduction:</label><br>
-            <textarea name = "selfIntroduction" rows = "4" cols = "50" id = "selfIntroduction"></textarea>
+        <label for = "deleteImg"></label>
+        <input type = "checkbox" name = "deleteImg" value = "delete" id = "deleteImg">Delete previous image
 
-            <label for = "publicPortfolio">Account Status:</label>
-            <select name = "publicPortfolio" id = "publicPortfolio">
-                <option value = "public">public</option>
-                <option value = "private">private</option>
-            </select>
+        <label for = "selfIntroduction">Self Introduction:</label><br>
+        <textarea name = "selfIntroduction" rows = "4" cols = "50" id = "selfIntroduction"></textarea>
 
-            <input type = "submit" value = "Submit">
-        </form>
+        <label for = "publicPortfolio">Account Status:</label>
+        <select name = "publicPortfolio" id = "publicPortfolio">
+            <option value = "public">public</option>
+            <option value = "private">private</option>
+        </select>
 
-        <button id = "logout">Logout</button>
-      </div>
-  </body>
+        <input type = "submit" value = "Submit">
+    </form>
+
+    <button id = "logout">Logout</button>
+</div>
+</body>
 </html>
