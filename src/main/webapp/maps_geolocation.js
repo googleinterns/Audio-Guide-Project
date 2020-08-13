@@ -38,7 +38,7 @@ function addEnableGeolocationControl(map) {
   geolocationControlDiv.index = 1;
   map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(geolocationControlDiv);
   geolocationControlDiv.addEventListener("click",
-          event => onGeolocationControlEvent(map, geolocationControlDiv));
+      event => onGeolocationControlEvent(map, geolocationControlDiv));
 }
 
 /**
@@ -57,28 +57,28 @@ function onGeolocationControlEvent(map, geolocationControlDiv) {
 }
 
 function enableLocationTracking(map, geolocationControlDiv, img) {
-    trackLocation = true;
-    geolocationControlDiv.title = DISABLE_GEOLOCATION_TITLE;
-    img.src = ENABLE_GEOLOCATION_IMG_SRC;
-    if (navigator.geolocation) {
-      watchPositionId = navigator.geolocation.watchPosition(
-          position => {
-            saveCurrentlocation(position, map);
-            showCurrentLocationMarker(map)
-          },
-          error => watchPositionError(error));
-    } else {
-      trackUser = false;
-      alert(NO_GEOLOCATION_SUPPORT_MSG);
-    }
+  trackLocation = true;
+  geolocationControlDiv.title = DISABLE_GEOLOCATION_TITLE;
+  img.src = ENABLE_GEOLOCATION_IMG_SRC;
+  if (navigator.geolocation) {
+    watchPositionId = navigator.geolocation.watchPosition(
+        position => {
+          saveCurrentlocation(position, map);
+          showCurrentLocationMarker(map)
+        },
+        error => watchPositionError(error));
+  } else {
+    trackUser = false;
+    alert(NO_GEOLOCATION_SUPPORT_MSG);
+  }
 }
 
 function disableLocationTracking(geolocationControlDiv, img) {
-    trackLocation = false;
-    navigator.geolocation.clearWatch(watchPositionId);
-    removeCurrentLocationMarker();
-    img.src = DISABLED_GEOLOCATION_IMG_SRC;
-    geolocationControlDiv.title = ENABLE_GEOLOCATION_TITLE;
+  trackLocation = false;
+  navigator.geolocation.clearWatch(watchPositionId);
+  removeCurrentLocationMarker();
+  img.src = DISABLED_GEOLOCATION_IMG_SRC;
+  geolocationControlDiv.title = ENABLE_GEOLOCATION_TITLE;
 }
 
 /**
@@ -87,7 +87,7 @@ function disableLocationTracking(geolocationControlDiv, img) {
 function addGoToMyLocationControl(map) {
   const myLocationControlDiv =
       createControlDiv(GO_TO_MY_LOCATION_TITLE,
-              "./img/my_location.svg", GO_TO_MY_LOCATION_IMG_ID);
+          "./img/my_location.svg", GO_TO_MY_LOCATION_IMG_ID);
   myLocationControlDiv.index = 1;
   map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(myLocationControlDiv);
   trackLocation = false;

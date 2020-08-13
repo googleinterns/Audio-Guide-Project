@@ -36,7 +36,7 @@ function initAutocomplete(map) {
  * Gets the place searched by the user if possible,
  * centers the map around it and adds a marker for it.
  * If the user didn't choose an existing place, display
- * the best suggestion instead. 
+ * the best suggestion instead.
  */
 function showNewSearchResult(map, autocomplete, input) {
   searchedPlaceMarker.setVisible(false);
