@@ -105,8 +105,9 @@ class Place {
 
     set draggable(draggability) {
         this._marker.setDraggable(draggability);
+        var thisPlace = this;
         this._marker.addListener('drag', function() {
-            this.position = this.getPosition();
+            thisPlace.position = this.getPosition();
         });
     }
 
