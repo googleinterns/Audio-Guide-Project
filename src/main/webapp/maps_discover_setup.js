@@ -26,7 +26,11 @@ function createMap() {
       document.getElementById('map'), myMapOptions);
   addGoToMyLocationControl(map);
   addEnableGeolocationControl(map);
-  initAutocomplete(map);
-  displayPublicPlaceGuides(map);
-  enableChoosingPlaceByClick(map);
+
+  var searchResult = new Place(0, 0, "Picked Location", null, PlaceType.SEARCH_RESULT, true);
+  searchResult.draggable = true;
+  searchResult.map = map;
+  initAutocomplete(map, searchResult);
+  // displayPublicPlaceGuides(map);
+  // enableChoosingPlaceByClick(map);
 }

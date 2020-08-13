@@ -1,7 +1,7 @@
 const placeZoom = 14;
 
 // Get icons from the charts API
-function getMarkerIcon(color) {
+function getColoredMarkerIcon(color) {
     var iconBase = 'https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|';
     var markerIcon = {
         url: iconBase + color,
@@ -15,19 +15,26 @@ function getMarkerIcon(color) {
 var PlaceType = {
     PUBLIC: {
         // Orange icon
+        icon: null,
         iconColor: "de8a0b", 
     },
     PRIVATE: {
         // Yellow icon
+        icon: null,
         iconColor: "f7ff05",
     },
     SEARCH_RESULT: {
         // Green icon
+        icon: null,
         iconColor: "82d613",
     },
     SAVED_LOCATION: {
         // Blue icon
+        icon: null,
         iconColor: "1d2480",
+    },
+    CURRENT_LOCATION: {
+        icon: "./img/blue_dot.png",
     }
 };
 
@@ -35,7 +42,7 @@ class Place {
     // Either positionLat, positionLng and name, or mapsPlace will be specified.
     // The others will be null.
     // placeType is a value from PlaceType
-    constructor(positionLat, positionLng, name, mapsPlace, placeType) {
+    constructor(positionLat, positionLng, name, mapsPlace, placeType, hasInfoWindow) {
         this._mapsPlace = mapsPlace;
         if (this._mapsPlace != null) {
             this._position = this._mapsPlace.geometry.location;
@@ -45,28 +52,37 @@ class Place {
             this._name = name;
         }
         this._placeType = placeType;
+        this._hasInfoWindow = hasInfoWindow;
         this.setupRepresentationOnMap();
     }
 
     setupRepresentationOnMap() {
         this.setupMarker();
-        this.setupInfoWindow();
-        this._marker.addListener('click', () => {
-            if (this._infoWindowClosed) {
-                this._infoWindow.open(map, this._marker);
-            }
-            else {
-                this._infoWindow.close();
-            }
-            this._infoWindowClosed = !this._infoWindowClosed;
-        });
+        if(this._hasInfoWindow) {
+            this.setupInfoWindow();
+            this._marker.addListener('click', () => {
+                if (this._infoWindowClosed) {
+                    this._infoWindow.open(map, this._marker);
+                }
+                else {
+                    this._infoWindow.close();
+                }
+                this._infoWindowClosed = !this._infoWindowClosed;
+            });
+        }
     }
 
     setupMarker() {
+        var markerIcon;
+        if (this._placeType.icon != null) {
+            markerIcon = this._placeType.icon;
+        } else {
+            markerIcon = getColoredMarkerIcon(this._placeType.iconColor);
+        }
         this._marker = new google.maps.Marker( {
             position: this._position, 
             title: this._name, 
-            icon: getMarkerIcon(this._placeType.iconColor)
+            icon: markerIcon,
         });
     }
 
@@ -83,8 +99,16 @@ class Place {
         return content;
     }
 
-    addMarkerToMap(map) {
-        this._marker.setMap(map);
+    set visible(visibility) {
+        this._marker.setVisible(visibility);
+    }
+
+    set draggable(draggability) {
+        this._marker.setDraggable(draggability);
+    }
+
+    set map(newMap) {
+        this._marker.setMap(newMap);
     }
 
     removeMarkerFromMap() {
@@ -96,12 +120,32 @@ class Place {
     }
 
     set position(pos) {
-        this._position = pos;
+        if (this._place != null ) {
+            throw "You can't change the position of a Place associated to a place from Maps!";
+        } else {
+            this._position = pos;
+            this._marker.setPosition(this._position);
+        }
+    }
+
+    get place() {
+        return this._mapsPlace;
+    }
+
+    set place(newPlace) {
+        this._mapsPlace = newPlace;
+        this._position = this._mapsPlace.geometry.location;
+        this._name = this._mapsPlace.name;
+        this._marker.setPosition(this._position);
+    }
+
+    detachFromPlace() {
+        this._mapsPlace = null;
     }
 
     centerMapAround(map) {
         if (this._mapsPlace != null && this._mapsPlace.geometry.viewPort) {
-            map.fitBounds(mapsPlace.geometry.viewport);
+            map.fitBounds(this._mapsPlace.geometry.viewport);
         } else {
             map.setCenter(this._position);
             map.setZoom(placeZoom);
@@ -127,10 +171,5 @@ class PlaceGuide extends Place {
         "<h4> Created by: " + this._creatorName + "</h4>" + 
         "<p>" + this._description + "</p>";
         return content;
-    }
-
-    set position(pos) {
-        super.position = pos;
-        this._marker.setPosition(this._position);
     }
 }

@@ -5,7 +5,7 @@
  * the geolocation feature, which displays the user's current location continuously.
  */
 
-var currentLocationMarker = null;
+// var currentLocationMarker = null;
 var trackUser = false;
 var watchPositionId;
 var currentLocation;
@@ -33,6 +33,9 @@ const GO_TO_MY_LOCATION_TITLE = "Go to my location";
  * Remark that the audio-guide creation process doesn't require the user's location at all.
  */
 function addEnableGeolocationControl(map) {
+  currentLocation = new Place(0, 0, "My current location", null, PlaceType.CURRENT_LOCATION, false);
+  currentLocation.visible = false;
+  currentLocation.map = map;
   const geolocationControlDiv =
       createControlDiv(ENABLE_GEOLOCATION_TITLE, DISABLED_GEOLOCATION_IMG_SRC, GEOLOCATION_IMG_ID);
   geolocationControlDiv.index = 1;
@@ -57,16 +60,20 @@ function geolocationControlEvent(map, geolocationControlDiv) {
     if (navigator.geolocation) {
       watchPositionId = navigator.geolocation.watchPosition(
           position => {
-            saveCurrentlocation(position, map);
-            showCurrentLocationMarker(map)
+              currentLocation.position = convertCurrentLocationToLatLng(position);
+              currentLocation.visible = true;
           },
-          error => watchPositionError(error));
+          error => {
+              currentLocation.visible = false;
+              showError(error);
+          }
+      );
     } else {
       alert(NO_GEOLOCATION_SUPPORT_MSG);
     }
   } else {
     navigator.geolocation.clearWatch(watchPositionId);
-    removeCurrentLocationMarker();
+    currentLocation.visible = false;
     img.src = DISABLED_GEOLOCATION_IMG_SRC;
     geolocationControlDiv.title = ENABLE_GEOLOCATION_TITLE;
   }
@@ -94,7 +101,7 @@ function addGoToMyLocationControl(map) {
 function goToMyLocationControlEvent(map) {
   if (trackUser) {
     if (navigator.geolocation) {
-      centerMapToCurrentLocation(map);
+      currentLocation.centerMapAround(map);
     } else {
       alert(NO_GEOLOCATION_SUPPORT_MSG);
     }
@@ -103,44 +110,12 @@ function goToMyLocationControlEvent(map) {
   }
 }
 
-function centerMapToCurrentLocation(map) {
-  map.setCenter(currentLocation);
-  map.setZoom(placeZoom);
-}
-
-function saveCurrentlocation(position, map) {
-  currentLocation = {
-    lat: position.coords.latitude,
-    lng: position.coords.longitude
+function convertCurrentLocationToLatLng(location) {
+  locationLatLng = {
+    lat: location.coords.latitude,
+    lng: location.coords.longitude
   };
-}
-
-/**
- * This function is called when an error occurs in watchPosition.
- * It displays a message suggetsing the cause of the error and
- * stops displayin the user's location.
- */
-function watchPositionError(error) {
-  showError(error);
-  removeCurrentLocationMarker();
-}
-
-function showCurrentLocationMarker(map) {
-  if (currentLocationMarker === null) {
-    currentLocationMarker = new google.maps.Marker({
-      map: map,
-      position: currentLocation,
-      icon: "./img/blue_dot.png"
-    });
-  }
-  currentLocationMarker.setMap(map);
-  currentLocationMarker.setPosition(currentLocation);
-}
-
-function removeCurrentLocationMarker() {
-  if (currentLocationMarker != null) {
-    currentLocationMarker.setMap(null);
-  }
+  return locationLatLng;
 }
 
 /** Displays a message corresponding to the error occured in watchposition */

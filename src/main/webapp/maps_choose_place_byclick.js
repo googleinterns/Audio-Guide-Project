@@ -16,6 +16,6 @@ function enableChoosingPlaceByClick(map) {
         }
     });
     chosenPlaceMarker.addListener('drag', function() {
-        chosenPlaceMarker.setTitle(clickedPlaceMarker.getPosition().toString());
+        chosenPlaceMarker.setTitle(chosenPlaceMarker.getPosition().toString());
     });
 }
