@@ -24,7 +24,6 @@
     <script src = "maps_place.js"></script>
     <script src = "maps_show_places.js"></script>
     <script src = "maps_choose_place_byclick.js"></script>
-    <script src = "maps_geocoding.js"></script>
     <script src="https://unpkg.com/@google/markerclustererplus@4.0.1/dist/markerclustererplus.min.js"></script>
     <script> 
         /** This function initialises the map and adds some functionalities to it:
@@ -45,20 +44,21 @@
             const map = new google.maps.Map(
                 document.getElementById('map'), myMapOptions);
 
-            // Geolocation functionality
+            // Geolocation functionality.
             var geolocator = new Geolocator(map);
             geolocator.init();
 
+            // Pick location functionality.
             var searchResult = new Place(0, 0, "Picked Location", null, PlaceType.SEARCH_RESULT, true);
             searchResult.draggable = true;
             searchResult.map = map;
-
             var searchBox = new SearchBox(map, searchResult, "search-box");
             searchBox.init();
-
-            var userId = "test";
-            displayPlaceGuidesOfUser(map, userId);
             enableChoosingPlaceByClick(map, searchResult);
+
+            // Display user's place guides functionality.
+            var userId = "test";
+            PlaceDisplayer.displayPlaceGuidesOfUser(map, userId);
         }
     </script>
 </body>

@@ -147,10 +147,8 @@ class Place {
 
     centerMapAround(map) {
         if (this._mapsPlace != null && this._mapsPlace.geometry.viewport) {
-            console.log("centered using viewport");
             map.fitBounds(this._mapsPlace.geometry.viewport);
         } else {
-            console.log("centered using location, because mapsPlace is " + this._mapsPlace + " and viewPort is " + this._mapsPlace.geometry.viewPort);
             map.setCenter(this._position);
             map.setZoom(placeZoom);
         }

@@ -94,6 +94,7 @@ class Geolocator {
         this._trackLocation = false;
         navigator.geolocation.clearWatch(this._watchPositionId);
         this._currentLocation.visible = false;
+        var img = document.getElementById(Geolocator.GEOLOCATION_IMG_ID);
         img.src = Geolocator.DISABLED_GEOLOCATION_IMG_SRC;
         this._geolocationControlDiv.title = Geolocator.ENABLE_GEOLOCATION_TITLE;
     }
