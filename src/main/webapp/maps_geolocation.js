@@ -29,7 +29,7 @@ const GO_TO_MY_LOCATION_TITLE = "Go to my location";
 /**
  * Adds a button to the map which turns on/off geolocation.
  * Geolocation can be battery-consuming, and the user should be able
- * to tund it off.
+ * to turn it off.
  * Remark that the audio-guide creation process doesn't require the user's location at all.
  */
 function addEnableGeolocationControl(map) {
@@ -44,9 +44,9 @@ function addEnableGeolocationControl(map) {
 
 /**
  * When the geolocation button gets clicked, its status is toggled.
- * If geolocation is on, then each time the user's loctaion changes,
- * and event will be triggered,
- * and the currentLocationMarker and currentlocation will be reset
+ * If geolocation is on, then each time the user's location changes,
+ * an event will be triggered,
+ * and the currentLocationMarker and currentlocation will be reset.
  */
 function onGeolocationControlEvent(map, geolocationControlDiv) {
   var img = document.getElementById(GEOLOCATION_IMG_ID);
