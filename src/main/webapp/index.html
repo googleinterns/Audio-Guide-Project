@@ -9,7 +9,13 @@
     <link rel = "stylesheet" href = "style.css">
 </head>
 <body onload="setUpUserAndForm()">
-<div id="createProfile">
+    <header> 
+        <ul>
+            <li><a href = "index.html">Home</a></li>
+            <li><a href = "discover.html">Discover</a><li>
+        </ul>
+    </header>
+  <div id="createProfile">
     <form method = "POST" id = "portfolioForm" enctype = "multipart/form-data">
         <label for = "name">Name:</label><br>
         <input type = "text" name = "name" id = "name"><br>
@@ -31,8 +37,7 @@
 
         <input type = "submit" value = "Submit">
     </form>
-
     <button id = "logout">Logout</button>
-</div>
+  </div>
 </body>
 </html>
