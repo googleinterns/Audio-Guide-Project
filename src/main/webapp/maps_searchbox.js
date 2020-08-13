@@ -14,47 +14,54 @@
  * then I programatically choose the first place suggestion when the query is submitted.
  */
 
-const GEOCODER_FAIL_MSG = "Geocoder failed due to: ";
+class SearchBox {
+    static GEOCODER_FAIL_MSG = "Geocoder failed due to: ";
 
-function initAutocomplete(map, searchResult) {
-  const input = document.getElementById("search-box");
-  var autocomplete = new google.maps.places.Autocomplete(input);
-  map.controls[google.maps.ControlPosition.TOP_CENTER].push(input);
-
-  autocomplete.setFields(['address_components', 'geometry', 'name']);
-  autocomplete.addListener('place_changed',
-      result => setNewSearchResult(map, autocomplete, input, searchResult));
-}
-
-/**
- * Gets the place searched by the user if possible,
- * centers the map around it and adds a marker for it.
- * If the user didn't choose an existing place, display
- * the best suggestion instead. 
- */
-function setNewSearchResult(map, autocomplete, input, searchResult) {
-  var place = autocomplete.getPlace();
-  if (!place.geometry) {
-    // If the user didn't choose a suggestion, but pressed enter,
-    // then "place" may have no geometry.
-    // In this case, search for the "closest" place with geometry and show that.
-    setClosestResult(map, input, autocomplete, searchResult);
-    return;
-  }
-  searchResult.updatePlaceAndCenter(map, place);
-}
-
-/**
- * This function gets the best result(prediction) for the submitted search query
- * and displays it as the new search result.
- */
-function setClosestResult(map, input, autocomplete, searchResult) {
-  var service = new google.maps.places.AutocompleteService();
-  service.getPlacePredictions({input: input.value}, function (predictions, status) {
-    if (status != google.maps.places.PlacesServiceStatus.OK) {
-      alert(status);
-      return;
+    constructor(map, searchResult, elementId) {
+        this._map = map;
+        this._searchResult = searchResult;
+        this._input = document.getElementById(elementId);
+        this._autocomplete = new google.maps.places.Autocomplete(this._input);
+        this._map.controls[google.maps.ControlPosition.TOP_CENTER].push(this._input);
     }
-    searchResult.updatePlaceAndCenterBasedOnId(map, predictions[0].place_id);
-  });
+
+    initAutocomplete() {
+        this._autocomplete.setFields(['address_components', 'geometry', 'name']);
+        this._autocomplete.addListener('place_changed',
+            result => this._setNewSearchResult(map, autocomplete, input, searchResult));
+        }
+    }
+
+    /**
+    * Gets the place searched by the user if possible,
+    * centers the map around it and adds a marker for it.
+    * If the user didn't choose an existing place, display
+    * the best suggestion instead. 
+    */
+    setNewSearchResult(map, autocomplete, input, searchResult) {
+    var place = autocomplete.getPlace();
+    if (!place.geometry) {
+        // If the user didn't choose a suggestion, but pressed enter,
+        // then "place" may have no geometry.
+        // In this case, search for the "closest" place with geometry and show that.
+        setClosestResult(map, input, autocomplete, searchResult);
+        return;
+    }
+    searchResult.updatePlaceAndCenter(map, place);
+    }
+
+    /**
+    * This function gets the best result(prediction) for the submitted search query
+    * and displays it as the new search result.
+    */
+    function setClosestResult(map, input, autocomplete, searchResult) {
+    var service = new google.maps.places.AutocompleteService();
+    service.getPlacePredictions({input: input.value}, function (predictions, status) {
+        if (status != google.maps.places.PlacesServiceStatus.OK) {
+        alert(status);
+        return;
+        }
+        searchResult.updatePlaceAndCenterBasedOnId(map, predictions[0].place_id);
+    });
+    }
 }
