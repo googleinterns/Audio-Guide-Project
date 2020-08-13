@@ -69,7 +69,7 @@ function enableLocationTracking(map, geolocationControlDiv, img) {
           },
           error => watchPositionError(error));
     } else {
-      disableLocationTracking(geolocationControlDiv, img);
+      trackUser = false;
       alert(NO_GEOLOCATION_SUPPORT_MSG);
     }
 }
@@ -106,7 +106,6 @@ function onGoToMyLocationControlEvent(map) {
     if (navigator.geolocation) {
       centerMapToCurrentLocation(map);
     } else {
-      disableLocationTracking(geolocationControlDiv, img);
       alert(NO_GEOLOCATION_SUPPORT_MSG);
     }
   } else {
