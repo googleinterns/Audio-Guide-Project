@@ -53,7 +53,7 @@ function showNewSearchResult(map, autocomplete, input) {
 }
 
 /**
- * This function gets the best result(prediction) for the submitted search query
+ * This function gets the best result prediction for the submitted search query
  * and displays it as the new search result.
  */
 function showClosestResult(map, input, autocomplete) {
