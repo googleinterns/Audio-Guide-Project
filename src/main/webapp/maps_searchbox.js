@@ -41,8 +41,7 @@ function setNewSearchResult(map, autocomplete, input, searchResult) {
     setClosestResult(map, input, autocomplete, searchResult);
     return;
   }
-  searchResult.place = place;
-  searchResult.centerMapAround(map);
+  searchResult.updatePlaceAndCenter(map, place);
 }
 
 /**
@@ -56,27 +55,6 @@ function setClosestResult(map, input, autocomplete, searchResult) {
       alert(status);
       return;
     }
-    setSearchResultBasedOnId(map, searchResult,  predictions[0].place_id);
+    searchResult.updatePlaceAndCenterBasedOnId(map, predictions[0].place_id);
   });
-}
-
-/**
- * This function relies on Geocoder API to get the place
- * corresponding to an id, provided by the Places API,
- * and then display it as the new search result.
- */
-function setSearchResultBasedOnId(map, searchResult, id) {
-  const geocoder = new google.maps.Geocoder();
-  geocoder.geocode({placeId: id}, (results, status) => {
-    if (status !== "OK") {
-      window.alert(GEOCODER_FAIL_MSG + status);
-      return;
-    }
-    updateSearchResult(map, searchResult, results[0]);
-  });
-}
-
-function updateSearchResult(map, searchResult, place) {
-    searchResult.place = place;
-    searchResult.centerMapAround(map);
 }

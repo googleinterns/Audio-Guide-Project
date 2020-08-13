@@ -32,5 +32,5 @@ function createMap() {
   searchResult.map = map;
   initAutocomplete(map, searchResult);
   // displayPublicPlaceGuides(map);
-  // enableChoosingPlaceByClick(map);
+  enableChoosingPlaceByClick(map, searchResult);
 }

@@ -1,3 +1,0 @@
-var chosenPlaceMarker;
-var chosenPlacePosition;
-

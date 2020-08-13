@@ -105,6 +105,9 @@ class Place {
 
     set draggable(draggability) {
         this._marker.setDraggable(draggability);
+        this._marker.addListener('drag', function() {
+            this.position = this.getPosition();
+        });
     }
 
     set map(newMap) {
@@ -121,11 +124,10 @@ class Place {
 
     set position(pos) {
         if (this._place != null ) {
-            throw "You can't change the position of a Place associated to a place from Maps!";
-        } else {
-            this._position = pos;
-            this._marker.setPosition(this._position);
-        }
+            this.detachFromPlace();
+        } 
+        this._position = pos;
+        this._marker.setPosition(this._position);
     }
 
     get place() {
@@ -150,6 +152,27 @@ class Place {
             map.setCenter(this._position);
             map.setZoom(placeZoom);
         }
+    }
+
+    /**
+    * This function relies on Geocoder API to get the place
+    * corresponding to an id, provided by the Places API,
+    * and then display it as the new search result.
+    */
+    updatePlaceAndCenterBasedOnId(map, id) {
+        const geocoder = new google.maps.Geocoder();
+        geocoder.geocode({placeId: id}, (results, status) => {
+            if (status !== "OK") {
+            window.alert(GEOCODER_FAIL_MSG + status);
+            return;
+            }
+            this.updatePlaceAndCenter(map, results[0]);
+        });
+    }
+
+    updatePlaceAndCenter(map, newPlace) {
+        this.place = newPlace;
+        this.centerMapAround(map);
     }
 }
 
