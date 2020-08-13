@@ -52,6 +52,13 @@ function onGeolocationControlEvent(map, geolocationControlDiv) {
   var img = document.getElementById(GEOLOCATION_IMG_ID);
   trackLocation = !trackLocation;
   if (trackLocation) {
+    enableLocationTracking(map, geolocationControlDiv, img);
+  } else {
+    disableLocationTracking(geolocationControlDiv, img);
+  }
+}
+
+function enableLocationTracking(map, geolocationControlDiv, img) {
     geolocationControlDiv.title = DISABLE_GEOLOCATION_TITLE;
     img.src = ENABLE_GEOLOCATION_IMG_SRC;
     if (navigator.geolocation) {
@@ -64,12 +71,13 @@ function onGeolocationControlEvent(map, geolocationControlDiv) {
     } else {
       alert(NO_GEOLOCATION_SUPPORT_MSG);
     }
-  } else {
+}
+
+function disableLocationTracking(geolocationControlDiv, img) {
     navigator.geolocation.clearWatch(watchPositionId);
     removeCurrentLocationMarker();
     img.src = DISABLED_GEOLOCATION_IMG_SRC;
     geolocationControlDiv.title = ENABLE_GEOLOCATION_TITLE;
-  }
 }
 
 /**
