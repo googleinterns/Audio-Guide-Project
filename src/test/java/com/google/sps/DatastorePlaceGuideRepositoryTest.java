@@ -282,7 +282,7 @@ public final class DatastorePlaceGuideRepositoryTest{
   }
 
   @Test(expected = EntityNotFoundException.class)
-  public void deletePlaceGuideTest() throws EntityNotFoundException{
+  public void deletePlaceGuide_theChosenPlaceGuideHasBeenDeleted_throwExceptionSinceEntityDoesntExist() throws EntityNotFoundException{
     List<PlaceGuide> testPlaceGuidesList = Arrays.asList(testPublicPlaceGuideA,
                                                          testPublicPlaceGuideB,
                                                          testPrivatePlaceGuideB,
