@@ -1,6 +1,7 @@
 class LocationSaver {
     static SAVE_LOCATION_TEXT = "Save location";
     static SAVE_LOCATION_ID = "locationSaverControl";
+    static SAVED_LOCATION_MESSAGE = "Location saved!";
 
     constructor(map, chosenPlace) {
         this._map = map;
@@ -17,15 +18,19 @@ class LocationSaver {
                 event => this.onSaveLocationControlEvent());
     }
 
+    get savedLocation() {
+        return this._savedPlace;
+    }
+
     onSaveLocationControlEvent() {
+        this._savedPlace.visible = false;
+        alert(LocationSaver.SAVED_LOCATION_MESSAGE);
         if (this._chosenPlace.place != null) {
             this._savedPlace.place = this._chosenPlace.place;
-            this._chosenPlace.place = this._chosenPlace.place;
         } else {
             this._savedPlace.position = this._chosenPlace.position;
-            this._chosenPlace.posiiton = this._chosenPlace.position;
         }
-        this._savedPlace.visible = true;
+        this._chosenPlace.onPositionChangeSetVisible(this._savedPlace);
     }
 
     /** Creates a div with the style of control elements and with the given text. */

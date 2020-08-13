@@ -53,6 +53,7 @@ class Place {
         }
         this._placeType = placeType;
         this._hasInfoWindow = hasInfoWindow;
+        this._toSetVisiblePlace = null;
         this.setupRepresentationOnMap();
     }
 
@@ -129,6 +130,7 @@ class Place {
         } 
         this._position = pos;
         this._marker.setPosition(this._position);
+        this.setVisibleTheAttachedPlace();
     }
 
     get place() {
@@ -140,6 +142,7 @@ class Place {
         this._position = this._mapsPlace.geometry.location;
         this._name = this._mapsPlace.name;
         this._marker.setPosition(this._position);
+        this.setVisibleTheAttachedPlace();
     }
 
     detachFromPlace() {
@@ -174,6 +177,17 @@ class Place {
     updatePlaceAndCenter(map, newPlace) {
         this.place = newPlace;
         this.centerMapAround(map);
+    }
+
+    onPositionChangeSetVisible(toSetVisiblePlace) {
+        this._toSetVisiblePlace = toSetVisiblePlace;
+    }
+
+    setVisibleTheAttachedPlace() {
+        if (this._toSetVisiblePlace != null) {
+            this._toSetVisiblePlace.visible = true;
+            this._toSetVisiblePlace = null;
+        }
     }
 }
 
