@@ -6,7 +6,7 @@
  */
 
 var currentLocationMarker = null;
-var trackUser = false;
+var trackLocation = false;
 var watchPositionId;
 var currentLocation;
 
@@ -37,7 +37,7 @@ function addEnableGeolocationControl(map) {
       createControlDiv(ENABLE_GEOLOCATION_TITLE, DISABLED_GEOLOCATION_IMG_SRC, GEOLOCATION_IMG_ID);
   geolocationControlDiv.index = 1;
   map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(geolocationControlDiv);
-  trackUser = false;
+  trackLocation = false;
   geolocationControlDiv.addEventListener("click",
           event => onGeolocationControlEvent(map, geolocationControlDiv));
 }
@@ -50,8 +50,8 @@ function addEnableGeolocationControl(map) {
  */
 function onGeolocationControlEvent(map, geolocationControlDiv) {
   var img = document.getElementById(GEOLOCATION_IMG_ID);
-  trackUser = !trackUser;
-  if (trackUser) {
+  trackLocation = !trackLocation;
+  if (trackLocation) {
     geolocationControlDiv.title = DISABLE_GEOLOCATION_TITLE;
     img.src = ENABLE_GEOLOCATION_IMG_SRC;
     if (navigator.geolocation) {
@@ -81,7 +81,7 @@ function addGoToMyLocationControl(map) {
               "./img/my_location.svg", GO_TO_MY_LOCATION_IMG_ID);
   myLocationControlDiv.index = 1;
   map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(myLocationControlDiv);
-  trackUser = false;
+  trackLocation = false;
   myLocationControlDiv.addEventListener("click",
       event => onGoToMyLocationControlEvent(map));
 }
@@ -92,7 +92,7 @@ function addGoToMyLocationControl(map) {
  * Otherwise, a message will be displayed to enable geolocation.
  */
 function onGoToMyLocationControlEvent(map) {
-  if (trackUser) {
+  if (trackLocation) {
     if (navigator.geolocation) {
       centerMapToCurrentLocation(map);
     } else {
