@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset = "UTF-8">
-    <title>Create Place Guide</title>
+    <title>My PlaceGuides</title>
     <script src = "maps_key.js"></script>
     <script id = "maps-api" async defer></script>
     <link rel = "stylesheet" href = "style.css">
@@ -46,26 +46,6 @@
             };
             const map = new google.maps.Map(
                 document.getElementById('map'), myMapOptions);
-
-            // Geolocation functionality.
-            var geolocator = new Geolocator(map);
-            geolocator.init();
-
-            // Pick location functionality.
-            var searchResult = new Place(0, 0, "Picked Location", null, PlaceType.SEARCH_RESULT, true);
-            searchResult.draggable = true;
-            searchResult.map = map;
-            var searchBox = new SearchBox(map, searchResult, "search-box");
-            searchBox.init();
-            enableChoosingPlaceByClick(map, searchResult);
-
-            // Save location functionality.
-            var locationSaver = new LocationSaver(map, searchResult);
-            locationSaver.init();
-
-            // Display user's place guides functionality.
-            var userId = "test";
-            PlaceDisplayer.displayPlaceGuidesOfUser(map, userId);
         }
     </script>
 </body>
