@@ -51,6 +51,7 @@
             geolocator.init();
 
             // Choose location functionality.
+            // Remark that chosenLocation can be updated from the SearchBox and by clicking as well.
             var chosenLocation = new Place(0, 0, "Picked Location", null, PlaceType.SEARCH_RESULT, true);
             chosenLocation.draggable = true;
             chosenLocation.map = map;
@@ -59,7 +60,7 @@
             enableChoosingLocationByClick(map, chosenLocation);
 
             // Save location functionality.
-            var locationSaver = new LocationSaver(map, searchResult);
+            var locationSaver = new LocationSaver(map, chosenLocation);
             locationSaver.init();
 
             // Display user's place guides functionality.
