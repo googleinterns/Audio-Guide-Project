@@ -1,3 +1,8 @@
+/**
+ * This class is responsible for saving the chosen place when the user clicks the "Save location" button.
+ * Remark that there would be 2 markers on top of each other, 
+ * so instead savedPlace's marker is set visible only when the other one changes its position.
+ */
 class LocationSaver {
     static SAVE_LOCATION_TEXT = "Save location";
     static SAVE_LOCATION_ID = "locationSaverControl";

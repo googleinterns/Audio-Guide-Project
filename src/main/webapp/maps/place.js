@@ -1,17 +1,6 @@
 const placeZoom = 14;
 
-// Get icons from the charts API
-function getColoredMarkerIcon(color) {
-    var iconBase = 'https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|';
-    var markerIcon = {
-        url: iconBase + color,
-        scaledSize: new google.maps.Size(30, 46), // scaled size
-        origin: new google.maps.Point(0,0), // origin
-        anchor: new google.maps.Point(15, 45) // anchor
-    }
-    return markerIcon;
-}
-
+// Specify different icons/colors for dynamically generated icons for each place type.
 var PlaceType = {
     PUBLIC: {
         // Orange icon
@@ -38,10 +27,16 @@ var PlaceType = {
     }
 };
 
+/**
+ * This class holds a place's data and handles its representation on the map.
+ * The place is represented by a marker corresponding to placeType, 
+ * and it may also have an infoWindow, containing the name.
+ * The place may be defined my specifying its position(@param positionLat, @param positionLng) and @param name, 
+ * or by specifying a place from the Google Place database(@param mapsPlace).
+ * Remark that mapsPlace has the higher priority(because it contains more information).
+ * Whenever a new position is set, the mapsPlace is discarder, and vice versa.
+ */
 class Place {
-    // Either positionLat, positionLng and name, or mapsPlace will be specified.
-    // The others will be null.
-    // placeType is a value from PlaceType
     constructor(positionLat, positionLng, name, mapsPlace, placeType, hasInfoWindow) {
         this._mapsPlace = mapsPlace;
         if (this._mapsPlace != null) {
@@ -61,6 +56,7 @@ class Place {
         this.setupMarker();
         if(this._hasInfoWindow) {
             this.setupInfoWindow();
+            // The infowindow an be opened and closed by clicking the marker.
             this._marker.addListener('click', () => {
                 if (this._infoWindowClosed) {
                     this.openInfoWindow();
@@ -125,6 +121,7 @@ class Place {
         this._map = newMap;
         this._marker.setMap(newMap);
         var thisPlace = this;
+        // Close the open infowindow if the user clicks anywhere else on the map.
         if(this._hasInfoWindow) {
             this._marker.getMap().addListener('click', function(mapsMouseEvent) {
                 if (!this._infoWindowClosed) {
@@ -144,6 +141,7 @@ class Place {
     }
 
     set position(pos) {
+        // Overwrite mapsPlace when position changes.
         if (this._mapsPlace != null ) {
             this.detachFromPlace();
         } 
@@ -158,6 +156,8 @@ class Place {
 
     set place(newPlace) {
         this._mapsPlace = newPlace;
+        // Overwrite position when mapsPlace changes.
+        // use the position of the new mapsPlace.
         this._position = this._mapsPlace.geometry.location;
         this._name = this._mapsPlace.name;
         this._marker.setPosition(this._position);
@@ -180,7 +180,7 @@ class Place {
     /**
     * This function relies on Geocoder API to get the place
     * corresponding to an id, provided by the Places API,
-    * and then display it as the new search result.
+    * and then update the mapsPlace.
     */
     updatePlaceAndCenterBasedOnId(id) {
         const geocoder = new google.maps.Geocoder();
@@ -198,6 +198,14 @@ class Place {
         this.centerMapAround();
     }
 
+    /** 
+     * The attached place will be set to visible the this place's position changes. 
+     * This functionality is used when the user saves the currently picked location.
+     * Since the two markers would be overlapping 100%, the picked loctaion marker 
+     * may not be visible, and thus draggable anymore.
+     * To solve this, the saved location marker is made visible only when the currently picked 
+     * location marker is moved away.
+     */
     attachToSavePlace(toSavePlace) {
         this._toSavePlace = toSavePlace;
     }
@@ -227,10 +235,23 @@ class PlaceGuide extends Place {
         this.setupRepresentationOnMap();
     }
 
+    // Specific infoWindowContent for PlaceGuides.
     getInfoWindowContent() {
         var content = "<h3>" + this._name + "</h3>" +
         "<h4> Created by: " + this._creatorName + "</h4>" + 
         "<p>" + this._description + "</p>";
         return content;
     }
+}
+
+// Get icons from the charts API.
+function getColoredMarkerIcon(color) {
+    var iconBase = 'https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|';
+    var markerIcon = {
+        url: iconBase + color,
+        scaledSize: new google.maps.Size(30, 46),
+        origin: new google.maps.Point(0,0),
+        anchor: new google.maps.Point(15, 45)
+    }
+    return markerIcon;
 }

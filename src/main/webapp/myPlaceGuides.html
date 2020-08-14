@@ -26,14 +26,11 @@
     <script src = "./maps/show_places.js"></script>
     <script src="https://unpkg.com/@google/markerclustererplus@4.0.1/dist/markerclustererplus.min.js"></script>
     <script> 
-        /** This function initialises the map and adds some functionalities to it:
-        * {@code addGoToMyLocationControl} allows the user to center the map
-        * at their location by clicking a button.
-        * {@code addEnableGeolocationControl} allows the user to turn on/off
-        * the geolocation feature, which displays the user's current location continuously.
-        * {@code initAutocomplete} sets up a search-box with auto-suggestions feature,
-        * so that the user can search for a specific place. When a search query is submitted,
-        * the map is centered at the requested place and a marker is displayed for it.
+         /** 
+        * This function initialises the map and adds some functionalities to it:
+        * Geolocation: to track the user's current location, display it and center the map around it.
+        * Searching: lets the user search for places and center the map around it.
+        * Display place guides: displays the place guides created by the currently logged in user.
         */
         function createMap() {
             var myMapOptions = {

@@ -1,3 +1,7 @@
+/** 
+ * This class is responsible for getting and displaying the places corresponding to a query.
+ * For now, the places' data is hardcoded, but it needs to be fetched from the server in the future.
+ */
 class PlaceDisplayer {
     static displayPublicPlaceGuides(map) {
         var placeGuides = PlaceDisplayer.getPublicPlaceGuides();
@@ -19,7 +23,7 @@ class PlaceDisplayer {
                 {imagePath: './img/m'});
     }
 
-    // This is for demonstrational purposes only. data will be fetched from the server.
+    // This is for demonstrational purposes only. Data will be fetched from the server.
     static getPublicPlaceGuides() {
         var publicPlaceGuides = [
             new PlaceGuide("id1", "PlaceGuide 1", "This is a placeguide 1", "audioKey1", 3, "imgKey1", 
@@ -44,7 +48,7 @@ class PlaceDisplayer {
         return publicPlaceGuides;
     }
 
-    // This is for demonstrational purposes only. data will be fetched from the server.
+    // This is for demonstrational purposes only. Data will be fetched from the server.
     static getPlaceGuidesOfUser(userId) {
         var publicPlaceGuides = [
             new PlaceGuide("id1", "PlaceGuide 1", "This is a placeguide 1", "audioKey1", 3, "imgKey1", 

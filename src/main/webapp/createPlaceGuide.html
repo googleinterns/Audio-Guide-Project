@@ -28,14 +28,13 @@
     <script src = "./maps/save_location.js"></script>
     <script src="https://unpkg.com/@google/markerclustererplus@4.0.1/dist/markerclustererplus.min.js"></script>
     <script> 
-        /** This function initialises the map and adds some functionalities to it:
-        * {@code addGoToMyLocationControl} allows the user to center the map
-        * at their location by clicking a button.
-        * {@code addEnableGeolocationControl} allows the user to turn on/off
-        * the geolocation feature, which displays the user's current location continuously.
-        * {@code initAutocomplete} sets up a search-box with auto-suggestions feature,
-        * so that the user can search for a specific place. When a search query is submitted,
-        * the map is centered at the requested place and a marker is displayed for it.
+        /** 
+        * This function initialises the map and adds some functionalities to it:
+        * Geolocation: to track the user's current location, display it and center the map around it.
+        * Choose location: the user can choose  alocation through the searchbox, 
+        * by clicking on any point on the map, by clicnking on a POI or by moving the marker of the chosen location.
+        * Save location: lets the user save the currently chosen location for the place guide creation.
+        * Display place guides: displays the place guides created by the currently logged in user.
         */
         function createMap() {
             var myMapOptions = {
@@ -51,19 +50,20 @@
             var geolocator = new Geolocator(map);
             geolocator.init();
 
-            // Pick location functionality.
-            var searchResult = new Place(0, 0, "Picked Location", null, PlaceType.SEARCH_RESULT, true);
-            searchResult.draggable = true;
-            searchResult.map = map;
-            var searchBox = new SearchBox(map, searchResult, "search-box");
+            // Choose location functionality.
+            var chosenLocation = new Place(0, 0, "Picked Location", null, PlaceType.SEARCH_RESULT, true);
+            chosenLocation.draggable = true;
+            chosenLocation.map = map;
+            var searchBox = new SearchBox(map, chosenLocation, "search-box");
             searchBox.init();
-            enableChoosingLocationByClick(map, searchResult);
+            enableChoosingLocationByClick(map, chosenLocation);
 
             // Save location functionality.
             var locationSaver = new LocationSaver(map, searchResult);
             locationSaver.init();
 
             // Display user's place guides functionality.
+            // The user's ID is hardcoded for now, but it will be fetched from the server in the future.
             var userId = "test";
             PlaceDisplayer.displayPlaceGuidesOfUser(map, userId);
         }

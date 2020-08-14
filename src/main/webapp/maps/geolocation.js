@@ -1,7 +1,8 @@
 /**
- * {@code addGoToMyLocationControl} allows the user to center the map
+ * The Geolocator class is responsible for finding and dispaying the users location on the map.
+ * {@code enableGoToMyLocationControl} allows the user to center the map
  * at their location by clicking a button.
- * {@code addEnableGeolocationControl} allows the user to turn on/off
+ * {@code enableGeolocationControl} allows the user to turn on/off
  * the geolocation feature, which displays the user's current location continuously.
  */
 class Geolocator {
@@ -46,23 +47,11 @@ class Geolocator {
         this.enableGoToMyLocationControl();
     }
 
-    /**
-    * Adds a button to the map which turns on/off geolocation.
-    * Geolocation can be battery-consuming, and the user should be able
-    * to turn it off.
-    * Remark that the audio-guide creation process doesn't require the user's location at all.
-    */
     enableGeolocationControl() {
         this._geolocationControlDiv.addEventListener("click",
                 event => this.onGeolocationControlEvent());
     }
 
-    /**
-    * When the geolocation button gets clicked, its status is toggled.
-    * If geolocation is on, then each time the user's location changes,
-    * an event will be triggered,
-    * and the currentLocationMarker and currentlocation will be reset.
-    */
     onGeolocationControlEvent() {
         if (!this._trackLocation) {
             this.enableLocationTracking();
@@ -104,19 +93,11 @@ class Geolocator {
         this._geolocationControlDiv.title = Geolocator.ENABLE_GEOLOCATION_TITLE;
     }
 
-    /**
-    * Adds a button to the map which lets the user center the map around their current location.
-    */
     enableGoToMyLocationControl() {
         this._myLocationControlDiv.addEventListener("click",
             event => this.onGoToMyLocationControlEvent());
     }
 
-    /**
-    * When the goToMyLocation-button is clicked, if the user's location is available,
-    * the maps gets centered around it.
-    * Otherwise, a message will be displayed to enable geolocation.
-    */
     onGoToMyLocationControlEvent() {
         if (this._trackLocation) {
             if (this._foundLocation) {
