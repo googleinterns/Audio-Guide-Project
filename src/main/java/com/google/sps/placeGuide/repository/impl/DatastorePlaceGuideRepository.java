@@ -57,8 +57,8 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository {
       placeGuideEntity = new Entity(ENTITY_KIND);
 
       // Update the {@code PlaceGuide} object with the updated placeGuide Id.
-      placeGuide = new PlaceGuide
-               .Builder(placeGuide.getName(), 
+      placeGuide = 
+            new PlaceGuide.Builder(placeGuide.getName(), 
                         placeGuide.getAudioKey(), 
                         placeGuide.getCreatorId(), 
                         placeGuide.getCoordinate())
@@ -137,15 +137,15 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository {
     String description = (String) placeGuideEntity.getProperty(DESCRIPTION_PROPERTY);
     long length = (long) placeGuideEntity.getProperty(LENGTH_PROPERTY);
     String imageKey = (String) placeGuideEntity.getProperty(IMAGE_KEY_PROPERTY);
-    PlaceGuide placeGuide = new PlaceGuide
-                            .Builder(name, audioKey, creatorId, coordinate)
-                            .setId(id)
-                            .setPlaceId(placeId)
-                            .setLength(length)
-                            .setDescription(description)
-                            .setImageKey(imageKey)
-                            .setPlaceGuideStatus(isPublic)
-                            .build();
+    PlaceGuide placeGuide = 
+            new PlaceGuide.Builder(name, audioKey, creatorId, coordinate)
+                .setId(id)
+                .setPlaceId(placeId)
+                .setLength(length)
+                .setDescription(description)
+                .setImageKey(imageKey)
+                .setPlaceGuideStatus(isPublic)
+                .build();
     return placeGuide;
   }
 
