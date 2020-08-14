@@ -147,7 +147,7 @@ class Place {
         } 
         this._position = pos;
         this._marker.setPosition(this._position);
-        this.setVisibleTheToSavePlace();
+        this.onPositionChange();
     }
 
     get place() {
@@ -161,7 +161,7 @@ class Place {
         this._position = this._mapsPlace.geometry.location;
         this._name = this._mapsPlace.name;
         this._marker.setPosition(this._position);
-        this.setVisibleTheToSavePlace();
+        this.onPositionChange();
     }
 
     detachFromPlace() {
@@ -210,6 +210,14 @@ class Place {
         this._toSavePlace = toSavePlace;
     }
 
+    onPositionChange() {
+        this.setVisibleTheToSavePlace();
+        if (this._setVisibleOnPositionChange) {
+            this.visible = true;
+            this._setVisibleOnPositionChange = false;
+        }
+    }
+
     setVisibleTheToSavePlace() {
         if (this._toSavePlace != null) {
             this._toSavePlace.visible = true;
@@ -219,6 +227,10 @@ class Place {
 
     detachToSavePlace() {
         this._toSavePlace = null;
+    }
+
+    setVisibleOnPositionChange() {
+        this._setVisibleOnPositionChange = true;
     }
 }
 
