@@ -72,11 +72,11 @@ class Geolocator {
     }
 
     enableLocationTracking(img) {
-        this._trackLocation = true;
-        var img = document.getElementById(Geolocator.GEOLOCATION_IMG_ID);
-        this._geolocationControlDiv.title = Geolocator.DISABLE_GEOLOCATION_TITLE;
-        img.src = Geolocator.ENABLE_GEOLOCATION_IMG_SRC;
         if (navigator.geolocation) {
+            this._trackLocation = true;
+            var img = document.getElementById(Geolocator.GEOLOCATION_IMG_ID);
+            this._geolocationControlDiv.title = Geolocator.DISABLE_GEOLOCATION_TITLE;
+            img.src = Geolocator.ENABLE_GEOLOCATION_IMG_SRC;
             this._watchPositionId = navigator.geolocation.watchPosition(
                 position => {
                     this._foundLocation = true;
@@ -90,7 +90,6 @@ class Geolocator {
                 }
             );
         } else {
-            this._foundLocation = false;
             alert(Geolocator.NO_GEOLOCATION_SUPPORT_MSG);
         }
     }
