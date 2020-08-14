@@ -37,7 +37,6 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository {
   }
 
   private Entity createPlaceGuideEntity(PlaceGuide placeGuide) {
-
     Entity placeGuideEntity;
 
     long placeGuideId = placeGuide.getId();
