@@ -21,7 +21,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 @RunWith(JUnit4.class)
-public final class DatastorePlaceGuideRepositoryTest{
+public final class DatastorePlaceGuideRepositoryTest {
   
   private final LocalServiceTestHelper helper = new LocalServiceTestHelper(
                                                             new LocalDatastoreServiceTestConfig());
