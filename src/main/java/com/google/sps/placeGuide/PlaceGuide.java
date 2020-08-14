@@ -61,7 +61,6 @@ public class PlaceGuide {
       this.name = name;
       this.audioKey = audioKey;
       this.creatorId = creatorId;
-      this.placeId = placeId;
       this.coordinate = coordinate;
     }
     public Builder setPlaceId(String placeId) {
