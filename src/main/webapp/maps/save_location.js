@@ -14,12 +14,12 @@ class LocationSaver {
         this._savedPlace.map = this._map;
         this._savedPlace.visible = false;
         this._chosenPlace = chosenPlace; 
-        this._saveLocationControlDiv = this.createControlDiv(LocationSaver.SAVE_LOCATION_TEXT, LocationSaver.SAVE_LOCATION_ID);
-        this._map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(this._saveLocationControlDiv);
+        this._saveLocationControlButton = this.createControlButton(LocationSaver.SAVE_LOCATION_TEXT, LocationSaver.SAVE_LOCATION_ID);
+        this._map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(this._saveLocationControlButton);
     }
 
     init() {
-        this._saveLocationControlDiv.addEventListener("click",
+        this._saveLocationControlButton.addEventListener("click",
                 event => this.onSaveLocationControlEvent());
     }
 
@@ -38,9 +38,9 @@ class LocationSaver {
         this._chosenPlace.attachToSavePlace(this._savedPlace);
     }
 
-    /** Creates a div with the style of control elements and with the given text. */
-    createControlDiv(text, id) {
-        const controlDiv = document.createElement("div");
+    /** Creates a button with the style of control elements and with the given text. */
+    createControlButton(text, id) {
+        const controlDiv = document.createElement("button");
         controlDiv.setAttribute('class', 'map-button');
         controlDiv.setAttribute('id', id);
         controlDiv.innerText = text;
