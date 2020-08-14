@@ -27,7 +27,7 @@ public class PlaceGuideServlet extends HttpServlet {
 
   // For production.
   public PlaceGuideServlet() {
-    userId = UserServiceFactory.getUserService().getCurrentUser().getUserId();
+    this(UserServiceFactory.getUserService().getCurrentUser().getUserId());  
   }
 
   // For testing.
@@ -51,7 +51,12 @@ public class PlaceGuideServlet extends HttpServlet {
   private final PlaceGuideRepository placeGuideRepository = PlaceGuideRepositoryFactory
                                                 .getPlaceGuideRepository(RepositoryType.DATASTORE);
 
-  private enum PlaceGuideQueryType {ALL, CREATED_ALL, CREATED_PUBLIC, CREATED_PRIVATE }
+  private enum PlaceGuideQueryType {
+    ALL, 
+    CREATED_ALL, 
+    CREATED_PUBLIC, 
+    CREATED_PRIVATE 
+  }
 
   /**
    * Saves the recently submitted place guide data.
