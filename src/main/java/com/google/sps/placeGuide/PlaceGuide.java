@@ -17,7 +17,8 @@ public class PlaceGuide {
   private final String creatorId;
   private final boolean isPublic;
 
-  // This is not the unique identifier of a place guide.
+  // This is the unique identifier of the place (maps places API). 
+  // It will be null if it's not from a Google Maps Places API.
   @Nullable
   private String placeId;
 
