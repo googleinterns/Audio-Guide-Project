@@ -30,7 +30,7 @@ class LocationSaver {
         } else {
             this._savedPlace.position = this._chosenPlace.position;
         }
-        this._chosenPlace.onPositionChangeSetVisible(this._savedPlace);
+        this._chosenPlace.attachToSavePlace(this._savedPlace);
     }
 
     /** Creates a div with the style of control elements and with the given text. */
