@@ -109,17 +109,18 @@ public class PlaceGuideServlet extends HttpServlet {
     float latitude = Float.parseFloat(request.getParameter(LATITUDE_INPUT));
     float longitude = Float.parseFloat(request.getParameter(LONGITUDE_INPUT));
     GeoPt coordinate = new GeoPt(latitude, longitude);
-    PlaceGuide.Builder newPlaceGuideBuilder = new PlaceGuide.Builder(name, audioKey, userId, 
-                                                                     coordinate);
-    String id = request.getParameter(ID_INPUT);
-    if (!id.isEmpty()) {
-      newPlaceGuideBuilder.setId(Long.parseLong(id));
+    String idStringValue = request.getParameter(ID_INPUT);
+    long id;
+    if (!idStringValue.isEmpty()) {
+      id = Long.parseLong(idStringValue);
     } else {
       // Create PlaceGuide entity id.
       Entity placeGuideEntity = new Entity(DatastorePlaceGuideRepository.ENTITY_KIND);
-      long placeGuideId = placeGuideEntity.getKey().getId();
-      newPlaceGuideBuilder.setId(placeGuideId);
+      id = placeGuideEntity.getKey().getId();
     }
+    PlaceGuide.Builder newPlaceGuideBuilder = new PlaceGuide.Builder(id, name, audioKey, userId, 
+                                                                     coordinate);
+
     String publicPlaceGuideStringValue = request.getParameter(IS_PUBLIC_INPUT);
     if (publicPlaceGuideStringValue.equals(IS_PUBLIC_INPUT_VALUE)) {
       newPlaceGuideBuilder.setPlaceGuideStatus(true);
