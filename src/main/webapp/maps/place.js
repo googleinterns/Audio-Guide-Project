@@ -1,4 +1,5 @@
 const placeZoom = 14;
+const CHOSEN_LOCATION_CHANGE_EVENT = "chosenPositionChange";
 
 // Specify different icons/colors for dynamically generated icons for each place type.
 var PlaceType = {
@@ -50,6 +51,15 @@ class Place {
         this._hasInfoWindow = hasInfoWindow;
         this._toSetVisiblePlace = null;
         this.setupRepresentationOnMap();
+        this.setupOnPositionChangeEvent();
+    }
+
+    set triggerChosenLocationChangeEvent(trigger) {
+        this._triggerChosenLocationChangeEvent = trigger;
+    }
+
+    setupOnPositionChangeEvent() {
+        this._positionChangeEvent = new Event(CHOSEN_LOCATION_CHANGE_EVENT);
     }
 
     setupRepresentationOnMap() {
@@ -199,49 +209,9 @@ class Place {
         this.centerMapAround();
     }
 
-    /** 
-     * The attached place will be set to visible the this place's position changes. 
-     * This functionality is used when the user saves the currently picked location.
-     * Since the two markers would be overlapping 100%, the picked loctaion marker 
-     * may not be visible, and thus draggable anymore.
-     * To solve this, the saved location marker is made visible only when the currently picked 
-     * location marker is moved away.
-     */
-    attachToSavePlace(toSavePlace) {
-        this._toSavePlace = toSavePlace;
-    }
-
     onPositionChange() {
-        this.setVisibleTheToSavePlace();
-        this.enableElement();
-        if (this._setVisibleOnPositionChange) {
-            this.visible = true;
-            this._setVisibleOnPositionChange = false;
-        }
-    }
-
-    setVisibleTheToSavePlace() {
-        if (this._toSavePlace != null) {
-            this._toSavePlace.visible = true;
-            this.detachToSavePlace();
-        }
-    }
-
-    detachToSavePlace() {
-        this._toSavePlace = null;
-    }
-
-    setVisibleOnPositionChange() {
-        this._setVisibleOnPositionChange = true;
-    }
-
-    enableElementOnPositionChange(element) {
-        this._toEnableElement = element;
-    }
-
-    enableElement() {
-        if (this._toEnableElement != null) {
-            this._toEnableElement.disabled = false;
+        if (this._triggerChosenLocationChangeEvent) {
+            document.getElementById("map").dispatchEvent(this._positionChangeEvent);
         }
     }
 }

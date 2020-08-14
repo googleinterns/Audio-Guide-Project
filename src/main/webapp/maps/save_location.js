@@ -17,7 +17,10 @@ class LocationSaver {
         this._saveLocationControlButton = this.createControlButton(LocationSaver.SAVE_LOCATION_TEXT, LocationSaver.SAVE_LOCATION_ID);
         this._saveLocationControlButton.disabled = true;
         this._map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(this._saveLocationControlButton);
-        this._chosenPlace.enableElementOnPositionChange(this._saveLocationControlButton);
+        var saveLocationButton = this._saveLocationControlButton;
+        document.getElementById("map").addEventListener(CHOSEN_LOCATION_CHANGE_EVENT, function() {
+            saveLocationButton.disabled = false;
+        });
     }
 
     init() {
@@ -37,7 +40,10 @@ class LocationSaver {
             this._savedPlace.position = this._chosenPlace.position;
         }
         alert(LocationSaver.SAVED_LOCATION_MESSAGE);
-        this._chosenPlace.attachToSavePlace(this._savedPlace);
+        var savedPlace = this._savedPlace;
+        document.getElementById("map").addEventListener(CHOSEN_LOCATION_CHANGE_EVENT, function() {
+            savedPlace.visible = true;
+        });
     }
 
     /** Creates a button with the style of control elements and with the given text. */

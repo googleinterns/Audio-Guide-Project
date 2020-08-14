@@ -54,9 +54,12 @@
             // Remark that chosenLocation can be updated from the SearchBox and by clicking as well.
             var chosenLocation = new Place(0, 0, "Picked Location", null, PlaceType.SEARCH_RESULT, true);
             chosenLocation.visible = false;
-            chosenLocation.setVisibleOnPositionChange();
             chosenLocation.draggable = true;
             chosenLocation.map = map;
+            chosenLocation.triggerChosenLocationChangeEvent = true;
+            document.getElementById("map").addEventListener(CHOSEN_LOCATION_CHANGE_EVENT, function() {
+                chosenLocation.visible = true;
+            });
             var searchBox = new SearchBox(map, chosenLocation, "search-box");
             searchBox.init();
             enableChoosingLocationByClick(map, chosenLocation);
