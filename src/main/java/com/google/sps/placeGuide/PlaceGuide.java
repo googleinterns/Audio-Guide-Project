@@ -9,9 +9,7 @@ public class PlaceGuide {
   // Unique identifier for a {@code PlaceGuide} automatically given 
   // when a {@code PlaceGuide} entity is created and will be used to delete
   // or edit {@code PlaceGuide}.
-  @Nullable
   private final long id;
-
   private final String name;
   private final String audioKey; 
   private final String creatorId;
@@ -48,7 +46,7 @@ public class PlaceGuide {
   }
 
   public static class Builder {
-    private long id;
+    private final long id;
     private final String name;
     private final String audioKey;
     private final String creatorId; 
@@ -58,7 +56,8 @@ public class PlaceGuide {
     private long length;
     private String description, imageKey;
         
-    public Builder(String name, String audioKey, String creatorId, GeoPt coordinate) {
+    public Builder(long id, String name, String audioKey, String creatorId, GeoPt coordinate) {
+      this.id = id;
       this.name = name;
       this.audioKey = audioKey;
       this.creatorId = creatorId;
@@ -67,10 +66,6 @@ public class PlaceGuide {
     }
     public Builder setPlaceId(String placeId) {
       this.placeId = placeId;
-      return this;
-    }
-    public Builder setId(long id) { 
-      this.id = id;
       return this;
     }
     public Builder setPlaceGuideStatus(boolean setToPublic) {
