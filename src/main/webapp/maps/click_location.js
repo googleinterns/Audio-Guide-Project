@@ -1,4 +1,7 @@
-function enableChoosingPlaceByClick(map, chosenPlace) {
+/**
+ * This function lets the user pick a 
+ */
+function enableChoosingLocationByClick(map, chosenPlace) {
     map.addListener('click', function(mapsMouseEvent) {
         if (mapsMouseEvent.placeId) {
             chosenPlace.updatePlaceAndCenterBasedOnId(mapsMouseEvent.placeId)
