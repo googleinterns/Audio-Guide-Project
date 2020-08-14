@@ -45,7 +45,7 @@ class SearchBox {
             this.setClosestResult();
             return;
         }
-        this._searchResult.updatePlaceAndCenter(this._map, place);
+        this._searchResult.updatePlaceAndCenter(place);
     }
 
     /**
@@ -61,7 +61,7 @@ class SearchBox {
                 alert(status);
                 return;
             }
-            searchResult.updatePlaceAndCenterBasedOnId(map, predictions[0].place_id);
+            searchResult.updatePlaceAndCenterBasedOnId(predictions[0].place_id);
         });
     }
 }

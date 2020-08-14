@@ -120,7 +120,7 @@ class Geolocator {
     onGoToMyLocationControlEvent() {
         if (this._trackLocation) {
             if (this._foundLocation) {
-                this._currentLocation.centerMapAround(this._map);
+                this._currentLocation.centerMapAround();
             } else {
                alert(Geolocator.LOCATION_NOT_FOUND_MSG);
             }

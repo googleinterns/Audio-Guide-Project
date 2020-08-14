@@ -122,6 +122,7 @@ class Place {
     }
 
     set map(newMap) {
+        this._map = newMap;
         this._marker.setMap(newMap);
         var thisPlace = this;
         if(this._hasInfoWindow) {
@@ -134,6 +135,7 @@ class Place {
     }
 
     removeMarkerFromMap() {
+        this._map = null;
         this._marker.setMap(null);
     }
 
@@ -166,12 +168,12 @@ class Place {
         this._mapsPlace = null;
     }
 
-    centerMapAround(map) {
+    centerMapAround() {
         if (this._mapsPlace != null && this._mapsPlace.geometry.viewport) {
-            map.fitBounds(this._mapsPlace.geometry.viewport);
+            this._map.fitBounds(this._mapsPlace.geometry.viewport);
         } else {
-            map.setZoom(placeZoom);
-            map.setCenter(this._position);
+            this._map.setZoom(placeZoom);
+            this._map.setCenter(this._position);
         }
     }
 
@@ -180,20 +182,20 @@ class Place {
     * corresponding to an id, provided by the Places API,
     * and then display it as the new search result.
     */
-    updatePlaceAndCenterBasedOnId(map, id) {
+    updatePlaceAndCenterBasedOnId(id) {
         const geocoder = new google.maps.Geocoder();
         geocoder.geocode({placeId: id}, (results, status) => {
             if (status !== "OK") {
-            window.alert(GEOCODER_FAIL_MSG + status);
-            return;
+                window.alert(Place.GEOCODER_FAIL_MSG + status);
+                return;
             }
-            this.updatePlaceAndCenter(map, results[0]);
+            this.updatePlaceAndCenter(results[0]);
         });
     }
 
-    updatePlaceAndCenter(map, newPlace) {
+    updatePlaceAndCenter(newPlace) {
         this.place = newPlace;
-        this.centerMapAround(map);
+        this.centerMapAround();
     }
 
     attachToSavePlace(toSavePlace) {
