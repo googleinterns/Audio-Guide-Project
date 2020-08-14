@@ -63,14 +63,23 @@ class Place {
             this.setupInfoWindow();
             this._marker.addListener('click', () => {
                 if (this._infoWindowClosed) {
-                    this._infoWindow.open(map, this._marker);
+                    this.openInfoWindow();
                 }
                 else {
-                    this._infoWindow.close();
+                    this.closeInfoWindow();
                 }
-                this._infoWindowClosed = !this._infoWindowClosed;
             });
         }
+    }
+
+    closeInfoWindow() {
+        this._infoWindow.close();
+        this._infoWindowClosed = true;
+    }
+
+    openInfoWindow() {
+        this._infoWindow.open(this._map, this._marker);
+        this._infoWindowClosed = false;
     }
 
     setupMarker() {
@@ -114,6 +123,14 @@ class Place {
 
     set map(newMap) {
         this._marker.setMap(newMap);
+        var thisPlace = this;
+        if(this._hasInfoWindow) {
+            this._marker.getMap().addListener('click', function(mapsMouseEvent) {
+                if (!this._infoWindowClosed) {
+                    thisPlace.closeInfoWindow();
+                }
+            });
+        }
     }
 
     removeMarkerFromMap() {
