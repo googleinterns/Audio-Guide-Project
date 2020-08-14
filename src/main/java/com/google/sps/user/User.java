@@ -14,6 +14,7 @@
 
 package com.google.sps.user;
 
+import java.util.Objects;
 import org.jetbrains.annotations.Nullable;
 
 /**
