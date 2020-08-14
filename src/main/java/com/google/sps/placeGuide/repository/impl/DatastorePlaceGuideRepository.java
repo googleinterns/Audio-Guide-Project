@@ -16,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 import com.google.sps.placeGuide.repository.PlaceGuideRepository;
 
 /** Class for handling place guide repository using datastore. */
-public class DatastorePlaceGuideRepository implements PlaceGuideRepository{
+public class DatastorePlaceGuideRepository implements PlaceGuideRepository {
 
   private final DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
   public static final String ENTITY_KIND = "PlaceGuide";
