@@ -170,6 +170,7 @@ class Place {
 
     centerMapAround() {
         if (this._mapsPlace != null && this._mapsPlace.geometry.viewport) {
+            this._map.setZoom(placeZoom);
             this._map.fitBounds(this._mapsPlace.geometry.viewport);
         } else {
             this._map.setZoom(placeZoom);
