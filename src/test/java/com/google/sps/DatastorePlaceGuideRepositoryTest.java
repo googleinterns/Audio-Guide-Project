@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.junit.Assert.assertEquals;
 
 @RunWith(JUnit4.class)
 public final class DatastorePlaceGuideRepositoryTest {
@@ -121,7 +122,7 @@ public final class DatastorePlaceGuideRepositoryTest {
       boolean hasEqual = false;
       int index_b_copy = 0;
       while (index_b_copy < b_copy.size()) {
-        if (a_pg.equals(b_copy.get(index_b_copy))) {
+        if (a_pg.getId() == (b_copy.get(index_b_copy)).getId()) {
           hasEqual = true;
           b_copy.remove(index_b_copy);
           break;
