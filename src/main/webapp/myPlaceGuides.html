@@ -24,8 +24,6 @@
     <script src = "maps_searchbox.js"></script>
     <script src = "maps_place.js"></script>
     <script src = "maps_show_places.js"></script>
-    <script src = "maps_click_location.js"></script>
-    <script src = "maps_save_location.js"></script>
     <script src="https://unpkg.com/@google/markerclustererplus@4.0.1/dist/markerclustererplus.min.js"></script>
     <script> 
         /** This function initialises the map and adds some functionalities to it:
@@ -46,6 +44,21 @@
             };
             const map = new google.maps.Map(
                 document.getElementById('map'), myMapOptions);
+
+            // Geolocation functionality.
+            var geolocator = new Geolocator(map);
+            geolocator.init();
+
+            // Searching functionality.
+            var searchResult = new Place(0, 0, "Picked Location", null, PlaceType.SEARCH_RESULT, true);
+            searchResult.map = map;
+            searchResult.visible = false;
+            var searchBox = new SearchBox(map, searchResult, "search-box");
+            searchBox.init();
+
+            // Discover public place guides functionality.
+            var userId = "test";
+            PlaceDisplayer.displayPlaceGuidesOfUser(map, userId);
         }
     </script>
 </body>
