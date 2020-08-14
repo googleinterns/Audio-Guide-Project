@@ -1,6 +1,7 @@
 package com.google.sps.servlets;
 
 import com.google.gson.Gson;
+import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.sps.data.RepositoryType;
@@ -111,7 +112,12 @@ public class PlaceGuideServlet extends HttpServlet {
                                                                      coordinate);
     String id = request.getParameter(ID_INPUT);
     if (!id.isEmpty()) {
-        newPlaceGuideBuilder.setId(Long.parseLong(id));
+      newPlaceGuideBuilder.setId(Long.parseLong(id));
+    } else {
+      // Create PlaceGuide entity id.
+      Entity placeGuideEntity = new Entity(DatastorePlaceGuideRepository.ENTITY_KIND);
+      long placeGuideId = placeGuideEntity.getKey().getId();
+      newPlaceGuideBuilder.setId(placeGuideId);
     }
     String publicPlaceGuideStringValue = request.getParameter(IS_PUBLIC_INPUT);
     if (publicPlaceGuideStringValue.equals(IS_PUBLIC_INPUT_VALUE)) {
