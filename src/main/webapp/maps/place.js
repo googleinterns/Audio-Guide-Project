@@ -213,6 +213,7 @@ class Place {
 
     onPositionChange() {
         this.setVisibleTheToSavePlace();
+        this.enableElement();
         if (this._setVisibleOnPositionChange) {
             this.visible = true;
             this._setVisibleOnPositionChange = false;
@@ -232,6 +233,16 @@ class Place {
 
     setVisibleOnPositionChange() {
         this._setVisibleOnPositionChange = true;
+    }
+
+    enableElementOnPositionChange(element) {
+        this._toEnableElement = element;
+    }
+
+    enableElement() {
+        if (this._toEnableElement != null) {
+            this._toEnableElement.disabled = false;
+        }
     }
 }
 

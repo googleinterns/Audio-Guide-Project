@@ -15,7 +15,9 @@ class LocationSaver {
         this._savedPlace.visible = false;
         this._chosenPlace = chosenPlace; 
         this._saveLocationControlButton = this.createControlButton(LocationSaver.SAVE_LOCATION_TEXT, LocationSaver.SAVE_LOCATION_ID);
+        this._saveLocationControlButton.disabled = true;
         this._map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(this._saveLocationControlButton);
+        this._chosenPlace.enableElementOnPositionChange(this._saveLocationControlButton);
     }
 
     init() {
