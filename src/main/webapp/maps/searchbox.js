@@ -14,52 +14,52 @@
  */
 
 class SearchBox {
-    static GEOCODER_FAIL_MSG = "Geocoder failed due to: ";
+  static GEOCODER_FAIL_MSG = "Geocoder failed due to: ";
 
-    constructor(map, searchResult, elementId) {
-        this._map = map;
-        this._searchResult = searchResult;
-        this._input = document.getElementById(elementId);
-        this._autocomplete = new google.maps.places.Autocomplete(this._input);
-        this._map.controls[google.maps.ControlPosition.TOP_CENTER].push(this._input);
-    }
+  constructor(map, searchResult, elementId) {
+    this._map = map;
+    this._searchResult = searchResult;
+    this._input = document.getElementById(elementId);
+    this._autocomplete = new google.maps.places.Autocomplete(this._input);
+    this._map.controls[google.maps.ControlPosition.TOP_CENTER].push(this._input);
+  }
 
-    init() {
-        this._autocomplete.setFields(['address_components', 'geometry', 'name']);
-        this._autocomplete.addListener('place_changed', result => this.setNewSearchResult());
-    }
+  init() {
+    this._autocomplete.setFields(['address_components', 'geometry', 'name']);
+    this._autocomplete.addListener('place_changed', result => this.setNewSearchResult());
+  }
 
-    /**
-    * Gets the place searched by the user if possible.
-    * If the user didn't choose an existing place, display
-    * the best suggestion instead. 
-    */
-    setNewSearchResult() {
-        var place = this._autocomplete.getPlace();
-        if (!place.geometry) {
-            // If the user didn't choose a suggestion, but pressed enter,
-            // then "place" may have no geometry.
-            // In this case, search for the "closest" place.
-            this.setClosestResult();
-            return;
-        }
-        this._searchResult.updatePlaceAndCenter(place);
+  /**
+   * Gets the place searched by the user if possible.
+   * If the user didn't choose an existing place, display
+   * the best suggestion instead.
+   */
+  setNewSearchResult() {
+    var place = this._autocomplete.getPlace();
+    if (!place.geometry) {
+      // If the user didn't choose a suggestion, but pressed enter,
+      // then "place" may have no geometry.
+      // In this case, search for the "closest" place.
+      this.setClosestResult();
+      return;
     }
+    this._searchResult.updatePlaceAndCenter(place);
+  }
 
-    /**
-    * This function gets the best result(prediction) for the submitted search query
-    * and updates searchresult.
-    */
-    setClosestResult() {
-        var service = new google.maps.places.AutocompleteService();
-        var searchResult = this._searchResult;
-        var map = this._map;
-        service.getPlacePredictions({input: this._input.value}, function (predictions, status) {
-            if (status != google.maps.places.PlacesServiceStatus.OK) {
-                alert(status);
-                return;
-            }
-            searchResult.updatePlaceAndCenterBasedOnId(predictions[0].place_id);
-        });
-    }
+  /**
+   * This function gets the best result(prediction) for the submitted search query
+   * and updates searchresult.
+   */
+  setClosestResult() {
+    var service = new google.maps.places.AutocompleteService();
+    var searchResult = this._searchResult;
+    var map = this._map;
+    service.getPlacePredictions({input: this._input.value}, function (predictions, status) {
+      if (status != google.maps.places.PlacesServiceStatus.OK) {
+        alert(status);
+        return;
+      }
+      searchResult.updatePlaceAndCenterBasedOnId(predictions[0].place_id);
+    });
+  }
 }
