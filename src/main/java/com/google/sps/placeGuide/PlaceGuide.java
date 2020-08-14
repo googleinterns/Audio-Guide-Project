@@ -95,11 +95,11 @@ public class PlaceGuide {
   }
   
   @Override
-  public boolean equals(Object o){
-    if(o == null) { 
+  public boolean equals(Object o) {
+    if (o == null) { 
       return false; 
     }
-    if(!(o instanceof PlaceGuide)) { 
+    if (!(o instanceof PlaceGuide)) { 
       return false; 
     }
     PlaceGuide placeGuide = (PlaceGuide) o;
