@@ -54,6 +54,9 @@ class Place {
         this.setupOnPositionChangeEvent();
     }
 
+    // Some objects' behaviour is conditioned by the chosenLocation's positionChanges
+    // To enable listening to this event, this flag must be set to true.
+    // Other Places won't trigger the event. 
     set triggerChosenLocationChangeEvent(trigger) {
         this._triggerChosenLocationChangeEvent = trigger;
     }
