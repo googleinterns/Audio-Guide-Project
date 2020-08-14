@@ -11,6 +11,7 @@ class Geolocator {
     static NO_LOCATION_INFORMATION_MSG = "Location information is unavailable.";
     static REQUEST_TIMEOUT_MSG = "The request to get user location timed out.";
     static UNKNOWN_ERROR_MSG = "An unknown error occurred while geolocating.";
+    static LOCATION_NOT_FOUND_MSG = "Your location couldn't be found yet.";
 
     static GEOLOCATION_IMG_ID = "enableGeolocationIcon";
     static ENABLE_GEOLOCATION_TITLE = "Enable geolocation";
@@ -25,6 +26,7 @@ class Geolocator {
     constructor(map){
         this._map = map;
         this._trackLocation = false;
+        this._foundLocation = false;
         this._watchPositionId = -1;
         this._currentLocation = new Place(0, 0, Geolocator.MY_LOCATION_TITLE, null, PlaceType.CURRENT_LOCATION, false);
         this._currentLocation.visible = false;
@@ -77,21 +79,25 @@ class Geolocator {
         if (navigator.geolocation) {
             this._watchPositionId = navigator.geolocation.watchPosition(
                 position => {
+                    this._foundLocation = true;
                     this._currentLocation.position = Geolocator.convertCurrentLocationToLatLng(position);
                     this._currentLocation.visible = true;
                 },
                 error => {
+                    this._foundLocation = false;
                     this._currentLocation.visible = false;
                     showError(error);
                 }
             );
         } else {
+            this._foundLocation = false;
             alert(Geolocator.NO_GEOLOCATION_SUPPORT_MSG);
         }
     }
 
     disableLocationTracking(geolocationControlDiv, img) {
         this._trackLocation = false;
+        this._foundLocation = false;
         navigator.geolocation.clearWatch(this._watchPositionId);
         this._currentLocation.visible = false;
         var img = document.getElementById(Geolocator.GEOLOCATION_IMG_ID);
@@ -114,10 +120,10 @@ class Geolocator {
     */
     onGoToMyLocationControlEvent() {
         if (this._trackLocation) {
-            if (navigator.geolocation) {
+            if (this._foundLocation) {
                 this._currentLocation.centerMapAround(this._map);
             } else {
-                alert(Geolocator.NO_GEOLOCATION_SUPPORT_MSG);
+               alert(Geolocator.LOCATION_NOT_FOUND_MSG);
             }
         } else {
             alert(Geolocator.ENABLE_GEOLOCATION_MSG);

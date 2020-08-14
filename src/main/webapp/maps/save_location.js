@@ -24,12 +24,12 @@ class LocationSaver {
 
     onSaveLocationControlEvent() {
         this._savedPlace.visible = false;
-        alert(LocationSaver.SAVED_LOCATION_MESSAGE);
         if (this._chosenPlace.place != null) {
             this._savedPlace.place = this._chosenPlace.place;
         } else {
             this._savedPlace.position = this._chosenPlace.position;
         }
+        alert(LocationSaver.SAVED_LOCATION_MESSAGE);
         this._chosenPlace.attachToSavePlace(this._savedPlace);
     }
 
