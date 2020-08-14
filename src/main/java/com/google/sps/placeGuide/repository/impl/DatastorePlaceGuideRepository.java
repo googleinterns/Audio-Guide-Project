@@ -37,39 +37,7 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository {
   }
 
   private Entity createPlaceGuideEntity(PlaceGuide placeGuide) {
-    Entity placeGuideEntity;
-
-    String name = placeGuide.getName();
-    String audioKey = placeGuide.getAudioKey();
-    String creatorId = placeGuide.getCreatorId();
-    String placeId = placeGuide.getPlaceId();
-    boolean isPublic = placeGuide.isPublic();
-    GeoPt coordinate = placeGuide.getCoordinate();
-    String description = placeGuide.getDescription();
-    long length = placeGuide.getLength();
-    String imageKey = placeGuide.getImageKey();
-
-    if (Long.valueOf(placeGuide.getId()) != null) {
-      // Use the original placeGuide's ID for when user edits a place guide.
-      placeGuideEntity = new Entity(ENTITY_KIND, placeGuide.getId());
-    } else {
-      // Let the ID be automatically created if the place guide is new.
-      placeGuideEntity = new Entity(ENTITY_KIND);
-
-      // Update the {@code PlaceGuide} object with the updated placeGuide Id.
-      placeGuide = 
-            new PlaceGuide.Builder(placeGuide.getName(), 
-                        placeGuide.getAudioKey(), 
-                        placeGuide.getCreatorId(), 
-                        placeGuide.getCoordinate())
-               .setId(placeGuideEntity.getKey().getId())
-               .setPlaceId(placeGuide.getPlaceId())
-               .setLength(placeGuide.getLength())
-               .setDescription(placeGuide.getDescription())
-               .setImageKey(placeGuide.getImageKey())
-               .setPlaceGuideStatus(placeGuide.isPublic())
-               .build();
-    }
+    Entity placeGuideEntity = new Entity(ENTITY_KIND, placeGuide.getId());
 
     placeGuideEntity.setProperty(NAME_PROPERTY, placeGuide.getName());
     placeGuideEntity.setProperty(AUDIO_KEY_PROPERTY, placeGuide.getAudioKey());

@@ -8,6 +8,7 @@ import com.google.sps.data.RepositoryType;
 import com.google.sps.placeGuide.PlaceGuide;
 import com.google.sps.placeGuide.repository.PlaceGuideRepository;
 import com.google.sps.placeGuide.repository.PlaceGuideRepositoryFactory;
+import com.google.sps.placeGuide.repository.impl.DatastorePlaceGuideRepository;
 import com.google.appengine.api.datastore.GeoPt;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
