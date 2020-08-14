@@ -49,7 +49,7 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository {
     long length = placeGuide.getLength();
     String imageKey = placeGuide.getImageKey();
 
-    if (Long.valueOf(placeGuideId) != null) {
+    if (Long.valueOf(placeGuide.getId()) != null) {
       // Use the original placeGuide's ID for when user edits a place guide.
       placeGuideEntity = new Entity(ENTITY_KIND, placeGuide.getId());
     } else {
@@ -73,7 +73,7 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository {
 
     placeGuideEntity.setProperty(NAME_PROPERTY, placeGuide.getName());
     placeGuideEntity.setProperty(AUDIO_KEY_PROPERTY, placeGuide.getAudioKey());
-    placeGuideEntity.setProperty(CREATOR_ID_PROPERTY, placeGuide.creatorId());
+    placeGuideEntity.setProperty(CREATOR_ID_PROPERTY, placeGuide.getCreatorId());
     placeGuideEntity.setProperty(PLACE_ID_PROPERTY, placeGuide.getPlaceId());
     placeGuideEntity.setProperty(IS_PUBLIC_PROPERTY, placeGuide.isPublic());
     placeGuideEntity.setProperty(COORDINATE_PROPERTY, placeGuide.getCoordinate());
