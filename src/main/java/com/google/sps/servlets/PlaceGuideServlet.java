@@ -50,8 +50,8 @@ public class PlaceGuideServlet extends HttpServlet {
   public static final String IMAGE_KEY_INPUT = "imageKey";
   public static final String PLACE_GUIDE_TYPE_PARAMETER = "placeGuideType";
 
-  private final PlaceGuideRepository placeGuideRepository = PlaceGuideRepositoryFactory
-                                                .getPlaceGuideRepository(RepositoryType.DATASTORE);
+  private final PlaceGuideRepository placeGuideRepository = 
+      PlaceGuideRepositoryFactory.getPlaceGuideRepository(RepositoryType.DATASTORE);
 
   private enum PlaceGuideQueryType {
     ALL, 
