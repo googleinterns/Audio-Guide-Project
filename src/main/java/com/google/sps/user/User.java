@@ -30,7 +30,6 @@ public class User {
   private final String selfIntroduction;
   @Nullable
   private final String imgKey;
-  @Nullable
   private final long bookmarkedPlaceGuideId;
 
   public static class Builder {
@@ -44,7 +43,6 @@ public class User {
     private String selfIntroduction;
     @Nullable
     private String imgKey;
-    @Nullable
     private long bookmarkedPlaceGuideId;
     private boolean publicPortfolio = false;
 
@@ -90,7 +88,6 @@ public class User {
     this.selfIntroduction = builder.selfIntroduction;
     this.imgKey = builder.imgKey;
     this.publicPortfolio = builder.publicPortfolio;
-    this.bookmarkedPlaceGuideId = builder.bookmarkedPlaceGuideId;
   }
 
   public String getId() {
@@ -115,10 +112,6 @@ public class User {
 
   public boolean portfolioIsPublic() {
     return publicPortfolio;
-  }
-
-  public long getBookmarkedPlaceGuideId() {
-    return bookmarkedPlaceGuideId;
   }
 
   @Override
