@@ -30,6 +30,7 @@ public class User {
   private final String selfIntroduction;
   @Nullable
   private final String imgKey;
+  private final long bookmarkedPlaceGuideId;
 
   public static class Builder {
     // Required.
@@ -42,6 +43,7 @@ public class User {
     private String selfIntroduction;
     @Nullable
     private String imgKey;
+    private long bookmarkedPlaceGuideId;
     private boolean publicPortfolio = false;
 
     public Builder(String id, String email) {
@@ -66,6 +68,11 @@ public class User {
 
     public Builder setPublicPortfolio(boolean publicPortfolio) {
       this.publicPortfolio = publicPortfolio;
+      return this;
+    }
+
+    public Builder setBookmarkedPlaceGuideId(long bookmarkedPlaceGuideId) {
+      this.bookmarkedPlaceGuideId = bookmarkedPlaceGuideId;
       return this;
     }
 
