@@ -21,6 +21,9 @@ import com.google.sps.data.RepositoryType;
 import com.google.sps.user.User;
 import com.google.sps.user.repository.UserRepository;
 import com.google.sps.user.repository.UserRepositoryFactory;
+import com.google.sps.placeGuide.PlaceGuide;
+import com.google.sps.placeGuide.repository.PlaceGuideRepository;
+import com.google.sps.placeGuide.repository.PlaceGuideRepositoryFactory;
 import org.jetbrains.annotations.Nullable;
 
 import javax.servlet.annotation.WebServlet;
@@ -32,46 +35,17 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * This servlet handles users' data.
+ * This servlet handles bookmarking place guide.
  */
-@WebServlet("/user-data-servlet")
-public class UserDataServlet extends HttpServlet {
-  public static final String NAME_INPUT = "name";
-  public static final String PUBLIC_PORTFOLIO_INPUT = "publicPortfolio";
-  public static final String PUBLIC_PORTFOLIO_INPUT_PUBLIC_VALUE = "public";
-  public static final String SELF_INTRODUCTION_INPUT = "selfIntroduction";
-  public static final String IMG_KEY_INPUT = "imgKey";
-  public static final String DELETE_IMG_INPUT = "deleteImg";
+@WebServlet("/bookmark-place-guide-servlet")
+public class BookmarkPlaceGuideServlet extends HttpServlet {
 
   private final UserRepository userRepository =
-          UserRepositoryFactory.getUserRepository(RepositoryType.DATASTORE);;
-  private final UserService userService = UserServiceFactory.getUserService();;
+      UserRepositoryFactory.getUserRepository(RepositoryType.DATASTORE);
+  private final PlaceGuideRepository placeGuideRepository = 
+      PlaceGuideRepositoryFactory.getPlaceGuideRepository(RepositoryType.DATASTORE);
+  private final UserService userService = UserServiceFactory.getUserService();
 
-  private final BlobstoreService blobstoreService;
-  private final BlobInfoFactory blobInfoFactory;
-
-  /**
-   * For production.
-   */
-  public UserDataServlet() {
-    this(BlobstoreServiceFactory.getBlobstoreService(), new BlobInfoFactory());
-  }
-
-  /**
-   * For testing purposes.
-   */
-  public UserDataServlet(BlobstoreService blobstoreService, BlobInfoFactory blobInfoFactory) {
-    this.blobstoreService = blobstoreService;
-    this.blobInfoFactory = blobInfoFactory;
-  }
-
-  /**
-   * Saves the recently submitted userdata (updates it if the user already has some data saved) in
-   * the database. Note: the user's name, self-introduction and portfolio status will be rewritten
-   * with the new data, whatewer it is. (even if the new data is empty and previously the user had
-   * some data saved) However, the user's photo is kept if they didn't submit a new one, unless the
-   * user specifically exressed their preference to drop the photo from their profile.
-   */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     User user = getUserFromRequest(request);
@@ -86,22 +60,12 @@ public class UserDataServlet extends HttpServlet {
     response.sendRedirect("/index.html");
   }
 
-  /**
-   * Returns the data of the user who is currently logged in.
-   */
-  @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    User user = userRepository.getUser(userService.getCurrentUser().getUserId());
-    response.setContentType("application/json;");
-    response.getWriter().println(convertToJsonUsingGson(user));
-  }
-
   private void deleteBlobWithGivenKeyValue(String keyValue) {
     BlobKey blobKey = new BlobKey(keyValue);
     blobstoreService.delete(blobKey);
   }
 
-  private User getUserFromRequest(HttpServletRequest request) {
+  private User getUserBookmarkedPlaceGuides(HttpServletRequest request) {
     String id = userService.getCurrentUser().getUserId();
     String email = userService.getCurrentUser().getEmail();
     User.Builder newUserBuilder = new User.Builder(id, email);

@@ -1,6 +1,7 @@
 package com.google.sps.placeGuide.repository;
 
 import org.jetbrains.annotations.Nullable;
+import com.google.sps.user.User;
 import com.google.sps.placeGuide.PlaceGuide;
 import java.util.List;
 
@@ -9,7 +10,7 @@ public interface PlaceGuideRepository {
 
   public void savePlaceGuide(PlaceGuide placeGuide);
 
-  public void bookmarkPlaceGuide(String saverId, long bookmarkedPlaceGuideId);
+  public void bookmarkPlaceGuide(User saver);
 
   // @return all public {@code PlaceGuide}.
   public List<PlaceGuide> getAllPublicPlaceGuides();
