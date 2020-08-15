@@ -45,48 +45,43 @@ public final class DatastorePlaceGuideRepositoryTest {
   public static final String IMAGE_KEY = "imageKey";
 
   private final PlaceGuide testPublicPlaceGuideA = 
-                                            new PlaceGuide.Builder(A_PUBLIC_ID, NAME, AUDIO_KEY, 
-                                                                       CREATOR_A_ID, COORDINATE)
-                                            .setPlaceId(PLACE_ID)
-                                            .setPlaceGuideStatus(IS_PUBLIC)
-                                            .setLength(LENGTH)
-                                            .setDescription(DESCRIPTION)
-                                            .setImageKey(IMAGE_KEY)
-                                            .build();
+      new PlaceGuide.Builder(A_PUBLIC_ID, NAME, AUDIO_KEY, CREATOR_A_ID, COORDINATE)
+      .setPlaceId(PLACE_ID)
+      .setPlaceGuideStatus(IS_PUBLIC)
+      .setLength(LENGTH)
+      .setDescription(DESCRIPTION)
+      .setImageKey(IMAGE_KEY)
+      .build();
 
   private final PlaceGuide previousTestPublicPlaceGuideA = 
-                                            new PlaceGuide.Builder(A_PUBLIC_ID, NAME, AUDIO_KEY, 
-                                                                       CREATOR_A_ID, COORDINATE)
-                                            .setPlaceGuideStatus(IS_PUBLIC)
-                                            .build();
+      new PlaceGuide.Builder(A_PUBLIC_ID, NAME, AUDIO_KEY, CREATOR_A_ID, COORDINATE)
+      .setPlaceGuideStatus(IS_PUBLIC)
+      .build();
 
   private final PlaceGuide testPrivatePlaceGuideA = 
-                                            new PlaceGuide.Builder(A_PRIVATE_ID, NAME, AUDIO_KEY, 
-                                                                        CREATOR_A_ID, COORDINATE)
-                                            .setPlaceId(PLACE_ID)
-                                            .setLength(LENGTH)
-                                            .setDescription(DESCRIPTION)
-                                            .setImageKey(IMAGE_KEY)
-                                            .build();
+      new PlaceGuide.Builder(A_PRIVATE_ID, NAME, AUDIO_KEY, CREATOR_A_ID, COORDINATE)
+      .setPlaceId(PLACE_ID)
+      .setLength(LENGTH)
+      .setDescription(DESCRIPTION)
+      .setImageKey(IMAGE_KEY)
+      .build();
 
   private final PlaceGuide testPublicPlaceGuideB = 
-                                            new PlaceGuide.Builder(B_PUBLIC_ID, NAME, AUDIO_KEY, 
-                                                                       CREATOR_B_ID, COORDINATE)
-                                            .setPlaceId(PLACE_ID)
-                                            .setPlaceGuideStatus(IS_PUBLIC)
-                                            .setLength(LENGTH)
-                                            .setDescription(DESCRIPTION)
-                                            .setImageKey(IMAGE_KEY)
-                                            .build();
+      new PlaceGuide.Builder(B_PUBLIC_ID, NAME, AUDIO_KEY, CREATOR_B_ID, COORDINATE)
+      .setPlaceId(PLACE_ID)
+      .setPlaceGuideStatus(IS_PUBLIC)
+      .setLength(LENGTH)
+      .setDescription(DESCRIPTION)
+      .setImageKey(IMAGE_KEY)
+      .build();
 
   private final PlaceGuide testPrivatePlaceGuideB = 
-                                            new PlaceGuide.Builder(B_PRIVATE_ID, NAME, AUDIO_KEY, 
-                                                                        CREATOR_B_ID, COORDINATE)
-                                            .setPlaceId(PLACE_ID)
-                                            .setLength(LENGTH)
-                                            .setDescription(DESCRIPTION)
-                                            .setImageKey(IMAGE_KEY)
-                                            .build();
+      new PlaceGuide.Builder(B_PRIVATE_ID, NAME, AUDIO_KEY, CREATOR_B_ID, COORDINATE)
+      .setPlaceId(PLACE_ID)
+      .setLength(LENGTH)
+      .setDescription(DESCRIPTION)
+      .setImageKey(IMAGE_KEY)
+      .build();
 
   private void saveTestPlaceGuidesEntities(List<PlaceGuide> placeGuides) {
     for (PlaceGuide placeGuide : placeGuides) {
