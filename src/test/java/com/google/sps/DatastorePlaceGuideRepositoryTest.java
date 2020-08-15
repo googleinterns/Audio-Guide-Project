@@ -288,7 +288,6 @@ public final class DatastorePlaceGuideRepositoryTest {
     Key deletedEntityKey = KeyFactory.createKey(DatastorePlaceGuideRepository.ENTITY_KIND, 
                                                                               A_PUBLIC_ID);
     Entity deletedEntity = datastore.get(deletedEntityKey);
-    
   }
 
   @After

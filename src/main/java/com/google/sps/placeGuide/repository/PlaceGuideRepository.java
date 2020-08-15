@@ -1,7 +1,6 @@
 package com.google.sps.placeGuide.repository;
 
 import org.jetbrains.annotations.Nullable;
-import com.google.sps.user.User;
 import com.google.sps.placeGuide.PlaceGuide;
 import java.util.List;
 
@@ -10,7 +9,7 @@ public interface PlaceGuideRepository {
 
   public void savePlaceGuide(PlaceGuide placeGuide);
 
-  public void bookmarkPlaceGuide(User saver);
+  public void bookmarkPlaceGuide(long placeGuideId, String userId);
 
   // @return all public {@code PlaceGuide}.
   public List<PlaceGuide> getAllPublicPlaceGuides();
@@ -26,7 +25,7 @@ public interface PlaceGuideRepository {
   // (not available to be viewed by other users).
   public List<PlaceGuide> getCreatedPrivatePlaceGuides(String creatorId);
 
-  public List<PlaceGuide> getBookmarkedPlaceGuides(String creatorId);
+  public List<PlaceGuide> getBookmarkedPlaceGuides(String userId);
 
   public void deletePlaceGuide(long placeGuideId);
 }

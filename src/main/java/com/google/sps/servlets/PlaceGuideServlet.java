@@ -57,7 +57,8 @@ public class PlaceGuideServlet extends HttpServlet {
     ALL, 
     CREATED_ALL, 
     CREATED_PUBLIC, 
-    CREATED_PRIVATE 
+    CREATED_PRIVATE,
+    BOOKMARKED
   }
 
   /**
@@ -97,6 +98,8 @@ public class PlaceGuideServlet extends HttpServlet {
       case CREATED_PRIVATE:
         placeGuides = placeGuideRepository.getCreatedPrivatePlaceGuides(userId);
         break;
+      case BOOKMARKED:
+        placeGuides = placeGuideRepository.getBookmarkedPlaceGuides(userId);
       default:
         throw new IllegalStateException("Place Guide type does not exist!");
     }

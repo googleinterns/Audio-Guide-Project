@@ -14,6 +14,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import org.jetbrains.annotations.Nullable;
 import com.google.sps.placeGuide.repository.PlaceGuideRepository;
+import com.google.sps.user.repository.impl.DatastoreUserRepository;
+import com.google.sps.user.User;
 
 /** Class for handling place guide repository using datastore. */
 public class DatastorePlaceGuideRepository implements PlaceGuideRepository {
@@ -50,6 +52,25 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository {
     placeGuideEntity.setProperty(IMAGE_KEY_PROPERTY, placeGuide.getImageKey());
 
     return placeGuideEntity;
+  }
+
+  @Override
+  public void bookmarkPlaceGuide(long placeGuideId, User userId) {
+    try {
+      Key userEntityKey = KeyFactory.createKey(DatastoreUserRepository.ENTITY_KIND, userId);
+      Entity userEntity = datastore.get(userEntityKey);
+      List<Key> bookmarkedPlaceGuides = 
+          (ArrayList) userEntity.getProperty("bookmarkedPlaceGuides");
+      Key placeGuideKey = KeyFactory.createKey(ENTITY_KIND, placeGuideId);
+      bookmarkedPlaceGuides.add(placeGuideKey);
+      Entity updatedUserEntity = 
+          Entity.newBuilder(userEntity)
+          .set(DatastoreUserRepository.BOOKMARKED_PLACE_GUIDES_PROPERTY, bookmarkedPlaceGuides)
+          .build();
+      datastore.update(updatedUserEntity);
+    } catch (EntityNotFoundException err) {
+      System.out.println(err);
+    }
   }
 
   @Override
@@ -114,6 +135,18 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository {
             .setPlaceGuideStatus(isPublic)
             .build();
     return placeGuide;
+  }
+
+  @Override
+  public List<PlaceGuide> getBookmarkedPlaceGuides(String userId) {
+    try {
+      Key userEntityKey = KeyFactory.createKey(DatastoreUserRepository.ENTITY_KIND, userId);
+      Entity userEntity = datastore.get(userEntityKey);
+      return (ArrayList) userEntity.getProperty(
+          DatastoreUserRepository.BOOKMARKED_PLACE_GUIDES_PROPERTY);
+    } catch(EntityNotFoundException err) {
+      System.out.println(err);
+    }
   }
 
   @Override

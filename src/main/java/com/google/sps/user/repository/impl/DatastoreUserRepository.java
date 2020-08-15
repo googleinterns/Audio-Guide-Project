@@ -29,6 +29,7 @@ public class DatastoreUserRepository implements UserRepository {
   public static final String PUBLIC_PORTFOLIO_PROPERTY = "publicPortfolio";
   public static final String SELF_INTRODUCTION_PROPERTY = "selfIntroduction";
   public static final String IMG_KEY_PROPERTY = "imgKey";
+  public static final String BOOKMARKED_PLACE_GUIDES_PROPERTY = "bookmarkedPlaceGuides";
 
   @Override
   public void saveUser(User user) {

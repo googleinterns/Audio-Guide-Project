@@ -17,7 +17,6 @@ package com.google.sps.user;
 import java.util.Objects;
 import org.jetbrains.annotations.Nullable;
 import java.util.List;
-import com.google.appengine.api.datastore.Entity;
 import com.google.sps.placeGuide.PlaceGuide;
 
 /**
@@ -33,7 +32,6 @@ public class User {
   private final String selfIntroduction;
   @Nullable
   private final String imgKey;
-  private final List<PlaceGuide> bookmarkedPlaceGuides;
 
   public static class Builder {
     // Required.
@@ -46,7 +44,6 @@ public class User {
     private String selfIntroduction;
     @Nullable
     private String imgKey;
-    private final List<PlaceGuide> bookmarkedPlaceGuides;
     private boolean publicPortfolio = false;
 
     public Builder(String id, String email) {
@@ -74,11 +71,6 @@ public class User {
       return this;
     }
 
-    public Builder setBookmarkedPlaceGuideId(long bookmarkedPlaceGuideId) {
-      this.bookmarkedPlaceGuideId = bookmarkedPlaceGuideId;
-      return this;
-    }
-
     public User build() {
       return new User(this);
     }
@@ -91,7 +83,6 @@ public class User {
     this.selfIntroduction = builder.selfIntroduction;
     this.imgKey = builder.imgKey;
     this.publicPortfolio = builder.publicPortfolio;
-    this.bookmarkedPlaceGuideId = builder.bookmarkedPlaceGuideId;
   }
 
   public String getId() {
@@ -116,10 +107,6 @@ public class User {
 
   public boolean portfolioIsPublic() {
     return publicPortfolio;
-  }
-
-  public long getBookmarkedPlaceGuideId() {
-    return bookmarkedPlaceGuideId;
   }
 
   @Override

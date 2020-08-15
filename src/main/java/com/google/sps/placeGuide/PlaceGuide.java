@@ -89,15 +89,6 @@ public class PlaceGuide {
     }
   }
 
-  @Override
-  public boolean equals(Object o){
-    if (!(o instanceof PlaceGuide)) {
-      return false;
-    }
-    PlaceGuide placeGuide = (PlaceGuide) o;
-    return placeGuide.getId().equals(this.getId());
-  }  
-
   public long getId() {
     return id;
   }
