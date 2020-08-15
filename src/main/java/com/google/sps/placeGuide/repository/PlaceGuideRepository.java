@@ -9,6 +9,8 @@ public interface PlaceGuideRepository {
 
   public void savePlaceGuide(PlaceGuide placeGuide);
 
+  public void bookmarkPlaceGuide(String saverId, long bookmarkedPlaceGuideId);
+
   // @return all public {@code PlaceGuide}.
   public List<PlaceGuide> getAllPublicPlaceGuides();
 
@@ -22,6 +24,8 @@ public interface PlaceGuideRepository {
   // Finds all of the user's created place guides that are private
   // (not available to be viewed by other users).
   public List<PlaceGuide> getCreatedPrivatePlaceGuides(String creatorId);
+
+  public List<PlaceGuide> getBookmarkedPlaceGuides(String creatorId);
 
   public void deletePlaceGuide(long placeGuideId);
 }

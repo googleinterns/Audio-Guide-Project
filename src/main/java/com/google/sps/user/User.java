@@ -16,6 +16,9 @@ package com.google.sps.user;
 
 import java.util.Objects;
 import org.jetbrains.annotations.Nullable;
+import java.util.List;
+import com.google.appengine.api.datastore.Entity;
+import com.google.sps.placeGuide.PlaceGuide;
 
 /**
  * Stores the data related to one user.
@@ -30,8 +33,7 @@ public class User {
   private final String selfIntroduction;
   @Nullable
   private final String imgKey;
-  @Nullable
-  private final long bookmarkedPlaceGuideId;
+  private final List<PlaceGuide> bookmarkedPlaceGuides;
 
   public static class Builder {
     // Required.
@@ -44,8 +46,7 @@ public class User {
     private String selfIntroduction;
     @Nullable
     private String imgKey;
-    @Nullable
-    private long bookmarkedPlaceGuideId;
+    private final List<PlaceGuide> bookmarkedPlaceGuides;
     private boolean publicPortfolio = false;
 
     public Builder(String id, String email) {
