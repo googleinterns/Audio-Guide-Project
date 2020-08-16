@@ -22,7 +22,9 @@ import com.google.sps.data.RepositoryType;
 import com.google.sps.user.User;
 import com.google.sps.user.repository.UserRepository;
 import com.google.sps.user.repository.UserRepositoryFactory;
+import com.google.sps.user.repository.impl.DatastoreUserRepository;
 import org.jetbrains.annotations.Nullable;
+import com.google.appengine.api.datastore.*;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -30,6 +32,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
 
 /**
@@ -75,14 +78,15 @@ public class UserDataServlet extends HttpServlet {
    */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    User user = getUserFromRequest(request);
     User prevUserData = userRepository.getUser(userService.getCurrentUser().getUserId());
-    if (prevUserData != null
+    boolean prevUserDataExists = (Boolean) (prevUserData != null);
+    if (prevUserDataExists
             && prevUserData.getImgKey() != null
             && !prevUserData.getImgKey().equals(user.getImgKey())) {
       // Delete previous image blob from blobstore, because it was overwritten or deleted.
       deleteBlobWithGivenKeyValue(prevUserData.getImgKey());
     }
+    User user = getUserFromRequest(request, prevUserDataExists);
     userRepository.saveUser(user);
     response.sendRedirect("/index.html");
   }
@@ -105,8 +109,19 @@ public class UserDataServlet extends HttpServlet {
   private User getUserFromRequest(HttpServletRequest request, boolean prevUserDataExists) {
     String id = userService.getCurrentUser().getUserId();
     String email = userService.getCurrentUser().getEmail();
-    List<long> bookmarkedPlaceGuides = request.getParameter("")
-    User.Builder newUserBuilder = new User.Builder(id, email);
+    List<long> bookmarkedPlaceGuides;
+    if (prevUserDataExists) {
+      Key prevUserKey = KeyFactory.createKey(DatastoreUserRepository.ENTITY_KIND, id);
+      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+      Entity prevUserEntity = datastore.get(prevUserKey);
+      // Get user's previous bookmarkedPlaceGuides.
+      bookmarkedPlaceGuides = 
+          (ArrayList) prevUserEntity
+          .getProperty(DatastoreUserRepository.BOOKMARKED_PLACE_GUIDES_PROPERTY);
+    } else {
+      bookmarkedPlaceGuides = new ArrayList<>();
+    }
+    User.Builder newUserBuilder = new User.Builder(id, email, bookmarkedPlaceGuides);
     String name = request.getParameter(NAME_INPUT);
     if (!name.isEmpty()) {
       newUserBuilder.setName(name);
