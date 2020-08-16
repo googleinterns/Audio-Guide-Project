@@ -40,16 +40,14 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 
 @RunWith(JUnit4.class)
 public final class UserCreationServletTest {
   private static final String ID = "userid";
   private static final String EMAIL = "user@gmail.com";
-  private static final List<Long> BOOKMARKED_PLACE_GUIDES = Collections.unmodifiableList(
-      Arrays.asList(12345));
-  private static final List<Long> EMPTY_BOOKMARKED_PLACE_GUIDES = Collections.unmodifiableList(
-      Arrays.asList());
+  private static final List<Long> BOOKMARKED_PLACE_GUIDES = Arrays.asList((long) 12345);
+  private static final List<Long> EMPTY_BOOKMARKED_PLACE_GUIDES = Arrays.asList();
   private static final String NAME = "username";
   private static final String SELF_INTRODUCTION = "I am the user";
   private static final String IMG_KEY = "img1234";

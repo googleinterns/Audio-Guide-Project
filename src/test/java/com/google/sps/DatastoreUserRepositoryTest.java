@@ -37,7 +37,7 @@ import java.util.Collections;
 public final class DatastoreUserRepositoryTest {
   private static final String ID = "userid";
   private static final String EMAIL = "user@gmail.com";
-  private static final List<Long> BOOKMARKED_PLACE_GUIDES = Collections.unmodifiableList(Arrays.asList(12345));
+  private static final List<Long> BOOKMARKED_PLACE_GUIDES = Arrays.asList((long) 12345);
   private static final String NAME = "username";
   private static final String SELF_INTRODUCTION = "I am the user";
   private static final String IMG_KEY = "img1234";

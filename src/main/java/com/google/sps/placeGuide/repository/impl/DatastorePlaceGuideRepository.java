@@ -118,6 +118,23 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository {
     return Collections.unmodifiableList(createdPlaceGuides);
   }
 
+  @Override
+  public List<PlaceGuide> getBookmarkedPlaceGuides(String userId) {
+    List<PlaceGuide> bookmarkedPlaceGuides = new ArrayList<>();
+    User user = userRepository.getUser(userId);
+    List<Long> bookmarkedPlaceGuidesIds = user.getBookmarkedPlaceGuides();
+    for (long placeGuideId : bookmarkedPlaceGuidesIds) {
+      Key placeGuideEntityKey = KeyFactory.createKey(ENTITY_KIND, placeGuideId);
+      try {
+        Entity placeGuideEntity = datastore.get(placeGuideEntityKey);
+        bookmarkedPlaceGuides.add(getPlaceGuideFromEntity(placeGuideEntity));
+      } catch(EntityNotFoundException err) {
+        System.out.println("PlaceGuide entity does not exist or has already been removed.");
+      }
+    }
+    return bookmarkedPlaceGuides;
+  }
+
   private PlaceGuide getPlaceGuideFromEntity(Entity placeGuideEntity) {
     long id = placeGuideEntity.getKey().getId();
     String name = (String) placeGuideEntity.getProperty(NAME_PROPERTY);
@@ -138,18 +155,6 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository {
             .setPlaceGuideStatus(isPublic)
             .build();
     return placeGuide;
-  }
-
-  @Override
-  public List<PlaceGuide> getBookmarkedPlaceGuides(String userId) {
-    try {
-      Key userEntityKey = KeyFactory.createKey(DatastoreUserRepository.ENTITY_KIND, userId);
-      Entity userEntity = datastore.get(userEntityKey);
-      return (ArrayList) userEntity.getProperty(
-          DatastoreUserRepository.BOOKMARKED_PLACE_GUIDES_PROPERTY);
-    } catch(EntityNotFoundException err) {
-      System.out.println(err);
-    }
   }
 
   @Override
