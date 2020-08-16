@@ -79,10 +79,8 @@ public class UserDataServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     User prevUserData = userRepository.getUser(userService.getCurrentUser().getUserId());
-    User user = getUserFromRequest(request, prevUserDataExists);
-    if (prevUserDataExists
-            && prevUserData.getImgKey() != null
-            && !prevUserData.getImgKey().equals(user.getImgKey())) {
+    User user = getUserFromRequest(request, prevUserData);
+    if (prevUserData.getImgKey() != null && !prevUserData.getImgKey().equals(user.getImgKey())) {
       // Delete previous image blob from blobstore, because it was overwritten or deleted.
       deleteBlobWithGivenKeyValue(prevUserData.getImgKey());
     }
@@ -105,21 +103,10 @@ public class UserDataServlet extends HttpServlet {
     blobstoreService.delete(blobKey);
   }
 
-  private User getUserFromRequest(HttpServletRequest request, boolean prevUserDataExists) {
+  private User getUserFromRequest(HttpServletRequest request, User prevUserData) {
     String id = userService.getCurrentUser().getUserId();
     String email = userService.getCurrentUser().getEmail();
-    List<Long> bookmarkedPlaceGuides;
-    if (prevUserDataExists) {
-      Key prevUserKey = KeyFactory.createKey(DatastoreUserRepository.ENTITY_KIND, id);
-      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-      Entity prevUserEntity = datastore.get(prevUserKey);
-      // Get user's previous bookmarkedPlaceGuides.
-      bookmarkedPlaceGuides = 
-          (ArrayList) prevUserEntity
-          .getProperty(DatastoreUserRepository.BOOKMARKED_PLACE_GUIDES_PROPERTY);
-    } else {
-      bookmarkedPlaceGuides = new ArrayList<>();
-    }
+    List<Long> bookmarkedPlaceGuides = prevUserData.getBookmarkedPlaceGuides();
     User.Builder newUserBuilder = new User.Builder(id, email, bookmarkedPlaceGuides);
     String name = request.getParameter(NAME_INPUT);
     if (!name.isEmpty()) {
