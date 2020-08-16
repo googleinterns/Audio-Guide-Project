@@ -79,7 +79,6 @@ public class UserDataServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     User prevUserData = userRepository.getUser(userService.getCurrentUser().getUserId());
-    boolean prevUserDataExists = (Boolean) (prevUserData != null);
     User user = getUserFromRequest(request, prevUserDataExists);
     if (prevUserDataExists
             && prevUserData.getImgKey() != null
