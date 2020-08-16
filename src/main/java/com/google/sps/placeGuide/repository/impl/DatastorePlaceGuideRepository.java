@@ -15,12 +15,17 @@ import java.util.Collections;
 import org.jetbrains.annotations.Nullable;
 import com.google.sps.placeGuide.repository.PlaceGuideRepository;
 import com.google.sps.user.repository.impl.DatastoreUserRepository;
+import com.google.sps.user.repository.UserRepository;
+import com.google.sps.user.repository.UserRepositoryFactory;
+import com.google.sps.data.RepositoryType;
 import com.google.sps.user.User;
 
 /** Class for handling place guide repository using datastore. */
 public class DatastorePlaceGuideRepository implements PlaceGuideRepository {
 
   private final DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+  private final UserRepository userRepository =
+      UserRepositoryFactory.getUserRepository(RepositoryType.DATASTORE);
   public static final String ENTITY_KIND = "PlaceGuide";
   public static final String NAME_PROPERTY = "name";
   public static final String AUDIO_KEY_PROPERTY = "audioKey";
@@ -56,22 +61,19 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository {
 
   @Override
   public void bookmarkPlaceGuide(long placeGuideId, String userId) {
-    try {
-      Key userEntityKey = KeyFactory.createKey(DatastoreUserRepository.ENTITY_KIND, userId);
-      Entity userEntity = datastore.get(userEntityKey);
+    User user = userRepository.getUser(userId);
+    List<Long> bookmarkedPlaceGuides = user.getBookmarkedPlaceGuides();
+    bookmarkedPlaceGuides.add(placeGuideId);
 
-      // Get user's properties in order to update user entity bookmarkedPlaceGuides data.
-      
-
-      List<Key> bookmarkedPlaceGuides = 
-          (ArrayList) userEntity.getProperty("bookmarkedPlaceGuides");
-      Key placeGuideKey = KeyFactory.createKey(ENTITY_KIND, placeGuideId);
-      bookmarkedPlaceGuides.add(placeGuideKey);
-
-      datastore.update(updatedUserEntity);
-    } catch (EntityNotFoundException err) {
-      System.out.println(err);
-    }
+    // Create a new User object with the updated {@code bookmarkedPlaceGuides}.
+    User updatedUser =
+        new User.Builder(userId, user.getEmail(), bookmarkedPlaceGuides)
+        .setName(user.getName())
+        .addSelfIntroduction(user.getSelfIntroduction())
+        .setPublicPortfolio(user.portfolioIsPublic())
+        .addImgKey(user.getImgKey())
+        .build();
+    userRepository.saveUser(updatedUser);
   }
 
   @Override

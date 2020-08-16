@@ -44,6 +44,5 @@ public class BookmarkPlaceGuideServlet extends HttpServlet {
     String currentUrl = request.getParameter("currentUrl");
     long placeGuideId = Long.parseLong(request.getParameter("placeGuideId"));
     placeGuideRepository.bookmarkPlaceGuide(placeGuideId, userId);
-    response.sendRedirect(currentUrl);
   }
 }

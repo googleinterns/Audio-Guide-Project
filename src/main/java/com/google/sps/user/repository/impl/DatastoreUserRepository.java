@@ -18,6 +18,8 @@ import com.google.appengine.api.datastore.*;
 import com.google.sps.user.User;
 import com.google.sps.user.repository.UserRepository;
 import org.jetbrains.annotations.Nullable;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Handles the storage of comments using the Datastore API.
@@ -68,11 +70,17 @@ public class DatastoreUserRepository implements UserRepository {
     String id = (String) userEntity.getKey().getName();
     String name = (String) userEntity.getProperty(NAME_PROPERTY);
     String email = (String) userEntity.getProperty(EMAIL_PROPERTY);
+    List<Long> bookmarkedPlaceGuides = 
+        (ArrayList) userEntity.getProperty(BOOKMARKED_PLACE_GUIDES_PROPERTY);
     Boolean publicPortfolio = (Boolean) userEntity.getProperty(PUBLIC_PORTFOLIO_PROPERTY);
     String selfIntroduction = (String) userEntity.getProperty(SELF_INTRODUCTION_PROPERTY);
     String imgKey = (String) userEntity.getProperty(IMG_KEY_PROPERTY);
     User.Builder newUserBuilder =
-            new User.Builder(id, email).setName(name).addSelfIntroduction(selfIntroduction).setPublicPortfolio(publicPortfolio).addImgKey(imgKey);
+        new User.Builder(id, email, bookmarkedPlaceGuides)
+        .setName(name)
+        .addSelfIntroduction(selfIntroduction)
+        .setPublicPortfolio(publicPortfolio)
+        .addImgKey(imgKey);
     return newUserBuilder.build();
   }
 
