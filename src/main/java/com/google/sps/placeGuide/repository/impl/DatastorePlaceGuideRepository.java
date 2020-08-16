@@ -55,18 +55,19 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository {
   }
 
   @Override
-  public void bookmarkPlaceGuide(long placeGuideId, User userId) {
+  public void bookmarkPlaceGuide(long placeGuideId, String userId) {
     try {
       Key userEntityKey = KeyFactory.createKey(DatastoreUserRepository.ENTITY_KIND, userId);
       Entity userEntity = datastore.get(userEntityKey);
+
+      // Get user's properties in order to update user entity bookmarkedPlaceGuides data.
+      
+
       List<Key> bookmarkedPlaceGuides = 
           (ArrayList) userEntity.getProperty("bookmarkedPlaceGuides");
       Key placeGuideKey = KeyFactory.createKey(ENTITY_KIND, placeGuideId);
       bookmarkedPlaceGuides.add(placeGuideKey);
-      Entity updatedUserEntity = 
-          Entity.newBuilder(userEntity)
-          .set(DatastoreUserRepository.BOOKMARKED_PLACE_GUIDES_PROPERTY, bookmarkedPlaceGuides)
-          .build();
+
       datastore.update(updatedUserEntity);
     } catch (EntityNotFoundException err) {
       System.out.println(err);

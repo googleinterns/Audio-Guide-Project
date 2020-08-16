@@ -3,6 +3,7 @@ package com.google.sps.placeGuide.repository;
 import org.jetbrains.annotations.Nullable;
 import com.google.sps.placeGuide.PlaceGuide;
 import java.util.List;
+import com.google.sps.user.User;
 
 /** Interface for handling place guide. */
 public interface PlaceGuideRepository {

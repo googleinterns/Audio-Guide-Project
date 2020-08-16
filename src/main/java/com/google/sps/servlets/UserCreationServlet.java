@@ -26,6 +26,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * This servlet is used for saving the user in the database the first time when they access our website. 
@@ -58,6 +59,7 @@ public class UserCreationServlet extends HttpServlet {
   private User getLoggedInUser() {
     String id = userService.getCurrentUser().getUserId();
     String email = userService.getCurrentUser().getEmail();
+    List<long> bookmarkedPlaceGuides = new ArrayList<>();
     User.Builder newUserBuilder = new User.Builder(id, email);
     return newUserBuilder.build();
   }
