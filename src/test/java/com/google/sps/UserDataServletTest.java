@@ -42,17 +42,21 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Collections;
 
 @RunWith(JUnit4.class)
 public final class UserDataServletTest {
   private static final String ID = "userid";
   private static final String EMAIL = "user@gmail.com";
+  private static final List<Long> BOOKMARKED_PLACE_GUIDES = Collections.unmodifiableList(Arrays.asList(12345));
   private static final String NAME = "username";
   private static final String SELF_INTRODUCTION = "I am the user";
   private static final String IMG_KEY = "/img.com";
 
   private final User toSaveUser =
-      new User.Builder(ID, EMAIL)
+      new User.Builder(ID, EMAIL, BOOKMARKED_PLACE_GUIDES)
           .setName(NAME)
           .setPublicPortfolio(true)
           .addSelfIntroduction(SELF_INTRODUCTION)
@@ -124,6 +128,9 @@ public final class UserDataServletTest {
       assertEquals(NAME, userEntity.getProperty(DatastoreUserRepository.NAME_PROPERTY));
       assertEquals(EMAIL, userEntity.getProperty(DatastoreUserRepository.EMAIL_PROPERTY));
       assertEquals(
+          BOOKMARKED_PLACE_GUIDES, 
+          userEntity.getProperty(DatastoreUserRepository.BOOKMARKED_PLACE_GUIDES_PROPERTY));
+      assertEquals(
           SELF_INTRODUCTION,
           userEntity.getProperty(DatastoreUserRepository.SELF_INTRODUCTION_PROPERTY));
       assertEquals(
@@ -140,6 +147,9 @@ public final class UserDataServletTest {
     Entity userEntity = new Entity(DatastoreUserRepository.ENTITY_KIND, toSaveUser.getId());
     userEntity.setProperty(DatastoreUserRepository.NAME_PROPERTY, toSaveUser.getName());
     userEntity.setProperty(DatastoreUserRepository.EMAIL_PROPERTY, toSaveUser.getEmail());
+    userEntity.setProperty(
+        DatastoreUserRepository.BOOKMARKED_PLACE_GUIDES_PROPERTY, 
+        toSaveUser.getBookmarkedPlaceGuides());
     userEntity.setProperty(
         DatastoreUserRepository.PUBLIC_PORTFOLIO_PROPERTY, toSaveUser.portfolioIsPublic());
     userEntity.setProperty(
@@ -164,6 +174,7 @@ public final class UserDataServletTest {
     User resultUser = gson.fromJson(sw.toString(), User.class);
     assertEquals(ID, resultUser.getId());
     assertEquals(EMAIL, resultUser.getEmail());
+    assertEquals(BOOKMARKED_PLACE_GUIDES, resultUser.getBookmarkedPlaceGuides());
     assertEquals(NAME, resultUser.getName());
     assertTrue(resultUser.portfolioIsPublic());
     assertEquals(SELF_INTRODUCTION, resultUser.getSelfIntroduction());

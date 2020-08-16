@@ -20,7 +20,8 @@ import java.lang.IllegalStateException;
 import java.io.IOException;
 
 /**
- * This servlet handles bookmarking place guide.
+ * This servlet handles bookmarking place guide and removing place guide id from user's 
+ * {@code bookmarkedPlaceGuides}.
  */
 @WebServlet("/bookmark-place-guide")
 public class BookmarkPlaceGuideServlet extends HttpServlet {
@@ -41,7 +42,6 @@ public class BookmarkPlaceGuideServlet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String currentUrl = request.getParameter("currentUrl");
     long placeGuideId = Long.parseLong(request.getParameter("placeGuideId"));
     placeGuideRepository.bookmarkPlaceGuide(placeGuideId, userId);
   }

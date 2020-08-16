@@ -80,13 +80,13 @@ public class UserDataServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     User prevUserData = userRepository.getUser(userService.getCurrentUser().getUserId());
     boolean prevUserDataExists = (Boolean) (prevUserData != null);
+    User user = getUserFromRequest(request, prevUserDataExists);
     if (prevUserDataExists
             && prevUserData.getImgKey() != null
             && !prevUserData.getImgKey().equals(user.getImgKey())) {
       // Delete previous image blob from blobstore, because it was overwritten or deleted.
       deleteBlobWithGivenKeyValue(prevUserData.getImgKey());
     }
-    User user = getUserFromRequest(request, prevUserDataExists);
     userRepository.saveUser(user);
     response.sendRedirect("/index.html");
   }
@@ -109,7 +109,7 @@ public class UserDataServlet extends HttpServlet {
   private User getUserFromRequest(HttpServletRequest request, boolean prevUserDataExists) {
     String id = userService.getCurrentUser().getUserId();
     String email = userService.getCurrentUser().getEmail();
-    List<long> bookmarkedPlaceGuides;
+    List<Long> bookmarkedPlaceGuides;
     if (prevUserDataExists) {
       Key prevUserKey = KeyFactory.createKey(DatastoreUserRepository.ENTITY_KIND, id);
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
