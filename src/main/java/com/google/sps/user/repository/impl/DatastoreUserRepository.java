@@ -26,10 +26,10 @@ public class DatastoreUserRepository implements UserRepository {
   public static final String ENTITY_KIND = "User";
   public static final String NAME_PROPERTY = "name";
   public static final String EMAIL_PROPERTY = "email";
+  public static final String BOOKMARKED_PLACE_GUIDES_PROPERTY = "bookmarkedPlaceGuides";
   public static final String PUBLIC_PORTFOLIO_PROPERTY = "publicPortfolio";
   public static final String SELF_INTRODUCTION_PROPERTY = "selfIntroduction";
   public static final String IMG_KEY_PROPERTY = "imgKey";
-  public static final String BOOKMARKED_PLACE_GUIDES_PROPERTY = "bookmarkedPlaceGuides";
 
   @Override
   public void saveUser(User user) {
@@ -41,6 +41,7 @@ public class DatastoreUserRepository implements UserRepository {
     Entity userEntity = new Entity(ENTITY_KIND, user.getId());
     userEntity.setProperty(NAME_PROPERTY, user.getName());
     userEntity.setProperty(EMAIL_PROPERTY, user.getEmail());
+    userEntity.setProperty(BOOKMARKED_PLACE_GUIDES_PROPERTY, user.getBookmarkedPlaceGuides());
     userEntity.setProperty(PUBLIC_PORTFOLIO_PROPERTY, user.portfolioIsPublic());
     userEntity.setProperty(SELF_INTRODUCTION_PROPERTY, user.getSelfIntroduction());
     userEntity.setProperty(IMG_KEY_PROPERTY, user.getImgKey());

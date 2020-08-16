@@ -60,7 +60,7 @@ public class UserCreationServlet extends HttpServlet {
     String id = userService.getCurrentUser().getUserId();
     String email = userService.getCurrentUser().getEmail();
     List<long> bookmarkedPlaceGuides = new ArrayList<>();
-    User.Builder newUserBuilder = new User.Builder(id, email);
+    User.Builder newUserBuilder = new User.Builder(id, email, bookmarkedPlaceGuides);
     return newUserBuilder.build();
   }
 

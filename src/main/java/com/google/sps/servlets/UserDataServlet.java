@@ -105,6 +105,7 @@ public class UserDataServlet extends HttpServlet {
   private User getUserFromRequest(HttpServletRequest request) {
     String id = userService.getCurrentUser().getUserId();
     String email = userService.getCurrentUser().getEmail();
+    List<long> bookmarkedPlaceGuides = request.getParameter("")
     User.Builder newUserBuilder = new User.Builder(id, email);
     String name = request.getParameter(NAME_INPUT);
     if (!name.isEmpty()) {
