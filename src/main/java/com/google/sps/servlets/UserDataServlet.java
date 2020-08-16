@@ -102,7 +102,7 @@ public class UserDataServlet extends HttpServlet {
     blobstoreService.delete(blobKey);
   }
 
-  private User getUserFromRequest(HttpServletRequest request) {
+  private User getUserFromRequest(HttpServletRequest request, boolean prevUserDataExists) {
     String id = userService.getCurrentUser().getUserId();
     String email = userService.getCurrentUser().getEmail();
     List<long> bookmarkedPlaceGuides = request.getParameter("")
