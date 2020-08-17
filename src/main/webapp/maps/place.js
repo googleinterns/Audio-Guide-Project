@@ -240,8 +240,6 @@ class Place {
         return;
       }
       this.place = results[0];
-      console.log("updated place based on id: ");
-      console.log(this._mapsPlace);
     });
   }
 
@@ -274,7 +272,6 @@ class PlaceGuide extends Place {
       return Place.constructPlaceBasedOnPlaceId(map, placeId, name, placeType, true)
         .catch(error => console.log("Failed to construct place guide based on id: " + error))
         .then(newPlace => {
-            console.log("at construction creatorName is: " + creatorName);
                 return new PlaceGuide(newPlace, databaseId, description, audioKey, audioLength, imgKey, creatorId, creatorName);
             }
         )
