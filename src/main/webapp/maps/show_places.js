@@ -75,14 +75,20 @@ class PlaceDisplayer {
     return new Promise(function(resolve, reject) {
         var publicPlaceGuides = []
         //var p = new Promise();
+        var p = Promise.resolve();
         for (var i=0; i<placeGuidesData.length; i++) {
-            if (placeGuidesData[i].placeId == null) {
-                var pg = placeGuidesData[i];
+            var pg = placeGuidesData[i];
+            if (pg.placeId == null) {
                 publicPlaceGuides.push(PlaceGuide.constructPlaceGuideBasedOnCoordinates(map, pg.id, pg.name, pg.description, 
                     pg.audioKey, pg.audioLength, pg.imgKey, pg.positionLat, pg.positionLng, pg.creatorId, pg.creatorName, pg.placeType));
+            } else {
+                p = p.then( () => {
+                        publicPlaceGuides.push(PlaceGuide.constructPlaceGuideBasedOnPlaceId(map, pg.id, pg.name, pg.description, pg.audioKey, pg.audioLength, 
+                        pg.imgKey, pg.placeId, pg.creatorId, pg.creatorName, pg.placeType));
+                    });
             }
         }
-        resolve(publicPlaceGuides);
+        p.then(resolve(publicPlaceGuides));
         // resolve(PlaceGuide.constructPlaceGuideBasedOnPlaceId(map,
         //   "id2", "PlaceGuide 2", "This is a placeguide 2",
         //   "audioKey2", 4, "imgKey2",
