@@ -38,17 +38,18 @@ class LocationSaver {
   }
 
   onSaveLocationControlEvent() {
-    this._savedPlace.visible = false;
+    this._savedPlace.visible = true;
     if (this._chosenPlace.place != null) {
       this._savedPlace.place = this._chosenPlace.place;
     } else {
       this._savedPlace.position = this._chosenPlace.position;
     }
+    this._chosenPlace.visible = false;
     alert(LocationSaver.SAVED_LOCATION_MESSAGE);
-    var savedPlace = this._savedPlace;
+    var chosenPlace = this._chosenPlace;
     document.getElementById("map")
         .addEventListener(CHOSEN_LOCATION_CHANGE_EVENT, function () {
-      savedPlace.visible = true;
+      chosenPlace.visible = true;
     });
   }
 
