@@ -186,7 +186,6 @@ class Place {
       icon: markerIcon,
       map: this._map,
     });
-    console.log("Marker added for placGuide " + this._name + " to map: " + this._map);
   }
 
   setupInfoWindow() {
@@ -230,17 +229,6 @@ class Place {
       }
       this.place = results[0];
       this.centerMapAround();
-    });
-  }
-
-  updatePlaceBasedOnId(id) {
-    const geocoder = new google.maps.Geocoder();
-    geocoder.geocode({placeId: id}, (results, status) => {
-      if (status !== "OK") {
-        window.alert(Place.GEOCODER_FAIL_MSG + status);
-        return;
-      }
-      this.place = results[0];
     });
   }
 
