@@ -268,6 +268,7 @@ class PlaceGuide extends Place {
         this._imgKey = imgKey;
         this._creatorId = creatorId;
         this._creatorName = creatorName;
+        return newPlaceGuide;
   }
 
   static constructPlaceBasedOnPlaceId(databaseId, name, description, audioKey, audioLength, imgKey, placeId, creatorId, creatorName, placeType){
