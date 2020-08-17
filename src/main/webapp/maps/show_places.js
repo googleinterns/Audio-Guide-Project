@@ -63,7 +63,6 @@ class PlaceDisplayer {
 
     return new Promise(function(resolve, reject) {
         var publicPlaceGuides = []
-        //var p = new Promise();
         var promises = [];
         for (var i=0; i<placeGuidesData.length; i++) {
             var pg = placeGuidesData[i];
@@ -82,13 +81,6 @@ class PlaceDisplayer {
         Promise.all(promises).then(() => {
             resolve(publicPlaceGuides)
         });
-        // resolve(PlaceGuide.constructPlaceGuideBasedOnPlaceId(map,
-        //   "id2", "PlaceGuide 2", "This is a placeguide 2",
-        //   "audioKey2", 4, "imgKey2",
-        //   "ChIJM3bYao8OSUcRpHGkCCTD9yM", "creatorId2",
-        //   "creatorName2", PlaceType.PUBLIC)
-        //    .then(newPlaceGuide => publicPlaceGuides.push(newPlaceGuide))
-        //    .then(() => {return publicPlaceGuides}));
     });
   }
 }
