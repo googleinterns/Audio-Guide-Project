@@ -68,33 +68,17 @@ class Place {
             placeId: placeId,
             fields: ['address_components', 'name', 'geometry']
         };
-
-    // // const geocoder = new google.maps.Geocoder();
-    // // console.log("placeType is");
-    // // console.log(placeType);
-
-    return new Promise(function(resolve, reject) {
-        var service = new google.maps.places.PlacesService(map);
-        console.log("map = ");
-        console.log(map);
-        service.getDetails(request, (place, status) => {
-            if (status === google.maps.places.PlacesServiceStatus.OK) {
-                resolve(new Place(map, 0, 0, name, place, placeType, hasInfoWindow));
-            }
-            else {
-                reject(new Error('Couldnt\'t find the place'+ placeId));
-            }
+        return new Promise(function(resolve, reject) {
+            var service = new google.maps.places.PlacesService(map);
+            service.getDetails(request, (place, status) => {
+                if (status === google.maps.places.PlacesServiceStatus.OK) {
+                    resolve(new Place(map, 0, 0, name, place, placeType, hasInfoWindow));
+                }
+                else {
+                    reject(new Error('Couldnt\'t find the place'+ placeId));
+                }
+            });
         });
-        // geocoder.geocode({placeId: placeId}, function(results, status) {
-        //     if (status === 'OK') {
-        //         console.log("placeType is");
-        //         console.log(placeType);
-        //         resolve(new Place(0, 0, name, results[0], placeType, hasInfoWindow));
-        //     } else {
-        //         reject(new Error('Couldnt\'t find the place'+ placeId));
-        //     }
-        // })
-    });
   }
 
   // Some objects' behaviour is conditioned by the chosenLocation's positionChanges
@@ -114,20 +98,6 @@ class Place {
     this._marker.addListener('drag', function () {
       thisPlace.position = this.getPosition();
     });
-  }
-
-  set map(newMap) {
-    this._map = newMap;
-    this._marker.setMap(newMap);
-    var thisPlace = this;
-    // Close the open infowindow if the user clicks anywhere else on the map.
-    if (this._hasInfoWindow) {
-      this._marker.getMap().addListener('click', function (mapsMouseEvent) {
-        if (!this._infoWindowClosed) {
-          thisPlace.closeInfoWindow();
-        }
-      });
-    }
   }
 
   get position() {
@@ -158,9 +128,6 @@ class Place {
   }
 
   get mapsPlaceName() {
-      console.log("When getting mapsPlaceName: ");
-      //console.log(this._mapsPlace.name);
-      console.log(this._mapsPlace);
       if (this._mapsPlace != null) {
           return this._mapsPlace.name;
       } else {
@@ -185,6 +152,14 @@ class Place {
           this.closeInfoWindow();
         }
       });
+      // Close the open infowindow if the user clicks anywhere else on the map.
+      if (this._hasInfoWindow) {
+      this._map.addListener('click', function (mapsMouseEvent) {
+        if (!this._infoWindowClosed) {
+          thisPlace.closeInfoWindow();
+        }
+      });
+    }
     }
   }
 
@@ -210,6 +185,7 @@ class Place {
       title: this._name,
       icon: markerIcon,
     });
+    this._marker.setMap(newMap);
   }
 
   setupInfoWindow() {
@@ -223,11 +199,6 @@ class Place {
   getInfoWindowContent() {
     var content = "<h3>" + this._name + "</h3>";
     return content;
-  }
-
-  removeMarkerFromMap() {
-    this._map = null;
-    this._marker.setMap(null);
   }
 
   detachFromPlace() {
