@@ -7,11 +7,13 @@ class PlaceDisplayer {
     PlaceDisplayer.getPublicPlaceGuides(map)
         .then(placeGuides => {
             var markers = placeGuides.map(function (placeGuide) {
+                console.log("Next placeguide: ");
+                console.log(placeGuide);
                 return placeGuide._marker;
             });
-            console.log("marker: ");
-            console.log(markers[0]);
-            console.log(markers[0].getPosition().toString());
+            console.log("marker1: ");
+            console.log(markers[1]);
+            console.log(markers[1].getPosition().toString());
             var markerCluster = new MarkerClusterer(map, markers,
                 {imagePath: './img/m'});
        });     
@@ -75,20 +77,27 @@ class PlaceDisplayer {
     return new Promise(function(resolve, reject) {
         var publicPlaceGuides = []
         //var p = new Promise();
-        var p = Promise.resolve();
+        var promises = [];
         for (var i=0; i<placeGuidesData.length; i++) {
             var pg = placeGuidesData[i];
             if (pg.placeId == null) {
                 publicPlaceGuides.push(PlaceGuide.constructPlaceGuideBasedOnCoordinates(map, pg.id, pg.name, pg.description, 
                     pg.audioKey, pg.audioLength, pg.imgKey, pg.positionLat, pg.positionLng, pg.creatorId, pg.creatorName, pg.placeType));
             } else {
-                p = p.then( () => {
-                        publicPlaceGuides.push(PlaceGuide.constructPlaceGuideBasedOnPlaceId(map, pg.id, pg.name, pg.description, pg.audioKey, pg.audioLength, 
-                        pg.imgKey, pg.placeId, pg.creatorId, pg.creatorName, pg.placeType));
-                    });
+                promises.push(new Promise(function(resolve, reject) {
+                    PlaceGuide.constructPlaceGuideBasedOnPlaceId(map, pg.id, pg.name, pg.description, pg.audioKey, pg.audioLength, 
+                            pg.imgKey, pg.placeId, pg.creatorId, pg.creatorName, pg.placeType).then(placeGuide => {
+                                console.log("pushing placeGuide");
+                                console.log(placeGuide)
+                                publicPlaceGuides.push(placeGuide)
+                                resolve()});
+                    }));
             }
         }
-        p.then(resolve(publicPlaceGuides));
+        Promise.all(promises).then(() => {
+            console.log("returned array of placeGuides: " + publicPlaceGuides);
+            resolve(publicPlaceGuides)
+        });
         // resolve(PlaceGuide.constructPlaceGuideBasedOnPlaceId(map,
         //   "id2", "PlaceGuide 2", "This is a placeguide 2",
         //   "audioKey2", 4, "imgKey2",

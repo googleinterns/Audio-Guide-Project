@@ -277,6 +277,7 @@ class PlaceGuide extends Place {
         .catch(error => console.log("Failed to construct place guide based on id: " + error))
         .then(newPlace => {
                 newPlace._marker.setMap(null);
+                newPlace.visible = false;
                 return new PlaceGuide(newPlace, databaseId, description, audioKey, audioLength, imgKey, creatorId, creatorName);
             }
         )
