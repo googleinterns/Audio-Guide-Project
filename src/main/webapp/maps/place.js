@@ -203,13 +203,9 @@ class Place {
         window.alert(Place.GEOCODER_FAIL_MSG + status);
         return;
       }
-      this.updatePlaceAndCenter(results[0]);
+      this.place = results[0];
+      this.centerMapAround();
     });
-  }
-
-  updatePlaceAndCenter(newPlace) {
-    this.place = newPlace;
-    this.centerMapAround();
   }
 
   onPositionChange() {

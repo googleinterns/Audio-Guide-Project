@@ -43,7 +43,8 @@ class SearchBox {
       this.setClosestResult();
       return;
     }
-    this._searchResult.updatePlaceAndCenter(place);
+    this._searchResult.place = place;
+    this._searchResult.centerMapAround();
   }
 
   /**
