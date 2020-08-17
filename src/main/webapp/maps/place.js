@@ -185,7 +185,7 @@ class Place {
       title: this._name,
       icon: markerIcon,
     });
-    this._marker.setMap(newMap);
+    this._marker.setMap(this._map);
   }
 
   setupInfoWindow() {

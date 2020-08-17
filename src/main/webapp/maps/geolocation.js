@@ -32,7 +32,6 @@ class Geolocator {
     this._currentLocation = new Place(map, 0, 0, Geolocator.MY_LOCATION_TITLE,
         null, PlaceType.CURRENT_LOCATION, false);
     this._currentLocation.visible = false;
-    this._currentLocation.map = map;
     this._geolocationControlDiv =
         this.createControlDiv(Geolocator.ENABLE_GEOLOCATION_TITLE,
             Geolocator.DISABLED_GEOLOCATION_IMG_SRC, Geolocator.GEOLOCATION_IMG_ID);

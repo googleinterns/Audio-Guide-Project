@@ -52,7 +52,6 @@
             // Searching functionality.
             var searchResult =
                 new Place(map, 0, 0, "Picked Location", null, PlaceType.SEARCH_RESULT, true);
-            searchResult.map = map;
             searchResult.visible = false;
             var searchBox = new SearchBox(map, searchResult, "search-box");
             searchBox.init();

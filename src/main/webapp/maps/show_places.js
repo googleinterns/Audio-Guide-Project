@@ -6,15 +6,10 @@ class PlaceDisplayer {
   static displayPublicPlaceGuides(map) {
     PlaceDisplayer.getPublicPlaceGuides(map)
         .then(placeGuides => {
-            console.log("public place guides: ");
-            console.log(placeGuides);
-            placeGuides.forEach(placeGuide => placeGuide.map = map);
             var markers = placeGuides.map(function (placeGuide) {
                 console.log("marker" + placeGuide._marker);
                 return placeGuide._marker;
             });
-            console.log("Markers");
-            console.log(markers);
             var markerCluster = new MarkerClusterer(map, markers,
                 {imagePath: './img/m'});
        });     

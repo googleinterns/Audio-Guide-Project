@@ -61,7 +61,6 @@
                 new Place(map, 0, 0, "Picked Location", null, PlaceType.SEARCH_RESULT, true);
             chosenLocation.visible = false;
             chosenLocation.draggable = true;
-            chosenLocation.map = map;
             chosenLocation.triggerChosenLocationChangeEvent = true;
             document.getElementById("map")
                 .addEventListener(CHOSEN_LOCATION_CHANGE_EVENT, function() {
