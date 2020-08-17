@@ -34,26 +34,45 @@ var PlaceType = {
  * The place is represented by a marker corresponding to placeType,
  * and it may also have an infoWindow, containing the name.
  * The place may be defined my specifying
- * its position(@param positionLat, @param positionLng) and @param name,
- * or by specifying a place from the Google Place database(@param mapsPlace).
+ * its position(@param positionLat, @param positionLng), 
+ * using @code constructPlaceBasedOnCoordinates factory method, 
+ * or by specifying a place from the Google Place database(@param mapsPlace), 
+ * using @code constructPlaceBasedOnPlaceId factory method.
+ * remark that @code constructPlaceBasedOnPlaceId returns a promise!
  * Remark that mapsPlace has the higher priority(because it contains more information).
- * Whenever a new position is set, the mapsPlace is discarder, and vice versa.
+ * Whenever a new position is set, the mapsPlace is discarded, and vice versa.
  */
 class Place {
   constructor(positionLat, positionLng, name, mapsPlace, placeType, hasInfoWindow) {
     this._mapsPlace = mapsPlace;
+    this._name = name;
     if (this._mapsPlace != null) {
       this._position = this._mapsPlace.geometry.location;
-      this.name = this._mapsPlace.name;
     } else {
       this._position = new google.maps.LatLng(positionLat, positionLng);
-      this._name = name;
     }
     this._placeType = placeType;
     this._hasInfoWindow = hasInfoWindow;
     this._toSetVisiblePlace = null;
     this.setupRepresentationOnMap();
     this.setupOnPositionChangeEvent();
+  }
+
+  static constructPlaceBasedOnCoordinates(positionLat, positionLong, name, placeType, hasInfoWindow){
+      return new Place(positionLat, positionLng, name, null, placeType, hasInfoWindow);
+  }
+
+  static constructPlaceBasedOnPlaceId(placeId, name, placeType, hasInfoWindow){
+    const geocoder = new google.maps.Geocoder();
+    return new Promise(function(resolve, reject) {
+        geocoder.geocode({placeId: placeId}, function(results, status) {
+            if (status === 'OK') {
+                resolve(new Place(0, 0, name, results[0], placeType, hasInfoWindow));
+            } else {
+                reject(new Error('Couldnt\'t find the place'+ placeId));
+            }
+        })
+    });
   }
 
   // Some objects' behaviour is conditioned by the chosenLocation's positionChanges
@@ -112,9 +131,19 @@ class Place {
     // Overwrite position when mapsPlace changes.
     // use the position of the new mapsPlace.
     this._position = this._mapsPlace.geometry.location;
-    this._name = this._mapsPlace.name;
     this._marker.setPosition(this._position);
     this.onPositionChange();
+  }
+
+  get mapsPlaceName() {
+      console.log("When getting mapsPlaceName: ");
+      console.log(this._mapsPlace);
+      if (this._mapsPlace != null) {
+          return this._mapsPlace.name;
+      } else {
+          // No name available. Use coordinates for naming;
+          return this._position.toString();
+      }
   }
 
   setupOnPositionChangeEvent() {
@@ -209,6 +238,19 @@ class Place {
     });
   }
 
+  updatePlaceBasedOnId(id) {
+    const geocoder = new google.maps.Geocoder();
+    geocoder.geocode({placeId: id}, (results, status) => {
+      if (status !== "OK") {
+        window.alert(Place.GEOCODER_FAIL_MSG + status);
+        return;
+      }
+      this.place = results[0];
+      console.log("updated place based on id: ");
+      console.log(this._mapsPlace);
+    });
+  }
+
   onPositionChange() {
     if (this._triggerChosenLocationChangeEvent) {
       document.getElementById("map").dispatchEvent(this._positionChangeEvent);
@@ -217,22 +259,38 @@ class Place {
 }
 
 class PlaceGuide extends Place {
-  constructor(databaseId, name, description, audioKey, audioLength, imgKey, positionLat, positionLng, placeId, creatorId, creatorName, placeType) {
-    super(positionLat, positionLng, name, null, placeType, true);
-    this._databaseId = databaseId;
-    this._name = name;
-    this._description = description;
-    this._audioKey = audioKey;
-    this._imgKey = imgKey;
-    this._creatorId = creatorId;
-    this._creatorName = creatorName;
-    this.setupRepresentationOnMap();
+  static constructPlaceGuideBasedOnCoordinates(databaseId, name, description, audioKey, audioLength, imgKey, positionLat, positionLng, creatorId, creatorName, placeType){
+        var newPlaceGuide = constructPlaceBasedOnCoordinates(positionLat, positionLng, name, placeType, hasInfoWindow);
+        this._databaseId = databaseId;
+        this._description = description;
+        this._audioKey = audioKey;
+        this._audioLength = audioLength;
+        this._imgKey = imgKey;
+        this._creatorId = creatorId;
+        this._creatorName = creatorName;
+  }
+
+  static constructPlaceBasedOnPlaceId(databaseId, name, description, audioKey, audioLength, imgKey, placeId, creatorId, creatorName, placeType){
+      return constructPlaceBasedOnPlaceId(placeId)
+        .catch(error => console.log("Failed to construct place guide based on id: " + error))
+        .then(placeGuide => {
+                placeGuide._databaseId = databaseId;
+                placeGuide._description = description;
+                placeGuide._audioKey = audioKey;
+                placeGuide._audioLength = audioLength;
+                placeGuide._imgKey = imgKey;
+                placeGuide._creatorId = creatorId;
+                placeGuide._creatorName = creatorName;
+                return placeGuide;
+            }
+        )
   }
 
   // Specific infoWindowContent for PlaceGuides.
   getInfoWindowContent() {
     var content = "<h3>" + this._name + "</h3>" +
         "<h4> Created by: " + this._creatorName + "</h4>" +
+        "<h4> Place: " + this.mapsPlaceName + "</h4>" +
         "<p>" + this._description + "</p>";
     return content;
   }
