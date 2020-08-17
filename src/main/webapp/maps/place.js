@@ -6,10 +6,10 @@ const CHOSEN_LOCATION_CHANGE_EVENT = "chosenPositionChange";
  * This class holds a place's data and handles its representation on the map.
  * The place is represented by a marker corresponding to placeType,
  * and it may also have an infoWindow, containing the name.
- * The place may be defined my specifying
+ * The place may be defined by specifying
  * its position(@param positionLat, @param positionLng), 
  * using @code constructPlaceBasedOnCoordinates factory method, 
- * or by specifying a place from the Google Place database(@param mapsPlace), 
+ * or by specifying a place ID from the Google Place database(@param mapsPlace), 
  * using @code constructPlaceBasedOnPlaceId factory method.
  * Remark that @code constructPlaceBasedOnPlaceId returns a promise!
  * Remark that mapsPlace has the higher priority(because it contains more information).
@@ -27,8 +27,8 @@ class Place {
     }
     this._placeType = placeType;
     this._hasInfoWindow = hasInfoWindow;
+    this._positionChangeEvent = new Event(CHOSEN_LOCATION_CHANGE_EVENT);
     this.setupRepresentationOnMap();
-    this.setupOnPositionChangeEvent();
   }
 
   static constructPlaceBasedOnCoordinates(map, positionLat, positionLng, name, placeType, hasInfoWindow){
@@ -58,10 +58,6 @@ class Place {
   // Other Places won't trigger the event.
   set triggerChosenLocationChangeEvent(trigger) {
     this._triggerChosenLocationChangeEvent = trigger;
-  }
-
-  setupOnPositionChangeEvent() {
-    this._positionChangeEvent = new Event(CHOSEN_LOCATION_CHANGE_EVENT);
   }
 
   set visible(visibility) {
@@ -103,20 +99,11 @@ class Place {
     this.onPositionChange();
   }
 
-  get mapsPlaceName() {
-      if (this._mapsPlace != null) {
-          return this._mapsPlace.name;
-      } else {
-          // No name available. Use coordinates for naming;
-          return this._position.toString();
-      }
-  }
-
   setupRepresentationOnMap() {
     this.setupMarker();
     if (this._hasInfoWindow) {
       this.setupInfoWindow();
-      // The infowindow an be opened and closed by clicking the marker.
+      // The infowindow can be opened and closed by clicking the marker.
       this._marker.addListener('click', () => {
         if (this._infoWindowClosed) {
           this.openInfoWindow();
@@ -217,7 +204,7 @@ class Place {
   }
 }
 
-class PlaceGuide extends Place {
+class PlaceGuide {
   constructor(place, databaseId, description, audioKey, audioLength, imgKey, creatorId, creatorName) {
       super(place._map, place._position.lat(), place._position.lng(), place._name, place._mapsPlace, place._placeType, place._hasInfoWindow);
       this._marker.setMap(null);
@@ -255,6 +242,15 @@ class PlaceGuide extends Place {
         "<h4> Place: " + this.mapsPlaceName + "</h4>" +
         "<p>" + this._description + "</p>";
     return content;
+  }
+
+  get mapsPlaceName() {
+      if (this._mapsPlace != null) {
+          return this._mapsPlace.name;
+      } else {
+          // No name available. Use coordinates for naming;
+          return this._position.toString();
+      }
   }
 }
 
