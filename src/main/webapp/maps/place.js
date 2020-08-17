@@ -63,19 +63,34 @@ class Place {
   }
 
   static constructPlaceBasedOnPlaceId(placeId, name, placeType, hasInfoWindow){
-    const geocoder = new google.maps.Geocoder();
-    console.log("placeType is");
-    console.log(placeType);
+        var request = {
+            placeId: placeId,
+            fields: ['address_components', 'name', 'geometry']
+        };
+
+         var service = new google.maps.places.PlacesService(map);
+    // // const geocoder = new google.maps.Geocoder();
+    // // console.log("placeType is");
+    // // console.log(placeType);
+
     return new Promise(function(resolve, reject) {
-        geocoder.geocode({placeId: placeId}, function(results, status) {
-            if (status === 'OK') {
-                console.log("placeType is");
-                console.log(placeType);
-                resolve(new Place(0, 0, name, results[0], placeType, hasInfoWindow));
-            } else {
+        service.getDetails(request, (place, status) => {
+            if (status === google.maps.places.PlacesServiceStatus.OK) {
+                resolve(new Place(0, 0, name, place, placeType, hasInfoWindow));
+            }
+            else {
                 reject(new Error('Couldnt\'t find the place'+ placeId));
             }
-        })
+        });
+        // geocoder.geocode({placeId: placeId}, function(results, status) {
+        //     if (status === 'OK') {
+        //         console.log("placeType is");
+        //         console.log(placeType);
+        //         resolve(new Place(0, 0, name, results[0], placeType, hasInfoWindow));
+        //     } else {
+        //         reject(new Error('Couldnt\'t find the place'+ placeId));
+        //     }
+        // })
     });
   }
 
@@ -141,6 +156,7 @@ class Place {
 
   get mapsPlaceName() {
       console.log("When getting mapsPlaceName: ");
+      //console.log(this._mapsPlace.name);
       console.log(this._mapsPlace);
       if (this._mapsPlace != null) {
           return this._mapsPlace.name;
@@ -272,6 +288,7 @@ class PlaceGuide extends Place {
       this._imgKey = imgKey;
       this._creatorId = creatorId;
       this._creatorName = creatorName;
+      this.setupRepresentationOnMap();
   }
 
   static constructPlaceGuideBasedOnCoordinates(databaseId, name, description, audioKey, audioLength, imgKey, positionLat, positionLng, creatorId, creatorName, placeType){
@@ -283,6 +300,7 @@ class PlaceGuide extends Place {
       return Place.constructPlaceBasedOnPlaceId(placeId, name, placeType, true)
         .catch(error => console.log("Failed to construct place guide based on id: " + error))
         .then(newPlace => {
+            console.log("at construction creatorName is: " + creatorName);
                 return new PlaceGuide(newPlace, databaseId, description, audioKey, audioLength, imgKey, creatorId, creatorName);
             }
         )
