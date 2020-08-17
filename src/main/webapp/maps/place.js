@@ -190,7 +190,8 @@ class Place {
 
   /**
    * This function relies on Places API to get the place
-   * corresponding to an id, and then update the mapsPlace.
+   * corresponding to an id, then update the mapsPlace and 
+   * center the map around it.
    */
   updatePlaceAndCenterBasedOnId(id) {
        var request = {

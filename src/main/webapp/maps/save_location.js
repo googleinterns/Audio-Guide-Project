@@ -1,7 +1,7 @@
 /**
  * This class is responsible for saving the chosen place when the user clicks the "Save location" button.
- * Remark that there would be 2 markers on top of each other,
- * so instead savedPlace's marker is set visible only when the other one changes its position.
+ * Remark that after the two markers get on top of each other,
+ * the chosen location will be seen only when its position changes.
  */
 class LocationSaver {
   static SAVE_LOCATION_TEXT = "Save location";
@@ -45,12 +45,12 @@ class LocationSaver {
       this._savedPlace.position = this._chosenPlace.position;
     }
     this._chosenPlace.visible = false;
-    alert(LocationSaver.SAVED_LOCATION_MESSAGE);
     var chosenPlace = this._chosenPlace;
     document.getElementById("map")
         .addEventListener(CHOSEN_LOCATION_CHANGE_EVENT, function () {
       chosenPlace.visible = true;
     });
+    alert(LocationSaver.SAVED_LOCATION_MESSAGE);
   }
 
   /** Creates a button with the style of control elements and with the given text. */
