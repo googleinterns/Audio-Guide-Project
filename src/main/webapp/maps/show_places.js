@@ -7,13 +7,8 @@ class PlaceDisplayer {
     PlaceDisplayer.getPublicPlaceGuides(map)
         .then(placeGuides => {
             var markers = placeGuides.map(function (placeGuide) {
-                console.log("Next placeguide: ");
-                console.log(placeGuide);
                 return placeGuide._marker;
             });
-            console.log("marker1: ");
-            console.log(markers[1]);
-            console.log(markers[1].getPosition().toString());
             var markerCluster = new MarkerClusterer(map, markers,
                 {imagePath: './img/m'});
        });     
@@ -79,15 +74,12 @@ class PlaceDisplayer {
                 promises.push(new Promise(function(resolve, reject) {
                     PlaceGuide.constructPlaceGuideBasedOnPlaceId(map, pg.id, pg.name, pg.description, pg.audioKey, pg.audioLength, 
                             pg.imgKey, pg.placeId, pg.creatorId, pg.creatorName, pg.placeType).then(placeGuide => {
-                                console.log("pushing placeGuide");
-                                console.log(placeGuide)
                                 publicPlaceGuides.push(placeGuide)
                                 resolve()});
                     }));
             }
         }
         Promise.all(promises).then(() => {
-            console.log("returned array of placeGuides: " + publicPlaceGuides);
             resolve(publicPlaceGuides)
         });
         // resolve(PlaceGuide.constructPlaceGuideBasedOnPlaceId(map,

@@ -191,7 +191,6 @@ class Place {
 
   setupInfoWindow() {
     this._infoWindowClosed = true;
-    console.log("set infoWindowContent: " + this.getInfoWindowContent());
     this._infoWindow = new google.maps.InfoWindow({
       content: this.getInfoWindowContent(),
       maxWidth: 200,
