@@ -263,30 +263,27 @@ class Place {
 }
 
 class PlaceGuide extends Place {
+  constructor(place, databaseId, description, audioKey, audioLength, imgKey, creatorId, creatorName) {
+      super(place._positionLat, place._positionLng, place._name, place._mapsPlace, place._placeType, place._hasInfoWindow);
+      this._databaseId = databaseId;
+      this._description = description;
+      this._audioKey = audioKey;
+      this._audioLength = audioLength;
+      this._imgKey = imgKey;
+      this._creatorId = creatorId;
+      this._creatorName = creatorName;
+  }
+
   static constructPlaceGuideBasedOnCoordinates(databaseId, name, description, audioKey, audioLength, imgKey, positionLat, positionLng, creatorId, creatorName, placeType){
-        var newPlaceGuide = Place.constructPlaceBasedOnCoordinates(positionLat, positionLng, name, placeType, true);
-        this._databaseId = databaseId;
-        this._description = description;
-        this._audioKey = audioKey;
-        this._audioLength = audioLength;
-        this._imgKey = imgKey;
-        this._creatorId = creatorId;
-        this._creatorName = creatorName;
-        return newPlaceGuide;
+        var newPlace = Place.constructPlaceBasedOnCoordinates(positionLat, positionLng, name, placeType, true);
+        return new PlaceGuide(newPlace, databaseId, description, audioKey, audioLength, imgKey, creatorId, creatorName);
   }
 
   static constructPlaceGuideBasedOnPlaceId(databaseId, name, description, audioKey, audioLength, imgKey, placeId, creatorId, creatorName, placeType){
       return Place.constructPlaceBasedOnPlaceId(placeId, name, placeType, true)
         .catch(error => console.log("Failed to construct place guide based on id: " + error))
-        .then(placeGuide => {
-                placeGuide._databaseId = databaseId;
-                placeGuide._description = description;
-                placeGuide._audioKey = audioKey;
-                placeGuide._audioLength = audioLength;
-                placeGuide._imgKey = imgKey;
-                placeGuide._creatorId = creatorId;
-                placeGuide._creatorName = creatorName;
-                return placeGuide;
+        .then(newPlace => {
+                return new PlaceGuide(newPlace, databaseId, description, audioKey, audioLength, imgKey, creatorId, creatorName);
             }
         )
   }
