@@ -153,13 +153,14 @@ class Place {
         }
       });
       // Close the open infowindow if the user clicks anywhere else on the map.
+      var thisPlace = this;
       if (this._hasInfoWindow) {
-      this._map.addListener('click', function (mapsMouseEvent) {
-        if (!this._infoWindowClosed) {
-          thisPlace.closeInfoWindow();
-        }
-      });
-    }
+        this._map.addListener('click', function (mapsMouseEvent) {
+            if (!thisPlace._infoWindowClosed) {
+                thisPlace.closeInfoWindow();
+            }
+        });
+      }
     }
   }
 
@@ -190,6 +191,7 @@ class Place {
 
   setupInfoWindow() {
     this._infoWindowClosed = true;
+    console.log("set infoWindowContent: " + this.getInfoWindowContent());
     this._infoWindow = new google.maps.InfoWindow({
       content: this.getInfoWindowContent(),
       maxWidth: 200,
@@ -252,7 +254,7 @@ class Place {
 
 class PlaceGuide extends Place {
   constructor(place, databaseId, description, audioKey, audioLength, imgKey, creatorId, creatorName) {
-      super(place._map, place._positionLat, place._positionLng, place._name, place._mapsPlace, place._placeType, place._hasInfoWindow);
+      super(place._map, place._position.lat(), place._position.lng(), place._name, place._mapsPlace, place._placeType, place._hasInfoWindow);
       this._databaseId = databaseId;
       this._description = description;
       this._audioKey = audioKey;
@@ -260,11 +262,13 @@ class PlaceGuide extends Place {
       this._imgKey = imgKey;
       this._creatorId = creatorId;
       this._creatorName = creatorName;
+      this.visible = true;
       this.setupRepresentationOnMap();
   }
 
   static constructPlaceGuideBasedOnCoordinates(map, databaseId, name, description, audioKey, audioLength, imgKey, positionLat, positionLng, creatorId, creatorName, placeType){
         var newPlace = Place.constructPlaceBasedOnCoordinates(map, positionLat, positionLng, name, placeType, true);
+        newPlace.visible = false;
         return new PlaceGuide(newPlace, databaseId, description, audioKey, audioLength, imgKey, creatorId, creatorName);
   }
 
@@ -272,6 +276,7 @@ class PlaceGuide extends Place {
       return Place.constructPlaceBasedOnPlaceId(map, placeId, name, placeType, true)
         .catch(error => console.log("Failed to construct place guide based on id: " + error))
         .then(newPlace => {
+                newPlace._marker.setMap(null);
                 return new PlaceGuide(newPlace, databaseId, description, audioKey, audioLength, imgKey, creatorId, creatorName);
             }
         )
