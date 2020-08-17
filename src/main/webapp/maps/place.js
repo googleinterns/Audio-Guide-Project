@@ -7,9 +7,9 @@ const CHOSEN_LOCATION_CHANGE_EVENT = "chosenPositionChange";
  * The place is represented by a marker corresponding to placeType,
  * and it may also have an infoWindow, containing the name.
  * The place may be defined by specifying
- * its position(@param positionLat, @param positionLng), 
- * using @code constructPlaceBasedOnCoordinates factory method, 
- * or by specifying a place ID from the Google Place database(@param mapsPlace), 
+ * its position(@param positionLat, @param positionLng),
+ * using @code constructPlaceBasedOnCoordinates factory method,
+ * or by specifying a place ID from the Google Place database(@param mapsPlace),
  * using @code constructPlaceBasedOnPlaceId factory method.
  * Remark that @code constructPlaceBasedOnPlaceId returns a promise!
  * Remark that mapsPlace has the higher priority(because it contains more information).
@@ -31,30 +31,6 @@ class Place {
     this.setupRepresentationOnMap();
   }
 
-  static constructPlaceBasedOnCoordinates(map, positionLat, positionLng, name, placeType, hasInfoWindow){
-      return new Place(map, positionLat, positionLng, name, null, placeType, hasInfoWindow);
-  }
-
-  static constructPlaceBasedOnPlaceId(map, placeId, name, placeType, hasInfoWindow){
-        var request = {
-            placeId: placeId,
-            fields: ['address_components', 'name', 'geometry']
-        };
-        return new Promise(function(resolve, reject) {
-            var service = new google.maps.places.PlacesService(map);
-            service.getDetails(request, (place, status) => {
-                if (status === google.maps.places.PlacesServiceStatus.OK) {
-                    resolve(new Place(map, 0, 0, name, place, placeType, hasInfoWindow));
-                }
-                else {
-                    reject(new Error('Couldnt\'t find the place'+ placeId));
-                }
-            });
-        });
-  }
-
-  // Some objects' behaviour is conditioned by the chosenLocation's positionChanges
-  // To enable listening to this event, this flag must be set to true.
   // Other Places won't trigger the event.
   set triggerChosenLocationChangeEvent(trigger) {
     this._triggerChosenLocationChangeEvent = trigger;
@@ -63,6 +39,9 @@ class Place {
   set visible(visibility) {
     this._marker.setVisible(visibility);
   }
+
+  // Some objects' behaviour is conditioned by the chosenLocation's positionChanges
+  // To enable listening to this event, this flag must be set to true.
 
   set draggable(draggability) {
     this._marker.setDraggable(draggability);
@@ -99,14 +78,39 @@ class Place {
     this.onPositionChange();
   }
 
-   get mapsPlaceName() {
-      if (this._mapsPlace != null) {
-          return this._mapsPlace.name;
-      } else {
-          // No name available. Use coordinates for naming;
-          return this._position.toString();
-      }
+  get mapsPlaceName() {
+    if (this._mapsPlace != null) {
+      return this._mapsPlace.name;
+    } else {
+      // No name available. Use coordinates for naming;
+      return this._position.toString();
     }
+  }
+
+  set infoWindowContent(content) {
+    this._infoWindow.setContent(content);
+  }
+
+  static constructPlaceBasedOnCoordinates(map, positionLat, positionLng, name, placeType, hasInfoWindow) {
+    return new Place(map, positionLat, positionLng, name, null, placeType, hasInfoWindow);
+  }
+
+  static constructPlaceBasedOnPlaceId(map, placeId, name, placeType, hasInfoWindow) {
+    var request = {
+      placeId: placeId,
+      fields: ['address_components', 'name', 'geometry']
+    };
+    return new Promise(function (resolve, reject) {
+      var service = new google.maps.places.PlacesService(map);
+      service.getDetails(request, (place, status) => {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+          resolve(new Place(map, 0, 0, name, place, placeType, hasInfoWindow));
+        } else {
+          reject(new Error('Couldnt\'t find the place' + placeId));
+        }
+      });
+    });
+  }
 
   setupRepresentationOnMap() {
     this.setupMarker();
@@ -124,9 +128,9 @@ class Place {
       var thisPlace = this;
       if (this._hasInfoWindow) {
         this._map.addListener('click', function (mapsMouseEvent) {
-            if (!thisPlace._infoWindowClosed) {
-                thisPlace.closeInfoWindow();
-            }
+          if (!thisPlace._infoWindowClosed) {
+            thisPlace.closeInfoWindow();
+          }
         });
       }
     }
@@ -165,10 +169,6 @@ class Place {
     });
   }
 
-  set infoWindowContent(content) {
-      this._infoWindow.setContent(content);
-  }
-
   getInfoWindowContent() {
     var content = "<h3>" + this._name + "</h3>";
     return content;
@@ -190,25 +190,24 @@ class Place {
 
   /**
    * This function relies on Places API to get the place
-   * corresponding to an id, then update the mapsPlace and 
+   * corresponding to an id, then update the mapsPlace and
    * center the map around it.
    */
   updatePlaceAndCenterBasedOnId(id) {
-       var request = {
-            placeId: id,
-            fields: ['address_components', 'name', 'geometry']
-        };
-        var service = new google.maps.places.PlacesService(this._map);
-        service.getDetails(request, (place, status) => {
-            if (status === google.maps.places.PlacesServiceStatus.OK) {
-                this.place = place;
-                this.centerMapAround();
-            }
-            else {
-                window.alert(Place.GEOCODER_FAIL_MSG + status);
-                return;
-            }
-        });
+    var request = {
+      placeId: id,
+      fields: ['address_components', 'name', 'geometry']
+    };
+    var service = new google.maps.places.PlacesService(this._map);
+    service.getDetails(request, (place, status) => {
+      if (status === google.maps.places.PlacesServiceStatus.OK) {
+        this.place = place;
+        this.centerMapAround();
+      } else {
+        window.alert(Place.GEOCODER_FAIL_MSG + status);
+
+      }
+    });
   }
 
   onPositionChange() {

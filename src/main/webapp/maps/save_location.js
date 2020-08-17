@@ -11,7 +11,7 @@ class LocationSaver {
 
   constructor(map, chosenPlace) {
     this._map = map;
-    this._savedPlace = 
+    this._savedPlace =
         Place.constructPlaceBasedOnCoordinates(map, 0, 0, LocationSaver.SAVED_LOCATION_TITLE, PlaceType.SAVED_LOCATION, true);
     this._savedPlace.map = this._map;
     this._savedPlace.visible = false;
@@ -24,8 +24,8 @@ class LocationSaver {
     var saveLocationButton = this._saveLocationControlButton;
     document.getElementById("map")
         .addEventListener(CHOSEN_LOCATION_CHANGE_EVENT, function () {
-      saveLocationButton.disabled = false;
-    });
+          saveLocationButton.disabled = false;
+        });
   }
 
   get savedLocation() {
@@ -48,8 +48,8 @@ class LocationSaver {
     var chosenPlace = this._chosenPlace;
     document.getElementById("map")
         .addEventListener(CHOSEN_LOCATION_CHANGE_EVENT, function () {
-      chosenPlace.visible = true;
-    });
+          chosenPlace.visible = true;
+        });
     alert(LocationSaver.SAVED_LOCATION_MESSAGE);
   }
 
