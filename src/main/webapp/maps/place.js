@@ -1,4 +1,4 @@
-const placeZoom = 14;
+const PLACE_ZOOM = 14;
 const CHOSEN_LOCATION_CHANGE_EVENT = "chosenPositionChange";
 
 // Specify different icons/colors for dynamically generated icons for each place type.
@@ -183,10 +183,10 @@ class Place {
 
   centerMapAround() {
     if (this._mapsPlace != null && this._mapsPlace.geometry.viewport) {
-      this._map.setZoom(placeZoom);
+      this._map.setZoom(PLACE_ZOOM);
       this._map.fitBounds(this._mapsPlace.geometry.viewport);
     } else {
-      this._map.setZoom(placeZoom);
+      this._map.setZoom(PLACE_ZOOM);
       this._map.setCenter(this._position);
     }
   }
