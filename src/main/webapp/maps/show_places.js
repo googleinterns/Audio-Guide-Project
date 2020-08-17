@@ -7,7 +7,7 @@ class PlaceDisplayer {
     PlaceDisplayer.getPublicPlaceGuides(map)
         .then(placeGuides => {
             var markers = placeGuides.map(function (placeGuide) {
-                return placeGuide._marker;
+                return placeGuide._place._marker;
             });
             var markerCluster = new MarkerClusterer(map, markers,
                 {imagePath: './img/m'});
@@ -18,7 +18,7 @@ class PlaceDisplayer {
     PlaceDisplayer.getPlaceGuidesOfUser(map)
         .then(placeGuides => {
             var markers = placeGuides.map(function (placeGuide) {
-                return placeGuide._marker;
+                return placeGuide._place._marker;
             });
             var markerCluster = new MarkerClusterer(map, markers,
                 {imagePath: './img/m'});
