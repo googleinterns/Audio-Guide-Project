@@ -2,33 +2,6 @@ const PLACE_ZOOM = 14;
 const MAX_ZOOM = 19;
 const CHOSEN_LOCATION_CHANGE_EVENT = "chosenPositionChange";
 
-// Specify different icons/colors for dynamically generated icons for each place type.
-var PlaceType = {
-  PUBLIC: {
-    // Orange icon
-    icon: null,
-    iconColor: "de8a0b",
-  },
-  PRIVATE: {
-    // Yellow icon
-    icon: null,
-    iconColor: "f7ff05",
-  },
-  SEARCH_RESULT: {
-    // Green icon
-    icon: null,
-    iconColor: "82d613",
-  },
-  SAVED_LOCATION: {
-    // Blue icon
-    icon: null,
-    iconColor: "1d2480",
-  },
-  CURRENT_LOCATION: {
-    icon: "./img/blue_dot.png",
-  }
-};
-
 /**
  * This class holds a place's data and handles its representation on the map.
  * The place is represented by a marker corresponding to placeType,
@@ -284,6 +257,33 @@ class PlaceGuide extends Place {
     return content;
   }
 }
+
+// Specify different icons/colors for dynamically generated icons for each place type.
+var PlaceType = {
+  PUBLIC: {
+    // Orange icon
+    icon: null,
+    iconColor: "de8a0b",
+  },
+  PRIVATE: {
+    // Yellow icon
+    icon: null,
+    iconColor: "f7ff05",
+  },
+  SEARCH_RESULT: {
+    // Green icon
+    icon: null,
+    iconColor: "82d613",
+  },
+  SAVED_LOCATION: {
+    // Blue icon
+    icon: null,
+    iconColor: "1d2480",
+  },
+  CURRENT_LOCATION: {
+    icon: "./img/blue_dot.png",
+  }
+};
 
 // Get icons from the charts API.
 function getColoredMarkerIcon(color) {
