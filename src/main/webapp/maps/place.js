@@ -221,15 +221,21 @@ class Place {
    * and then update the mapsPlace.
    */
   updatePlaceAndCenterBasedOnId(id) {
-    const geocoder = new google.maps.Geocoder();
-    geocoder.geocode({placeId: id}, (results, status) => {
-      if (status !== "OK") {
-        window.alert(Place.GEOCODER_FAIL_MSG + status);
-        return;
-      }
-      this.place = results[0];
-      this.centerMapAround();
-    });
+       var request = {
+            placeId: id,
+            fields: ['address_components', 'name', 'geometry']
+        };
+        var service = new google.maps.places.PlacesService(this._map);
+        service.getDetails(request, (place, status) => {
+            if (status === google.maps.places.PlacesServiceStatus.OK) {
+                this.place = place;
+                this.centerMapAround();
+            }
+            else {
+                window.alert(Place.GEOCODER_FAIL_MSG + status);
+                return;
+            }
+        });
   }
 
   onPositionChange() {
