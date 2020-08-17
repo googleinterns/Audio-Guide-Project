@@ -246,7 +246,7 @@ class Place {
 
 class PlaceGuide extends Place {
   constructor(place, databaseId, description, audioKey, audioLength, imgKey, creatorId, creatorName) {
-      super(place._map, place._position.lat(), place._position.lng(), place._name, place._mapsPlace, PlaceType.SAVED_LOCATION, place._hasInfoWindow);
+      super(place._map, place._position.lat(), place._position.lng(), place._name, place._mapsPlace, place._placeType, place._hasInfoWindow);
       this._marker.setMap(null);
       this._databaseId = databaseId;
       this._description = description;
@@ -260,13 +260,13 @@ class PlaceGuide extends Place {
   }
 
   static constructPlaceGuideBasedOnCoordinates(map, databaseId, name, description, audioKey, audioLength, imgKey, positionLat, positionLng, creatorId, creatorName, placeType){
-        var newPlace = Place.constructPlaceBasedOnCoordinates(map, positionLat, positionLng, name, PlaceType.SEARCH_RESULT, true);
+        var newPlace = Place.constructPlaceBasedOnCoordinates(map, positionLat, positionLng, name, placeType, true);
         newPlace._marker.setMap(null);
         return new PlaceGuide(newPlace, databaseId, description, audioKey, audioLength, imgKey, creatorId, creatorName);
   }
 
   static constructPlaceGuideBasedOnPlaceId(map, databaseId, name, description, audioKey, audioLength, imgKey, placeId, creatorId, creatorName, placeType){
-      return Place.constructPlaceBasedOnPlaceId(map, placeId, name, PlaceType.PRIVATE, true)
+      return Place.constructPlaceBasedOnPlaceId(map, placeId, name, placeType, true)
         .catch(error => console.log("Failed to construct place guide based on id: " + error))
         .then(newPlace => {
                 newPlace._marker.setMap(null);
