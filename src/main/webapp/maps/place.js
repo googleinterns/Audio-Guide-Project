@@ -38,7 +38,7 @@ var PlaceType = {
  * using @code constructPlaceBasedOnCoordinates factory method, 
  * or by specifying a place from the Google Place database(@param mapsPlace), 
  * using @code constructPlaceBasedOnPlaceId factory method.
- * remark that @code constructPlaceBasedOnPlaceId returns a promise!
+ * Remark that @code constructPlaceBasedOnPlaceId returns a promise!
  * Remark that mapsPlace has the higher priority(because it contains more information).
  * Whenever a new position is set, the mapsPlace is discarded, and vice versa.
  */
@@ -64,9 +64,13 @@ class Place {
 
   static constructPlaceBasedOnPlaceId(placeId, name, placeType, hasInfoWindow){
     const geocoder = new google.maps.Geocoder();
+    console.log("placeType is");
+    console.log(placeType);
     return new Promise(function(resolve, reject) {
         geocoder.geocode({placeId: placeId}, function(results, status) {
             if (status === 'OK') {
+                console.log("placeType is");
+                console.log(placeType);
                 resolve(new Place(0, 0, name, results[0], placeType, hasInfoWindow));
             } else {
                 reject(new Error('Couldnt\'t find the place'+ placeId));
@@ -260,7 +264,7 @@ class Place {
 
 class PlaceGuide extends Place {
   static constructPlaceGuideBasedOnCoordinates(databaseId, name, description, audioKey, audioLength, imgKey, positionLat, positionLng, creatorId, creatorName, placeType){
-        var newPlaceGuide = constructPlaceBasedOnCoordinates(positionLat, positionLng, name, placeType, hasInfoWindow);
+        var newPlaceGuide = Place.constructPlaceBasedOnCoordinates(positionLat, positionLng, name, placeType, true);
         this._databaseId = databaseId;
         this._description = description;
         this._audioKey = audioKey;
@@ -271,8 +275,8 @@ class PlaceGuide extends Place {
         return newPlaceGuide;
   }
 
-  static constructPlaceBasedOnPlaceId(databaseId, name, description, audioKey, audioLength, imgKey, placeId, creatorId, creatorName, placeType){
-      return constructPlaceBasedOnPlaceId(placeId)
+  static constructPlaceGuideBasedOnPlaceId(databaseId, name, description, audioKey, audioLength, imgKey, placeId, creatorId, creatorName, placeType){
+      return Place.constructPlaceBasedOnPlaceId(placeId, name, placeType, true)
         .catch(error => console.log("Failed to construct place guide based on id: " + error))
         .then(placeGuide => {
                 placeGuide._databaseId = databaseId;
