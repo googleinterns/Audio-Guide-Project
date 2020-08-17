@@ -12,7 +12,8 @@ class LocationSaver {
   constructor(map, chosenPlace) {
     this._map = map;
     this._savedPlace =
-        Place.constructPlaceBasedOnCoordinates(map, 0, 0, LocationSaver.SAVED_LOCATION_TITLE, PlaceType.SAVED_LOCATION, true);
+        Place.constructPlaceBasedOnCoordinates(map, 0, 0,
+            LocationSaver.SAVED_LOCATION_TITLE, PlaceType.SAVED_LOCATION, true);
     this._savedPlace.map = this._map;
     this._savedPlace.visible = false;
     this._chosenPlace = chosenPlace;

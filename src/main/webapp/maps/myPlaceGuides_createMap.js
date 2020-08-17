@@ -23,7 +23,8 @@ function createMap() {
 
   // Searching functionality.
   var searchResult =
-      Place.constructPlaceBasedOnCoordinates(map, 0, 0, "Search Result", PlaceType.SEARCH_RESULT, true);
+      Place.constructPlaceBasedOnCoordinates(map, 0, 0,
+          "Search Result", PlaceType.SEARCH_RESULT, true);
   searchResult.visible = false;
   var searchBox = new SearchBox(map, searchResult, "search-box");
   searchBox.init();

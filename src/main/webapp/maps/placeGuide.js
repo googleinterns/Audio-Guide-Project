@@ -15,16 +15,23 @@ class PlaceGuide {
     this._place.infoWindowContent = this.getInfoWindowContent();
   }
 
-  static constructPlaceGuideBasedOnCoordinates(map, databaseId, name, description, audioKey, audioLength, imgKey, positionLat, positionLng, creatorId, creatorName, placeType) {
-    var newPlace = Place.constructPlaceBasedOnCoordinates(map, positionLat, positionLng, name, placeType, true);
-    return new PlaceGuide(newPlace, databaseId, description, audioKey, audioLength, imgKey, creatorId, creatorName);
+  static constructPlaceGuideBasedOnCoordinates(map, databaseId, name, description, audioKey,
+                                               audioLength, imgKey, positionLat, positionLng,
+                                               creatorId, creatorName, placeType) {
+    var newPlace = Place.constructPlaceBasedOnCoordinates(map, positionLat, positionLng, name,
+        placeType, true);
+    return new PlaceGuide(newPlace, databaseId, description, audioKey,
+        audioLength, imgKey, creatorId, creatorName);
   }
 
-  static constructPlaceGuideBasedOnPlaceId(map, databaseId, name, description, audioKey, audioLength, imgKey, placeId, creatorId, creatorName, placeType) {
+  static constructPlaceGuideBasedOnPlaceId(map, databaseId, name, description, audioKey,
+                                           audioLength, imgKey, placeId, creatorId,
+                                           creatorName, placeType) {
     return Place.constructPlaceBasedOnPlaceId(map, placeId, name, placeType, true)
         .catch(error => console.log("Failed to construct place guide based on id: " + error))
         .then(newPlace => {
-              return new PlaceGuide(newPlace, databaseId, description, audioKey, audioLength, imgKey, creatorId, creatorName);
+              return new PlaceGuide(newPlace, databaseId, description, audioKey,
+                  audioLength, imgKey, creatorId, creatorName);
             }
         )
   }

@@ -28,7 +28,8 @@ function createMap() {
   // Choose location functionality.
   // Remark that chosenLocation can be updated from the SearchBox and by clicking as well.
   var chosenLocation =
-      Place.constructPlaceBasedOnCoordinates(map, 0, 0, "Picked Location", PlaceType.SEARCH_RESULT, true);
+      Place.constructPlaceBasedOnCoordinates(map, 0, 0,
+          "Picked Location", PlaceType.SEARCH_RESULT, true);
   chosenLocation.visible = false;
   chosenLocation.draggable = true;
   chosenLocation.triggerChosenLocationChangeEvent = true;

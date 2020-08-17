@@ -91,7 +91,8 @@ class Place {
     this._infoWindow.setContent(content);
   }
 
-  static constructPlaceBasedOnCoordinates(map, positionLat, positionLng, name, placeType, hasInfoWindow) {
+  static constructPlaceBasedOnCoordinates(map, positionLat, positionLng,
+                                          name, placeType, hasInfoWindow) {
     return new Place(map, positionLat, positionLng, name, null, placeType, hasInfoWindow);
   }
 

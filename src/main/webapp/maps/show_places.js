@@ -108,15 +108,19 @@ class PlaceDisplayer {
       for (var i = 0; i < placeGuidesData.length; i++) {
         var pg = placeGuidesData[i];
         if (pg.placeId == null) {
-          publicPlaceGuides.push(PlaceGuide.constructPlaceGuideBasedOnCoordinates(map, pg.id, pg.name, pg.description,
-              pg.audioKey, pg.audioLength, pg.imgKey, pg.positionLat, pg.positionLng, pg.creatorId, pg.creatorName, pg.placeType));
+          publicPlaceGuides.push(
+              PlaceGuide.constructPlaceGuideBasedOnCoordinates(map, pg.id, pg.name, pg.description,
+                  pg.audioKey, pg.audioLength, pg.imgKey, pg.positionLat, pg.positionLng,
+                  pg.creatorId, pg.creatorName, pg.placeType));
         } else {
           promises.push(new Promise(function (resolve, reject) {
-            PlaceGuide.constructPlaceGuideBasedOnPlaceId(map, pg.id, pg.name, pg.description, pg.audioKey, pg.audioLength,
-                pg.imgKey, pg.placeId, pg.creatorId, pg.creatorName, pg.placeType).then(placeGuide => {
-              publicPlaceGuides.push(placeGuide);
-              resolve()
-            });
+            PlaceGuide.constructPlaceGuideBasedOnPlaceId(map, pg.id, pg.name, pg.description,
+                pg.audioKey, pg.audioLength,
+                pg.imgKey, pg.placeId, pg.creatorId, pg.creatorName, pg.placeType)
+                .then(placeGuide => {
+                  publicPlaceGuides.push(placeGuide);
+                  resolve()
+                });
           }));
         }
       }
@@ -183,15 +187,19 @@ class PlaceDisplayer {
       for (var i = 0; i < placeGuidesData.length; i++) {
         var pg = placeGuidesData[i];
         if (pg.placeId == null) {
-          placeGuidesOfUser.push(PlaceGuide.constructPlaceGuideBasedOnCoordinates(map, pg.id, pg.name, pg.description,
-              pg.audioKey, pg.audioLength, pg.imgKey, pg.positionLat, pg.positionLng, pg.creatorId, pg.creatorName, pg.placeType));
+          placeGuidesOfUser.push(
+              PlaceGuide.constructPlaceGuideBasedOnCoordinates(map, pg.id, pg.name, pg.description,
+                  pg.audioKey, pg.audioLength, pg.imgKey, pg.positionLat, pg.positionLng, pg.creatorId,
+                  pg.creatorName, pg.placeType));
         } else {
           promises.push(new Promise(function (resolve, reject) {
-            PlaceGuide.constructPlaceGuideBasedOnPlaceId(map, pg.id, pg.name, pg.description, pg.audioKey, pg.audioLength,
-                pg.imgKey, pg.placeId, pg.creatorId, pg.creatorName, pg.placeType).then(placeGuide => {
-              placeGuidesOfUser.push(placeGuide);
-              resolve()
-            });
+            PlaceGuide.constructPlaceGuideBasedOnPlaceId(map, pg.id, pg.name, pg.description,
+                pg.audioKey, pg.audioLength,
+                pg.imgKey, pg.placeId, pg.creatorId, pg.creatorName, pg.placeType)
+                .then(placeGuide => {
+                  placeGuidesOfUser.push(placeGuide);
+                  resolve()
+                });
           }));
         }
       }
