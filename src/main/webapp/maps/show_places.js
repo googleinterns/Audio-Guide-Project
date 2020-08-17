@@ -4,7 +4,7 @@
  */
 class PlaceDisplayer {
   static displayPublicPlaceGuides(map) {
-    PlaceDisplayer.getPublicPlaceGuides()
+    PlaceDisplayer.getPublicPlaceGuides(map)
         .then(placeGuides => {
             console.log("public place guides: ");
             console.log(placeGuides);
@@ -17,7 +17,7 @@ class PlaceDisplayer {
             console.log(markers);
             var markerCluster = new MarkerClusterer(map, markers,
                 {imagePath: './img/m'});
-        });     
+       });     
   }
 
   static displayPlaceGuidesOfUser(map, userId) {
@@ -31,16 +31,16 @@ class PlaceDisplayer {
   }
 
   // This is for demonstrational purposes only. Data will be fetched from the server.
-  static getPublicPlaceGuides() {
+  static getPublicPlaceGuides(map) {
     return new Promise(function(resolve, reject) {
         var publicPlaceGuides = []
-        resolve(PlaceGuide.constructPlaceGuideBasedOnPlaceId(
+        resolve(PlaceGuide.constructPlaceGuideBasedOnPlaceId(map,
           "id2", "PlaceGuide 2", "This is a placeguide 2",
           "audioKey2", 4, "imgKey2",
           "ChIJM3bYao8OSUcRpHGkCCTD9yM", "creatorId2",
           "creatorName2", PlaceType.PUBLIC)
-          .then(newPlaceGuide => publicPlaceGuides.push(newPlaceGuide))
-          .then(() => {return publicPlaceGuides}));
+           .then(newPlaceGuide => publicPlaceGuides.push(newPlaceGuide))
+           .then(() => {return publicPlaceGuides}));
     });
   }
 }

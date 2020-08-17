@@ -10,7 +10,7 @@ class LocationSaver {
 
   constructor(map, chosenPlace) {
     this._map = map;
-    this._savedPlace = new Place(0, 0, "Saved location",
+    this._savedPlace = new Place(map, 0, 0, "Saved location",
         null, PlaceType.SAVED_LOCATION, true);
     this._savedPlace.map = this._map;
     this._savedPlace.visible = false;

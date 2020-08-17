@@ -58,7 +58,7 @@
             // Choose location functionality.
             // Remark that chosenLocation can be updated from the SearchBox and by clicking as well.
             var chosenLocation =
-                new Place(0, 0, "Picked Location", null, PlaceType.SEARCH_RESULT, true);
+                new Place(map, 0, 0, "Picked Location", null, PlaceType.SEARCH_RESULT, true);
             chosenLocation.visible = false;
             chosenLocation.draggable = true;
             chosenLocation.map = map;

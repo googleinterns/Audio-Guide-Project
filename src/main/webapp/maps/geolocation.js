@@ -29,7 +29,7 @@ class Geolocator {
     this._trackLocation = false;
     this._foundLocation = false;
     this._watchPositionId = -1;
-    this._currentLocation = new Place(0, 0, Geolocator.MY_LOCATION_TITLE,
+    this._currentLocation = new Place(map, 0, 0, Geolocator.MY_LOCATION_TITLE,
         null, PlaceType.CURRENT_LOCATION, false);
     this._currentLocation.visible = false;
     this._currentLocation.map = map;

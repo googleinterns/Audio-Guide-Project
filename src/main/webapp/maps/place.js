@@ -43,7 +43,8 @@ var PlaceType = {
  * Whenever a new position is set, the mapsPlace is discarded, and vice versa.
  */
 class Place {
-  constructor(positionLat, positionLng, name, mapsPlace, placeType, hasInfoWindow) {
+  constructor(map, positionLat, positionLng, name, mapsPlace, placeType, hasInfoWindow) {
+    this._map = map;
     this._mapsPlace = mapsPlace;
     this._name = name;
     if (this._mapsPlace != null) {
@@ -58,25 +59,27 @@ class Place {
     this.setupOnPositionChangeEvent();
   }
 
-  static constructPlaceBasedOnCoordinates(positionLat, positionLong, name, placeType, hasInfoWindow){
-      return new Place(positionLat, positionLng, name, null, placeType, hasInfoWindow);
+  static constructPlaceBasedOnCoordinates(map, positionLat, positionLong, name, placeType, hasInfoWindow){
+      return new Place(map, positionLat, positionLng, name, null, placeType, hasInfoWindow);
   }
 
-  static constructPlaceBasedOnPlaceId(placeId, name, placeType, hasInfoWindow){
+  static constructPlaceBasedOnPlaceId(map, placeId, name, placeType, hasInfoWindow){
         var request = {
             placeId: placeId,
             fields: ['address_components', 'name', 'geometry']
         };
 
-         var service = new google.maps.places.PlacesService(map);
     // // const geocoder = new google.maps.Geocoder();
     // // console.log("placeType is");
     // // console.log(placeType);
 
     return new Promise(function(resolve, reject) {
+        var service = new google.maps.places.PlacesService(map);
+        console.log("map = ");
+        console.log(map);
         service.getDetails(request, (place, status) => {
             if (status === google.maps.places.PlacesServiceStatus.OK) {
-                resolve(new Place(0, 0, name, place, placeType, hasInfoWindow));
+                resolve(new Place(map, 0, 0, name, place, placeType, hasInfoWindow));
             }
             else {
                 reject(new Error('Couldnt\'t find the place'+ placeId));
@@ -280,7 +283,7 @@ class Place {
 
 class PlaceGuide extends Place {
   constructor(place, databaseId, description, audioKey, audioLength, imgKey, creatorId, creatorName) {
-      super(place._positionLat, place._positionLng, place._name, place._mapsPlace, place._placeType, place._hasInfoWindow);
+      super(place._map, place._positionLat, place._positionLng, place._name, place._mapsPlace, place._placeType, place._hasInfoWindow);
       this._databaseId = databaseId;
       this._description = description;
       this._audioKey = audioKey;
@@ -291,13 +294,13 @@ class PlaceGuide extends Place {
       this.setupRepresentationOnMap();
   }
 
-  static constructPlaceGuideBasedOnCoordinates(databaseId, name, description, audioKey, audioLength, imgKey, positionLat, positionLng, creatorId, creatorName, placeType){
-        var newPlace = Place.constructPlaceBasedOnCoordinates(positionLat, positionLng, name, placeType, true);
+  static constructPlaceGuideBasedOnCoordinates(map, databaseId, name, description, audioKey, audioLength, imgKey, positionLat, positionLng, creatorId, creatorName, placeType){
+        var newPlace = Place.constructPlaceBasedOnCoordinates(map, positionLat, positionLng, name, placeType, true);
         return new PlaceGuide(newPlace, databaseId, description, audioKey, audioLength, imgKey, creatorId, creatorName);
   }
 
-  static constructPlaceGuideBasedOnPlaceId(databaseId, name, description, audioKey, audioLength, imgKey, placeId, creatorId, creatorName, placeType){
-      return Place.constructPlaceBasedOnPlaceId(placeId, name, placeType, true)
+  static constructPlaceGuideBasedOnPlaceId(map, databaseId, name, description, audioKey, audioLength, imgKey, placeId, creatorId, creatorName, placeType){
+      return Place.constructPlaceBasedOnPlaceId(map, placeId, name, placeType, true)
         .catch(error => console.log("Failed to construct place guide based on id: " + error))
         .then(newPlace => {
             console.log("at construction creatorName is: " + creatorName);
