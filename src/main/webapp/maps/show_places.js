@@ -7,7 +7,6 @@ class PlaceDisplayer {
     PlaceDisplayer.getPublicPlaceGuides(map)
         .then(placeGuides => {
             var markers = placeGuides.map(function (placeGuide) {
-                console.log("marker" + placeGuide._marker);
                 return placeGuide._marker;
             });
             var markerCluster = new MarkerClusterer(map, markers,

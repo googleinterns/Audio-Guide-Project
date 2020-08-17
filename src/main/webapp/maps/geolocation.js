@@ -29,8 +29,8 @@ class Geolocator {
     this._trackLocation = false;
     this._foundLocation = false;
     this._watchPositionId = -1;
-    this._currentLocation = new Place(map, 0, 0, Geolocator.MY_LOCATION_TITLE,
-        null, PlaceType.CURRENT_LOCATION, false);
+    this._currentLocation = 
+        Place.constructPlaceBasedOnCoordinates(map, 0, 0, Geolocator.MY_LOCATION_TITLE, PlaceType.CURRENT_LOCATION, true);
     this._currentLocation.visible = false;
     this._geolocationControlDiv =
         this.createControlDiv(Geolocator.ENABLE_GEOLOCATION_TITLE,

@@ -7,11 +7,12 @@ class LocationSaver {
   static SAVE_LOCATION_TEXT = "Save location";
   static SAVE_LOCATION_ID = "locationSaverControl";
   static SAVED_LOCATION_MESSAGE = "Location saved!";
+  static SAVED_LOCATION_TITLE = "Saved location";
 
   constructor(map, chosenPlace) {
     this._map = map;
-    this._savedPlace = new Place(map, 0, 0, "Saved location",
-        null, PlaceType.SAVED_LOCATION, true);
+    this._savedPlace = 
+        Place.constructPlaceBasedOnCoordinates(map, 0, 0, LocationSaver.SAVED_LOCATION_TITLE, PlaceType.SAVED_LOCATION, true);
     this._savedPlace.map = this._map;
     this._savedPlace.visible = false;
     this._chosenPlace = chosenPlace;
