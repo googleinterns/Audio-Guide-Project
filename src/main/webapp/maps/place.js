@@ -216,9 +216,8 @@ class Place {
   }
 
   /**
-   * This function relies on Geocoder API to get the place
-   * corresponding to an id, provided by the Places API,
-   * and then update the mapsPlace.
+   * This function relies on Places API to get the place
+   * corresponding to an id, and then update the mapsPlace.
    */
   updatePlaceAndCenterBasedOnId(id) {
        var request = {
