@@ -53,13 +53,6 @@ public class PlaceGuideServlet extends HttpServlet {
   private final PlaceGuideRepository placeGuideRepository = 
       PlaceGuideRepositoryFactory.getPlaceGuideRepository(RepositoryType.DATASTORE);
 
-  private enum PlaceGuideQueryType {
-    ALL, 
-    CREATED_ALL, 
-    CREATED_PUBLIC, 
-    CREATED_PRIVATE 
-  }
-
   /**
    * Saves the recently submitted place guide data.
    */
