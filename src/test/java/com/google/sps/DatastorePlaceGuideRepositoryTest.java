@@ -44,6 +44,22 @@ public final class DatastorePlaceGuideRepositoryTest {
   public static final String PREVIOUS_DESCRIPTION = "previous description";
   public static final String IMAGE_KEY = "imageKey";
 
+  // PlaceGuides' parameters used for map-related queries.
+  public static final long INNER_PUBLIC_ID = 56789;
+  public static final long INNER_PRIVATE_ID = 98765;
+  public static final long OUTER_PUBLIC_ID = 67890;
+  public static final long OUTER_PRIVATE_ID = 9876;
+  public static final String CREATOR_INNER_ID = "creatorC_Id";
+  public static final String CREATOR_OUTER_ID = "creatorD_Id";
+  public static final GeoPt INNER_PUBLIC_COORDINATE = new GeoPt((float) 10, (float) -5);
+  public static final GeoPt INNER_PRIVATE_COORDINATE = new GeoPt((float) -10, (float) 10);
+  public static final GeoPt OUTER_PUBLIC_COORDINATE = new GeoPt((float) 30, (float) -10);
+  public static final GeoPt OUTER_PRIVATE_COORDINATE = new GeoPt((float) -10, (float) -45);
+  // Corners of the rectangle for the queried map area.
+  public static final GeoPt NORTH_EAST_CORNER = new GeoPt((float) 15, (float) 15);
+  public static final GeoPt SOUTH_WEST_CORNER = new GeoPt((float) -15, (float) -15);
+
+
   private final PlaceGuide testPublicPlaceGuideA = 
       new PlaceGuide.Builder(A_PUBLIC_ID, NAME, AUDIO_KEY, CREATOR_A_ID, COORDINATE)
       .setPlaceId(PLACE_ID)
