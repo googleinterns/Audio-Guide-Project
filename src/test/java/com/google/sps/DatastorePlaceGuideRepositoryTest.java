@@ -21,6 +21,8 @@ import org.junit.runners.JUnit4;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Set;
+import java.util.HashSet;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.junit.Assert.assertEquals;
@@ -332,7 +334,7 @@ public final class DatastorePlaceGuideRepositoryTest {
   }
 
   @Test
-  public void getBookmarkedPlaceGuides() {
+  public void getBookmarkedPlaceGuides_allPlaceGuidesExistAndUserExists_returnCorrespondingPlaceGuides() {
     List<PlaceGuide> testPlaceGuidesList = Arrays.asList(testPublicPlaceGuideA,
                                                          testPublicPlaceGuideB,
                                                          testPrivatePlaceGuideB,
@@ -344,6 +346,34 @@ public final class DatastorePlaceGuideRepositoryTest {
     List<PlaceGuide> expected = Arrays.asList(testPublicPlaceGuideA, testPublicPlaceGuideB);
     List<PlaceGuide> result = placeGuideRepository.getBookmarkedPlaceGuides(CREATOR_A_ID);
     assertTrue(compare(expected, result));
+  }
+
+  @Test(expected = IllegalStateException.class)
+  public void getBookmarkedPlaceGuides_nonExistentUser_throwsError() {
+    List<PlaceGuide> testPlaceGuidesList = Arrays.asList(testPublicPlaceGuideA,
+                                                         testPublicPlaceGuideB,
+                                                         testPrivatePlaceGuideB,
+                                                         testPrivatePlaceGuideA);
+    saveTestPlaceGuidesEntities(testPlaceGuidesList);
+
+    List<PlaceGuide> expected = Arrays.asList(testPublicPlaceGuideA, testPublicPlaceGuideB);
+    List<PlaceGuide> result = placeGuideRepository.getBookmarkedPlaceGuides(CREATOR_A_ID);
+    assertTrue(compare(expected, result));
+  }
+
+  @Test
+  public void getBookmarkedPlaceGuides_allBookmarkedPlaceGuidesDontExistAnymore_bookmarkedPlaceGuidesBecomesEmpty() {
+    // Store user to database.
+    userRepository.saveUser(userA);
+
+    List<PlaceGuide> expected = Arrays.asList();
+    List<PlaceGuide> result = placeGuideRepository.getBookmarkedPlaceGuides(CREATOR_A_ID);
+    assertEquals(expected, result);
+
+    // Check if the user's {@code bookmarkedPlaceGuides} is empty. If it's empty, then datastore
+    // will store it as a null value.
+    User testUserA = userRepository.getUser(CREATOR_A_ID);
+    assertEquals(expected, testUserA.getBookmarkedPlaceGuides());
   }
 
   @Test(expected = EntityNotFoundException.class)

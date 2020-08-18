@@ -16,7 +16,7 @@ package com.google.sps.user;
 
 import java.util.Objects;
 import org.jetbrains.annotations.Nullable;
-import java.util.List;
+import java.util.Set;
 import java.util.Collections;
 
 /**
@@ -34,7 +34,7 @@ public class User {
   private final String imgKey;
 
   // Contains the unique identifier of the corresponding bookmarked place guides.
-  private final List<Long> bookmarkedPlaceGuides; 
+  private final Set<Long> bookmarkedPlaceGuides; 
 
   public static class Builder {
     // Required.
@@ -48,9 +48,9 @@ public class User {
     @Nullable
     private String imgKey;
     private boolean publicPortfolio = false;
-    private final List<Long> bookmarkedPlaceGuides;
+    private final Set<Long> bookmarkedPlaceGuides;
 
-    public Builder(String id, String email, List<Long> bookmarkedPlaceGuides) {
+    public Builder(String id, String email, Set<Long> bookmarkedPlaceGuides) {
       this.id = id;
       this.email = email;
       this.bookmarkedPlaceGuides = bookmarkedPlaceGuides;
@@ -115,8 +115,8 @@ public class User {
     return publicPortfolio;
   }
 
-  public List<Long> getBookmarkedPlaceGuides() {
-    return Collections.unmodifiableList(bookmarkedPlaceGuides);
+  public Set<Long> getBookmarkedPlaceGuides() {
+    return Collections.unmodifiableSet(bookmarkedPlaceGuides);
   }
 
   @Override

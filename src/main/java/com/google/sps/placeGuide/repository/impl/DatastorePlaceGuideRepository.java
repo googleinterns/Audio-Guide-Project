@@ -134,29 +134,44 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository {
   public List<PlaceGuide> getBookmarkedPlaceGuides(String userId) {
     List<PlaceGuide> bookmarkedPlaceGuides = new ArrayList<>();
     User user = userRepository.getUser(userId);
-    List<Long> bookmarkedIds = user.getBookmarkedPlaceGuides();
-    List<Long> bookmarkedIdsCopy = new ArrayList<>(bookmarkedPlaceGuidesIds);
-    int bookmarkedIdsCopyIndex = 0;
-    while (bookmarkedIdsCopyIndex < bookmarkedIdsCopy.size()) {
-      long placeGuideId = bookmarkedIdsCopy.get(bookmarkedIdsCopyIndex);
-      Key placeGuideEntityKey = KeyFactory.createKey(ENTITY_KIND, placeGuideId);
-      try {
-        Entity placeGuideEntity = datastore.get(placeGuideEntityKey);
-        bookmarkedPlaceGuides.add(getPlaceGuideFromEntity(placeGuideEntity));
-        bookmarkedIdsCopyIndex++;
-      } catch(EntityNotFoundException err) {
-        System.out.println("PlaceGuide entity does not exist or has already been removed.");
-        bookmarkedIdsCopyIndex.remove(bookmarkedIdsCopyIndex);
+    if (user != null) {
+      List<Long> bookmarkedIds = user.getBookmarkedPlaceGuides();
+      List<Long> bookmarkedIdsCopy = new ArrayList<>(bookmarkedIds);
+      int bookmarkedIdsCopyIndex = 0;
+      while (bookmarkedIdsCopyIndex < bookmarkedIdsCopy.size()) {
+        long placeGuideId = bookmarkedIdsCopy.get(bookmarkedIdsCopyIndex);
+        Key placeGuideEntityKey = KeyFactory.createKey(ENTITY_KIND, placeGuideId);
+        try {
+          Entity placeGuideEntity = datastore.get(placeGuideEntityKey);
+          bookmarkedPlaceGuides.add(getPlaceGuideFromEntity(placeGuideEntity));
+          bookmarkedIdsCopyIndex++;
+        } catch(EntityNotFoundException err) {
+          System.out.println("PlaceGuide entity does not exist or has already been removed.");
+          bookmarkedIdsCopy.remove(bookmarkedIdsCopyIndex);
+        }
       }
+      // Update and save user with updated {@code bookmarkedPlaceGuides}.
+      saveUpdatedUser(user, bookmarkedIdsCopy);
+      return bookmarkedPlaceGuides;
+    } else {
+      throw new IllegalStateException("Cannot get bookmarked place guides for non-existent user!");
     }
-    // Update and save user with updated {@code bookmarkedPlaceGuides}.
-    saveUpdatedUser(user, bookmarkedIdsCopyIndex);
-    return bookmarkedPlaceGuides;
   }
+
+//   @Overrider
+//   public void removeBookmarkedPlaceGuides(long placeGuideId, String userId) {
+//     User user = userRepository.getUser(userId);
+//     if (user != null) {
+//       List<Long> bookmarkedPlaceGuides = user.getBookmarkedPlaceGuides();
+
+//     } else {
+//       throw new IllegalStateException("Cannot remove bookmarked place guides from non-existent user!");
+//     }
+//   }
 
   private void saveUpdatedUser(User user, List<Long> updatedBookmarkedPlaceGuides) {
     User updatedUser =
-        new User.Builder(user.getId(), user.getEmail(), updatedBookmarkedPlaceGuidesCopy)
+        new User.Builder(user.getId(), user.getEmail(), updatedBookmarkedPlaceGuides)
         .setName(user.getName())
         .addSelfIntroduction(user.getSelfIntroduction())
         .setPublicPortfolio(user.portfolioIsPublic())
