@@ -61,19 +61,31 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository {
 
   @Override
   public void bookmarkPlaceGuide(long placeGuideId, String userId) {
-    User user = userRepository.getUser(userId);
-    List<Long> bookmarkedPlaceGuides = user.getBookmarkedPlaceGuides();
-    bookmarkedPlaceGuides.add(placeGuideId);
+    // Check if the corresponding placeGuide is in the database.
+    Key placeGuideEntityKey = KeyFactory.createKey(ENTITY_KIND, placeGuideId);
+    try {
+      Entity placeGuideEntity = datastore.get(placeGuideEntityKey);
+      User user = userRepository.getUser(userId);
+      if (user != null) {
+        List<Long> bookmarkedPlaceGuides = user.getBookmarkedPlaceGuides();
+        List<Long> bookmarkedPlaceGuidesCopy;
+        if (bookmarkedPlaceGuides == null) {
+          bookmarkedPlaceGuidesCopy = new ArrayList<>();
+        } else {
+          bookmarkedPlaceGuidesCopy = new ArrayList<>(bookmarkedPlaceGuides);
+        }
+        bookmarkedPlaceGuidesCopy.add(placeGuideId);
 
-    // Create a new User object with the updated {@code bookmarkedPlaceGuides}.
-    User updatedUser =
-        new User.Builder(userId, user.getEmail(), bookmarkedPlaceGuides)
-        .setName(user.getName())
-        .addSelfIntroduction(user.getSelfIntroduction())
-        .setPublicPortfolio(user.portfolioIsPublic())
-        .addImgKey(user.getImgKey())
-        .build();
-    userRepository.saveUser(updatedUser);
+      // Update and save user with the updated {@code bookmarkedPlaceGuides}.
+        saveUpdatedUser(user, bookmarkedPlaceGuidesCopy);
+      } else {
+        throw new IllegalStateException("Non existent user cannot bookmark a place guide!");
+      }
+
+    } catch(EntityNotFoundException err) {
+      System.out.println("No existing corresponding place guides.");
+    }
+
   }
 
   @Override
@@ -122,17 +134,35 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository {
   public List<PlaceGuide> getBookmarkedPlaceGuides(String userId) {
     List<PlaceGuide> bookmarkedPlaceGuides = new ArrayList<>();
     User user = userRepository.getUser(userId);
-    List<Long> bookmarkedPlaceGuidesIds = user.getBookmarkedPlaceGuides();
-    for (long placeGuideId : bookmarkedPlaceGuidesIds) {
+    List<Long> bookmarkedIds = user.getBookmarkedPlaceGuides();
+    List<Long> bookmarkedIdsCopy = new ArrayList<>(bookmarkedPlaceGuidesIds);
+    int bookmarkedIdsCopyIndex = 0;
+    while (bookmarkedIdsCopyIndex < bookmarkedIdsCopy.size()) {
+      long placeGuideId = bookmarkedIdsCopy.get(bookmarkedIdsCopyIndex);
       Key placeGuideEntityKey = KeyFactory.createKey(ENTITY_KIND, placeGuideId);
       try {
         Entity placeGuideEntity = datastore.get(placeGuideEntityKey);
         bookmarkedPlaceGuides.add(getPlaceGuideFromEntity(placeGuideEntity));
+        bookmarkedIdsCopyIndex++;
       } catch(EntityNotFoundException err) {
         System.out.println("PlaceGuide entity does not exist or has already been removed.");
+        bookmarkedIdsCopyIndex.remove(bookmarkedIdsCopyIndex);
       }
     }
+    // Update and save user with updated {@code bookmarkedPlaceGuides}.
+    saveUpdatedUser(user, bookmarkedIdsCopyIndex);
     return bookmarkedPlaceGuides;
+  }
+
+  private void saveUpdatedUser(User user, List<Long> updatedBookmarkedPlaceGuides) {
+    User updatedUser =
+        new User.Builder(user.getId(), user.getEmail(), updatedBookmarkedPlaceGuidesCopy)
+        .setName(user.getName())
+        .addSelfIntroduction(user.getSelfIntroduction())
+        .setPublicPortfolio(user.portfolioIsPublic())
+        .addImgKey(user.getImgKey())
+        .build();
+    userRepository.saveUser(updatedUser);
   }
 
   private PlaceGuide getPlaceGuideFromEntity(Entity placeGuideEntity) {

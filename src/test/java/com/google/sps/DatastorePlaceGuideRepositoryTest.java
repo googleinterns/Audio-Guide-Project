@@ -9,6 +9,10 @@ import com.google.sps.placeGuide.PlaceGuide;
 import com.google.sps.placeGuide.repository.PlaceGuideRepository;
 import com.google.sps.placeGuide.repository.PlaceGuideRepositoryFactory;
 import com.google.sps.placeGuide.repository.impl.DatastorePlaceGuideRepository;
+import com.google.sps.user.repository.UserRepository;
+import com.google.sps.user.repository.UserRepositoryFactory;
+import com.google.sps.user.repository.impl.DatastoreUserRepository;
+import com.google.sps.user.User;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,6 +30,8 @@ public final class DatastorePlaceGuideRepositoryTest {
   
   private final LocalServiceTestHelper helper = new LocalServiceTestHelper(
                                                             new LocalDatastoreServiceTestConfig());
+  private final UserRepository userRepository = 
+      UserRepositoryFactory.getUserRepository(RepositoryType.DATASTORE);
 
   public static final long A_PUBLIC_ID = 12345;
   public static final long B_PUBLIC_ID = 23456;
@@ -43,6 +49,20 @@ public final class DatastorePlaceGuideRepositoryTest {
   public static final String DESCRIPTION = "description";
   public static final String PREVIOUS_DESCRIPTION = "previous description";
   public static final String IMAGE_KEY = "imageKey";
+
+  public static final String OTHER_USER_EMAIL = "otherUser@gmail.com";
+  public static final List<Long> OTHER_USER_BOOKMARKED_PLACE_GUIDES = new ArrayList<>();
+  public static final String CREATOR_A_EMAIL = "creatorA@gmail.com";
+  public static final List<Long> CREATOR_A_BOOKMARKED_PLACE_GUIDES = 
+      Arrays.asList(A_PUBLIC_ID, B_PUBLIC_ID);
+
+  private final User testUser = 
+      new User.Builder(OTHER_USER_ID, OTHER_USER_EMAIL, OTHER_USER_BOOKMARKED_PLACE_GUIDES)
+      .build();
+
+  private final User userA = 
+      new User.Builder(CREATOR_A_ID, CREATOR_A_EMAIL, CREATOR_A_BOOKMARKED_PLACE_GUIDES)
+      .build();
 
   private final PlaceGuide testPublicPlaceGuideA = 
       new PlaceGuide.Builder(A_PUBLIC_ID, NAME, AUDIO_KEY, CREATOR_A_ID, COORDINATE)
@@ -175,6 +195,40 @@ public final class DatastorePlaceGuideRepositoryTest {
   }
 
   @Test
+  public void bookmarkPlaceGuide_existingUserAndExistingPlaceGuide_bookmarkedPlaceGuidesContainsPlaceGuideId() {
+    // Save testUser to datastore using userRepository.
+    userRepository.saveUser(testUser);
+    
+    // Store place guide to datastore.
+    List<PlaceGuide> testPlaceGuidesList = Arrays.asList(testPublicPlaceGuideA,
+                                                         testPublicPlaceGuideB,
+                                                         testPrivatePlaceGuideB,
+                                                         testPrivatePlaceGuideA);
+    saveTestPlaceGuidesEntities(testPlaceGuidesList);
+
+    // testUser is bookmarking public place guide a. 
+    placeGuideRepository.bookmarkPlaceGuide(A_PUBLIC_ID, OTHER_USER_ID);
+
+    // Check whether the place guide is inside testUser's bookmarkedPlaceGuides list.
+    List<Long> expected = Arrays.asList(A_PUBLIC_ID);
+    List<Long> result = userRepository.getUser(OTHER_USER_ID).getBookmarkedPlaceGuides();
+    assertEquals(expected, result);
+  }
+
+  @Test(expected = IllegalStateException.class)
+  public void bookmarkPlaceGuide_InexistentUserAndExistingPlaceGuide_throwsError() {
+    // Store place guide to datastore.
+    List<PlaceGuide> testPlaceGuidesList = Arrays.asList(testPublicPlaceGuideA,
+                                                         testPublicPlaceGuideB,
+                                                         testPrivatePlaceGuideB,
+                                                         testPrivatePlaceGuideA);
+    saveTestPlaceGuidesEntities(testPlaceGuidesList);
+
+    // testUser is bookmarking public place guide a. 
+    placeGuideRepository.bookmarkPlaceGuide(A_PUBLIC_ID, OTHER_USER_ID);
+  }
+
+  @Test
   public void getAllPublicPlaceGuides_placeGuideExists_returnPlaceGuide() {
     List<PlaceGuide> testPlaceGuidesList = Arrays.asList(testPublicPlaceGuideA,
                                                          testPublicPlaceGuideB,
@@ -274,6 +328,21 @@ public final class DatastorePlaceGuideRepositoryTest {
     saveTestPlaceGuidesEntities(testPlaceGuidesList);
     List<PlaceGuide> result = placeGuideRepository.getCreatedPrivatePlaceGuides(CREATOR_A_ID);
     List<PlaceGuide> expected = Arrays.asList(testPrivatePlaceGuideA);
+    assertTrue(compare(expected, result));
+  }
+
+  @Test
+  public void getBookmarkedPlaceGuides() {
+    List<PlaceGuide> testPlaceGuidesList = Arrays.asList(testPublicPlaceGuideA,
+                                                         testPublicPlaceGuideB,
+                                                         testPrivatePlaceGuideB,
+                                                         testPrivatePlaceGuideA);
+    saveTestPlaceGuidesEntities(testPlaceGuidesList);
+
+    // Store user to database.
+    userRepository.saveUser(userA);
+    List<PlaceGuide> expected = Arrays.asList(testPublicPlaceGuideA, testPublicPlaceGuideB);
+    List<PlaceGuide> result = placeGuideRepository.getBookmarkedPlaceGuides(CREATOR_A_ID);
     assertTrue(compare(expected, result));
   }
 
