@@ -116,7 +116,7 @@ public class User {
   }
 
   public List<Long> getBookmarkedPlaceGuides() {
-    return bookmarkedPlaceGuides;
+    return Collections.unmodifiableList(bookmarkedPlaceGuides);
   }
 
   @Override

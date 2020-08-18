@@ -72,6 +72,9 @@ public class DatastoreUserRepository implements UserRepository {
     String email = (String) userEntity.getProperty(EMAIL_PROPERTY);
     List<Long> bookmarkedPlaceGuides = 
         (ArrayList) userEntity.getProperty(BOOKMARKED_PLACE_GUIDES_PROPERTY);
+    if (bookmarkedPlaceGuides == null) {
+      bookmarkedPlaceGuides = new ArrayList<>();
+    }
     Boolean publicPortfolio = (Boolean) userEntity.getProperty(PUBLIC_PORTFOLIO_PROPERTY);
     String selfIntroduction = (String) userEntity.getProperty(SELF_INTRODUCTION_PROPERTY);
     String imgKey = (String) userEntity.getProperty(IMG_KEY_PROPERTY);

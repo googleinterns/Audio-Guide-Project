@@ -80,7 +80,9 @@ public class UserDataServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     User prevUserData = userRepository.getUser(userService.getCurrentUser().getUserId());
     User user = getUserFromRequest(request, prevUserData);
-    if (prevUserData.getImgKey() != null && !prevUserData.getImgKey().equals(user.getImgKey())) {
+    if (prevUserData != null && 
+        prevUserData.getImgKey() != null && 
+        !prevUserData.getImgKey().equals(user.getImgKey())) {
       // Delete previous image blob from blobstore, because it was overwritten or deleted.
       deleteBlobWithGivenKeyValue(prevUserData.getImgKey());
     }
@@ -106,7 +108,12 @@ public class UserDataServlet extends HttpServlet {
   private User getUserFromRequest(HttpServletRequest request, User prevUserData) {
     String id = userService.getCurrentUser().getUserId();
     String email = userService.getCurrentUser().getEmail();
-    List<Long> bookmarkedPlaceGuides = prevUserData.getBookmarkedPlaceGuides();
+    List<Long> bookmarkedPlaceGuides;
+    if (prevUserData != null && prevUserData.getBookmarkedPlaceGuides() != null) {
+      bookmarkedPlaceGuides = prevUserData.getBookmarkedPlaceGuides();
+    } else {
+      bookmarkedPlaceGuides = new ArrayList<>();
+    }
     User.Builder newUserBuilder = new User.Builder(id, email, bookmarkedPlaceGuides);
     String name = request.getParameter(NAME_INPUT);
     if (!name.isEmpty()) {

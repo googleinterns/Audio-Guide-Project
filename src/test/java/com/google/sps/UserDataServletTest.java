@@ -30,6 +30,9 @@ import com.google.gson.Gson;
 import com.google.sps.servlets.UserDataServlet;
 import com.google.sps.user.User;
 import com.google.sps.user.repository.impl.DatastoreUserRepository;
+import com.google.sps.user.repository.UserRepository;
+import com.google.sps.user.repository.UserRepositoryFactory;
+import com.google.sps.data.RepositoryType;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -50,6 +53,8 @@ import java.util.Collections;
 public final class UserDataServletTest {
   private static final String ID = "userid";
   private static final String EMAIL = "user@gmail.com";
+  private static final List<Long> EMPTY_BOOKMARKED_PLACE_GUIDES_TO_GET = null;
+  private static final List<Long> EMPTY_BOOKMARKED_PLACE_GUIDES_TO_STORE = Arrays.asList();
   private static final List<Long> BOOKMARKED_PLACE_GUIDES = Arrays.asList((long) 12345);
   private static final String NAME = "username";
   private static final String SELF_INTRODUCTION = "I am the user";
@@ -97,49 +102,161 @@ public final class UserDataServletTest {
     helper.tearDown();
   }
 
+//   @Test
+//   public void doPost_InexistentUser_returnsEmptyBookmarkedPlaceGuides() throws IOException, ServletException {
+//     // Mock request and response.
+//     when(request.getParameter(UserDataServlet.NAME_INPUT)).thenReturn(NAME);
+//     when(request.getParameter(UserDataServlet.SELF_INTRODUCTION_INPUT))
+//         .thenReturn(SELF_INTRODUCTION);
+//     when(request.getParameter(UserDataServlet.PUBLIC_PORTFOLIO_INPUT)).thenReturn("private");
+//     StringWriter sw = new StringWriter();
+//     PrintWriter pw = new PrintWriter(sw);
+//     when(response.getWriter()).thenReturn(pw);
+
+//     // Mock blobstoreService and blobInfoFactory.
+//     Map<String, List<BlobKey>> blobs = new HashMap<>();
+//     BlobKey blobKey = new BlobKey(IMG_KEY);
+//     blobs.put(UserDataServlet.IMG_KEY_INPUT, Arrays.asList(blobKey));
+//     when(blobstoreService.getUploads(request)).thenReturn(blobs);
+//     BlobInfo blobInfo = new BlobInfo(blobKey, "img", new Date(), "file.img", 1);
+//     when(blobInfoFactory.loadBlobInfo(blobKey)).thenReturn(blobInfo);
+
+//     // Save the currenly logged in user's data.
+//     userDataServlet = new UserDataServlet(blobstoreService, blobInfoFactory);
+//     userDataServlet.doPost(request, response);
+
+//     // Get the currenly logged in user's previously saved data.
+//     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+//     Key userKey = KeyFactory.createKey(DatastoreUserRepository.ENTITY_KIND, ID);
+//     try {
+//       Entity userEntity = datastore.get(userKey);
+//       assertEquals(NAME, userEntity.getProperty(DatastoreUserRepository.NAME_PROPERTY));
+//       assertEquals(EMAIL, userEntity.getProperty(DatastoreUserRepository.EMAIL_PROPERTY));
+//       assertEquals(
+//           EMPTY_BOOKMARKED_PLACE_GUIDES_TO_GET, 
+//           userEntity.getProperty(DatastoreUserRepository.BOOKMARKED_PLACE_GUIDES_PROPERTY));
+//       assertEquals(
+//           SELF_INTRODUCTION,
+//           userEntity.getProperty(DatastoreUserRepository.SELF_INTRODUCTION_PROPERTY));
+//       assertEquals(
+//           false, userEntity.getProperty(DatastoreUserRepository.PUBLIC_PORTFOLIO_PROPERTY));
+//       assertEquals(IMG_KEY, userEntity.getProperty(DatastoreUserRepository.IMG_KEY_PROPERTY));
+//     } catch (EntityNotFoundException e) {
+//       fail("Entity not found: " + e);
+//     }
+//   }
+
   @Test
-  public void doPost() throws IOException, ServletException {
-    // Mock request and response.
-    when(request.getParameter(UserDataServlet.NAME_INPUT)).thenReturn(NAME);
-    when(request.getParameter(UserDataServlet.SELF_INTRODUCTION_INPUT))
-        .thenReturn(SELF_INTRODUCTION);
-    when(request.getParameter(UserDataServlet.PUBLIC_PORTFOLIO_INPUT)).thenReturn("private");
-    StringWriter sw = new StringWriter();
-    PrintWriter pw = new PrintWriter(sw);
-    when(response.getWriter()).thenReturn(pw);
-
-    // Mock blobstoreService and blobInfoFactory.
-    Map<String, List<BlobKey>> blobs = new HashMap<>();
-    BlobKey blobKey = new BlobKey(IMG_KEY);
-    blobs.put(UserDataServlet.IMG_KEY_INPUT, Arrays.asList(blobKey));
-    when(blobstoreService.getUploads(request)).thenReturn(blobs);
-    BlobInfo blobInfo = new BlobInfo(blobKey, "img", new Date(), "file.img", 1);
-    when(blobInfoFactory.loadBlobInfo(blobKey)).thenReturn(blobInfo);
-
-    // Save the currenly logged in user's data.
-    userDataServlet = new UserDataServlet(blobstoreService, blobInfoFactory);
-    userDataServlet.doPost(request, response);
-
-    // Get the currenly logged in user's previously saved data.
+  public void doPost_userExistsWithEmptyBookmarkedPlaceGuides_returnsEmptyBookmarkedPlaceGuides() throws IOException, ServletException {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    Key userKey = KeyFactory.createKey(DatastoreUserRepository.ENTITY_KIND, ID);
-    try {
-      Entity userEntity = datastore.get(userKey);
-      assertEquals(NAME, userEntity.getProperty(DatastoreUserRepository.NAME_PROPERTY));
-      assertEquals(EMAIL, userEntity.getProperty(DatastoreUserRepository.EMAIL_PROPERTY));
-      assertEquals(
-          BOOKMARKED_PLACE_GUIDES, 
-          userEntity.getProperty(DatastoreUserRepository.BOOKMARKED_PLACE_GUIDES_PROPERTY));
-      assertEquals(
-          SELF_INTRODUCTION,
-          userEntity.getProperty(DatastoreUserRepository.SELF_INTRODUCTION_PROPERTY));
-      assertEquals(
-          false, userEntity.getProperty(DatastoreUserRepository.PUBLIC_PORTFOLIO_PROPERTY));
-      assertEquals(IMG_KEY, userEntity.getProperty(DatastoreUserRepository.IMG_KEY_PROPERTY));
-    } catch (EntityNotFoundException e) {
-      fail("Entity not found: " + e);
-    }
+
+    // Store user's previous data.
+    Entity prevUserEntity = new Entity(DatastoreUserRepository.ENTITY_KIND, ID);
+    prevUserEntity.setProperty(DatastoreUserRepository.EMAIL_PROPERTY, EMAIL);
+    prevUserEntity.setProperty(
+        DatastoreUserRepository.BOOKMARKED_PLACE_GUIDES_PROPERTY, 
+        EMPTY_BOOKMARKED_PLACE_GUIDES_TO_STORE);
+    datastore.put(prevUserEntity);
+
+    UserRepository userRepository = UserRepositoryFactory.getUserRepository(RepositoryType.DATASTORE);
+    User user = userRepository.getUser(ID);
+    Gson gson = new Gson();
+    String json = gson.toJson(user);
+    System.out.println(json);
+
+    // // Mock request and response.
+    // when(request.getParameter(UserDataServlet.NAME_INPUT)).thenReturn(NAME);
+    // when(request.getParameter(UserDataServlet.SELF_INTRODUCTION_INPUT))
+    //     .thenReturn(SELF_INTRODUCTION);
+    // when(request.getParameter(UserDataServlet.PUBLIC_PORTFOLIO_INPUT)).thenReturn("private");
+    // StringWriter sw = new StringWriter();
+    // PrintWriter pw = new PrintWriter(sw);
+    // when(response.getWriter()).thenReturn(pw);
+
+    // // Mock blobstoreService and blobInfoFactory.
+    // Map<String, List<BlobKey>> blobs = new HashMap<>();
+    // BlobKey blobKey = new BlobKey(IMG_KEY);
+    // blobs.put(UserDataServlet.IMG_KEY_INPUT, Arrays.asList(blobKey));
+    // when(blobstoreService.getUploads(request)).thenReturn(blobs);
+    // BlobInfo blobInfo = new BlobInfo(blobKey, "img", new Date(), "file.img", 1);
+    // when(blobInfoFactory.loadBlobInfo(blobKey)).thenReturn(blobInfo);
+
+    // // Save the currenly logged in user's data.
+    // userDataServlet = new UserDataServlet(blobstoreService, blobInfoFactory);
+    // userDataServlet.doPost(request, response);
+
+    // // Get the currently logged in user's previously saved data.
+    // Key userKey = KeyFactory.createKey(DatastoreUserRepository.ENTITY_KIND, ID);
+    // try {
+    //   Entity userEntity = datastore.get(userKey);
+    //   assertEquals(NAME, userEntity.getProperty(DatastoreUserRepository.NAME_PROPERTY));
+    //   assertEquals(EMAIL, userEntity.getProperty(DatastoreUserRepository.EMAIL_PROPERTY));
+    //   assertEquals(
+    //       EMPTY_BOOKMARKED_PLACE_GUIDES_TO_GET, 
+    //       userEntity.getProperty(DatastoreUserRepository.BOOKMARKED_PLACE_GUIDES_PROPERTY));
+    //   assertEquals(
+    //       SELF_INTRODUCTION,
+    //       userEntity.getProperty(DatastoreUserRepository.SELF_INTRODUCTION_PROPERTY));
+    //   assertEquals(
+    //       false, userEntity.getProperty(DatastoreUserRepository.PUBLIC_PORTFOLIO_PROPERTY));
+    //   assertEquals(IMG_KEY, userEntity.getProperty(DatastoreUserRepository.IMG_KEY_PROPERTY));
+    // } catch (EntityNotFoundException e) {
+    //   fail("Entity not found: " + e);
+    // }
   }
+
+//   @Test
+//   public void doPost_userExistsWithFilledBookmarkedPlaceGuides_returnsFilledBookmarkedPlaceGuides() throws IOException, ServletException {
+//     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
+//     // Store user's previous data.
+//     Entity prevUserEntity = new Entity(DatastoreUserRepository.ENTITY_KIND, ID);
+//     prevUserEntity.setProperty(DatastoreUserRepository.EMAIL_PROPERTY, EMAIL);
+//     prevUserEntity.setProperty(
+//         DatastoreUserRepository.BOOKMARKED_PLACE_GUIDES_PROPERTY, 
+//         BOOKMARKED_PLACE_GUIDES);
+//     datastore.put(prevUserEntity);
+
+//     // Mock request and response.
+//     when(request.getParameter(UserDataServlet.NAME_INPUT)).thenReturn(NAME);
+//     when(request.getParameter(UserDataServlet.SELF_INTRODUCTION_INPUT))
+//         .thenReturn(SELF_INTRODUCTION);
+//     when(request.getParameter(UserDataServlet.PUBLIC_PORTFOLIO_INPUT)).thenReturn("private");
+//     StringWriter sw = new StringWriter();
+//     PrintWriter pw = new PrintWriter(sw);
+//     when(response.getWriter()).thenReturn(pw);
+
+//     // Mock blobstoreService and blobInfoFactory.
+//     Map<String, List<BlobKey>> blobs = new HashMap<>();
+//     BlobKey blobKey = new BlobKey(IMG_KEY);
+//     blobs.put(UserDataServlet.IMG_KEY_INPUT, Arrays.asList(blobKey));
+//     when(blobstoreService.getUploads(request)).thenReturn(blobs);
+//     BlobInfo blobInfo = new BlobInfo(blobKey, "img", new Date(), "file.img", 1);
+//     when(blobInfoFactory.loadBlobInfo(blobKey)).thenReturn(blobInfo);
+
+//     // Save the currenly logged in user's data.
+//     userDataServlet = new UserDataServlet(blobstoreService, blobInfoFactory);
+//     userDataServlet.doPost(request, response);
+
+//     // Get the currently logged in user's previously saved data.
+//     Key userKey = KeyFactory.createKey(DatastoreUserRepository.ENTITY_KIND, ID);
+//     try {
+//       Entity userEntity = datastore.get(userKey);
+//       assertEquals(NAME, userEntity.getProperty(DatastoreUserRepository.NAME_PROPERTY));
+//       assertEquals(EMAIL, userEntity.getProperty(DatastoreUserRepository.EMAIL_PROPERTY));
+//       assertEquals(
+//           BOOKMARKED_PLACE_GUIDES, 
+//           userEntity.getProperty(DatastoreUserRepository.BOOKMARKED_PLACE_GUIDES_PROPERTY));
+//       assertEquals(
+//           SELF_INTRODUCTION,
+//           userEntity.getProperty(DatastoreUserRepository.SELF_INTRODUCTION_PROPERTY));
+//       assertEquals(
+//           false, userEntity.getProperty(DatastoreUserRepository.PUBLIC_PORTFOLIO_PROPERTY));
+//       assertEquals(IMG_KEY, userEntity.getProperty(DatastoreUserRepository.IMG_KEY_PROPERTY));
+//     } catch (EntityNotFoundException e) {
+//       fail("Entity not found: " + e);
+//     }
+//   }
 
   @Test
   public void doGet_existingUser_returnsUser() throws IOException, ServletException {
