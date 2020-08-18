@@ -15,6 +15,9 @@
 package com.google.sps.placeGuide;
 
 import com.google.sps.user.User;
+import com.google.sps.user.repository.UserRepository;
+import com.google.sps.user.repository.UserRepositoryFactory;
+import com.google.sps.data.RepositoryType;
 import com.google.sps.placeGuide.PlaceGuide;
 import org.jetbrains.annotations.Nullable;
 import com.google.appengine.api.datastore.GeoPt;
@@ -27,17 +30,24 @@ import com.google.appengine.api.datastore.GeoPt;
 public class PlaceGuideWithUser {
     private User creator;
     private PlaceGuide placeGuide;
+    private static final UserRepository userRepository =
+          UserRepositoryFactory.getUserRepository(RepositoryType.DATASTORE);;
 
-    PlaceGuideWithUser(User creator, PlaceGuide placeGuide) {
+    private PlaceGuideWithUser(User creator, PlaceGuide placeGuide) {
         this.creator = creator;
         this.placeGuide = placeGuide;
     }
 
-    User getCreator() {
+    public static PlaceGuideWithUser createPlaceGuideWithUserPair(PlaceGuide placeGuide) {
+        User creator = userRepository.getUser(placeGuide.getCreatorId());
+        return new PlaceGuideWithUser(creator, placeGuide);
+    }
+
+    public User getCreator() {
         return creator;
     }
 
-    PlaceGuide getPlaceGuide() {
+    public PlaceGuide getPlaceGuide() {
         return placeGuide;
     }
 }
