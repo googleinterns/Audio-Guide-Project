@@ -3,11 +3,13 @@ package com.google.sps.placeGuide.repository.impl;
 import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.datastore.Query.Filter;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
+import com.google.appengine.api.datastore.Query.StContainsFilter;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.CompositeFilter;
 import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
 import com.google.sps.placeGuide.PlaceGuide;
 import com.google.appengine.api.datastore.GeoPt;
+import com.google.appengine.api.datastore.Query.GeoRegion;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -84,6 +86,46 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository {
     return getPlaceGuidesList(query);
   }
 
+   @Override
+  public void deletePlaceGuide(long placeGuideId) {
+    Key placeGuideEntityKey = KeyFactory.createKey(ENTITY_KIND, placeGuideId);
+    datastore.delete(placeGuideEntityKey);
+  }
+
+  public List<PlaceGuide> getAllPublicPlaceGuidesInMapArea(GeoPt northEastCorner, GeoPt southWestCorner) {
+    Filter publicityFilter = new FilterPredicate(IS_PUBLIC_PROPERTY, FilterOperator.EQUAL, true);
+    Filter mapAreaFilter = new StContainsFilter(COORDINATE_PROPERTY, new GeoRegion.Rectangle(southWestCorner, northEastCorner));
+    Filter queryFilter = CompositeFilterOperator.and(publicityFilter, mapAreaFilter);
+    Query query = new Query(ENTITY_KIND).setFilter(queryFilter);
+    return getPlaceGuidesList(query);
+  }
+
+  public List<PlaceGuide> getCreatedPlaceGuidesInMapArea(String creatorId, GeoPt northEastCorner, GeoPt southWestCorner) {
+    Filter mapAreaFilter = new StContainsFilter(COORDINATE_PROPERTY, new GeoRegion.Rectangle(southWestCorner, northEastCorner));
+    Filter creatorFilter = new FilterPredicate(CREATOR_ID_PROPERTY, FilterOperator.EQUAL, creatorId);
+    Filter queryFilter = CompositeFilterOperator.and(mapAreaFilter, creatorFilter);
+    Query query = new Query(ENTITY_KIND).setFilter(queryFilter);
+    return getPlaceGuidesList(query);
+  }
+
+  public List<PlaceGuide> getCreatedPublicPlaceGuidesInMapArea(String creatorId, GeoPt northEastCorner, GeoPt southWestCorner) {
+    Filter publicityFilter = new FilterPredicate(IS_PUBLIC_PROPERTY, FilterOperator.EQUAL, true);
+    Filter mapAreaFilter = new StContainsFilter(COORDINATE_PROPERTY, new GeoRegion.Rectangle(southWestCorner, northEastCorner));
+    Filter creatorFilter = new FilterPredicate(CREATOR_ID_PROPERTY, FilterOperator.EQUAL, creatorId);
+    Filter queryFilter = CompositeFilterOperator.and(publicityFilter, mapAreaFilter, creatorFilter);
+    Query query = new Query(ENTITY_KIND).setFilter(queryFilter);
+    return getPlaceGuidesList(query);
+  }
+
+  public List<PlaceGuide> getCreatedPrivatePlaceGuidesInMapArea(String creatorId, GeoPt northEastCorner, GeoPt southWestCorner) {
+    Filter publicityFilter = new FilterPredicate(IS_PUBLIC_PROPERTY, FilterOperator.EQUAL, false);
+    Filter mapAreaFilter = new StContainsFilter(COORDINATE_PROPERTY, new GeoRegion.Rectangle(southWestCorner, northEastCorner));
+    Filter creatorFilter = new FilterPredicate(CREATOR_ID_PROPERTY, FilterOperator.EQUAL, creatorId);
+    Filter queryFilter = CompositeFilterOperator.and(publicityFilter, mapAreaFilter, creatorFilter);
+    Query query = new Query(ENTITY_KIND).setFilter(queryFilter);
+    return getPlaceGuidesList(query);
+  }
+
   private List<PlaceGuide> getPlaceGuidesList(Query query) {
     PreparedQuery results = datastore.prepare(query);
     List<PlaceGuide> createdPlaceGuides = new ArrayList<>();
@@ -114,11 +156,5 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository {
             .setPlaceGuideStatus(isPublic)
             .build();
     return placeGuide;
-  }
-
-  @Override
-  public void deletePlaceGuide(long placeGuideId) {
-    Key placeGuideEntityKey = KeyFactory.createKey(ENTITY_KIND, placeGuideId);
-    datastore.delete(placeGuideEntityKey);
   }
 }
