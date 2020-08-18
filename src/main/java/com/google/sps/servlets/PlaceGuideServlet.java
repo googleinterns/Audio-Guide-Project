@@ -72,8 +72,17 @@ public class PlaceGuideServlet extends HttpServlet {
     String placeGuideType = request.getParameter(PLACE_GUIDE_TYPE_PARAMETER);
     PlaceGuideQueryType queryType = PlaceGuideQueryType.valueOf(placeGuideType);
     List<PlaceGuide> placeGuides = getPlaceGuides(queryType);
+    List<PlaceGuide> placeGuideWithUserPairs = getPlaceGuideWithUserPairs(placeGuides);
     response.setContentType("application/json;");
     response.getWriter().println(convertToJsonUsingGson(placeGuides));
+  }
+
+  private List<PlaceGuideWithUser> getPlaceGuideWithUserPairs(List<PlaceGuide> placeGuides) {
+      List<PlaceGuideWithUser> placeGuideWithUserPairs = new ArrayList<>();
+      for(PlaceGuide placeGuide : placeGuides) {
+          placeGuideWithUserPairs.add(PlaceGuideWithUser.createPlaceGuideWithUserPair(placeGuide));
+      }
+      return placeGuideWithUserPairs;
   }
 
   private List<PlaceGuide> getPlaceGuides(PlaceGuideQueryType placeGuideQueryType) {
@@ -91,18 +100,18 @@ public class PlaceGuideServlet extends HttpServlet {
       case CREATED_PRIVATE:
         placeGuides = placeGuideRepository.getCreatedPrivatePlaceGuides(userId);
         break;
-      case ALL_PUBLIC_IN_MAP_AREA:
-        placeGuides = placeGuideRepository.getAllPublicPlaceGuidesInMapArea();
-        break;
-      case CREATED_ALL_IN_MAP_AREA:
-        placeGuides = placeGuideRepository.getCreatedPlaceGuidesInMapArea(userId);
-        break;
-      case CREATED_PUBLIC_IN_MAP_AREA:
-        placeGuides = placeGuideRepository.getCreatedPublicPlaceGuidesInMapArea(userId);
-        break;
-      case CREATED_PRIVATE_IN_MAP_AREA:
-        placeGuides = placeGuideRepository.getCreatedPrivatePlaceGuidesInMapArea(userId);
-        break;
+    //   case ALL_PUBLIC_IN_MAP_AREA:
+    //     placeGuides = placeGuideRepository.getAllPublicPlaceGuidesInMapArea();
+    //     break;
+    //   case CREATED_ALL_IN_MAP_AREA:
+    //     placeGuides = placeGuideRepository.getCreatedPlaceGuidesInMapArea(userId);
+    //     break;
+    //   case CREATED_PUBLIC_IN_MAP_AREA:
+    //     placeGuides = placeGuideRepository.getCreatedPublicPlaceGuidesInMapArea(userId);
+    //     break;
+    //   case CREATED_PRIVATE_IN_MAP_AREA:
+    //     placeGuides = placeGuideRepository.getCreatedPrivatePlaceGuidesInMapArea(userId);
+    //     break;
       default:
         throw new IllegalStateException("Place Guide type does not exist!");
     }
