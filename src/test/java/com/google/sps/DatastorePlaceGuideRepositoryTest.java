@@ -359,6 +359,23 @@ public final class DatastorePlaceGuideRepositoryTest {
     assertTrue(compare(expected, result));
   }
 
+  @Test
+  public void getCreatedPlaceGuidesInMapArea_noExistingPlaceGuides_emptyResult() {
+    List<PlaceGuide> result = placeGuideRepository.getCreatedPlaceGuidesInMapArea(OTHER_USER_ID, NORTH_EAST_CORNER, SOUTH_WEST_CORNER);
+    assertTrue(result.isEmpty());
+  }
+
+  @Test
+  public void getCreatedPlaceGuidesInMapArea_userDoesntOwnAnyPlaceGuides_emptyResult() {
+    List<PlaceGuide> testPlaceGuidesList = Arrays.asList(testInnerPrivatePlaceGuide, 
+                                                         testInnerPublicPlaceGuide,
+                                                         testOuterPrivatePlaceGuide,
+                                                         testOuterPublicPlaceGuide);
+    saveTestPlaceGuidesEntities(testPlaceGuidesList);
+    List<PlaceGuide> result = placeGuideRepository.getCreatedPlaceGuidesInMapArea(OTHER_USER_ID, NORTH_EAST_CORNER, SOUTH_WEST_CORNER);
+    assertTrue(result.isEmpty());
+  }
+
   @After
   public void tearDown() {
     helper.tearDown();
