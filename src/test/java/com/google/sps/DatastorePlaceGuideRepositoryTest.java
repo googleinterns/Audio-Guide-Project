@@ -99,6 +99,38 @@ public final class DatastorePlaceGuideRepositoryTest {
       .setImageKey(IMAGE_KEY)
       .build();
 
+  private final PlaceGuide testInnerPublicPlaceGuide = 
+      new PlaceGuide.Builder(INNER_PUBLIC_ID, NAME, AUDIO_KEY, CREATOR_INNER_ID, INNER_PUBLIC_COORDINATE)
+      .setPlaceId(PLACE_ID)
+      .setLength(LENGTH)
+      .setDescription(DESCRIPTION)
+      .setImageKey(IMAGE_KEY)
+      .build();
+
+  private final PlaceGuide testInnerPrivatePlaceGuide = 
+      new PlaceGuide.Builder(INNER_PRIVATE_ID, NAME, AUDIO_KEY, CREATOR_INNER_ID, INNER_PRIVATE_COORDINATE)
+      .setPlaceId(PLACE_ID)
+      .setLength(LENGTH)
+      .setDescription(DESCRIPTION)
+      .setImageKey(IMAGE_KEY)
+      .build();
+
+  private final PlaceGuide testOuterPublicPlaceGuide = 
+      new PlaceGuide.Builder(OUTER_PUBLIC_ID, NAME, AUDIO_KEY, CREATOR_OUTER_ID, OUTER_PUBLIC_COORDINATE)
+      .setPlaceId(PLACE_ID)
+      .setLength(LENGTH)
+      .setDescription(DESCRIPTION)
+      .setImageKey(IMAGE_KEY)
+      .build();
+
+  private final PlaceGuide testOuterPrivatePlaceGuide = 
+      new PlaceGuide.Builder(OUTER_PRIVATE_ID, NAME, AUDIO_KEY, CREATOR_OUTER_ID, OUTER_PUBLIC_COORDINATE)
+      .setPlaceId(PLACE_ID)
+      .setLength(LENGTH)
+      .setDescription(DESCRIPTION)
+      .setImageKey(IMAGE_KEY)
+      .build();
+
   private void saveTestPlaceGuidesEntities(List<PlaceGuide> placeGuides) {
     for (PlaceGuide placeGuide : placeGuides) {
       datastore.put(getEntityFromPlaceGuide(placeGuide));
