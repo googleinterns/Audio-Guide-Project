@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.google.sps.placeGuideWithUserPair.PlaceGuideWithUserPair;
 import com.google.sps.data.RepositoryType;
 import com.google.sps.data.PlaceGuideQueryType;
 import com.google.sps.placeGuide.PlaceGuide;
@@ -72,15 +73,15 @@ public class PlaceGuideServlet extends HttpServlet {
     String placeGuideType = request.getParameter(PLACE_GUIDE_TYPE_PARAMETER);
     PlaceGuideQueryType queryType = PlaceGuideQueryType.valueOf(placeGuideType);
     List<PlaceGuide> placeGuides = getPlaceGuides(queryType);
-    List<PlaceGuide> placeGuideWithUserPairs = getPlaceGuideWithUserPairs(placeGuides);
+    List<PlaceGuideWithUserPair> placeGuideWithUserPairs = getPlaceGuideWithUserPairs(placeGuides);
     response.setContentType("application/json;");
-    response.getWriter().println(convertToJsonUsingGson(placeGuides));
+    response.getWriter().println(convertToJsonUsingGson(placeGuideWithUserPairs));
   }
 
-  private List<PlaceGuideWithUser> getPlaceGuideWithUserPairs(List<PlaceGuide> placeGuides) {
-      List<PlaceGuideWithUser> placeGuideWithUserPairs = new ArrayList<>();
+  private List<PlaceGuideWithUserPair> getPlaceGuideWithUserPairs(List<PlaceGuide> placeGuides) {
+      List<PlaceGuideWithUserPair> placeGuideWithUserPairs = new ArrayList<>();
       for(PlaceGuide placeGuide : placeGuides) {
-          placeGuideWithUserPairs.add(PlaceGuideWithUser.createPlaceGuideWithUserPair(placeGuide));
+          placeGuideWithUserPairs.add(PlaceGuideWithUserPair.createPlaceGuideWithUserPair(placeGuide));
       }
       return placeGuideWithUserPairs;
   }

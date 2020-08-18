@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.google.sps.placeGuide;
+package com.google.sps.placeGuideWithUserPair;
 
 import com.google.sps.user.User;
 import com.google.sps.user.repository.UserRepository;
@@ -27,20 +27,20 @@ import com.google.appengine.api.datastore.GeoPt;
  * This class is used to return the complete information about a place guide
  * from the servlets, including the user's data, in one object.
  */
-public class PlaceGuideWithUser {
+public class PlaceGuideWithUserPair {
     private User creator;
     private PlaceGuide placeGuide;
     private static final UserRepository userRepository =
           UserRepositoryFactory.getUserRepository(RepositoryType.DATASTORE);;
 
-    private PlaceGuideWithUser(User creator, PlaceGuide placeGuide) {
+    private PlaceGuideWithUserPair(User creator, PlaceGuide placeGuide) {
         this.creator = creator;
         this.placeGuide = placeGuide;
     }
 
-    public static PlaceGuideWithUser createPlaceGuideWithUserPair(PlaceGuide placeGuide) {
+    public static PlaceGuideWithUserPair createPlaceGuideWithUserPair(PlaceGuide placeGuide) {
         User creator = userRepository.getUser(placeGuide.getCreatorId());
-        return new PlaceGuideWithUser(creator, placeGuide);
+        return new PlaceGuideWithUserPair(creator, placeGuide);
     }
 
     public User getCreator() {
