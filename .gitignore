@@ -5,3 +5,4 @@ step253-2020.iml
 src/main/webapp/maps_key.js
 maps_key.js
 .gitignore2
+src/main/webapp/maps/api_key.js
