@@ -50,7 +50,8 @@ public class PlaceGuideServlet extends HttpServlet {
   public static final String DESCRIPTION_INPUT = "description";
   public static final String LENGTH_INPUT = "length";
   public static final String IMAGE_KEY_INPUT = "imageKey";
-  public static final String PLACE_GUIDE_TYPE_PARAMETER = "placeGuideType";
+  public static final String PLACE_GUIDE_QUERY_TYPE_PARAMETER = "placeGuideType";
+  public static final String REGION_CORNERS_PARAMETER = "regionCorners";
 
   private final PlaceGuideRepository placeGuideRepository = 
       PlaceGuideRepositoryFactory.getPlaceGuideRepository(RepositoryType.DATASTORE);
@@ -70,9 +71,17 @@ public class PlaceGuideServlet extends HttpServlet {
    */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String placeGuideType = request.getParameter(PLACE_GUIDE_TYPE_PARAMETER);
-    PlaceGuideQueryType queryType = PlaceGuideQueryType.valueOf(placeGuideType);
-    List<PlaceGuide> placeGuides = getPlaceGuides(queryType);
+    String placeGuideQueryTypeString = request.getParameter(PLACE_GUIDE_QUERY_TYPE_PARAMETER);
+    PlaceGuideQueryType placeGuideQueryType = PlaceGuideQueryType.valueOf(placeGuideQueryTypeString);
+    GeoPt northEastCorner = null;
+    GeoPt southWestCorner = null;
+    if (placeGuideQueryType.requiresCoordinates()) {
+        String regionCornersString = request.getParameter(REGION_CORNERS_PARAMETER);
+        String[] cornerCoordinates = regionCornersString.split(",");
+        southWestCorner = new GeoPt(Float.parseFloat(cornerCoordinates[0]), Float.parseFloat(cornerCoordinates[1]));
+        northEastCorner = new GeoPt(Float.parseFloat(cornerCoordinates[2]), Float.parseFloat(cornerCoordinates[3]));
+    }
+    List<PlaceGuide> placeGuides = getPlaceGuides(placeGuideQueryType, northEastCorner, southWestCorner);
     List<PlaceGuideWithUserPair> placeGuideWithUserPairs = getPlaceGuideWithUserPairs(placeGuides);
     response.setContentType("application/json;");
     response.getWriter().println(convertToJsonUsingGson(placeGuideWithUserPairs));
@@ -86,7 +95,7 @@ public class PlaceGuideServlet extends HttpServlet {
       return placeGuideWithUserPairs;
   }
 
-  private List<PlaceGuide> getPlaceGuides(PlaceGuideQueryType placeGuideQueryType) {
+  private List<PlaceGuide> getPlaceGuides(PlaceGuideQueryType placeGuideQueryType, GeoPt northEastCorner, GeoPt southWestCorner) {
     List<PlaceGuide> placeGuides;
     switch(placeGuideQueryType) {
       case ALL_PUBLIC:
@@ -101,18 +110,18 @@ public class PlaceGuideServlet extends HttpServlet {
       case CREATED_PRIVATE:
         placeGuides = placeGuideRepository.getCreatedPrivatePlaceGuides(userId);
         break;
-    //   case ALL_PUBLIC_IN_MAP_AREA:
-    //     placeGuides = placeGuideRepository.getAllPublicPlaceGuidesInMapArea();
-    //     break;
-    //   case CREATED_ALL_IN_MAP_AREA:
-    //     placeGuides = placeGuideRepository.getCreatedPlaceGuidesInMapArea(userId);
-    //     break;
-    //   case CREATED_PUBLIC_IN_MAP_AREA:
-    //     placeGuides = placeGuideRepository.getCreatedPublicPlaceGuidesInMapArea(userId);
-    //     break;
-    //   case CREATED_PRIVATE_IN_MAP_AREA:
-    //     placeGuides = placeGuideRepository.getCreatedPrivatePlaceGuidesInMapArea(userId);
-    //     break;
+      case ALL_PUBLIC_IN_MAP_AREA:
+        placeGuides = placeGuideRepository.getAllPublicPlaceGuidesInMapArea(northEastCorner, southWestCorner);
+        break;
+      case CREATED_ALL_IN_MAP_AREA:
+        placeGuides = placeGuideRepository.getCreatedPlaceGuidesInMapArea(userId, northEastCorner, southWestCorner);
+        break;
+      case CREATED_PUBLIC_IN_MAP_AREA:
+        placeGuides = placeGuideRepository.getCreatedPublicPlaceGuidesInMapArea(userId, northEastCorner, southWestCorner);
+        break;
+      case CREATED_PRIVATE_IN_MAP_AREA:
+        placeGuides = placeGuideRepository.getCreatedPrivatePlaceGuidesInMapArea(userId, northEastCorner, southWestCorner);
+        break;
       default:
         throw new IllegalStateException("Place Guide type does not exist!");
     }

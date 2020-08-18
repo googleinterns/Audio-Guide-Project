@@ -23,7 +23,7 @@ public enum PlaceGuideQueryType {
     ALL_PUBLIC_IN_MAP_AREA(true), 
     CREATED_ALL_IN_MAP_AREA(true), 
     CREATED_PUBLIC_IN_MAP_AREA(true), 
-    CREATED_PRIVATE_IN_MAP_AREA(true)
+    CREATED_PRIVATE_IN_MAP_AREA(true);
 
     private final boolean requiresCoordinates;
 
@@ -32,6 +32,6 @@ public enum PlaceGuideQueryType {
     }
 
     public boolean requiresCoordinates() {
-        return requiresCoordinates;
+        return this.requiresCoordinates;
     }
 }
