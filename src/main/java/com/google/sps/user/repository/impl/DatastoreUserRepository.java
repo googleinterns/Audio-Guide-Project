@@ -18,8 +18,8 @@ import com.google.appengine.api.datastore.*;
 import com.google.sps.user.User;
 import com.google.sps.user.repository.UserRepository;
 import org.jetbrains.annotations.Nullable;
-import java.util.List;
-import java.util.ArrayList;
+import java.util.Set;
+import java.util.HashSet;
 
 /**
  * Handles the storage of comments using the Datastore API.
@@ -28,7 +28,7 @@ public class DatastoreUserRepository implements UserRepository {
   public static final String ENTITY_KIND = "User";
   public static final String NAME_PROPERTY = "name";
   public static final String EMAIL_PROPERTY = "email";
-  public static final String BOOKMARKED_PLACE_GUIDES_PROPERTY = "bookmarkedPlaceGuides";
+  public static final String BOOKMARKED_PLACE_GUIDES_IDS_PROPERTY = "bookmarkedPlaceGuidesIds";
   public static final String PUBLIC_PORTFOLIO_PROPERTY = "publicPortfolio";
   public static final String SELF_INTRODUCTION_PROPERTY = "selfIntroduction";
   public static final String IMG_KEY_PROPERTY = "imgKey";
@@ -43,7 +43,7 @@ public class DatastoreUserRepository implements UserRepository {
     Entity userEntity = new Entity(ENTITY_KIND, user.getId());
     userEntity.setProperty(NAME_PROPERTY, user.getName());
     userEntity.setProperty(EMAIL_PROPERTY, user.getEmail());
-    userEntity.setProperty(BOOKMARKED_PLACE_GUIDES_PROPERTY, user.getBookmarkedPlaceGuides());
+    userEntity.setProperty(BOOKMARKED_PLACE_GUIDES_IDS_PROPERTY, user.getBookmarkedPlaceGuidesIds());
     userEntity.setProperty(PUBLIC_PORTFOLIO_PROPERTY, user.portfolioIsPublic());
     userEntity.setProperty(SELF_INTRODUCTION_PROPERTY, user.getSelfIntroduction());
     userEntity.setProperty(IMG_KEY_PROPERTY, user.getImgKey());
@@ -70,10 +70,12 @@ public class DatastoreUserRepository implements UserRepository {
     String id = (String) userEntity.getKey().getName();
     String name = (String) userEntity.getProperty(NAME_PROPERTY);
     String email = (String) userEntity.getProperty(EMAIL_PROPERTY);
-    List<Long> bookmarkedPlaceGuides = 
-        (ArrayList) userEntity.getProperty(BOOKMARKED_PLACE_GUIDES_PROPERTY);
-    if (bookmarkedPlaceGuides == null) {
+    List<Long> bookmarkedPlaceGuidesIdsList = 
+        (ArrayList) userEntity.getProperty(BOOKMARKED_PLACE_GUIDES_IDS_PROPERTY);
+    if (bookmarkedPlaceGuidesIdsList == null) {
       bookmarkedPlaceGuides = new ArrayList<>();
+    } else {
+      
     }
     Boolean publicPortfolio = (Boolean) userEntity.getProperty(PUBLIC_PORTFOLIO_PROPERTY);
     String selfIntroduction = (String) userEntity.getProperty(SELF_INTRODUCTION_PROPERTY);
