@@ -46,7 +46,7 @@ import java.util.Arrays;
 public final class UserCreationServletTest {
   private static final String ID = "userid";
   private static final String EMAIL = "user@gmail.com";
-  private static final List<Long> BOOKMARKED_PLACE_GUIDES = Arrays.asList((long) 12345);
+  private static final Set<Long> BOOKMARKED_PLACE_GUIDES = Arrays.asList((long) 12345);
 
   // Datastore treats empty list as null value.
   private static final List<Long> EMPTY_BOOKMARKED_PLACE_GUIDES = null;

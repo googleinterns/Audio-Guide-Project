@@ -34,7 +34,7 @@ public class User {
   private final String imgKey;
 
   // Contains the unique identifier of the corresponding bookmarked place guides.
-  private final Set<Long> bookmarkedPlaceGuides; 
+  private final Set<Long> bookmarkedPlaceGuidesIds; 
 
   public static class Builder {
     // Required.
@@ -48,12 +48,12 @@ public class User {
     @Nullable
     private String imgKey;
     private boolean publicPortfolio = false;
-    private final Set<Long> bookmarkedPlaceGuides;
+    private final Set<Long> bookmarkedPlaceGuidesIds;
 
-    public Builder(String id, String email, Set<Long> bookmarkedPlaceGuides) {
+    public Builder(String id, String email, Set<Long> bookmarkedPlaceGuidesIds) {
       this.id = id;
       this.email = email;
-      this.bookmarkedPlaceGuides = bookmarkedPlaceGuides;
+      this.bookmarkedPlaceGuidesIds = bookmarkedPlaceGuidesIds;
     }
 
     public Builder setName(String name) {
@@ -88,7 +88,7 @@ public class User {
     this.selfIntroduction = builder.selfIntroduction;
     this.imgKey = builder.imgKey;
     this.publicPortfolio = builder.publicPortfolio;
-    this.bookmarkedPlaceGuides = builder.bookmarkedPlaceGuides;
+    this.bookmarkedPlaceGuidesIds = builder.bookmarkedPlaceGuidesIds;
   }
 
   public String getId() {
@@ -115,8 +115,8 @@ public class User {
     return publicPortfolio;
   }
 
-  public Set<Long> getBookmarkedPlaceGuides() {
-    return Collections.unmodifiableSet(bookmarkedPlaceGuides);
+  public Set<Long> getBookmarkedPlaceGuidesIds() {
+    return Collections.unmodifiableSet(bookmarkedPlaceGuidesIds);
   }
 
   @Override
