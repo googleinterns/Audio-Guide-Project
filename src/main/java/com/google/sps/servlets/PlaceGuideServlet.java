@@ -5,6 +5,7 @@ import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.sps.data.RepositoryType;
+import com.google.sps.data.PlaceGuideQueryType;
 import com.google.sps.placeGuide.PlaceGuide;
 import com.google.sps.placeGuide.repository.PlaceGuideRepository;
 import com.google.sps.placeGuide.repository.PlaceGuideRepositoryFactory;
@@ -78,7 +79,7 @@ public class PlaceGuideServlet extends HttpServlet {
   private List<PlaceGuide> getPlaceGuides(PlaceGuideQueryType placeGuideQueryType) {
     List<PlaceGuide> placeGuides;
     switch(placeGuideQueryType) {
-      case ALL:
+      case ALL_PUBLIC:
         placeGuides = placeGuideRepository.getAllPublicPlaceGuides();
         break;
       case CREATED_ALL:
@@ -89,6 +90,18 @@ public class PlaceGuideServlet extends HttpServlet {
         break;
       case CREATED_PRIVATE:
         placeGuides = placeGuideRepository.getCreatedPrivatePlaceGuides(userId);
+        break;
+      case ALL_PUBLIC_IN_MAP_AREA:
+        placeGuides = placeGuideRepository.getAllPublicPlaceGuidesInMapArea();
+        break;
+      case CREATED_ALL_IN_MAP_AREA:
+        placeGuides = placeGuideRepository.getCreatedPlaceGuidesInMapArea(userId);
+        break;
+      case CREATED_PUBLIC_IN_MAP_AREA:
+        placeGuides = placeGuideRepository.getCreatedPublicPlaceGuidesInMapArea(userId);
+        break;
+      case CREATED_PRIVATE_IN_MAP_AREA:
+        placeGuides = placeGuideRepository.getCreatedPrivatePlaceGuidesInMapArea(userId);
         break;
       default:
         throw new IllegalStateException("Place Guide type does not exist!");
