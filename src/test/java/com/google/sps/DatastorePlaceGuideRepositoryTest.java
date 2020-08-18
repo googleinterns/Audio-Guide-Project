@@ -444,6 +444,43 @@ public final class DatastorePlaceGuideRepositoryTest {
     assertTrue(compare(expected, result));
   }
 
+   @Test
+  public void getCreatedPublicPlaceGuidesInMapArea_noExistingPlaceGuides_emptyResult() {
+    List<PlaceGuide> result = placeGuideRepository.getCreatedPublicPlaceGuidesInMapArea(OTHER_USER_ID, NORTH_EAST_CORNER, SOUTH_WEST_CORNER);
+    assertTrue(result.isEmpty());
+  }
+
+  @Test
+  public void getCreatedPublicPlaceGuidesInMapArea_userDoesntOwnAnyPlaceGuides_emptyResult() {
+    List<PlaceGuide> testPlaceGuidesList = Arrays.asList(testInnerPrivatePlaceGuideC, 
+                                                         testInnerPublicPlaceGuideC,
+                                                         testOuterPrivatePlaceGuideC,
+                                                         testOuterPublicPlaceGuideC,
+                                                         testInnerPrivatePlaceGuideD, 
+                                                         testInnerPublicPlaceGuideD,
+                                                         testOuterPrivatePlaceGuideD,
+                                                         testOuterPublicPlaceGuideD);
+    saveTestPlaceGuidesEntities(testPlaceGuidesList);
+    List<PlaceGuide> result = placeGuideRepository.getCreatedPublicPlaceGuidesInMapArea(OTHER_USER_ID, NORTH_EAST_CORNER, SOUTH_WEST_CORNER);
+    assertTrue(result.isEmpty());
+  }
+
+  @Test
+  public void getCreatedPublicPlaceGuidesInMapArea_userOwnsPlaceGuides_resultHasInnerPublicPlaceGuidesOfUser() {
+    List<PlaceGuide> testPlaceGuidesList = Arrays.asList(testInnerPrivatePlaceGuideC, 
+                                                         testInnerPublicPlaceGuideC,
+                                                         testOuterPrivatePlaceGuideC,
+                                                         testOuterPublicPlaceGuideC,
+                                                         testInnerPrivatePlaceGuideD, 
+                                                         testInnerPublicPlaceGuideD,
+                                                         testOuterPrivatePlaceGuideD,
+                                                         testOuterPublicPlaceGuideD);
+    saveTestPlaceGuidesEntities(testPlaceGuidesList);
+    List<PlaceGuide> result = placeGuideRepository.getCreatedPublicPlaceGuidesInMapArea(CREATOR_C_ID, NORTH_EAST_CORNER, SOUTH_WEST_CORNER);
+    List<PlaceGuide> expected = Arrays.asList(testInnerPublicPlaceGuideC);
+    assertTrue(compare(expected, result));
+  }
+
   @After
   public void tearDown() {
     helper.tearDown();
