@@ -102,6 +102,7 @@ public final class DatastorePlaceGuideRepositoryTest {
   private final PlaceGuide testInnerPublicPlaceGuide = 
       new PlaceGuide.Builder(INNER_PUBLIC_ID, NAME, AUDIO_KEY, CREATOR_INNER_ID, INNER_PUBLIC_COORDINATE)
       .setPlaceId(PLACE_ID)
+      .setPlaceGuideStatus(IS_PUBLIC)
       .setLength(LENGTH)
       .setDescription(DESCRIPTION)
       .setImageKey(IMAGE_KEY)
@@ -118,6 +119,7 @@ public final class DatastorePlaceGuideRepositoryTest {
   private final PlaceGuide testOuterPublicPlaceGuide = 
       new PlaceGuide.Builder(OUTER_PUBLIC_ID, NAME, AUDIO_KEY, CREATOR_OUTER_ID, OUTER_PUBLIC_COORDINATE)
       .setPlaceId(PLACE_ID)
+      .setPlaceGuideStatus(IS_PUBLIC)
       .setLength(LENGTH)
       .setDescription(DESCRIPTION)
       .setImageKey(IMAGE_KEY)
@@ -337,6 +339,24 @@ public final class DatastorePlaceGuideRepositoryTest {
                                                                               A_PUBLIC_ID);
     Entity deletedEntity = datastore.get(deletedEntityKey);
     
+  }
+
+  @Test
+  public void getAllPublicPlaceGuidesInMapArea_noExistingPlaceGuides_emptyResult() {
+    List<PlaceGuide> result = placeGuideRepository.getAllPublicPlaceGuidesInMapArea(NORTH_EAST_CORNER, SOUTH_WEST_CORNER);
+    assertTrue(result.isEmpty());
+  }
+
+  @Test
+  public void getAllPublicPlaceGuidesInMapArea_placeGuidesExist_resultHasInnerPublicPlaceGuide() {
+    List<PlaceGuide> testPlaceGuidesList = Arrays.asList(testInnerPrivatePlaceGuide, 
+                                                         testInnerPublicPlaceGuide,
+                                                         testOuterPrivatePlaceGuide,
+                                                         testOuterPublicPlaceGuide);
+    saveTestPlaceGuidesEntities(testPlaceGuidesList);
+    List<PlaceGuide> result = placeGuideRepository.getAllPublicPlaceGuidesInMapArea(NORTH_EAST_CORNER, SOUTH_WEST_CORNER);
+    List<PlaceGuide> expected = Arrays.asList(testInnerPublicPlaceGuide);
+    assertTrue(compare(expected, result));
   }
 
   @After
