@@ -27,18 +27,22 @@ public interface PlaceGuideRepository {
   public void deletePlaceGuide(long placeGuideId);
 
   // @return all public {@code PlaceGuide} which are within a given map area of rectangular form.
-  public List<PlaceGuide> getAllPublicPlaceGuidesInMapArea(GeoPt northEastCorner, GeoPt southWestCorner);
+  public List<PlaceGuide> getAllPublicPlaceGuidesInMapArea(GeoPt northEastCorner,
+                                                            GeoPt southWestCorner);
 
   // Finds all of the user's created place guides which are within a given map area of rectangular form.
-  public List<PlaceGuide> getCreatedPlaceGuidesInMapArea(String creatorId, GeoPt northEastCorner, GeoPt southWestCorner);
+  public List<PlaceGuide> getCreatedPlaceGuidesInMapArea(String creatorId, GeoPt northEastCorner
+          , GeoPt southWestCorner);
 
   // Finds all of the user's created place guides that are public and 
   // which are within a given map area of rectangular form.
   // (available to be viewed by other users).
-  public List<PlaceGuide> getCreatedPublicPlaceGuidesInMapArea(String creatorId, GeoPt northEastCorner, GeoPt southWestCorner);
+  public List<PlaceGuide> getCreatedPublicPlaceGuidesInMapArea(String creatorId,
+                                                                GeoPt northEastCorner, GeoPt southWestCorner);
 
   // Finds all of the user's created place guides that are private and
   // which are within a given map area of rectangular form.
   // (not available to be viewed by other users).
-  public List<PlaceGuide> getCreatedPrivatePlaceGuidesInMapArea(String creatorId, GeoPt northEastCorner, GeoPt southWestCorner);
+  public List<PlaceGuide> getCreatedPrivatePlaceGuidesInMapArea(String creatorId,
+                                                                 GeoPt northEastCorner, GeoPt southWestCorner);
 }

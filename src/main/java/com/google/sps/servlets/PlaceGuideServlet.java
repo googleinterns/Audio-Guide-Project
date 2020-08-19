@@ -78,10 +78,13 @@ public class PlaceGuideServlet extends HttpServlet {
     if (placeGuideQueryType.requiresCoordinates()) {
         String regionCornersString = request.getParameter(REGION_CORNERS_PARAMETER);
         String[] cornerCoordinates = regionCornersString.split(",");
-        southWestCorner = new GeoPt(Float.parseFloat(cornerCoordinates[0]), Float.parseFloat(cornerCoordinates[1]));
-        northEastCorner = new GeoPt(Float.parseFloat(cornerCoordinates[2]), Float.parseFloat(cornerCoordinates[3]));
+        southWestCorner = new GeoPt(
+                Float.parseFloat(cornerCoordinates[0]), Float.parseFloat(cornerCoordinates[1]));
+        northEastCorner = new GeoPt(
+                Float.parseFloat(cornerCoordinates[2]), Float.parseFloat(cornerCoordinates[3]));
     }
-    List<PlaceGuide> placeGuides = getPlaceGuides(placeGuideQueryType, northEastCorner, southWestCorner);
+    List<PlaceGuide> placeGuides =
+            getPlaceGuides(placeGuideQueryType, northEastCorner, southWestCorner);
     List<PlaceGuideWithUserPair> placeGuideWithUserPairs = getPlaceGuideWithUserPairs(placeGuides);
     response.setContentType("application/json;");
     response.getWriter().println(convertToJsonUsingGson(placeGuideWithUserPairs));
@@ -90,12 +93,15 @@ public class PlaceGuideServlet extends HttpServlet {
   private List<PlaceGuideWithUserPair> getPlaceGuideWithUserPairs(List<PlaceGuide> placeGuides) {
       List<PlaceGuideWithUserPair> placeGuideWithUserPairs = new ArrayList<>();
       for(PlaceGuide placeGuide : placeGuides) {
-          placeGuideWithUserPairs.add(PlaceGuideWithUserPair.createPlaceGuideWithUserPair(placeGuide));
+          placeGuideWithUserPairs
+                  .add(PlaceGuideWithUserPair.createPlaceGuideWithUserPair(placeGuide));
       }
       return placeGuideWithUserPairs;
   }
 
-  private List<PlaceGuide> getPlaceGuides(PlaceGuideQueryType placeGuideQueryType, GeoPt northEastCorner, GeoPt southWestCorner) {
+  private List<PlaceGuide> getPlaceGuides(PlaceGuideQueryType placeGuideQueryType,
+                                          GeoPt northEastCorner,
+                                          GeoPt southWestCorner) {
     List<PlaceGuide> placeGuides;
     switch(placeGuideQueryType) {
       case ALL_PUBLIC:
@@ -111,16 +117,20 @@ public class PlaceGuideServlet extends HttpServlet {
         placeGuides = placeGuideRepository.getCreatedPrivatePlaceGuides(userId);
         break;
       case ALL_PUBLIC_IN_MAP_AREA:
-        placeGuides = placeGuideRepository.getAllPublicPlaceGuidesInMapArea(northEastCorner, southWestCorner);
+        placeGuides = placeGuideRepository
+                .getAllPublicPlaceGuidesInMapArea(northEastCorner, southWestCorner);
         break;
       case CREATED_ALL_IN_MAP_AREA:
-        placeGuides = placeGuideRepository.getCreatedPlaceGuidesInMapArea(userId, northEastCorner, southWestCorner);
+        placeGuides = placeGuideRepository
+                .getCreatedPlaceGuidesInMapArea(userId, northEastCorner, southWestCorner);
         break;
       case CREATED_PUBLIC_IN_MAP_AREA:
-        placeGuides = placeGuideRepository.getCreatedPublicPlaceGuidesInMapArea(userId, northEastCorner, southWestCorner);
+        placeGuides = placeGuideRepository
+                .getCreatedPublicPlaceGuidesInMapArea(userId, northEastCorner, southWestCorner);
         break;
       case CREATED_PRIVATE_IN_MAP_AREA:
-        placeGuides = placeGuideRepository.getCreatedPrivatePlaceGuidesInMapArea(userId, northEastCorner, southWestCorner);
+        placeGuides = placeGuideRepository
+                .getCreatedPrivatePlaceGuidesInMapArea(userId, northEastCorner, southWestCorner);
         break;
       default:
         throw new IllegalStateException("Place Guide type does not exist!");

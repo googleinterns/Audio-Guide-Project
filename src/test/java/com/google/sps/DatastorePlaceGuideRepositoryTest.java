@@ -110,7 +110,8 @@ public final class DatastorePlaceGuideRepositoryTest {
       .build();
 
   private final PlaceGuide testInnerPublicPlaceGuideC = 
-      new PlaceGuide.Builder(C_INNER_PUBLIC_ID, NAME, AUDIO_KEY, CREATOR_C_ID, C_INNER_PUBLIC_COORDINATE)
+      new PlaceGuide.Builder(C_INNER_PUBLIC_ID, NAME, AUDIO_KEY, CREATOR_C_ID,
+              C_INNER_PUBLIC_COORDINATE)
       .setPlaceId(PLACE_ID)
       .setPlaceGuideStatus(IS_PUBLIC)
       .setLength(LENGTH)
@@ -119,7 +120,8 @@ public final class DatastorePlaceGuideRepositoryTest {
       .build();
 
   private final PlaceGuide testInnerPrivatePlaceGuideC = 
-      new PlaceGuide.Builder(C_INNER_PRIVATE_ID, NAME, AUDIO_KEY, CREATOR_C_ID, C_INNER_PRIVATE_COORDINATE)
+      new PlaceGuide.Builder(C_INNER_PRIVATE_ID, NAME, AUDIO_KEY, CREATOR_C_ID,
+              C_INNER_PRIVATE_COORDINATE)
       .setPlaceId(PLACE_ID)
       .setLength(LENGTH)
       .setDescription(DESCRIPTION)
@@ -127,7 +129,8 @@ public final class DatastorePlaceGuideRepositoryTest {
       .build();
 
   private final PlaceGuide testOuterPublicPlaceGuideC = 
-      new PlaceGuide.Builder(C_OUTER_PUBLIC_ID, NAME, AUDIO_KEY, CREATOR_C_ID, C_OUTER_PUBLIC_COORDINATE)
+      new PlaceGuide.Builder(C_OUTER_PUBLIC_ID, NAME, AUDIO_KEY, CREATOR_C_ID,
+              C_OUTER_PUBLIC_COORDINATE)
       .setPlaceId(PLACE_ID)
       .setPlaceGuideStatus(IS_PUBLIC)
       .setLength(LENGTH)
@@ -136,7 +139,8 @@ public final class DatastorePlaceGuideRepositoryTest {
       .build();
 
   private final PlaceGuide testOuterPrivatePlaceGuideC = 
-      new PlaceGuide.Builder(C_OUTER_PRIVATE_ID, NAME, AUDIO_KEY, CREATOR_C_ID, C_OUTER_PUBLIC_COORDINATE)
+      new PlaceGuide.Builder(C_OUTER_PRIVATE_ID, NAME, AUDIO_KEY, CREATOR_C_ID,
+              C_OUTER_PUBLIC_COORDINATE)
       .setPlaceId(PLACE_ID)
       .setLength(LENGTH)
       .setDescription(DESCRIPTION)
@@ -144,7 +148,8 @@ public final class DatastorePlaceGuideRepositoryTest {
       .build();
 
   private final PlaceGuide testInnerPublicPlaceGuideD = 
-      new PlaceGuide.Builder(D_INNER_PUBLIC_ID, NAME, AUDIO_KEY, CREATOR_D_ID, D_INNER_PUBLIC_COORDINATE)
+      new PlaceGuide.Builder(D_INNER_PUBLIC_ID, NAME, AUDIO_KEY, CREATOR_D_ID,
+              D_INNER_PUBLIC_COORDINATE)
       .setPlaceId(PLACE_ID)
       .setPlaceGuideStatus(IS_PUBLIC)
       .setLength(LENGTH)
@@ -153,7 +158,8 @@ public final class DatastorePlaceGuideRepositoryTest {
       .build();
 
   private final PlaceGuide testInnerPrivatePlaceGuideD = 
-      new PlaceGuide.Builder(D_INNER_PRIVATE_ID, NAME, AUDIO_KEY, CREATOR_D_ID, D_INNER_PRIVATE_COORDINATE)
+      new PlaceGuide.Builder(D_INNER_PRIVATE_ID, NAME, AUDIO_KEY, CREATOR_D_ID,
+              D_INNER_PRIVATE_COORDINATE)
       .setPlaceId(PLACE_ID)
       .setLength(LENGTH)
       .setDescription(DESCRIPTION)
@@ -161,7 +167,8 @@ public final class DatastorePlaceGuideRepositoryTest {
       .build();
 
   private final PlaceGuide testOuterPublicPlaceGuideD = 
-      new PlaceGuide.Builder(D_OUTER_PUBLIC_ID, NAME, AUDIO_KEY, CREATOR_D_ID, D_OUTER_PUBLIC_COORDINATE)
+      new PlaceGuide.Builder(D_OUTER_PUBLIC_ID, NAME, AUDIO_KEY, CREATOR_D_ID,
+              D_OUTER_PUBLIC_COORDINATE)
       .setPlaceId(PLACE_ID)
       .setPlaceGuideStatus(IS_PUBLIC)
       .setLength(LENGTH)
@@ -170,7 +177,8 @@ public final class DatastorePlaceGuideRepositoryTest {
       .build();
 
   private final PlaceGuide testOuterPrivatePlaceGuideD = 
-      new PlaceGuide.Builder(D_OUTER_PRIVATE_ID, NAME, AUDIO_KEY, CREATOR_D_ID, D_OUTER_PUBLIC_COORDINATE)
+      new PlaceGuide.Builder(D_OUTER_PRIVATE_ID, NAME, AUDIO_KEY, CREATOR_D_ID,
+              D_OUTER_PUBLIC_COORDINATE)
       .setPlaceId(PLACE_ID)
       .setLength(LENGTH)
       .setDescription(DESCRIPTION)
@@ -387,7 +395,8 @@ public final class DatastorePlaceGuideRepositoryTest {
 
   @Test
   public void getAllPublicPlaceGuidesInMapArea_noExistingPlaceGuides_emptyResult() {
-    List<PlaceGuide> result = placeGuideRepository.getAllPublicPlaceGuidesInMapArea(NORTH_EAST_CORNER, SOUTH_WEST_CORNER);
+    List<PlaceGuide> result = placeGuideRepository
+            .getAllPublicPlaceGuidesInMapArea(NORTH_EAST_CORNER, SOUTH_WEST_CORNER);
     assertTrue(result.isEmpty());
   }
 
@@ -410,7 +419,8 @@ public final class DatastorePlaceGuideRepositoryTest {
 
   @Test
   public void getCreatedPlaceGuidesInMapArea_noExistingPlaceGuides_emptyResult() {
-    List<PlaceGuide> result = placeGuideRepository.getCreatedPlaceGuidesInMapArea(OTHER_USER_ID, NORTH_EAST_CORNER, SOUTH_WEST_CORNER);
+    List<PlaceGuide> result = placeGuideRepository
+            .getCreatedPlaceGuidesInMapArea(OTHER_USER_ID, NORTH_EAST_CORNER, SOUTH_WEST_CORNER);
     assertTrue(result.isEmpty());
   }
 
@@ -425,7 +435,8 @@ public final class DatastorePlaceGuideRepositoryTest {
                                                          testOuterPrivatePlaceGuideD,
                                                          testOuterPublicPlaceGuideD);
     saveTestPlaceGuidesEntities(testPlaceGuidesList);
-    List<PlaceGuide> result = placeGuideRepository.getCreatedPlaceGuidesInMapArea(OTHER_USER_ID, NORTH_EAST_CORNER, SOUTH_WEST_CORNER);
+    List<PlaceGuide> result = placeGuideRepository
+            .getCreatedPlaceGuidesInMapArea(OTHER_USER_ID, NORTH_EAST_CORNER, SOUTH_WEST_CORNER);
     assertTrue(result.isEmpty());
   }
 
@@ -440,7 +451,8 @@ public final class DatastorePlaceGuideRepositoryTest {
                                                          testOuterPrivatePlaceGuideD,
                                                          testOuterPublicPlaceGuideD);
     saveTestPlaceGuidesEntities(testPlaceGuidesList);
-    List<PlaceGuide> result = placeGuideRepository.getCreatedPlaceGuidesInMapArea(CREATOR_C_ID, NORTH_EAST_CORNER, SOUTH_WEST_CORNER);
+    List<PlaceGuide> result = placeGuideRepository
+            .getCreatedPlaceGuidesInMapArea(CREATOR_C_ID, NORTH_EAST_CORNER, SOUTH_WEST_CORNER);
     List<PlaceGuide> expected = Arrays.asList(testInnerPublicPlaceGuideC, 
                                               testInnerPrivatePlaceGuideC);
     assertTrue(compare(expected, result));
@@ -448,7 +460,8 @@ public final class DatastorePlaceGuideRepositoryTest {
 
   @Test
   public void getCreatedPublicPlaceGuidesInMapArea_noExistingPlaceGuides_emptyResult() {
-    List<PlaceGuide> result = placeGuideRepository.getCreatedPublicPlaceGuidesInMapArea(OTHER_USER_ID, NORTH_EAST_CORNER, SOUTH_WEST_CORNER);
+    List<PlaceGuide> result = placeGuideRepository
+            .getCreatedPublicPlaceGuidesInMapArea(OTHER_USER_ID, NORTH_EAST_CORNER, SOUTH_WEST_CORNER);
     assertTrue(result.isEmpty());
   }
 
@@ -463,7 +476,8 @@ public final class DatastorePlaceGuideRepositoryTest {
                                                          testOuterPrivatePlaceGuideD,
                                                          testOuterPublicPlaceGuideD);
     saveTestPlaceGuidesEntities(testPlaceGuidesList);
-    List<PlaceGuide> result = placeGuideRepository.getCreatedPublicPlaceGuidesInMapArea(OTHER_USER_ID, NORTH_EAST_CORNER, SOUTH_WEST_CORNER);
+    List<PlaceGuide> result = placeGuideRepository
+            .getCreatedPublicPlaceGuidesInMapArea(OTHER_USER_ID, NORTH_EAST_CORNER, SOUTH_WEST_CORNER);
     assertTrue(result.isEmpty());
   }
 
@@ -478,14 +492,16 @@ public final class DatastorePlaceGuideRepositoryTest {
                                                          testOuterPrivatePlaceGuideD,
                                                          testOuterPublicPlaceGuideD);
     saveTestPlaceGuidesEntities(testPlaceGuidesList);
-    List<PlaceGuide> result = placeGuideRepository.getCreatedPublicPlaceGuidesInMapArea(CREATOR_C_ID, NORTH_EAST_CORNER, SOUTH_WEST_CORNER);
+    List<PlaceGuide> result = placeGuideRepository
+            .getCreatedPublicPlaceGuidesInMapArea(CREATOR_C_ID, NORTH_EAST_CORNER, SOUTH_WEST_CORNER);
     List<PlaceGuide> expected = Arrays.asList(testInnerPublicPlaceGuideC);
     assertTrue(compare(expected, result));
   }
 
   @Test
   public void getCreatedPrivatePlaceGuidesInMapArea_noExistingPlaceGuides_emptyResult() {
-    List<PlaceGuide> result = placeGuideRepository.getCreatedPrivatePlaceGuidesInMapArea(OTHER_USER_ID, NORTH_EAST_CORNER, SOUTH_WEST_CORNER);
+    List<PlaceGuide> result = placeGuideRepository
+            .getCreatedPrivatePlaceGuidesInMapArea(OTHER_USER_ID, NORTH_EAST_CORNER, SOUTH_WEST_CORNER);
     assertTrue(result.isEmpty());
   }
 
@@ -500,7 +516,8 @@ public final class DatastorePlaceGuideRepositoryTest {
                                                          testOuterPrivatePlaceGuideD,
                                                          testOuterPublicPlaceGuideD);
     saveTestPlaceGuidesEntities(testPlaceGuidesList);
-    List<PlaceGuide> result = placeGuideRepository.getCreatedPrivatePlaceGuidesInMapArea(OTHER_USER_ID, NORTH_EAST_CORNER, SOUTH_WEST_CORNER);
+    List<PlaceGuide> result = placeGuideRepository
+            .getCreatedPrivatePlaceGuidesInMapArea(OTHER_USER_ID, NORTH_EAST_CORNER, SOUTH_WEST_CORNER);
     assertTrue(result.isEmpty());
   }
 
@@ -515,7 +532,8 @@ public final class DatastorePlaceGuideRepositoryTest {
                                                          testOuterPrivatePlaceGuideD,
                                                          testOuterPublicPlaceGuideD);
     saveTestPlaceGuidesEntities(testPlaceGuidesList);
-    List<PlaceGuide> result = placeGuideRepository.getCreatedPrivatePlaceGuidesInMapArea(CREATOR_C_ID, NORTH_EAST_CORNER, SOUTH_WEST_CORNER);
+    List<PlaceGuide> result = placeGuideRepository
+            .getCreatedPrivatePlaceGuidesInMapArea(CREATOR_C_ID, NORTH_EAST_CORNER, SOUTH_WEST_CORNER);
     List<PlaceGuide> expected = Arrays.asList(testInnerPrivatePlaceGuideC);
     assertTrue(compare(expected, result));
   }
