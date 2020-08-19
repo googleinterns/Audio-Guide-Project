@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset = "UTF-8">
+    <title>Create Place Guide</title>
+    <style>
+      #imageDiv {
+        width: 300px;
+        min-height: 100px;
+        border: 2px solid #dddddd;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        color: #cccccc;
+      }
+
+      #imagePreview {
+        display: none;
+        width: 100%;
+      }
+    </style>
+</head>
+<body onload = "setUpCreatePlaceGuideForm()">
+<div id="createPlaceGuide">
+    <form method = "POST" id = "formId" enctype = "multipart/form-data">
+        <input type="hidden" id="id" name="id">
+        <br>
+        <label for = "name">Name:</label><br>
+        <input type = "text" name = "name" id = "name" required>
+        <br>
+        <label for = "audioKey">Upload audio file</label>
+        <input type = "file" name = "audioKey" id = "audioKey" required>
+        <br>
+        <audio id = "audioPlayer" controls>
+            <source src="" type="audio/mpeg">
+        </audio>
+        <br>
+        <label for = "deleteAudio">Delete previous audio file</label>
+        <input type = "checkbox" name = "deleteAudio" value = "delete" id = "deleteAudio">
+        <br>
+        <label for = "imageKey">Upload image</label>
+        <input type = "file" name = "imageKey" id = "imageKey">
+        <div id = "imageDiv">
+        <br>
+        <img src = "" alt = "image preview" id = "imagePreview">
+        <br>
+        </div>
+        <label for = "deleteImage">Delete previous image</label>
+        <input type = "checkbox" name = "deleteImage" value = "delete" id = "deleteImage">
+        <br>
+        <label for = "placeId">place id : </label><br>
+        <input type = "text" name = "placeId" id = "placeId" readonly><br>
+        <br>
+        <label for = "description">Description:</label><br>
+        <textarea name = "description" rows = "4" cols = "50" id = "description"></textarea>
+        <br>
+        <label for = "length">Amount of time needed:</label><br>
+        <input type = "text" name = "length" id = "length"><br>
+        <label for = "isPublic">Place Guide Status:</label>
+        <select name = "isPublic" id = "isPublic">
+            <option value = "public">public</option>
+            <option value = "private">private</option>
+        </select>
+        <br>
+        
+        <fieldset>
+            <legend>Coordinate: </legend>
+            <label for = "latitude">latitude : </label><br>
+            <input type = "text" name = "latitude" id = "latitude" required><br>
+            <label for = "longitude">longitude : </label><br>
+            <input type = "text" name = "longitude" id = "longitude" required><br>
+            <br>        
+        </fieldset>
+        <input type = "submit" value = "Submit">
+    </form>
+
+    <button id = "testExistingPlaceGuide" onclick = "testExistingPlaceGuide()">Test Input Existing PlaceGuide</button>
+    <button id = "testGivenCoordinate" onclick = "testGivenCoordinate()">Test Input Coordinate</button>
+</div>
+
+<script>
+/**
+ * Handles setting up the create place guide form whenever the page is loaded.
+ */
+function setUpCreatePlaceGuideForm() {
+  addBlobstoreUploadUrlToForm("CREATE_PLACE_GUIDE_FORM", "formId");
+  activatePreviewFeature();
+}
+
+function activatePreviewFeature() {
+
+  const imageInput = document.getElementById("imageKey");
+  const imagePreview = document.getElementById("imagePreview");
+  // Previewing files uploaded by user.
+  imageInput.addEventListener("change", function() {
+    const file = this.files[0];
+    console.log(file);
+
+    if (file) {
+      const reader = new FileReader();
+      imagePreview.style.display = "block";
+
+      reader.addEventListener("load", function() {
+        imagePreview.setAttribute("src", this.result);
+      });
+
+      reader.readAsDataURL(file);
+    }
+  });
+  const audioInput = document.getElementById("audioKey");
+  const audioPlayer = document.getElementById("audioPlayer");
+  audioInput.addEventListener("change", function() {
+    const file = this.files[0];
+    if (file) {
+      const reader = new FileReader();
+
+      reader.addEventListener("load", function() {
+        audioPlayer.setAttribute('src', this.result);
+        audioPlayer.play();
+
+      });
+
+      reader.readAsDataURL(file);
+      console.log(reader);
+    }
+  });
+}
+
+/**
+ * Sets the action of the form to the url to which blobs can be uploaded.
+ */
+function addBlobstoreUploadUrlToForm(formType, formId) {
+  getBlobstoreUploadUrlFromServlet(formType).then(uploadUrl => {
+    setFormActionUrl(uploadUrl, formId);
+  });
+}
+
+/**
+ * Fetches a url to which the files can be uploaded, relying on Blobstore API.
+ */
+function getBlobstoreUploadUrlFromServlet(formType) {
+  var url = new URL("/blobstore-upload-url", document.URL);
+  url.searchParams.append('formType', formType)
+  return fetch(url)
+      .catch(error => console.log("getBlobstoreUploadUrlFromServlet: failed to fetch: " + error))
+      .then(uploadUrl => uploadUrl.text())
+      .catch(error =>
+          console.log('getBlobstoreUploadUrlFromServlet: failed to convert to text: ' + error))
+      .then(uploadUrl => {
+        return uploadUrl;
+      });
+}
+
+/**
+ * Sets the destination url of the post method for the portfolio form to uploadUrl.
+ */
+function setFormActionUrl(uploadUrl, formId) {
+  var form = document.getElementById("formId");
+  form.action = uploadUrl;
+}
+
+/**
+ * Creates an img element with the given blobKey,
+ * relying on the blobstore API for serving the blob.
+ */
+function createImageElement() {
+  const srcBlobKey = document.getElementById("imageKey").value;
+  const imageDiv = document.getElementById("imageDiv");
+  var url = new URL("/serve-blob", document.URL);
+  url.searchParams.append('blob-key', srcBlobKey);
+  var img = document.createElement("img");
+  img.setAttribute('id', 'previewImage');
+  img.src = url;
+  imageDiv.appendChild(img);
+}
+
+function testExistingPlaceGuide() {
+  fetch('place-guide-data?placeGuideType=ALL_PUBLIC', {method: 'GET'})
+  .then((response) => {
+    response.json();
+  })
+  .then((result) => {
+    console.log(result);
+  })
+}
+
+function fillFormWithPlaceGuideData(placeGuide) {
+// setFormInputValue(document.getElementById("name"), placeGuide.name);
+// setFormInputValue(document.getElementById("placeId"), placeGuide.placeId);
+// const latitude = placeGuide.coordinator.latitude;
+// const longitude = placeGuide.coordinator.longitude;
+// setFormInputValue(document.getElementById("latitude"), latitude);
+// setFormInputValue(document.getElementById("longitude"), longitude);
+// setFormInputValue(document.getElementById("description"), placeGuide.description);
+// setFormInputValue(document.getElementById("length"), placeGuide.length);
+// console.log(placeGuide.audioKey);
+  console.log(placeGuide);
+}
+
+function addBlobstoreAudioPreview(audioKey) {
+  const srcBlobKey = document.getElementById("audioKey").value;
+  const audioDiv = document.getElementById("audioDiv");
+  var url = new URL("/serve-blob", document.URL);
+  url.searchParams.append('blob-key', srcBlobKey);
+  var audio = document.createElement("audio");
+  audio.setAttribute('id', 'previewAudio');
+  var source = document.createElement("source");
+  source.src = url;
+  source.type = "audio/mpeg";
+  audio.appendChild(source);
+  audioDiv.appendChild(audio);
+}
+
+/**
+ * Sets one form input's value to the given value.
+ */
+function setFormInputValue(input, value) {
+  if (value === undefined) {
+    input.value = "";
+  } else {
+    input.value = value;
+  }
+}
+
+function testGivenCoordinate() {
+  document.getElementById("latitude").setAttribute("value", 3.14);
+  document.getElementById("longitude").setAttribute("value", 2.56);
+}
+
+</script>
+</body>
+</html>
