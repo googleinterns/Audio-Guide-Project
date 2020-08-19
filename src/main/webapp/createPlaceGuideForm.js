@@ -37,7 +37,6 @@ function activatePreviewFeature() {
       });
 
       reader.readAsDataURL(file);
-      console.log(reader);
     }
   });
 }
