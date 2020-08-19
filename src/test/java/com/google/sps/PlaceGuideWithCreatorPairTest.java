@@ -21,7 +21,7 @@ import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestC
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.google.sps.data.RepositoryType;
 import com.google.sps.placeGuide.PlaceGuide;
-import com.google.sps.placeGuideWithUserPair.PlaceGuideWithUserPair;
+import com.google.sps.placeGuideWithCreatorPair.PlaceGuideWithCreatorPair;
 import com.google.sps.user.User;
 import com.google.sps.user.repository.UserRepository;
 import com.google.sps.user.repository.UserRepositoryFactory;
@@ -32,7 +32,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
-public final class PlaceGuideWithUserPairTest {
+public final class PlaceGuideWithCreatorPairTest {
   // User parameters.
   private static final String USER_ID = "userid";
   private static final String EMAIL = "user@gmail.com";
@@ -86,9 +86,9 @@ public final class PlaceGuideWithUserPairTest {
   @Test
   public void createPlaceGuideWithUserPair_existingUser_matchesPlaceGuideWithUser() {
     myUserRepository.saveUser(toSaveUser);
-    PlaceGuideWithUserPair placeGuideWithUserPair =
-        PlaceGuideWithUserPair.createPlaceGuideWithUserPair(toMatchPlaceGuide);
-    assertEquals(toSaveUser, placeGuideWithUserPair.getCreator());
+    PlaceGuideWithCreatorPair placeGuideWithCreatorPair =
+        PlaceGuideWithCreatorPair.createPlaceGuideWithCreatorPair(toMatchPlaceGuide);
+    assertEquals(toSaveUser, placeGuideWithCreatorPair.getCreator());
   }
 
   // Remark: this scenario should never occur in real-life.
@@ -96,8 +96,8 @@ public final class PlaceGuideWithUserPairTest {
   // there cannot exist PlaceGuides with inexistent creators.
   @Test
   public void createPlaceGuideWithUserPair_nonExistingUser_matchesPlaceGuideWithNullUser() {
-    PlaceGuideWithUserPair placeGuideWithUserPair =
-        PlaceGuideWithUserPair.createPlaceGuideWithUserPair(toMatchPlaceGuide);
-    assertEquals(null, placeGuideWithUserPair.getCreator());
+    PlaceGuideWithCreatorPair placeGuideWithCreatorPair =
+        PlaceGuideWithCreatorPair.createPlaceGuideWithCreatorPair(toMatchPlaceGuide);
+    assertEquals(null, placeGuideWithCreatorPair.getCreator());
   }
 }
