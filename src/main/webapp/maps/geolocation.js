@@ -61,10 +61,10 @@ class Geolocator {
   }
 
   onGeolocationControlEvent() {
-    if (!this._trackLocation) {
-      this.enableLocationTracking();
-    } else {
+    if (this._trackLocation) {
       this.disableLocationTracking();
+    } else {
+      this.enableLocationTracking();
     }
   }
 
