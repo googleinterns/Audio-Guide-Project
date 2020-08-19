@@ -9,6 +9,7 @@
 <div id="createPlaceGuide">
     <form method = "POST" id = "formId" enctype = "multipart/form-data">
         <input type="hidden" id="id" name="id">
+        <input type="hidden" id="placeId" name="placeId">
         <br>
         <label for = "name">Name:</label><br>
         <input type = "text" name = "name" id = "name" required>
@@ -33,9 +34,6 @@
         <label for = "deleteImage">Delete previous image</label>
         <input type = "checkbox" name = "deleteImage" value = "delete" id = "deleteImage">
         <br>
-        <label for = "placeId">place id : </label><br>
-        <input type = "text" name = "placeId" id = "placeId" readonly><br>
-        <br>
         <label for = "description">Description:</label><br>
         <textarea name = "description" rows = "4" cols = "50" id = "description"></textarea>
         <br>
@@ -47,7 +45,6 @@
             <option value = "private">private</option>
         </select>
         <br>
-        
         <fieldset>
             <legend>Coordinate: </legend>
             <label for = "latitude">latitude : </label><br>
