@@ -20,18 +20,7 @@ function createMap() {
   const map = new google.maps.Map(
       document.getElementById('map'), myMapOptions);
 
-  // Geolocation functionality.
-  var geolocator = new Geolocator(map);
-  geolocator.init();
-
-  // Searching functionality.
-  var searchResult =
-      Place.constructPlaceBasedOnCoordinates(map, 0, 0,
-          "Search Result", PlaceType.SEARCH_RESULT, true);
-  searchResult.visible = false;
-  var searchBox = new SearchBox(map, searchResult, "search-box");
-  searchBox.init();
-
-  // Discover public place guides functionality.
+  addGeolocationFunctionality(map);
+  addSearchingFunctionality(map);
   PlaceDisplayer.displayPublicPlaceGuides(map);
 }
