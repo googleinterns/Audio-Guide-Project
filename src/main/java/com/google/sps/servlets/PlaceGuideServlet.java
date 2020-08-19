@@ -31,19 +31,25 @@ public class PlaceGuideServlet extends HttpServlet {
   private final String userId;
   private final BlobstoreService blobstoreService;
   private final BlobInfoFactory blobInfoFactory;
+  private final DatastoreService datastore;
 
   // For production.
   public PlaceGuideServlet() {
     this(UserServiceFactory.getUserService().getCurrentUser().getUserId(), 
          BlobstoreServiceFactory.getBlobstoreService(),
-         new BlobInfoFactory());  
+         new BlobInfoFactory(),
+         DatastoreServiceFactory.getDatastoreService());  
   }
 
   // For testing.
-  public PlaceGuideServlet(String userId, BlobstoreService blobstoreService, BlobInfoFactory blobInfoFactory) {
+  public PlaceGuideServlet(String userId, 
+                           BlobstoreService blobstoreService, 
+                           BlobInfoFactory blobInfoFactory, 
+                           DatastoreService datastore) {
     this.userId = userId;
     this.blobstoreService = blobstoreService;
     this.blobInfoFactory = blobInfoFactory;
+    this.datastore = datastore;
   }
 
   public static final String ID_INPUT = "id";
@@ -128,6 +134,7 @@ public class PlaceGuideServlet extends HttpServlet {
     } else {
       // Create PlaceGuide entity id.
       Entity placeGuideEntity = new Entity(DatastorePlaceGuideRepository.ENTITY_KIND);
+      datastore.put(placeGuideEntity);
       id = placeGuideEntity.getKey().getId();
     }
     PlaceGuide.Builder newPlaceGuideBuilder = new PlaceGuide.Builder(id, name, audioKey, userId, 

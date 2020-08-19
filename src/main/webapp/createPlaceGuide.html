@@ -161,42 +161,14 @@ function setFormActionUrl(uploadUrl, formId) {
   form.action = uploadUrl;
 }
 
-/**
- * Creates an img element with the given blobKey,
- * relying on the blobstore API for serving the blob.
- */
-function createImageElement() {
-  const srcBlobKey = document.getElementById("imageKey").value;
-  const imageDiv = document.getElementById("imageDiv");
-  var url = new URL("/serve-blob", document.URL);
-  url.searchParams.append('blob-key', srcBlobKey);
-  var img = document.createElement("img");
-  img.setAttribute('id', 'previewImage');
-  img.src = url;
-  imageDiv.appendChild(img);
-}
-
 function testExistingPlaceGuide() {
-  fetch('place-guide-data?placeGuideType=ALL_PUBLIC', {method: 'GET'})
+  fetch('/place-guide-data?placeGuideType=ALL_PUBLIC', {method: 'GET'})
   .then((response) => {
     response.json();
   })
   .then((result) => {
     console.log(result);
   })
-}
-
-function fillFormWithPlaceGuideData(placeGuide) {
-// setFormInputValue(document.getElementById("name"), placeGuide.name);
-// setFormInputValue(document.getElementById("placeId"), placeGuide.placeId);
-// const latitude = placeGuide.coordinator.latitude;
-// const longitude = placeGuide.coordinator.longitude;
-// setFormInputValue(document.getElementById("latitude"), latitude);
-// setFormInputValue(document.getElementById("longitude"), longitude);
-// setFormInputValue(document.getElementById("description"), placeGuide.description);
-// setFormInputValue(document.getElementById("length"), placeGuide.length);
-// console.log(placeGuide.audioKey);
-  console.log(placeGuide);
 }
 
 function addBlobstoreAudioPreview(audioKey) {

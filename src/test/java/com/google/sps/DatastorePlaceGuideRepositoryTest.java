@@ -407,6 +407,14 @@ public final class DatastorePlaceGuideRepositoryTest {
     assertEquals(expected, result);
   }
 
+  @Test
+  public void tester() {
+    Entity a = new Entity("sg");
+    a.setProperty("as", "sfgsd");
+    datastore.put(a);
+    System.out.println(a.getKey().getId());  
+  }
+
   @After
   public void tearDown() {
     helper.tearDown();
