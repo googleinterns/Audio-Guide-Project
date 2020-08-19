@@ -20,11 +20,14 @@ import com.google.appengine.api.datastore.*;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.google.sps.data.RepositoryType;
+import com.google.sps.placeGuide.PlaceGuide;
+import com.google.sps.placeGuideWithUserPair.PlaceGuideWithUserPair;
 import com.google.sps.user.User;
 import com.google.sps.user.repository.UserRepository;
 import com.google.sps.user.repository.UserRepositoryFactory;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
@@ -50,12 +53,12 @@ public final class PlaceGuideWithUserPairTest {
 
   private final User toSaveUser =
       new User.Builder(USER_ID, EMAIL)
-          .setName(NAME)
+          .setName(USER_NAME)
           .addSelfIntroduction(SELF_INTRODUCTION)
           .addImgKey(USER_IMG_KEY)
           .build();
 
-  private final PlaceGuide testPublicPlaceGuideA =
+  private final PlaceGuide toMatchPlaceGuide =
       new PlaceGuide.Builder(PLACEGUIDE_ID, PLACEGUIDE_NAME, AUDIO_KEY, CREATOR_ID, COORDINATE)
           .setPlaceId(PLACE_ID)
           .setPlaceGuideStatus(IS_PUBLIC)
@@ -80,25 +83,21 @@ public final class PlaceGuideWithUserPairTest {
     helper.tearDown();
   }
 
-  //   @Test
-  //   public void saveUser() {
-  //     myUserRepository.saveUser(toSaveUser);
+  @Test
+  public void createPlaceGuideWithUserPair_existingUser_matchesPlaceGuideWithUser() {
+    myUserRepository.saveUser(toSaveUser);
+    PlaceGuideWithUserPair placeGuideWithUserPair =
+        PlaceGuideWithUserPair.createPlaceGuideWithUserPair(toMatchPlaceGuide);
+    assertEquals(toSaveUser, placeGuideWithUserPair.getCreator());
+  }
 
-  //     // Get user.
-  //     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-  //     Key userKey = KeyFactory.createKey(DatastoreUserRepository.ENTITY_KIND, ID);
-  //     try {
-  //       Entity userEntity = datastore.get(userKey);
-  //       assertEquals(NAME, userEntity.getProperty(DatastoreUserRepository.NAME_PROPERTY));
-  //       assertEquals(EMAIL, userEntity.getProperty(DatastoreUserRepository.EMAIL_PROPERTY));
-  //       assertEquals(
-  //           SELF_INTRODUCTION,
-  //           userEntity.getProperty(DatastoreUserRepository.SELF_INTRODUCTION_PROPERTY));
-  //       assertEquals(
-  //           false, userEntity.getProperty(DatastoreUserRepository.PUBLIC_PORTFOLIO_PROPERTY));
-  //       assertEquals(IMG_KEY, userEntity.getProperty(DatastoreUserRepository.IMG_KEY_PROPERTY));
-  //     } catch (EntityNotFoundException e) {
-  //       fail("Entity not found: " + e);
-  //     }
-  //   }
+  // Remark: this scenario should never occur in real-life.
+  // The user's data will be saved the very first time when they access the website, so
+  // there cannot exist PlaceGuides with inexistent creators.
+  @Test
+  public void createPlaceGuideWithUserPair_nonExistingUser_matchesPlaceGuideWithNullUser() {
+    PlaceGuideWithUserPair placeGuideWithUserPair =
+        PlaceGuideWithUserPair.createPlaceGuideWithUserPair(toMatchPlaceGuide);
+    assertEquals(null, placeGuideWithUserPair.getCreator());
+  }
 }
