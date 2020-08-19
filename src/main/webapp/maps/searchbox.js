@@ -24,6 +24,8 @@ class SearchBox {
     this._map.controls[google.maps.ControlPosition.TOP_CENTER].push(this._input);
   }
 
+  // The Searchbox starts listening to and handling 
+  // search-related events when init() is called. 
   init() {
     this._autocomplete.setFields(['address_components', 'geometry', 'name']);
     this._autocomplete.addListener('place_changed', result => this.setNewSearchResult());

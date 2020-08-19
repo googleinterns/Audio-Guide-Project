@@ -33,6 +33,8 @@ class LocationSaver {
     return this._savedPlace;
   }
 
+  // The LocationSaver starts listening to and handling "save chosen location" 
+  // click events when init() is called. 
   init() {
     this._saveLocationControlButton.addEventListener("click",
         event => this.onSaveLocationControlEvent());

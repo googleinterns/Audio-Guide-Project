@@ -50,6 +50,8 @@ class Geolocator {
     return locationLatLng;
   }
 
+  // The Geolocator starts listening to and handling "turn on/off geolocation" 
+  // and "go to my location" click events when init() is called. 
   init() {
     this.enableGeolocationControl();
     this.enableGoToMyLocationControl();
