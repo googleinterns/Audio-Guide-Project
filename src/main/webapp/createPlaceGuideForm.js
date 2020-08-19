@@ -118,7 +118,8 @@ function fillFormWithPlaceGuideData(placeGuides) {
     const audioPlayer = document.getElementById("audioPlayer");
     audioPlayer.setAttribute("src", audioSrc);
     const audioInput = document.getElementById("audioKey");
-    audioInput.files.push(audioSrc);
+    const audioSrcList = [audioSrc];
+    audioInput.files = audioSrcList;
     if (placeGuide.isPublic) {
       document.getElementById("isPublic").value = "public";
     } else {
@@ -135,7 +136,8 @@ function fillFormWithPlaceGuideData(placeGuides) {
       imageSrc.searchParams.append('blob-key', placeGuide.imageKey);
       imagePreview.setAttribute("src", imageSrc);
       const imageInput = document.getElementById("imageKey");
-      imageInput.files.push(imageSrc);
+      const imageSrcList = [imageSrc];
+      imageInput.files = imageSrcList;
     }
   }
 }
