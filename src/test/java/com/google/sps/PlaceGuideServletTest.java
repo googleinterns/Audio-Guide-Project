@@ -179,11 +179,7 @@
 //     attributeToValue.put("com.google.appengine.api.users.UserService.user_id_key", (Object) ID);
 //     helper =
 //         new LocalServiceTestHelper(
-//                 new LocalDatastoreServiceTestConfig(), new LocalBlobstoreServiceTestConfig())
-//             .setEnvIsLoggedIn(true)
-//             .setEnvAuthDomain("localhost")
-//             .setEnvEmail(EMAIL)
-//             .setEnvAttributes(attributeToValue);
+//                 new LocalDatastoreServiceTestConfig(), new LocalBlobstoreServiceTestConfig());
 //     helper.setUp();
 
 //     request = mock(HttpServletRequest.class);

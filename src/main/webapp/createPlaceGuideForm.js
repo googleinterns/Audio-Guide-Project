@@ -13,7 +13,6 @@ function activatePreviewFeature() {
   // Previewing files uploaded by user.
   imageInput.addEventListener("change", function() {
     const file = this.files[0];
-    console.log(file);
 
     if (file) {
       const reader = new FileReader();
@@ -35,8 +34,6 @@ function activatePreviewFeature() {
 
       reader.addEventListener("load", function() {
         audioPlayer.setAttribute('src', this.result);
-        audioPlayer.play();
-
       });
 
       reader.readAsDataURL(file);
@@ -120,6 +117,8 @@ function fillFormWithPlaceGuideData(placeGuides) {
     audioSrc.searchParams.append('blob-key', placeGuide.audioKey);
     const audioPlayer = document.getElementById("audioPlayer");
     audioPlayer.setAttribute("src", audioSrc);
+    const audioInput = document.getElementById("audioKey");
+    audioInput.files.push(audioSrc);
     if (placeGuide.isPublic) {
       document.getElementById("isPublic").value = "public";
     } else {
@@ -135,6 +134,8 @@ function fillFormWithPlaceGuideData(placeGuides) {
       const imageSrc = new URL("/serve-blob", document.URL);
       imageSrc.searchParams.append('blob-key', placeGuide.imageKey);
       imagePreview.setAttribute("src", imageSrc);
+      const imageInput = document.getElementById("imageKey");
+      imageInput.files.push(imageSrc);
     }
   }
 }

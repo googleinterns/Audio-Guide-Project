@@ -21,8 +21,9 @@
         width: 100%;
       }
     </style>
+    <script src = "setupCreatePlaceGuide.js"></script>
 </head>
-<body onload = "setUpCreatePlaceGuideForm()">
+<body onload = "setUpCreatePlaceGuidePage()">
 <div id="createPlaceGuide">
     <form method = "POST" id = "formId" enctype = "multipart/form-data">
         <input type="hidden" id="id" name="id">
@@ -76,10 +77,13 @@
         <input type = "submit" value = "Submit">
     </form>
 
+    <button type = "button" id = "logout">Logout</button>
+
     <button id = "testExistingPlaceGuide" onclick = "testExistingPlaceGuide()">Test Input Existing PlaceGuide</button>
     <button id = "testGivenCoordinate" onclick = "testGivenCoordinate()">Test Input Coordinate</button>
 </div>
 
 <script src = "createPlaceGuideForm.js"></script>
+<script src = "user.js"></script>
 </body>
 </html>
