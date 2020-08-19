@@ -14,7 +14,7 @@ class PlaceDisplayer {
         });
   }
 
-  static displayPlaceGuidesOfUser(map, userId) {
+  static displayPlaceGuidesOfUser(map) {
     PlaceDisplayer.getPlaceGuidesOfUser(map)
         .then(placeGuides => {
           var markers = placeGuides.map(function (placeGuide) {
@@ -26,6 +26,7 @@ class PlaceDisplayer {
   }
 
   // This is for demonstrational purposes only. Data will be fetched from the server.
+  // TODO(fbori): fetch all public placeGuides from servlet
   static getPublicPlaceGuides(map) {
     var placeGuidesData = [
       {
@@ -131,6 +132,7 @@ class PlaceDisplayer {
   }
 
   // This is for demonstrational purposes only. Data will be fetched from the server.
+  // TODO(fbori): fetch all place guides of the currently logged in user
   static getPlaceGuidesOfUser(map) {
     var placeGuidesData = [
       {

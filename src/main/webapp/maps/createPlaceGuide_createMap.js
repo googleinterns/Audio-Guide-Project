@@ -46,8 +46,5 @@ function createMap() {
   locationSaver.init();
 
   // Display user's place guides functionality.
-  // The user's ID is hardcoded for now,
-  // but it will be fetched from the server in the future.
-  var userId = "test";
-  PlaceDisplayer.displayPlaceGuidesOfUser(map, userId);
+  PlaceDisplayer.displayPlaceGuidesOfUser(map);
 }

@@ -30,6 +30,5 @@ function createMap() {
   searchBox.init();
 
   // Discover public place guides functionality.
-  var userId = "test";
-  PlaceDisplayer.displayPlaceGuidesOfUser(map, userId);
+  PlaceDisplayer.displayPlaceGuidesOfUser(map);
 }
