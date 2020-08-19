@@ -16,8 +16,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.lang.IllegalStateException;
 import java.io.IOException;
+import com.google.appengine.api.blobstore.*;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * This servlet handles placeguide's data.
@@ -26,15 +29,21 @@ import java.io.IOException;
 public class PlaceGuideServlet extends HttpServlet {
   
   private final String userId;
+  private final BlobstoreService blobstoreService;
+  private final BlobInfoFactory blobInfoFactory;
 
   // For production.
   public PlaceGuideServlet() {
-    this(UserServiceFactory.getUserService().getCurrentUser().getUserId());  
+    this(UserServiceFactory.getUserService().getCurrentUser().getUserId(), 
+         BlobstoreServiceFactory.getBlobstoreService(),
+         new BlobInfoFactory());  
   }
 
   // For testing.
-  public PlaceGuideServlet(String userId) {
+  public PlaceGuideServlet(String userId, BlobstoreService blobstoreService, BlobInfoFactory blobInfoFactory) {
     this.userId = userId;
+    this.blobstoreService = blobstoreService;
+    this.blobInfoFactory = blobInfoFactory;
   }
 
   public static final String ID_INPUT = "id";
@@ -54,7 +63,7 @@ public class PlaceGuideServlet extends HttpServlet {
       PlaceGuideRepositoryFactory.getPlaceGuideRepository(RepositoryType.DATASTORE);
 
   private enum PlaceGuideQueryType {
-    ALL, 
+    ALL_PUBLIC, 
     CREATED_ALL, 
     CREATED_PUBLIC, 
     CREATED_PRIVATE,
@@ -86,7 +95,7 @@ public class PlaceGuideServlet extends HttpServlet {
   private List<PlaceGuide> getPlaceGuides(PlaceGuideQueryType placeGuideQueryType) {
     List<PlaceGuide> placeGuides;
     switch(placeGuideQueryType) {
-      case ALL:
+      case ALL_PUBLIC:
         placeGuides = placeGuideRepository.getAllPublicPlaceGuides();
         break;
       case CREATED_ALL:
@@ -108,7 +117,7 @@ public class PlaceGuideServlet extends HttpServlet {
 
   private PlaceGuide getPlaceGuideFromRequest(HttpServletRequest request) {
     String name = request.getParameter(NAME_INPUT);
-    String audioKey = request.getParameter(AUDIO_KEY_INPUT); // Get from Blobstore.
+    String audioKey = getUploadedFileBlobKey(request, AUDIO_KEY_INPUT);
     float latitude = Float.parseFloat(request.getParameter(LATITUDE_INPUT));
     float longitude = Float.parseFloat(request.getParameter(LONGITUDE_INPUT));
     GeoPt coordinate = new GeoPt(latitude, longitude);
@@ -140,11 +149,30 @@ public class PlaceGuideServlet extends HttpServlet {
     if (!description.isEmpty()) {
       newPlaceGuideBuilder.setDescription(description);
     }
-    String imageKey = request.getParameter(IMAGE_KEY_INPUT);
-    if (!imageKey.isEmpty()) {
+    String imageKey = getUploadedFileBlobKey(request, IMAGE_KEY_INPUT);
+    if (imageKey != null) {
       newPlaceGuideBuilder.setImageKey(imageKey);
     }
     return newPlaceGuideBuilder.build();
+  }
+
+  @Nullable
+  private String getUploadedFileBlobKey(HttpServletRequest request, String formInputElementName) {
+    Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);
+    List<BlobKey> blobKeys = blobs.get(formInputElementName);
+    // User submitted form without selecting a file, so we can't get a URL. (dev server)
+    if (blobKeys == null || blobKeys.isEmpty()) {
+      return null;
+    }
+    BlobKey blobKey = blobKeys.get(0);
+    // User submitted form without selecting a file, so we can't get a URL. (live server)
+    BlobInfo blobInfo = blobInfoFactory.loadBlobInfo(blobKey);
+    if (blobInfo.getSize() == 0) {
+      blobstoreService.delete(blobKey);
+      return null;
+    }
+    // Return the blobKey as a string.
+    return blobKey.getKeyString();
   }
 
   private String convertToJsonUsingGson(Object o) {
