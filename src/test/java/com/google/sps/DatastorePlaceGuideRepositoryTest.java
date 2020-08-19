@@ -53,17 +53,17 @@ public final class DatastorePlaceGuideRepositoryTest {
   public static final String IMAGE_KEY = "imageKey";
 
   public static final String OTHER_USER_EMAIL = "otherUser@gmail.com";
-  public static final List<Long> OTHER_USER_BOOKMARKED_PLACE_GUIDES = new ArrayList<>();
+  public static final Set<Long> OTHER_USER_BOOKMARKED_PLACE_GUIDES_IDS = new HashSet<>();
   public static final String CREATOR_A_EMAIL = "creatorA@gmail.com";
-  public static final List<Long> CREATOR_A_BOOKMARKED_PLACE_GUIDES = 
-      Arrays.asList(A_PUBLIC_ID, B_PUBLIC_ID);
+  public static final Set<Long> CREATOR_A_BOOKMARKED_PLACE_GUIDES_IDS = 
+      new HashSet<>(Arrays.asList(A_PUBLIC_ID, B_PUBLIC_ID));
 
   private final User testUser = 
-      new User.Builder(OTHER_USER_ID, OTHER_USER_EMAIL, OTHER_USER_BOOKMARKED_PLACE_GUIDES)
+      new User.Builder(OTHER_USER_ID, OTHER_USER_EMAIL, OTHER_USER_BOOKMARKED_PLACE_GUIDES_IDS)
       .build();
 
   private final User userA = 
-      new User.Builder(CREATOR_A_ID, CREATOR_A_EMAIL, CREATOR_A_BOOKMARKED_PLACE_GUIDES)
+      new User.Builder(CREATOR_A_ID, CREATOR_A_EMAIL, CREATOR_A_BOOKMARKED_PLACE_GUIDES_IDS)
       .build();
 
   private final PlaceGuide testPublicPlaceGuideA = 
@@ -212,8 +212,8 @@ public final class DatastorePlaceGuideRepositoryTest {
     placeGuideRepository.bookmarkPlaceGuide(A_PUBLIC_ID, OTHER_USER_ID);
 
     // Check whether the place guide is inside testUser's bookmarkedPlaceGuides list.
-    List<Long> expected = Arrays.asList(A_PUBLIC_ID);
-    List<Long> result = userRepository.getUser(OTHER_USER_ID).getBookmarkedPlaceGuides();
+    Set<Long> expected = new HashSet<>(Arrays.asList(A_PUBLIC_ID));
+    Set<Long> result = userRepository.getUser(OTHER_USER_ID).getBookmarkedPlaceGuidesIds();
     assertEquals(expected, result);
   }
 
@@ -373,7 +373,8 @@ public final class DatastorePlaceGuideRepositoryTest {
     // Check if the user's {@code bookmarkedPlaceGuides} is empty. If it's empty, then datastore
     // will store it as a null value.
     User testUserA = userRepository.getUser(CREATOR_A_ID);
-    assertEquals(expected, testUserA.getBookmarkedPlaceGuides());
+    Set<Long> expectedSet = new HashSet<>();
+    assertEquals(expectedSet, testUserA.getBookmarkedPlaceGuidesIds());
   }
 
   @Test(expected = EntityNotFoundException.class)
@@ -387,6 +388,23 @@ public final class DatastorePlaceGuideRepositoryTest {
     Key deletedEntityKey = KeyFactory.createKey(DatastorePlaceGuideRepository.ENTITY_KIND, 
                                                                               A_PUBLIC_ID);
     Entity deletedEntity = datastore.get(deletedEntityKey);
+  }
+
+  @Test(expected = IllegalStateException.class)
+  public void removeBookmarkedPlaceGuide_userDoesntExist_throwsError() {
+    placeGuideRepository.removeBookmarkedPlaceGuide(A_PUBLIC_ID, CREATOR_A_ID);
+  }
+
+  @Test
+  public void removeBookmarkedPlaceGuide_userHasBookmarkedPlaceGuide_selectedPlaceGuideRemoved() {
+    // Store user A.
+    userRepository.saveUser(userA);
+
+    placeGuideRepository.removeBookmarkedPlaceGuide(A_PUBLIC_ID, CREATOR_A_ID);
+    User testUserA = userRepository.getUser(CREATOR_A_ID);
+    Set<Long> expected = new HashSet<>(Arrays.asList(B_PUBLIC_ID));
+    Set<Long> result = testUserA.getBookmarkedPlaceGuidesIds();
+    assertEquals(expected, result);
   }
 
   @After

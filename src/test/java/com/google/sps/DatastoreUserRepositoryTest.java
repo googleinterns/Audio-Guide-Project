@@ -30,20 +30,23 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Set;
+import java.util.HashSet;
 
 @RunWith(JUnit4.class)
 public final class DatastoreUserRepositoryTest {
   private static final String ID = "userid";
   private static final String EMAIL = "user@gmail.com";
-  private static final List<Long> BOOKMARKED_PLACE_GUIDES = Arrays.asList((long) 12345);
+  private static final Set<Long> BOOKMARKED_PLACE_GUIDES_IDS = new HashSet<>(Arrays.asList((long) 12345));
   private static final String NAME = "username";
   private static final String SELF_INTRODUCTION = "I am the user";
   private static final String IMG_KEY = "img1234";
 
   private final User toSaveUser =
-      new User.Builder(ID, EMAIL, BOOKMARKED_PLACE_GUIDES)
+      new User.Builder(ID, EMAIL, BOOKMARKED_PLACE_GUIDES_IDS)
           .setName(NAME)
           .addSelfIntroduction(SELF_INTRODUCTION)
           .addImgKey(IMG_KEY)
@@ -73,8 +76,8 @@ public final class DatastoreUserRepositoryTest {
     userEntity.setProperty(DatastoreUserRepository.NAME_PROPERTY, toSaveUser.getName());
     userEntity.setProperty(DatastoreUserRepository.EMAIL_PROPERTY, toSaveUser.getEmail());
     userEntity.setProperty(
-        DatastoreUserRepository.BOOKMARKED_PLACE_GUIDES_PROPERTY, 
-        toSaveUser.getBookmarkedPlaceGuides());
+        DatastoreUserRepository.BOOKMARKED_PLACE_GUIDES_IDS_PROPERTY, 
+        toSaveUser.getBookmarkedPlaceGuidesIds());
     userEntity.setProperty(
         DatastoreUserRepository.PUBLIC_PORTFOLIO_PROPERTY, toSaveUser.portfolioIsPublic());
     userEntity.setProperty(
@@ -107,9 +110,11 @@ public final class DatastoreUserRepositoryTest {
       Entity userEntity = datastore.get(userKey);
       assertEquals(NAME, userEntity.getProperty(DatastoreUserRepository.NAME_PROPERTY));
       assertEquals(EMAIL, userEntity.getProperty(DatastoreUserRepository.EMAIL_PROPERTY));
-      assertEquals(
-          BOOKMARKED_PLACE_GUIDES, 
-          userEntity.getProperty(DatastoreUserRepository.BOOKMARKED_PLACE_GUIDES_PROPERTY));
+      List<Long> resultList = 
+          (ArrayList) userEntity.getProperty(
+              DatastoreUserRepository.BOOKMARKED_PLACE_GUIDES_IDS_PROPERTY);
+      Set<Long> resultSet = new HashSet<>(resultList);
+      assertEquals(BOOKMARKED_PLACE_GUIDES_IDS, resultSet);
       assertEquals(
           SELF_INTRODUCTION,
           userEntity.getProperty(DatastoreUserRepository.SELF_INTRODUCTION_PROPERTY));
@@ -128,8 +133,8 @@ public final class DatastoreUserRepositoryTest {
     userEntity.setProperty(DatastoreUserRepository.NAME_PROPERTY, toSaveUser.getName());
     userEntity.setProperty(DatastoreUserRepository.EMAIL_PROPERTY, toSaveUser.getEmail());
     userEntity.setProperty(
-        DatastoreUserRepository.BOOKMARKED_PLACE_GUIDES_PROPERTY, 
-        toSaveUser.getBookmarkedPlaceGuides());
+        DatastoreUserRepository.BOOKMARKED_PLACE_GUIDES_IDS_PROPERTY, 
+        toSaveUser.getBookmarkedPlaceGuidesIds());
     userEntity.setProperty(
         DatastoreUserRepository.PUBLIC_PORTFOLIO_PROPERTY, toSaveUser.portfolioIsPublic());
     userEntity.setProperty(

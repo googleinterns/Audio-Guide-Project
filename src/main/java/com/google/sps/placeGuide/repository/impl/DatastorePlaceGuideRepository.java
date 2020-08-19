@@ -11,6 +11,8 @@ import com.google.appengine.api.datastore.GeoPt;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Set;
+import java.util.HashSet;
 import java.util.Collections;
 import org.jetbrains.annotations.Nullable;
 import com.google.sps.placeGuide.repository.PlaceGuideRepository;
@@ -67,17 +69,12 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository {
       Entity placeGuideEntity = datastore.get(placeGuideEntityKey);
       User user = userRepository.getUser(userId);
       if (user != null) {
-        List<Long> bookmarkedPlaceGuides = user.getBookmarkedPlaceGuides();
-        List<Long> bookmarkedPlaceGuidesCopy;
-        if (bookmarkedPlaceGuides == null) {
-          bookmarkedPlaceGuidesCopy = new ArrayList<>();
-        } else {
-          bookmarkedPlaceGuidesCopy = new ArrayList<>(bookmarkedPlaceGuides);
-        }
-        bookmarkedPlaceGuidesCopy.add(placeGuideId);
+        Set<Long> bookmarkedIds = user.getBookmarkedPlaceGuidesIds();
+        Set<Long> bookmarkedIdsCopy = new HashSet<>(bookmarkedIds);
+        bookmarkedIdsCopy.add(placeGuideId);
 
       // Update and save user with the updated {@code bookmarkedPlaceGuides}.
-        saveUpdatedUser(user, bookmarkedPlaceGuidesCopy);
+        saveUpdatedUser(user, bookmarkedIdsCopy);
       } else {
         throw new IllegalStateException("Non existent user cannot bookmark a place guide!");
       }
@@ -135,7 +132,7 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository {
     List<PlaceGuide> bookmarkedPlaceGuides = new ArrayList<>();
     User user = userRepository.getUser(userId);
     if (user != null) {
-      List<Long> bookmarkedIds = user.getBookmarkedPlaceGuides();
+      Set<Long> bookmarkedIds = user.getBookmarkedPlaceGuidesIds();
       List<Long> bookmarkedIdsCopy = new ArrayList<>(bookmarkedIds);
       int bookmarkedIdsCopyIndex = 0;
       while (bookmarkedIdsCopyIndex < bookmarkedIdsCopy.size()) {
@@ -150,28 +147,33 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository {
           bookmarkedIdsCopy.remove(bookmarkedIdsCopyIndex);
         }
       }
+      Set<Long> updatedBookmarkedIdsCopy = new HashSet<>(bookmarkedIdsCopy);
       // Update and save user with updated {@code bookmarkedPlaceGuides}.
-      saveUpdatedUser(user, bookmarkedIdsCopy);
+      saveUpdatedUser(user, updatedBookmarkedIdsCopy);
       return bookmarkedPlaceGuides;
     } else {
       throw new IllegalStateException("Cannot get bookmarked place guides for non-existent user!");
     }
   }
 
-//   @Overrider
-//   public void removeBookmarkedPlaceGuides(long placeGuideId, String userId) {
-//     User user = userRepository.getUser(userId);
-//     if (user != null) {
-//       List<Long> bookmarkedPlaceGuides = user.getBookmarkedPlaceGuides();
+  @Override
+  public void removeBookmarkedPlaceGuide(long placeGuideId, String userId) {
+    User user = userRepository.getUser(userId);
+    if (user != null) {
+      Set<Long> bookmarkedPlaceGuidesIds = user.getBookmarkedPlaceGuidesIds();
+      Set<Long> bookmarkedPlaceGuidesIdsCopy = new HashSet<>(bookmarkedPlaceGuidesIds);
+      bookmarkedPlaceGuidesIdsCopy.remove(placeGuideId);
+      
+      // Update user with the new set.
+      saveUpdatedUser(user, bookmarkedPlaceGuidesIdsCopy);
+    } else {
+      throw new IllegalStateException("Cannot remove bookmarked place guides from non-existent user!");
+    }
+  }
 
-//     } else {
-//       throw new IllegalStateException("Cannot remove bookmarked place guides from non-existent user!");
-//     }
-//   }
-
-  private void saveUpdatedUser(User user, List<Long> updatedBookmarkedPlaceGuides) {
+  private void saveUpdatedUser(User user, Set<Long> updatedBookmarkedPlaceGuidesIds) {
     User updatedUser =
-        new User.Builder(user.getId(), user.getEmail(), updatedBookmarkedPlaceGuides)
+        new User.Builder(user.getId(), user.getEmail(), updatedBookmarkedPlaceGuidesIds)
         .setName(user.getName())
         .addSelfIntroduction(user.getSelfIntroduction())
         .setPublicPortfolio(user.portfolioIsPublic())

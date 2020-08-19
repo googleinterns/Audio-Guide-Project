@@ -20,6 +20,8 @@ import com.google.sps.user.repository.UserRepository;
 import org.jetbrains.annotations.Nullable;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Handles the storage of comments using the Datastore API.
@@ -72,16 +74,17 @@ public class DatastoreUserRepository implements UserRepository {
     String email = (String) userEntity.getProperty(EMAIL_PROPERTY);
     List<Long> bookmarkedPlaceGuidesIdsList = 
         (ArrayList) userEntity.getProperty(BOOKMARKED_PLACE_GUIDES_IDS_PROPERTY);
+    Set<Long> bookmarkedPlaceGuidesIds;
     if (bookmarkedPlaceGuidesIdsList == null) {
-      bookmarkedPlaceGuides = new ArrayList<>();
+      bookmarkedPlaceGuidesIds = new HashSet<>();
     } else {
-      
+      bookmarkedPlaceGuidesIds = new HashSet<>(bookmarkedPlaceGuidesIdsList);
     }
     Boolean publicPortfolio = (Boolean) userEntity.getProperty(PUBLIC_PORTFOLIO_PROPERTY);
     String selfIntroduction = (String) userEntity.getProperty(SELF_INTRODUCTION_PROPERTY);
     String imgKey = (String) userEntity.getProperty(IMG_KEY_PROPERTY);
     User.Builder newUserBuilder =
-        new User.Builder(id, email, bookmarkedPlaceGuides)
+        new User.Builder(id, email, bookmarkedPlaceGuidesIds)
         .setName(name)
         .addSelfIntroduction(selfIntroduction)
         .setPublicPortfolio(publicPortfolio)

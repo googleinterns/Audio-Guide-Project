@@ -50,7 +50,7 @@ import java.util.Collections;
 public final class UserDataServletTest {
   private static final String ID = "userid";
   private static final String EMAIL = "user@gmail.com";
-  private static final Set<Long> EMPTY_BOOKMARKED_PLACE_GUIDES_IDS = new HashSet<>();
+  private static final Set<Long> EMPTY_BOOKMARKED_PLACE_GUIDES_IDS = null;
   private static final Set<Long> BOOKMARKED_PLACE_GUIDES_IDS = new HashSet<>(Arrays.asList((long) 12345));
   private static final String NAME = "username";
   private static final String SELF_INTRODUCTION = "I am the user";
@@ -129,7 +129,7 @@ public final class UserDataServletTest {
       assertEquals(NAME, userEntity.getProperty(DatastoreUserRepository.NAME_PROPERTY));
       assertEquals(EMAIL, userEntity.getProperty(DatastoreUserRepository.EMAIL_PROPERTY));
       assertEquals(
-          EMPTY_BOOKMARKED_PLACE_GUIDES_IDS, 
+          null, 
           userEntity.getProperty(DatastoreUserRepository.BOOKMARKED_PLACE_GUIDES_IDS_PROPERTY));
       assertEquals(
           SELF_INTRODUCTION,
@@ -183,7 +183,7 @@ public final class UserDataServletTest {
       assertEquals(NAME, userEntity.getProperty(DatastoreUserRepository.NAME_PROPERTY));
       assertEquals(EMAIL, userEntity.getProperty(DatastoreUserRepository.EMAIL_PROPERTY));
       assertEquals(
-          EMPTY_BOOKMARKED_PLACE_GUIDES_IDS, 
+          null, 
           userEntity.getProperty(DatastoreUserRepository.BOOKMARKED_PLACE_GUIDES_IDS_PROPERTY));
       assertEquals(
           SELF_INTRODUCTION,
@@ -236,9 +236,11 @@ public final class UserDataServletTest {
       Entity userEntity = datastore.get(userKey);
       assertEquals(NAME, userEntity.getProperty(DatastoreUserRepository.NAME_PROPERTY));
       assertEquals(EMAIL, userEntity.getProperty(DatastoreUserRepository.EMAIL_PROPERTY));
-      assertEquals(
-          BOOKMARKED_PLACE_GUIDES_IDS, 
-          userEntity.getProperty(DatastoreUserRepository.BOOKMARKED_PLACE_GUIDES_IDS_PROPERTY));
+      List<Long> resultList = 
+          (ArrayList) userEntity.getProperty(
+              DatastoreUserRepository.BOOKMARKED_PLACE_GUIDES_IDS_PROPERTY);
+      Set<Long> resultSet = new HashSet<>(resultList);
+      assertEquals(BOOKMARKED_PLACE_GUIDES_IDS, resultSet);
       assertEquals(
           SELF_INTRODUCTION,
           userEntity.getProperty(DatastoreUserRepository.SELF_INTRODUCTION_PROPERTY));

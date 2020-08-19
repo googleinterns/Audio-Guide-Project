@@ -28,5 +28,7 @@ public interface PlaceGuideRepository {
 
   public List<PlaceGuide> getBookmarkedPlaceGuides(String userId);
 
+  public void removeBookmarkedPlaceGuide(long placeGuideId, String userId);
+
   public void deletePlaceGuide(long placeGuideId);
 }
