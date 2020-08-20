@@ -27,12 +27,13 @@ public class PlaceGuide {
   private final long length;
 
   @Nullable
-  private final String description, imageKey;
+  private final String description, imageKey, placeName;
 
   private PlaceGuide(long id, String name, String audioKey, String creatorId, 
                                             String placeId, boolean isPublic, 
                                             GeoPt coordinate, long length, 
-                                            String description, String imageKey) {
+                                            String description, String imageKey, 
+                                            String placeName) {
     this.id = id;
     this.name = name;
     this.audioKey = audioKey;
@@ -43,6 +44,7 @@ public class PlaceGuide {
     this.length = length;
     this.description = description;
     this.imageKey = imageKey;
+    this.placeName = placeName;
   }
 
   public static class Builder {
@@ -54,7 +56,7 @@ public class PlaceGuide {
     private String placeId;
     private final GeoPt coordinate;
     private long length;
-    private String description, imageKey;
+    private String description, imageKey, placeName;
         
     public Builder(long id, String name, String audioKey, String creatorId, GeoPt coordinate) {
       this.id = id;
@@ -83,9 +85,14 @@ public class PlaceGuide {
       this.imageKey = imageKey;
       return this;
     }
+    public Builder setPlaceName(String placeName) {
+      this.placeName = placeName;
+      return this;
+    }
     public PlaceGuide build() {
       return new PlaceGuide(id, name, audioKey, creatorId, placeId, isPublic, 
-                                                coordinate, length, description, imageKey);
+                                                coordinate, length, description, imageKey, 
+                                                placeName);
     }
   }
 
@@ -131,5 +138,10 @@ public class PlaceGuide {
   @Nullable
   public String getImageKey() {
     return imageKey;
+  }
+
+  @Nullable
+  public String getPlaceName() {
+    return placeName;
   }
 }
