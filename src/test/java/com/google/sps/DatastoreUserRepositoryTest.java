@@ -24,6 +24,8 @@ import com.google.sps.user.User;
 import com.google.sps.user.repository.UserRepository;
 import com.google.sps.user.repository.UserRepositoryFactory;
 import com.google.sps.user.repository.impl.DatastoreUserRepository;
+import com.google.sps.placeGuide.repository.impl.DatastorePlaceGuideRepository;
+import com.google.sps.placeGuide.PlaceGuide;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,6 +37,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.Arrays;
 
 @RunWith(JUnit4.class)
 public final class DatastoreUserRepositoryTest {
@@ -52,17 +55,123 @@ public final class DatastoreUserRepositoryTest {
           .addSelfIntroduction(SELF_INTRODUCTION)
           .addImgKey(IMG_KEY)
           .build();
+
   private User toGetUser;
+
+  public static final long A_PUBLIC_ID = 12345;
+  public static final long B_PUBLIC_ID = 23456;
+  public static final long A_PRIVATE_ID = 34567;
+  public static final long B_PRIVATE_ID = 45678;
+  public static final String PLACE_GUIDE_NAME = "placeGuideName";
+  public static final String AUDIO_KEY = "audioKey";
+  public static final String CREATOR_A_ID = "creatorA_Id";
+  public static final String CREATOR_B_ID = "creatorB_Id";
+  public static final String OTHER_USER_ID = "otherUserId";
+  public static final String PLACE_ID = "placeId";
+  public static final GeoPt COORDINATE = new GeoPt((float) 3.14, (float) 2.56);
+  public static final boolean IS_PUBLIC = true;
+  public static final long LENGTH = new Long(60);
+  public static final String DESCRIPTION = "description";
+  public static final String PREVIOUS_DESCRIPTION = "previous description";
+  public static final String IMAGE_KEY = "imageKey";
+
+  public static final String OTHER_USER_EMAIL = "otherUser@gmail.com";
+  public static final Set<Long> OTHER_USER_BOOKMARKED_PLACE_GUIDES_IDS = new HashSet<>();
+  public static final String CREATOR_A_EMAIL = "creatorA@gmail.com";
+  public static final Set<Long> CREATOR_A_BOOKMARKED_PLACE_GUIDES_IDS = 
+      new HashSet<>(Arrays.asList(A_PUBLIC_ID, B_PUBLIC_ID));
+
+  private final User testUser = 
+      new User.Builder(OTHER_USER_ID, OTHER_USER_EMAIL)
+      .setBookmarkedPlaceGuidesIds(OTHER_USER_BOOKMARKED_PLACE_GUIDES_IDS)
+      .build();
+
+  private final User userA = 
+      new User.Builder(CREATOR_A_ID, CREATOR_A_EMAIL)
+      .setBookmarkedPlaceGuidesIds(CREATOR_A_BOOKMARKED_PLACE_GUIDES_IDS)
+      .build();
+
+  private final PlaceGuide testPublicPlaceGuideA = 
+      new PlaceGuide.Builder(A_PUBLIC_ID, PLACE_GUIDE_NAME, AUDIO_KEY, CREATOR_A_ID, COORDINATE)
+      .setPlaceId(PLACE_ID)
+      .setPlaceGuideStatus(IS_PUBLIC)
+      .setLength(LENGTH)
+      .setDescription(DESCRIPTION)
+      .setImageKey(IMAGE_KEY)
+      .build();
+
+  private final PlaceGuide previousTestPublicPlaceGuideA = 
+      new PlaceGuide.Builder(A_PUBLIC_ID, PLACE_GUIDE_NAME, AUDIO_KEY, CREATOR_A_ID, COORDINATE)
+      .setPlaceGuideStatus(IS_PUBLIC)
+      .build();
+
+  private final PlaceGuide testPrivatePlaceGuideA = 
+      new PlaceGuide.Builder(A_PRIVATE_ID, PLACE_GUIDE_NAME, AUDIO_KEY, CREATOR_A_ID, COORDINATE)
+      .setPlaceId(PLACE_ID)
+      .setLength(LENGTH)
+      .setDescription(DESCRIPTION)
+      .setImageKey(IMAGE_KEY)
+      .build();
+
+  private final PlaceGuide testPublicPlaceGuideB = 
+      new PlaceGuide.Builder(B_PUBLIC_ID, PLACE_GUIDE_NAME, AUDIO_KEY, CREATOR_B_ID, COORDINATE)
+      .setPlaceId(PLACE_ID)
+      .setPlaceGuideStatus(IS_PUBLIC)
+      .setLength(LENGTH)
+      .setDescription(DESCRIPTION)
+      .setImageKey(IMAGE_KEY)
+      .build();
+
+  private final PlaceGuide testPrivatePlaceGuideB = 
+      new PlaceGuide.Builder(B_PRIVATE_ID, PLACE_GUIDE_NAME, AUDIO_KEY, CREATOR_B_ID, COORDINATE)
+      .setPlaceId(PLACE_ID)
+      .setLength(LENGTH)
+      .setDescription(DESCRIPTION)
+      .setImageKey(IMAGE_KEY)
+      .build();
+
+  private void saveTestPlaceGuidesEntities(List<PlaceGuide> placeGuides) {
+    for (PlaceGuide placeGuide : placeGuides) {
+      datastore.put(getEntityFromPlaceGuide(placeGuide));
+    }
+  }
+
+  private Entity getEntityFromPlaceGuide(PlaceGuide placeGuide) {
+    Entity placeGuideEntity = 
+        new Entity(DatastorePlaceGuideRepository.ENTITY_KIND, placeGuide.getId());
+    placeGuideEntity.setProperty(
+        DatastorePlaceGuideRepository.NAME_PROPERTY, placeGuide.getName());
+    placeGuideEntity.setProperty(
+        DatastorePlaceGuideRepository.AUDIO_KEY_PROPERTY, placeGuide.getAudioKey());
+    placeGuideEntity.setProperty(
+        DatastorePlaceGuideRepository.CREATOR_ID_PROPERTY, placeGuide.getCreatorId());
+    placeGuideEntity.setProperty(
+        DatastorePlaceGuideRepository.IS_PUBLIC_PROPERTY, placeGuide.isPublic());
+    placeGuideEntity.setProperty(
+        DatastorePlaceGuideRepository.PLACE_ID_PROPERTY, placeGuide.getPlaceId());
+    placeGuideEntity.setProperty(
+        DatastorePlaceGuideRepository.COORDINATE_PROPERTY, placeGuide.getCoordinate());
+    placeGuideEntity.setProperty(
+        DatastorePlaceGuideRepository.DESCRIPTION_PROPERTY, placeGuide.getDescription());
+    placeGuideEntity.setProperty(
+        DatastorePlaceGuideRepository.LENGTH_PROPERTY, placeGuide.getLength());
+    placeGuideEntity.setProperty(
+        DatastorePlaceGuideRepository.IMAGE_KEY_PROPERTY, placeGuide.getImageKey());
+    return placeGuideEntity;
+  }
 
   private final UserRepository myUserRepository =
       UserRepositoryFactory.getUserRepository(RepositoryType.DATASTORE);
 
   private final LocalServiceTestHelper helper =
       new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
+  
+  private DatastoreService datastore;
 
   @Before
   public void setUp() {
     helper.setUp();
+    datastore = DatastoreServiceFactory.getDatastoreService();
   }
 
   @After
@@ -171,11 +280,11 @@ public final class DatastoreUserRepositoryTest {
     saveTestPlaceGuidesEntities(testPlaceGuidesList);
 
     // testUser is bookmarking public place guide a. 
-    placeGuideRepository.bookmarkPlaceGuide(A_PUBLIC_ID, OTHER_USER_ID);
+    myUserRepository.bookmarkPlaceGuide(A_PUBLIC_ID, OTHER_USER_ID);
 
     // Check whether the place guide is inside testUser's bookmarkedPlaceGuides list.
     Set<Long> expected = new HashSet<>(Arrays.asList(A_PUBLIC_ID));
-    Set<Long> result = userRepository.getUser(OTHER_USER_ID).getBookmarkedPlaceGuidesIds();
+    Set<Long> result = myUserRepository.getUser(OTHER_USER_ID).getBookmarkedPlaceGuidesIds();
     assertEquals(expected, result);
   }
 
@@ -189,6 +298,23 @@ public final class DatastoreUserRepositoryTest {
     saveTestPlaceGuidesEntities(testPlaceGuidesList);
 
     // testUser is bookmarking public place guide a. 
-    placeGuideRepository.bookmarkPlaceGuide(A_PUBLIC_ID, OTHER_USER_ID);
+    myUserRepository.bookmarkPlaceGuide(A_PUBLIC_ID, OTHER_USER_ID);
+  }
+
+  @Test(expected = IllegalStateException.class)
+  public void removeBookmarkedPlaceGuide_userDoesntExist_throwsError() {
+    myUserRepository.removeBookmarkedPlaceGuide(A_PUBLIC_ID, CREATOR_A_ID);
+  }
+
+  @Test
+  public void removeBookmarkedPlaceGuide_userHasBookmarkedPlaceGuide_selectedPlaceGuideRemoved() {
+    // Store user A.
+    myUserRepository.saveUser(userA);
+
+    myUserRepository.removeBookmarkedPlaceGuide(A_PUBLIC_ID, CREATOR_A_ID);
+    User testUserA = myUserRepository.getUser(CREATOR_A_ID);
+    Set<Long> expected = new HashSet<>(Arrays.asList(B_PUBLIC_ID));
+    Set<Long> result = testUserA.getBookmarkedPlaceGuidesIds();
+    assertEquals(expected, result);
   }
 }

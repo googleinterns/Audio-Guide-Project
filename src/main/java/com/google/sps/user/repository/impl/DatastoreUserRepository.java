@@ -17,6 +17,7 @@ package com.google.sps.user.repository.impl;
 import com.google.appengine.api.datastore.*;
 import com.google.sps.user.User;
 import com.google.sps.user.repository.UserRepository;
+import com.google.sps.placeGuide.repository.impl.DatastorePlaceGuideRepository;
 import org.jetbrains.annotations.Nullable;
 import java.util.Set;
 import java.util.HashSet;
@@ -101,7 +102,8 @@ public class DatastoreUserRepository implements UserRepository {
   @Override
   public void bookmarkPlaceGuide(long placeGuideId, String userId) {
     // Check if the corresponding placeGuide is in the database.
-    Key placeGuideEntityKey = KeyFactory.createKey(ENTITY_KIND, placeGuideId);
+    Key placeGuideEntityKey = 
+        KeyFactory.createKey(DatastorePlaceGuideRepository.ENTITY_KIND, placeGuideId);
     if (placeGuideExists(placeGuideEntityKey)) {
       User user = getUser(userId);
       if (user != null) {
