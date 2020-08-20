@@ -21,9 +21,6 @@ public class PlaceGuide {
   private String placeId;
 
   private final GeoPt coordinate;
-  
-  @Nullable
-  private final String placeName;
 
   // Specify how long user usually spends to follow this place guide in minutes.
   @Nullable
@@ -35,8 +32,7 @@ public class PlaceGuide {
   private PlaceGuide(long id, String name, String audioKey, String creatorId, 
                                             String placeId, boolean isPublic, 
                                             GeoPt coordinate, long length, 
-                                            String description, String imageKey,
-                                            String placeName) {
+                                            String description, String imageKey) {
     this.id = id;
     this.name = name;
     this.audioKey = audioKey;
@@ -47,7 +43,6 @@ public class PlaceGuide {
     this.length = length;
     this.description = description;
     this.imageKey = imageKey;
-    this.placeName = placeName;
   }
 
   public static class Builder {
@@ -57,7 +52,6 @@ public class PlaceGuide {
     private final String creatorId; 
     private boolean isPublic = false;
     private String placeId;
-    private String placeName;
     private final GeoPt coordinate;
     private long length;
     private String description, imageKey;
@@ -89,14 +83,9 @@ public class PlaceGuide {
       this.imageKey = imageKey;
       return this;
     }
-    public Builder setPlaceName(String placeName) {
-      this.placeName = placeName;
-      return this;
-    }
     public PlaceGuide build() {
       return new PlaceGuide(id, name, audioKey, creatorId, placeId, isPublic, 
-                                                coordinate, length, description, imageKey, 
-                                                placeName);
+                                                coordinate, length, description, imageKey);
     }
   }
 
@@ -142,10 +131,5 @@ public class PlaceGuide {
   @Nullable
   public String getImageKey() {
     return imageKey;
-  }
-
-  @Nullable
-  public String getPlaceName() {
-    return placeName;
   }
 }
