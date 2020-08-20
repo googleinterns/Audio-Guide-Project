@@ -358,11 +358,6 @@ public final class DatastorePlaceGuideRepositoryTest {
     Entity deletedEntity = datastore.get(deletedEntityKey);
   }
 
-  @Test(expected = IllegalStateException.class)
-  public void removeBookmarkedPlaceGuide_userDoesntExist_throwsError() {
-    placeGuideRepository.removeBookmarkedPlaceGuide(A_PUBLIC_ID, CREATOR_A_ID);
-  }
-
   @Test
   public void tester() {
     Entity a = new Entity("sg");
