@@ -62,30 +62,6 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository {
   }
 
   @Override
-  public void bookmarkPlaceGuide(long placeGuideId, String userId) {
-    // Check if the corresponding placeGuide is in the database.
-    Key placeGuideEntityKey = KeyFactory.createKey(ENTITY_KIND, placeGuideId);
-    try {
-      Entity placeGuideEntity = datastore.get(placeGuideEntityKey);
-      User user = userRepository.getUser(userId);
-      if (user != null) {
-        Set<Long> bookmarkedIds = user.getBookmarkedPlaceGuidesIds();
-        Set<Long> bookmarkedIdsCopy = new HashSet<>(bookmarkedIds);
-        bookmarkedIdsCopy.add(placeGuideId);
-
-      // Update and save user with the updated {@code bookmarkedPlaceGuides}.
-        saveUpdatedUser(user, bookmarkedIdsCopy);
-      } else {
-        throw new IllegalStateException("Non existent user cannot bookmark a place guide!");
-      }
-
-    } catch(EntityNotFoundException err) {
-      System.out.println("No existing corresponding place guides.");
-    }
-
-  }
-
-  @Override
   public List<PlaceGuide> getAllPublicPlaceGuides() {
     Filter queryFilter = new FilterPredicate(IS_PUBLIC_PROPERTY, FilterOperator.EQUAL, true);
     Query query = new Query(ENTITY_KIND).setFilter(queryFilter);
@@ -154,33 +130,6 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository {
     } else {
       throw new IllegalStateException("Cannot get bookmarked place guides for non-existent user!");
     }
-  }
-
-  @Override
-  public void removeBookmarkedPlaceGuide(long placeGuideId, String userId) {
-    User user = userRepository.getUser(userId);
-    if (user != null) {
-      Set<Long> bookmarkedPlaceGuidesIds = user.getBookmarkedPlaceGuidesIds();
-      Set<Long> bookmarkedPlaceGuidesIdsCopy = new HashSet<>(bookmarkedPlaceGuidesIds);
-      bookmarkedPlaceGuidesIdsCopy.remove(placeGuideId);
-      
-      // Update user with the new set.
-      saveUpdatedUser(user, bookmarkedPlaceGuidesIdsCopy);
-    } else {
-      throw new IllegalStateException("Cannot remove bookmarked place guides from non-existent user!");
-    }
-  }
-
-  private void saveUpdatedUser(User user, Set<Long> updatedBookmarkedPlaceGuidesIds) {
-    User updatedUser =
-        new User.Builder(user.getId(), user.getEmail())
-        .setBookmarkedPlaceGuidesIds(updatedBookmarkedPlaceGuidesIds)
-        .setName(user.getName())
-        .addSelfIntroduction(user.getSelfIntroduction())
-        .setPublicPortfolio(user.portfolioIsPublic())
-        .addImgKey(user.getImgKey())
-        .build();
-    userRepository.saveUser(updatedUser);
   }
 
   private PlaceGuide getPlaceGuideFromEntity(Entity placeGuideEntity) {

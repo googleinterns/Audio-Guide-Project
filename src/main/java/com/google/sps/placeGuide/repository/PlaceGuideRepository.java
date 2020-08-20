@@ -10,8 +10,6 @@ public interface PlaceGuideRepository {
 
   public void savePlaceGuide(PlaceGuide placeGuide);
 
-  public void bookmarkPlaceGuide(long placeGuideId, String userId);
-
   // @return all public {@code PlaceGuide}.
   public List<PlaceGuide> getAllPublicPlaceGuides();
 
@@ -27,8 +25,6 @@ public interface PlaceGuideRepository {
   public List<PlaceGuide> getCreatedPrivatePlaceGuides(String creatorId);
 
   public List<PlaceGuide> getBookmarkedPlaceGuides(String userId);
-
-  public void removeBookmarkedPlaceGuide(long placeGuideId, String userId);
 
   public void deletePlaceGuide(long placeGuideId);
 }

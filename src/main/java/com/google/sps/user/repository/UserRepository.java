@@ -35,5 +35,7 @@ public interface UserRepository {
 
   boolean existingUser(String id);
 
-  void bookmarkPlaceGuide
+  void bookmarkPlaceGuide(long placeGuideId, String userId);
+
+  void removeBookmarkedPlaceGuide(long placeGuideId, String userId);
 }
