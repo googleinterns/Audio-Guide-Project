@@ -59,11 +59,13 @@ public final class DatastorePlaceGuideRepositoryTest {
       new HashSet<>(Arrays.asList(A_PUBLIC_ID, B_PUBLIC_ID));
 
   private final User testUser = 
-      new User.Builder(OTHER_USER_ID, OTHER_USER_EMAIL, OTHER_USER_BOOKMARKED_PLACE_GUIDES_IDS)
+      new User.Builder(OTHER_USER_ID, OTHER_USER_EMAIL)
+      .setBookmarkedPlaceGuidesIds(OTHER_USER_BOOKMARKED_PLACE_GUIDES_IDS)
       .build();
 
   private final User userA = 
-      new User.Builder(CREATOR_A_ID, CREATOR_A_EMAIL, CREATOR_A_BOOKMARKED_PLACE_GUIDES_IDS)
+      new User.Builder(CREATOR_A_ID, CREATOR_A_EMAIL)
+      .setBookmarkedPlaceGuidesIds(CREATOR_A_BOOKMARKED_PLACE_GUIDES_IDS)
       .build();
 
   private final PlaceGuide testPublicPlaceGuideA = 

@@ -173,7 +173,8 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository {
 
   private void saveUpdatedUser(User user, Set<Long> updatedBookmarkedPlaceGuidesIds) {
     User updatedUser =
-        new User.Builder(user.getId(), user.getEmail(), updatedBookmarkedPlaceGuidesIds)
+        new User.Builder(user.getId(), user.getEmail())
+        .setBookmarkedPlaceGuidesIds(updatedBookmarkedPlaceGuidesIds)
         .setName(user.getName())
         .addSelfIntroduction(user.getSelfIntroduction())
         .setPublicPortfolio(user.portfolioIsPublic())
