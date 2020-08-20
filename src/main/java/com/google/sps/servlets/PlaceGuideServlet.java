@@ -91,7 +91,7 @@ public class PlaceGuideServlet extends HttpServlet {
     List<PlaceGuideWithCreatorPair> placeGuideWithCreatorPairs = new ArrayList<>();
     for (PlaceGuide placeGuide : placeGuides) {
       placeGuideWithCreatorPairs.add(
-          PlaceGuideWithCreatorPair.createPlaceGuideWithCreatorPair(placeGuide));
+          PlaceGuideWithCreatorPair.matchPlaceGuideWithCreatorPair(placeGuide));
     }
     return placeGuideWithCreatorPairs;
   }

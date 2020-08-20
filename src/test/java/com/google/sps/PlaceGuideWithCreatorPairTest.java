@@ -87,7 +87,7 @@ public final class PlaceGuideWithCreatorPairTest {
   public void createPlaceGuideWithUserPair_existingUser_matchesPlaceGuideWithUser() {
     myUserRepository.saveUser(toSaveUser);
     PlaceGuideWithCreatorPair placeGuideWithCreatorPair =
-        PlaceGuideWithCreatorPair.createPlaceGuideWithCreatorPair(toMatchPlaceGuide);
+        PlaceGuideWithCreatorPair.matchPlaceGuideWithCreatorPair(toMatchPlaceGuide);
     assertEquals(toSaveUser, placeGuideWithCreatorPair.getCreator());
   }
 
@@ -97,7 +97,7 @@ public final class PlaceGuideWithCreatorPairTest {
   @Test
   public void createPlaceGuideWithUserPair_nonExistingUser_matchesPlaceGuideWithNullUser() {
     PlaceGuideWithCreatorPair placeGuideWithCreatorPair =
-        PlaceGuideWithCreatorPair.createPlaceGuideWithCreatorPair(toMatchPlaceGuide);
+        PlaceGuideWithCreatorPair.matchPlaceGuideWithCreatorPair(toMatchPlaceGuide);
     assertEquals(null, placeGuideWithCreatorPair.getCreator());
   }
 }
