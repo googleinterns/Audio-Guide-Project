@@ -60,8 +60,7 @@ public class UserCreationServlet extends HttpServlet {
   private User getLoggedInUser() {
     String id = userService.getCurrentUser().getUserId();
     String email = userService.getCurrentUser().getEmail();
-    Set<Long> bookmarkedPlaceGuidesIds = new HashSet<>();
-    User.Builder newUserBuilder = new User.Builder(id, email, bookmarkedPlaceGuidesIds);
+    User.Builder newUserBuilder = new User.Builder(id, email);
     return newUserBuilder.build();
   }
 
