@@ -71,7 +71,7 @@ public class PlaceGuideServlet extends HttpServlet {
     if (placeGuideQueryType.requiresCoordinates()) {
       String regionCornersString = request.getParameter(REGION_CORNERS_PARAMETER);
       // On the client-side, the LatLngBound class's toUrlValue function will generate a string with
-      // the values being comma-separated. I need to parse it here.
+      // the values being comma-separated. The string is parsed here.
       String[] cornerCoordinates = regionCornersString.split(",");
       southWestCorner =
           new GeoPt(Float.parseFloat(cornerCoordinates[0]), Float.parseFloat(cornerCoordinates[1]));
