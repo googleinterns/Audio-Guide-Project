@@ -93,6 +93,7 @@ public class DatastoreUserRepository implements UserRepository {
     return newUserBuilder.build();
   }
 
+  @Override
   public boolean existingUser(String id) {
       return getUser(id) != null;
   }

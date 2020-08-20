@@ -34,4 +34,6 @@ public interface UserRepository {
   User getUser(String id);
 
   boolean existingUser(String id);
+
+  void bookmarkPlaceGuide
 }
