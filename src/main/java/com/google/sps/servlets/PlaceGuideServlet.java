@@ -63,6 +63,7 @@ public class PlaceGuideServlet extends HttpServlet {
   public static final String DESCRIPTION_INPUT = "description";
   public static final String LENGTH_INPUT = "length";
   public static final String IMAGE_KEY_INPUT = "imageKey";
+  public static final String PLACE_NAME_INPUT = "placeName";
   public static final String PLACE_GUIDE_TYPE_PARAMETER = "placeGuideType";
 
   private final PlaceGuideRepository placeGuideRepository = 
@@ -159,6 +160,10 @@ public class PlaceGuideServlet extends HttpServlet {
     String imageKey = getUploadedFileBlobKey(request, IMAGE_KEY_INPUT);
     if (imageKey != null) {
       newPlaceGuideBuilder.setImageKey(imageKey);
+    }
+    String placeName = request.getParameter(PLACE_NAME_INPUT);
+    if (!placeName.isEmpty()) {
+      newPlaceGuideBuilder.setPlaceName(placeName);
     }
     return newPlaceGuideBuilder.build();
   }

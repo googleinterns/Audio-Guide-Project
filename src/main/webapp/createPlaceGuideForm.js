@@ -72,6 +72,7 @@ function fillFormWithPlaceGuideData(placeGuide) {
   if (placeGuide.imageKey != undefined) {
     setBlobKeySrcToElement(placeGuide.imageKey, "imagePreview", true);
   }
+  setFormInputValue(document.getElementById("placeName"), placeGuide.placeName);
 }
 
 function setBlobKeySrcToElement(blobKey, elementId, displayBlock) {

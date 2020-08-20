@@ -74,6 +74,7 @@ public final class DatastoreUserRepositoryTest {
   public static final String DESCRIPTION = "description";
   public static final String PREVIOUS_DESCRIPTION = "previous description";
   public static final String IMAGE_KEY = "imageKey";
+  public static final String PLACE_NAME = "placeName";
 
   public static final String OTHER_USER_EMAIL = "otherUser@gmail.com";
   public static final Set<Long> OTHER_USER_BOOKMARKED_PLACE_GUIDES_IDS = new HashSet<>();
@@ -98,11 +99,7 @@ public final class DatastoreUserRepositoryTest {
       .setLength(LENGTH)
       .setDescription(DESCRIPTION)
       .setImageKey(IMAGE_KEY)
-      .build();
-
-  private final PlaceGuide previousTestPublicPlaceGuideA = 
-      new PlaceGuide.Builder(A_PUBLIC_ID, PLACE_GUIDE_NAME, AUDIO_KEY, CREATOR_A_ID, COORDINATE)
-      .setPlaceGuideStatus(IS_PUBLIC)
+      .setPlaceName(PLACE_NAME)
       .build();
 
   private final PlaceGuide testPrivatePlaceGuideA = 
@@ -111,6 +108,7 @@ public final class DatastoreUserRepositoryTest {
       .setLength(LENGTH)
       .setDescription(DESCRIPTION)
       .setImageKey(IMAGE_KEY)
+      .setPlaceName(PLACE_NAME)
       .build();
 
   private final PlaceGuide testPublicPlaceGuideB = 
@@ -120,6 +118,7 @@ public final class DatastoreUserRepositoryTest {
       .setLength(LENGTH)
       .setDescription(DESCRIPTION)
       .setImageKey(IMAGE_KEY)
+      .setPlaceName(PLACE_NAME)
       .build();
 
   private final PlaceGuide testPrivatePlaceGuideB = 
@@ -128,6 +127,7 @@ public final class DatastoreUserRepositoryTest {
       .setLength(LENGTH)
       .setDescription(DESCRIPTION)
       .setImageKey(IMAGE_KEY)
+      .setPlaceName(PLACE_NAME)
       .build();
 
   private void saveTestPlaceGuidesEntities(List<PlaceGuide> placeGuides) {
@@ -157,6 +157,8 @@ public final class DatastoreUserRepositoryTest {
         DatastorePlaceGuideRepository.LENGTH_PROPERTY, placeGuide.getLength());
     placeGuideEntity.setProperty(
         DatastorePlaceGuideRepository.IMAGE_KEY_PROPERTY, placeGuide.getImageKey());
+    placeGuideEntity.setProperty(
+        DatastorePlaceGuideRepository.PLACE_NAME_PROPERTY, placeGuide.getPlaceName());
     return placeGuideEntity;
   }
 
@@ -183,8 +185,10 @@ public final class DatastoreUserRepositoryTest {
   public void getUser_existingUser_returnsUserEqualToSavedUser() {
     // Create entity to save.
     Entity userEntity = new Entity(DatastoreUserRepository.ENTITY_KIND, toSaveUser.getId());
-    userEntity.setProperty(DatastoreUserRepository.NAME_PROPERTY, toSaveUser.getName());
-    userEntity.setProperty(DatastoreUserRepository.EMAIL_PROPERTY, toSaveUser.getEmail());
+    userEntity.setProperty(
+        DatastoreUserRepository.NAME_PROPERTY, toSaveUser.getName());
+    userEntity.setProperty(
+        DatastoreUserRepository.EMAIL_PROPERTY, toSaveUser.getEmail());
     userEntity.setProperty(
         DatastoreUserRepository.BOOKMARKED_PLACE_GUIDES_IDS_PROPERTY, 
         toSaveUser.getBookmarkedPlaceGuidesIds());
@@ -192,7 +196,8 @@ public final class DatastoreUserRepositoryTest {
         DatastoreUserRepository.PUBLIC_PORTFOLIO_PROPERTY, toSaveUser.portfolioIsPublic());
     userEntity.setProperty(
         DatastoreUserRepository.SELF_INTRODUCTION_PROPERTY, toSaveUser.getSelfIntroduction());
-    userEntity.setProperty(DatastoreUserRepository.IMG_KEY_PROPERTY, toSaveUser.getImgKey());
+    userEntity.setProperty(
+        DatastoreUserRepository.IMG_KEY_PROPERTY, toSaveUser.getImgKey());
 
     // Save entity to datastore.
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();

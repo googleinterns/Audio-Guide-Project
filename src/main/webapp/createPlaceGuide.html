@@ -4,6 +4,7 @@
     <meta charset = "UTF-8">
     <title>Create Place Guide</title>
     <script src = "setupCreatePlaceGuide.js"></script>
+    <link rel = "stylesheet" href = "style.css">
 </head>
 <body onload = "setUpCreatePlaceGuidePage()">
 <div id="createPlaceGuide">
@@ -50,9 +51,9 @@
             <label for = "placeName">place name : </label><br>
             <input type = "text" name = "placeName" id = "placeName" readonly><br>
             <label for = "latitude">latitude : </label><br>
-            <input type = "text" name = "latitude" id = "latitude" required><br>
+            <input type = "text" name = "latitude" id = "latitude" required onkeypress="return false;"><br>
             <label for = "longitude">longitude : </label><br>
-            <input type = "text" name = "longitude" id = "longitude" required><br>
+            <input type = "text" name = "longitude" id = "longitude" required onkeypress="return false;"><br>
             <br>        
         </fieldset>
         <input type = "submit" value = "Submit">
