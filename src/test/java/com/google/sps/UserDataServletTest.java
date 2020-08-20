@@ -57,13 +57,13 @@ public final class UserDataServletTest {
   private static final String IMG_KEY = "/img.com";
 
   private final User toSaveUser =
-      new User.Builder(ID, EMAIL, BOOKMARKED_PLACE_GUIDES_IDS)
+      new User.Builder(ID, EMAIL)
+          .setBookmarkedPlaceGuidesIds(BOOKMARKED_PLACE_GUIDES_IDS)
           .setName(NAME)
           .setPublicPortfolio(true)
           .addSelfIntroduction(SELF_INTRODUCTION)
           .addImgKey(IMG_KEY)
           .build();
-  private User toGetUser;
 
   private UserDataServlet userDataServlet;
   private Map<String, Object> attributeToValue = new HashMap<>();
