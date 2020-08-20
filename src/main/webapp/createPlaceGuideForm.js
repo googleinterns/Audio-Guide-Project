@@ -68,10 +68,7 @@ function fillFormWithPlaceGuideData(placeGuides) {
     const placeGuide = placeGuides[0];
     setFormInputValue(document.getElementById("id"), placeGuide.id);
     setFormInputValue(document.getElementById("name"), placeGuide.name);
-    const audioSrc = new URL("/serve-blob", document.URL);
-    audioSrc.searchParams.append('blob-key', placeGuide.audioKey);
-    const audioPlayer = document.getElementById("audioPlayer");
-    audioPlayer.setAttribute("src", audioSrc);
+    setBlobKeySrcToElement(placeGuide.audioKey, "audioPlayer", false);
     if (placeGuide.isPublic) {
       document.getElementById("isPublic").value = "public";
     } else {
@@ -82,11 +79,17 @@ function fillFormWithPlaceGuideData(placeGuides) {
     setFormInputValue(document.getElementById("length"), placeGuide.length);
     setFormInputValue(document.getElementById("description"), placeGuide.description);
     if (placeGuide.imageKey != undefined) {
-      const imagePreview = document.getElementById("imagePreview");
-      imagePreview.style.display = "block";
-      const imageSrc = new URL("/serve-blob", document.URL);
-      imageSrc.searchParams.append('blob-key', placeGuide.imageKey);
-      imagePreview.setAttribute("src", imageSrc);
+      setBlobKeySrcToElement(placeGuide.imageKey, "imagePreview", true);
     }
   }
+}
+
+function setBlobKeySrcToElement(blobKey, elementId, displayBlock) {
+  const element = document.getElementById(elementId);
+  if (displayBlock) {
+    element.style.display = "block";
+  }
+  const src = new URL("/serve-blob", document.URL);
+  src.searchParams.append('blob-key', blobKey);
+  element.setAttribute("src", src);
 }
