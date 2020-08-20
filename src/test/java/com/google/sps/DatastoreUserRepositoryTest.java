@@ -46,7 +46,8 @@ public final class DatastoreUserRepositoryTest {
   private static final String IMG_KEY = "img1234";
 
   private final User toSaveUser =
-      new User.Builder(ID, EMAIL, BOOKMARKED_PLACE_GUIDES_IDS)
+      new User.Builder(ID, EMAIL)
+          .setBookmarkedPlaceGuidesIds(BOOKMARKED_PLACE_GUIDES_IDS)
           .setName(NAME)
           .addSelfIntroduction(SELF_INTRODUCTION)
           .addImgKey(IMG_KEY)

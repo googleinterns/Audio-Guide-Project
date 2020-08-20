@@ -84,7 +84,8 @@ public class DatastoreUserRepository implements UserRepository {
     String selfIntroduction = (String) userEntity.getProperty(SELF_INTRODUCTION_PROPERTY);
     String imgKey = (String) userEntity.getProperty(IMG_KEY_PROPERTY);
     User.Builder newUserBuilder =
-        new User.Builder(id, email, bookmarkedPlaceGuidesIds)
+        new User.Builder(id, email)
+        .setBookmarkedPlaceGuidesIds(bookmarkedPlaceGuidesIds)
         .setName(name)
         .addSelfIntroduction(selfIntroduction)
         .setPublicPortfolio(publicPortfolio)
