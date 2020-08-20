@@ -36,7 +36,7 @@ public class PlaceGuideWithCreatorPair {
     this.placeGuide = placeGuide;
   }
 
-  public static PlaceGuideWithCreatorPair matchPlaceGuideWithCreatorPair(PlaceGuide placeGuide) {
+  public static PlaceGuideWithCreatorPair matchPlaceGuideWithCreator(PlaceGuide placeGuide) {
     User creator = userRepository.getUser(placeGuide.getCreatorId());
     return new PlaceGuideWithCreatorPair(creator, placeGuide);
   }
