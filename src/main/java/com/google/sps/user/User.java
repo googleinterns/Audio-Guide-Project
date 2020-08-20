@@ -17,6 +17,7 @@ package com.google.sps.user;
 import java.util.Objects;
 import org.jetbrains.annotations.Nullable;
 import java.util.Set;
+import java.util.HashSet;
 import java.util.Collections;
 
 /**
@@ -48,12 +49,16 @@ public class User {
     @Nullable
     private String imgKey;
     private boolean publicPortfolio = false;
-    private final Set<Long> bookmarkedPlaceGuidesIds;
+    private Set<Long> bookmarkedPlaceGuidesIds = new HashSet<>();
 
-    public Builder(String id, String email, Set<Long> bookmarkedPlaceGuidesIds) {
+    public Builder(String id, String email) {
       this.id = id;
       this.email = email;
+    }
+
+    public Builder setBookmarkedPlaceGuidesIds(Set<Long> bookmarkedPlaceGuidesIds) {
       this.bookmarkedPlaceGuidesIds = bookmarkedPlaceGuidesIds;
+      return this;
     }
 
     public Builder setName(String name) {
