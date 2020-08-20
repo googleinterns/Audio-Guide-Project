@@ -7,33 +7,24 @@ function setUpCreatePlaceGuideForm() {
 }
 
 function activatePreviewFeature() {
+  setSrcToElementOnChangeEvent("imageKey", "imagePreview", true);
+  setSrcToElementOnChangeEvent("audioKey", "audioPlayer", false);
+}
 
-  const imageInput = document.getElementById("imageKey");
-  const imagePreview = document.getElementById("imagePreview");
-  // Previewing files uploaded by user.
-  imageInput.addEventListener("change", function() {
+function setSrcToElementOnChangeEvent(elementId, previewId, displayBlock) {
+  const element = document.getElementById(elementId);
+  const preview = document.getElementById(previewId);
+  element.addEventListener("change", function() {
     const file = this.files[0];
 
     if (file) {
       const reader = new FileReader();
-      imagePreview.style.display = "block";
+      if (displayBlock) {
+        preview.style.display = "block"; 
+      }
 
       reader.addEventListener("load", function() {
-        imagePreview.setAttribute("src", this.result);
-      });
-
-      reader.readAsDataURL(file);
-    }
-  });
-  const audioInput = document.getElementById("audioKey");
-  const audioPlayer = document.getElementById("audioPlayer");
-  audioInput.addEventListener("change", function() {
-    const file = this.files[0];
-    if (file) {
-      const reader = new FileReader();
-
-      reader.addEventListener("load", function() {
-        audioPlayer.setAttribute('src', this.result);
+        preview.setAttribute("src", this.result);
       });
 
       reader.readAsDataURL(file);
@@ -45,7 +36,11 @@ function activatePreviewFeature() {
 // to see if image and audio previewing also works with files from blobstore.
 function testExistingPlaceGuide() {
   getFetchedList().then(placeGuides => {
-    fillFormWithPlaceGuideData(placeGuides)
+    if (placeGuides === undefined || placeGuides.length == 0) {
+      console.log("place guide does not exist yet.");
+    } else {
+      fillFormWithPlaceGuideData(placeGuides[0]); 
+    }
   });
 }
 
@@ -61,26 +56,21 @@ function testGivenCoordinate() {
   document.getElementById("longitude").setAttribute("value", 2.56);
 }
 
-function fillFormWithPlaceGuideData(placeGuides) {
-  if (placeGuides === undefined || placeGuides.length == 0) {
-    console.log("place guide does not exist yet.");
+function fillFormWithPlaceGuideData(placeGuide) {
+  setFormInputValue(document.getElementById("id"), placeGuide.id);
+  setFormInputValue(document.getElementById("name"), placeGuide.name);
+  setBlobKeySrcToElement(placeGuide.audioKey, "audioPlayer", false);
+  if (placeGuide.isPublic) {
+    document.getElementById("isPublic").value = "public";
   } else {
-    const placeGuide = placeGuides[0];
-    setFormInputValue(document.getElementById("id"), placeGuide.id);
-    setFormInputValue(document.getElementById("name"), placeGuide.name);
-    setBlobKeySrcToElement(placeGuide.audioKey, "audioPlayer", false);
-    if (placeGuide.isPublic) {
-      document.getElementById("isPublic").value = "public";
-    } else {
-      document.getElementById("isPublic").value = "private";
-    }
-    setFormInputValue(document.getElementById("latitude"), placeGuide.coordinate.latitude);
-    setFormInputValue(document.getElementById("longitude"), placeGuide.coordinate.longitude);
-    setFormInputValue(document.getElementById("length"), placeGuide.length);
-    setFormInputValue(document.getElementById("description"), placeGuide.description);
-    if (placeGuide.imageKey != undefined) {
-      setBlobKeySrcToElement(placeGuide.imageKey, "imagePreview", true);
-    }
+    document.getElementById("isPublic").value = "private";
+  }
+  setFormInputValue(document.getElementById("latitude"), placeGuide.coordinate.latitude);
+  setFormInputValue(document.getElementById("longitude"), placeGuide.coordinate.longitude);
+  setFormInputValue(document.getElementById("length"), placeGuide.length);
+  setFormInputValue(document.getElementById("description"), placeGuide.description);
+  if (placeGuide.imageKey != undefined) {
+    setBlobKeySrcToElement(placeGuide.imageKey, "imagePreview", true);
   }
 }
 
