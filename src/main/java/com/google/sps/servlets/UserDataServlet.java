@@ -109,13 +109,11 @@ public class UserDataServlet extends HttpServlet {
   private User getUserFromRequest(HttpServletRequest request, User prevUserData) {
     String id = userService.getCurrentUser().getUserId();
     String email = userService.getCurrentUser().getEmail();
-    Set<Long> bookmarkedPlaceGuidesIds;
+    User.Builder newUserBuilder = new User.Builder(id, email);
     if (prevUserData != null && !prevUserData.getBookmarkedPlaceGuidesIds().isEmpty()) {
-      bookmarkedPlaceGuidesIds = prevUserData.getBookmarkedPlaceGuidesIds();
-    } else {
-      bookmarkedPlaceGuidesIds = new HashSet<>();
+      Set<Long> bookmarkedPlaceGuidesIds = prevUserData.getBookmarkedPlaceGuidesIds();
+      newUserBuilder.setBookmarkedPlaceGuidesIds(bookmarkedPlaceGuidesIds);
     }
-    User.Builder newUserBuilder = new User.Builder(id, email, bookmarkedPlaceGuidesIds);
     String name = request.getParameter(NAME_INPUT);
     if (!name.isEmpty()) {
       newUserBuilder.setName(name);
