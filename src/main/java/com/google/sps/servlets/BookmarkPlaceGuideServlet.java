@@ -60,10 +60,10 @@ public class BookmarkPlaceGuideServlet extends HttpServlet {
       BookmarkPlaceGuideQueryType bookmarkPlaceGuideQueryType, long placeGuideId) {
     switch(bookmarkPlaceGuideQueryType) {
       case BOOKMARK:
-        userRepository.bookmarkPlaceGuide();
+        userRepository.bookmarkPlaceGuide(placeGuideId, userId);
         break;
       case REMOVE:
-        userRepository.removeBookmarkedPlaceGuide();
+        userRepository.removeBookmarkedPlaceGuide(placeGuideId, userId);
         break;
       default:
         throw new IllegalStateException("Bookmark handling type does not exist!");

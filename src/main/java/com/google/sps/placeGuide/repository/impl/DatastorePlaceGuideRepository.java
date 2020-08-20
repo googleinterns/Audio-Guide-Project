@@ -132,6 +132,18 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository {
     }
   }
 
+  private void saveUpdatedUser(User user, Set<Long> updatedBookmarkedPlaceGuidesIds) {
+    User updatedUser =
+        new User.Builder(user.getId(), user.getEmail())
+        .setBookmarkedPlaceGuidesIds(updatedBookmarkedPlaceGuidesIds)
+        .setName(user.getName())
+        .addSelfIntroduction(user.getSelfIntroduction())
+        .setPublicPortfolio(user.portfolioIsPublic())
+        .addImgKey(user.getImgKey())
+        .build();
+    userRepository.saveUser(updatedUser);
+  }
+
   private PlaceGuide getPlaceGuideFromEntity(Entity placeGuideEntity) {
     long id = placeGuideEntity.getKey().getId();
     String name = (String) placeGuideEntity.getProperty(NAME_PROPERTY);
