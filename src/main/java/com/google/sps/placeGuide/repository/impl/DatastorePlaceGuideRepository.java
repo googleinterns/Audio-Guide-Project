@@ -174,4 +174,9 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository {
     Key placeGuideEntityKey = KeyFactory.createKey(ENTITY_KIND, placeGuideId);
     datastore.delete(placeGuideEntityKey);
   }
+
+  @Override
+  public boolean placeGuideExists() {
+     
+  }
 }

@@ -63,6 +63,7 @@ public class PlaceGuideServlet extends HttpServlet {
   public static final String DESCRIPTION_INPUT = "description";
   public static final String LENGTH_INPUT = "length";
   public static final String IMAGE_KEY_INPUT = "imageKey";
+  public static final String DELETE_IMAGE_INPUT = "deleteImage";
   public static final String PLACE_NAME_INPUT = "placeName";
   public static final String PLACE_GUIDE_TYPE_PARAMETER = "placeGuideType";
 
@@ -125,6 +126,12 @@ public class PlaceGuideServlet extends HttpServlet {
   private PlaceGuide getPlaceGuideFromRequest(HttpServletRequest request) {
     String name = request.getParameter(NAME_INPUT);
     String audioKey = getUploadedFileBlobKey(request, AUDIO_KEY_INPUT);
+
+    // The audioKey can be null if the user did not upload any audio file. Hence, it will
+    // get the previous audioKey.
+    if (audioKey == null) {
+      audioKey
+    }
     float latitude = Float.parseFloat(request.getParameter(LATITUDE_INPUT));
     float longitude = Float.parseFloat(request.getParameter(LONGITUDE_INPUT));
     GeoPt coordinate = new GeoPt(latitude, longitude);

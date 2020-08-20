@@ -60,6 +60,9 @@ function testGivenCoordinate() {
 }
 
 function fillFormWithPlaceGuideData(placeGuide) {
+  // Set required attribute to false.
+  document.getElementById("audioKey").required = false;
+
   setFormInputValue(document.getElementById("id"), placeGuide.id);
   setFormInputValue(document.getElementById("name"), placeGuide.name);
   setBlobKeySrcToElement("audioKey", placeGuide.audioKey, "audioPlayer", false);
