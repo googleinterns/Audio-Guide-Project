@@ -199,40 +199,6 @@ public final class DatastorePlaceGuideRepositoryTest {
   }
 
   @Test
-  public void bookmarkPlaceGuide_existingUserAndExistingPlaceGuide_bookmarkedPlaceGuidesContainsPlaceGuideId() {
-    // Save testUser to datastore using userRepository.
-    userRepository.saveUser(testUser);
-    
-    // Store place guide to datastore.
-    List<PlaceGuide> testPlaceGuidesList = Arrays.asList(testPublicPlaceGuideA,
-                                                         testPublicPlaceGuideB,
-                                                         testPrivatePlaceGuideB,
-                                                         testPrivatePlaceGuideA);
-    saveTestPlaceGuidesEntities(testPlaceGuidesList);
-
-    // testUser is bookmarking public place guide a. 
-    placeGuideRepository.bookmarkPlaceGuide(A_PUBLIC_ID, OTHER_USER_ID);
-
-    // Check whether the place guide is inside testUser's bookmarkedPlaceGuides list.
-    Set<Long> expected = new HashSet<>(Arrays.asList(A_PUBLIC_ID));
-    Set<Long> result = userRepository.getUser(OTHER_USER_ID).getBookmarkedPlaceGuidesIds();
-    assertEquals(expected, result);
-  }
-
-  @Test(expected = IllegalStateException.class)
-  public void bookmarkPlaceGuide_InexistentUserAndExistingPlaceGuide_throwsError() {
-    // Store place guide to datastore.
-    List<PlaceGuide> testPlaceGuidesList = Arrays.asList(testPublicPlaceGuideA,
-                                                         testPublicPlaceGuideB,
-                                                         testPrivatePlaceGuideB,
-                                                         testPrivatePlaceGuideA);
-    saveTestPlaceGuidesEntities(testPlaceGuidesList);
-
-    // testUser is bookmarking public place guide a. 
-    placeGuideRepository.bookmarkPlaceGuide(A_PUBLIC_ID, OTHER_USER_ID);
-  }
-
-  @Test
   public void getAllPublicPlaceGuides_placeGuideExists_returnPlaceGuide() {
     List<PlaceGuide> testPlaceGuidesList = Arrays.asList(testPublicPlaceGuideA,
                                                          testPublicPlaceGuideB,
@@ -395,18 +361,6 @@ public final class DatastorePlaceGuideRepositoryTest {
   @Test(expected = IllegalStateException.class)
   public void removeBookmarkedPlaceGuide_userDoesntExist_throwsError() {
     placeGuideRepository.removeBookmarkedPlaceGuide(A_PUBLIC_ID, CREATOR_A_ID);
-  }
-
-  @Test
-  public void removeBookmarkedPlaceGuide_userHasBookmarkedPlaceGuide_selectedPlaceGuideRemoved() {
-    // Store user A.
-    userRepository.saveUser(userA);
-
-    placeGuideRepository.removeBookmarkedPlaceGuide(A_PUBLIC_ID, CREATOR_A_ID);
-    User testUserA = userRepository.getUser(CREATOR_A_ID);
-    Set<Long> expected = new HashSet<>(Arrays.asList(B_PUBLIC_ID));
-    Set<Long> result = testUserA.getBookmarkedPlaceGuidesIds();
-    assertEquals(expected, result);
   }
 
   @Test
