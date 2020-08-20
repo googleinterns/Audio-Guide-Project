@@ -102,9 +102,8 @@ public class DatastoreUserRepository implements UserRepository {
   public void bookmarkPlaceGuide(long placeGuideId, String userId) {
     // Check if the corresponding placeGuide is in the database.
     Key placeGuideEntityKey = KeyFactory.createKey(ENTITY_KIND, placeGuideId);
-    try {
-      Entity placeGuideEntity = datastore.get(placeGuideEntityKey);
-      User user = userRepository.getUser(userId);
+    if (placeGuideExists(placeGuideEntityKey)) {
+      User user = getUser(userId);
       if (user != null) {
         Set<Long> bookmarkedIds = user.getBookmarkedPlaceGuidesIds();
         Set<Long> bookmarkedIdsCopy = new HashSet<>(bookmarkedIds);
@@ -113,17 +112,15 @@ public class DatastoreUserRepository implements UserRepository {
       // Update and save user with the updated {@code bookmarkedPlaceGuides}.
         saveUpdatedUser(user, bookmarkedIdsCopy);
       } else {
-        throw new IllegalStateException("Non existent user cannot bookmark a place guide!");
+        throw new IllegalStateException("Non-existing user cannot bookmark a place guide!");
       }
-
-    } catch(EntityNotFoundException err) {
-      System.out.println("No existing corresponding place guides.");
+    } else {
+      throw new IllegalStateException("Can't bookmark a non-existing place guide!");
     }
-    placeGuideEnt
-
   }
 
-  private boolean placeGuideEntityExists(placeGuideEntityKey) {
+  private boolean placeGuideExists(Key placeGuideEntityKey) {
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     try {
       datastore.get(placeGuideEntityKey);
       return true;
@@ -134,7 +131,7 @@ public class DatastoreUserRepository implements UserRepository {
 
   @Override
   public void removeBookmarkedPlaceGuide(long placeGuideId, String userId) {
-    User user = userRepository.getUser(userId);
+    User user = getUser(userId);
     if (user != null) {
       Set<Long> bookmarkedPlaceGuidesIds = user.getBookmarkedPlaceGuidesIds();
       Set<Long> bookmarkedPlaceGuidesIdsCopy = new HashSet<>(bookmarkedPlaceGuidesIds);
@@ -156,6 +153,6 @@ public class DatastoreUserRepository implements UserRepository {
         .setPublicPortfolio(user.portfolioIsPublic())
         .addImgKey(user.getImgKey())
         .build();
-    userRepository.saveUser(updatedUser);
+    saveUser(updatedUser);
   }
 }
