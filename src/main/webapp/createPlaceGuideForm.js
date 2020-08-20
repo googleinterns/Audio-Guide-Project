@@ -16,6 +16,7 @@ function setSrcToElementOnChangeEvent(elementId, previewId, displayBlock) {
   const preview = document.getElementById(previewId);
   element.addEventListener("change", function() {
     const file = this.files[0];
+    console.log(this.files);
 
     if (file) {
       const reader = new FileReader();
@@ -44,6 +45,7 @@ function testExistingPlaceGuide() {
   });
 }
 
+// For testing.
 async function getFetchedList() {
   return fetch('/place-guide-data?placeGuideType=ALL_PUBLIC', {method: 'GET'})
   .then((response) => {
@@ -51,6 +53,7 @@ async function getFetchedList() {
   });
 }
 
+// For testing.
 function testGivenCoordinate() {
   document.getElementById("latitude").setAttribute("value", 3.14);
   document.getElementById("longitude").setAttribute("value", 2.56);
@@ -59,7 +62,7 @@ function testGivenCoordinate() {
 function fillFormWithPlaceGuideData(placeGuide) {
   setFormInputValue(document.getElementById("id"), placeGuide.id);
   setFormInputValue(document.getElementById("name"), placeGuide.name);
-  setBlobKeySrcToElement(placeGuide.audioKey, "audioPlayer", false);
+  setBlobKeySrcToElement("audioKey", placeGuide.audioKey, "audioPlayer", false);
   if (placeGuide.isPublic) {
     document.getElementById("isPublic").value = "public";
   } else {
@@ -70,17 +73,18 @@ function fillFormWithPlaceGuideData(placeGuide) {
   setFormInputValue(document.getElementById("length"), placeGuide.length);
   setFormInputValue(document.getElementById("description"), placeGuide.description);
   if (placeGuide.imageKey != undefined) {
-    setBlobKeySrcToElement(placeGuide.imageKey, "imagePreview", true);
+    setBlobKeySrcToElement("imageKey", placeGuide.imageKey, "imagePreview", true);
   }
   setFormInputValue(document.getElementById("placeName"), placeGuide.placeName);
 }
 
-function setBlobKeySrcToElement(blobKey, elementId, displayBlock) {
-  const element = document.getElementById(elementId);
+function setBlobKeySrcToElement(inputId, blobKey, previewId, displayBlock) {
+  const input = document.getElementById(inputId);
+  const preview = document.getElementById(previewId);
   if (displayBlock) {
-    element.style.display = "block";
+    preview.style.display = "block";
   }
   const src = new URL("/serve-blob", document.URL);
   src.searchParams.append('blob-key', blobKey);
-  element.setAttribute("src", src);
+  preview.setAttribute("src", src);
 }
