@@ -157,4 +157,38 @@ public final class DatastoreUserRepositoryTest {
     boolean userExists = myUserRepository.existingUser(ID);
     assertFalse(userExists);
   }
+
+  @Test
+  public void bookmarkPlaceGuide_existingUserAndExistingPlaceGuide_bookmarkedPlaceGuidesContainsPlaceGuideId() {
+    // Save testUser to datastore using userRepository.
+    myUserRepository.saveUser(testUser);
+    
+    // Store place guide to datastore.
+    List<PlaceGuide> testPlaceGuidesList = Arrays.asList(testPublicPlaceGuideA,
+                                                         testPublicPlaceGuideB,
+                                                         testPrivatePlaceGuideB,
+                                                         testPrivatePlaceGuideA);
+    saveTestPlaceGuidesEntities(testPlaceGuidesList);
+
+    // testUser is bookmarking public place guide a. 
+    placeGuideRepository.bookmarkPlaceGuide(A_PUBLIC_ID, OTHER_USER_ID);
+
+    // Check whether the place guide is inside testUser's bookmarkedPlaceGuides list.
+    Set<Long> expected = new HashSet<>(Arrays.asList(A_PUBLIC_ID));
+    Set<Long> result = userRepository.getUser(OTHER_USER_ID).getBookmarkedPlaceGuidesIds();
+    assertEquals(expected, result);
+  }
+
+  @Test(expected = IllegalStateException.class)
+  public void bookmarkPlaceGuide_InexistentUserAndExistingPlaceGuide_throwsError() {
+    // Store place guide to datastore.
+    List<PlaceGuide> testPlaceGuidesList = Arrays.asList(testPublicPlaceGuideA,
+                                                         testPublicPlaceGuideB,
+                                                         testPrivatePlaceGuideB,
+                                                         testPrivatePlaceGuideA);
+    saveTestPlaceGuidesEntities(testPlaceGuidesList);
+
+    // testUser is bookmarking public place guide a. 
+    placeGuideRepository.bookmarkPlaceGuide(A_PUBLIC_ID, OTHER_USER_ID);
+  }
 }
