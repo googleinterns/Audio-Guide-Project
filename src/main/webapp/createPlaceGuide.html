@@ -37,8 +37,8 @@
         <label for = "description">Description:</label><br>
         <textarea name = "description" rows = "4" cols = "50" id = "description"></textarea>
         <br>
-        <label for = "length">Amount of time needed:</label><br>
-        <input type = "text" name = "length" id = "length"><br>
+        <label for = "length">Amount of time needed in minute(s):</label><br>
+        <input type = "number" name = "length" id = "length" min = "0"><br>
         <label for = "isPublic">Place Guide Status:</label>
         <select name = "isPublic" id = "isPublic">
             <option value = "public">public</option>
@@ -46,7 +46,9 @@
         </select>
         <br>
         <fieldset>
-            <legend>Coordinate: </legend>
+            <legend>Chosen place description: </legend>
+            <label for = "placeName">place name : </label><br>
+            <input type = "placeName" name = "placeName" id = "placeName" readonly><br>
             <label for = "latitude">latitude : </label><br>
             <input type = "text" name = "latitude" id = "latitude" required onkeypress="return false;"><br>
             <label for = "longitude">longitude : </label><br>
