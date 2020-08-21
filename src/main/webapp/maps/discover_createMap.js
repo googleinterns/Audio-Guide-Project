@@ -8,4 +8,6 @@ function createMap() {
    var map = new MapWidget();
    map.addGeolocationFunctionality();
    map.addSearchingFunctionality();
+   var placeGuideRepository = new PlaceGuideRepository(PlaceGuideRepository.QueryType.ALL_PUBLIC_IN_MAP_AREA);
+   var placeGuideManager = new PlaceGuideManager(map, placeGuideRepository);
 }

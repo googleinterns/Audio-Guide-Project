@@ -9,6 +9,7 @@ class PlaceGuideRepository {
     constructor(queryType) {
         this._queryType = queryType;
         this._placeGuides = {}; // Init dictionary. 
+        console.log("PlaceGuideRepository constructed");
     }
 
     updatePlaceGuides() {
