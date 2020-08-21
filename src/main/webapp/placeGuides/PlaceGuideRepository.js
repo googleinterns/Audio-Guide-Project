@@ -18,9 +18,8 @@ class PlaceGuideRepository {
             .catch(error => console.log("PlaceGuideServlet: failed to fetch: " + error))
             .then(response => response.json())
             .catch(error => console.log('updatePlaceGuides: failed to convert response to JSON' + error))
-            .then(placeGuideWithCreatorPairs => {
-            
-            });
+            .then(placeGuideWithCreatorPairs => this._placeGudies = buildPlaceGuideDictionaryFromResponse(placeGuideWithCreatorPairs))
+            .catch(error => "updatePlaceGuides: unable to build placeGuide dictionary: " + error);
     }
 
     get placeGuides() {
