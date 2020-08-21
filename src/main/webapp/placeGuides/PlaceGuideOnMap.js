@@ -7,7 +7,18 @@ class PlaceGuideOnMap {
         this._marker = PlaceGuideOnMap.setupMarker(map, placeType, name, position);
         this.closeInfoWindowOnMapClick();
         this.toggleInfoWindowOnMarkerClick();
-        //this.highlightPlaceGuideOnMarkerDoubleClick();
+        this.highlightPlaceGuideOnMarkerDoubleClick();
+        this.stopAnimationOnMarkerClick();
+        this.stopanimationOnMapClick();
+    }
+
+    highlight() {
+        this._marker.setAnimation(google.maps.Animation.BOUNCE);
+    }
+
+    highlightPlaceGuideOnMarkerDoubleClick() {
+        var thisPlaceGuideOnMap = this;
+        this._marker.addListener("dblclick", placeGuideManager.highlight(thisPlaceGuideOnMap._id));
     }
 
     toggleInfoWindowOnMarkerClick() {
@@ -21,12 +32,26 @@ class PlaceGuideOnMap {
         });
     }
 
+    stopAnimationOnMarkerClick() {
+        var thisPlaceGuideOnMap = this;
+        this._marker.addListener('click', () => {
+            thisPlaceGuideOnMap._marker.setAnimation(null);
+        });
+    }
+
     closeInfoWindowOnMapClick() {
         var thisPlaceGuideOnMap = this;
         this._map.addListener('click', function (mapsMouseEvent) {
             if (!thisPlaceGuideOnMap._infoWindowClosed) {
                 thisPlaceGuideOnMap.closeInfoWindow();
             }
+        });
+    }
+
+    stopAnimationOnMapClick() {
+        var thisPlaceGuideOnMap = this;
+        this._map.addListener('click', function (mapsMouseEvent) {
+            thisPlaceGuideOnMap._marker.setAnimation(null);
         });
     }
 
