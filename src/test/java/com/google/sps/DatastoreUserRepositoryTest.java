@@ -74,7 +74,6 @@ public final class DatastoreUserRepositoryTest {
   public static final String DESCRIPTION = "description";
   public static final String PREVIOUS_DESCRIPTION = "previous description";
   public static final String IMAGE_KEY = "imageKey";
-  public static final String PLACE_NAME = "placeName";
 
   public static final String OTHER_USER_EMAIL = "otherUser@gmail.com";
   public static final Set<Long> OTHER_USER_BOOKMARKED_PLACE_GUIDES_IDS = new HashSet<>();
@@ -99,7 +98,6 @@ public final class DatastoreUserRepositoryTest {
       .setLength(LENGTH)
       .setDescription(DESCRIPTION)
       .setImageKey(IMAGE_KEY)
-      .setPlaceName(PLACE_NAME)
       .build();
 
   private final PlaceGuide testPrivatePlaceGuideA = 
@@ -108,7 +106,6 @@ public final class DatastoreUserRepositoryTest {
       .setLength(LENGTH)
       .setDescription(DESCRIPTION)
       .setImageKey(IMAGE_KEY)
-      .setPlaceName(PLACE_NAME)
       .build();
 
   private final PlaceGuide testPublicPlaceGuideB = 
@@ -118,7 +115,6 @@ public final class DatastoreUserRepositoryTest {
       .setLength(LENGTH)
       .setDescription(DESCRIPTION)
       .setImageKey(IMAGE_KEY)
-      .setPlaceName(PLACE_NAME)
       .build();
 
   private final PlaceGuide testPrivatePlaceGuideB = 
@@ -127,7 +123,6 @@ public final class DatastoreUserRepositoryTest {
       .setLength(LENGTH)
       .setDescription(DESCRIPTION)
       .setImageKey(IMAGE_KEY)
-      .setPlaceName(PLACE_NAME)
       .build();
 
   private void saveTestPlaceGuidesEntities(List<PlaceGuide> placeGuides) {
@@ -157,8 +152,6 @@ public final class DatastoreUserRepositoryTest {
         DatastorePlaceGuideRepository.LENGTH_PROPERTY, placeGuide.getLength());
     placeGuideEntity.setProperty(
         DatastorePlaceGuideRepository.IMAGE_KEY_PROPERTY, placeGuide.getImageKey());
-    placeGuideEntity.setProperty(
-        DatastorePlaceGuideRepository.PLACE_NAME_PROPERTY, placeGuide.getPlaceName());
     return placeGuideEntity;
   }
 

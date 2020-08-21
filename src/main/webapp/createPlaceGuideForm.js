@@ -1,3 +1,5 @@
+const DUMMY_DATA_FOR_PLACE_NAME = "placeName";
+
 /**
  * Handles setting up the create place guide form whenever the page is loaded.
  */
@@ -79,7 +81,7 @@ function fillFormWithPlaceGuideData(placeGuide) {
   if (placeGuide.imageKey != undefined) {
     setBlobKeySrcToElement("imageKey", placeGuide.imageKey, "imagePreview", true);
   }
-  setFormInputValue(document.getElementById("placeName"), placeGuide.placeName);
+  setFormInputValue(document.getElementById("placeName"), DUMMY_DATA_FOR_PLACE_NAME);
 }
 
 function setBlobKeySrcToElement(inputId, blobKey, previewId, displayBlock) {

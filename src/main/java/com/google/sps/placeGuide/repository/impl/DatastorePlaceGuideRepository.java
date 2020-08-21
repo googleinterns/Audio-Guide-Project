@@ -36,7 +36,6 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository {
   public static final String DESCRIPTION_PROPERTY = "description";
   public static final String LENGTH_PROPERTY = "length";
   public static final String IMAGE_KEY_PROPERTY = "imageKey";
-  public static final String PLACE_NAME_PROPERTY = "placeName";
 
   @Override
   public long saveAndGeneratePlaceGuideId() {
@@ -63,7 +62,6 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository {
     placeGuideEntity.setProperty(DESCRIPTION_PROPERTY, placeGuide.getDescription());
     placeGuideEntity.setProperty(LENGTH_PROPERTY, placeGuide.getLength());
     placeGuideEntity.setProperty(IMAGE_KEY_PROPERTY, placeGuide.getImageKey());
-    placeGuideEntity.setProperty(PLACE_NAME_PROPERTY, placeGuide.getPlaceName());
 
     return placeGuideEntity;
   }
@@ -176,7 +174,6 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository {
     String description = (String) placeGuideEntity.getProperty(DESCRIPTION_PROPERTY);
     long length = (long) placeGuideEntity.getProperty(LENGTH_PROPERTY);
     String imageKey = (String) placeGuideEntity.getProperty(IMAGE_KEY_PROPERTY);
-    String placeName = (String) placeGuideEntity.getProperty(PLACE_NAME_PROPERTY);
     PlaceGuide placeGuide = 
         new PlaceGuide.Builder(id, name, audioKey, creatorId, coordinate)
             .setPlaceId(placeId)
@@ -184,7 +181,6 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository {
             .setDescription(description)
             .setImageKey(imageKey)
             .setPlaceGuideStatus(isPublic)
-            .setPlaceName(placeName)
             .build();
     return placeGuide;
   }

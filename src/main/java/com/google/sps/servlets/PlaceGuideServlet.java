@@ -64,7 +64,6 @@ public class PlaceGuideServlet extends HttpServlet {
   public static final String LENGTH_INPUT = "length";
   public static final String IMAGE_KEY_INPUT = "imageKey";
   public static final String DELETE_IMAGE_INPUT = "deleteImage";
-  public static final String PLACE_NAME_INPUT = "placeName";
   public static final String PLACE_GUIDE_TYPE_PARAMETER = "placeGuideType";
 
   private final PlaceGuideRepository placeGuideRepository = 
@@ -167,10 +166,6 @@ public class PlaceGuideServlet extends HttpServlet {
     } else if(request.getParameterValues(DELETE_IMAGE_INPUT) == null) {
       imageKey = placeGuideRepository.getPlaceGuide(id).getImageKey();
       newPlaceGuideBuilder.setImageKey(imageKey);
-    }
-    String placeName = request.getParameter(PLACE_NAME_INPUT);
-    if (!placeName.isEmpty()) {
-      newPlaceGuideBuilder.setPlaceName(placeName);
     }
     return newPlaceGuideBuilder.build();
   }
