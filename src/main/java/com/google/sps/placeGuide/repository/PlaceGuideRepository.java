@@ -16,18 +16,22 @@ public interface PlaceGuideRepository {
   @Nullable
   public PlaceGuide getPlaceGuide(long placeGuideId);
 
-  // @return all public {@code PlaceGuide}.
+  /** @return all public {@code PlaceGuide}. */
   public List<PlaceGuide> getAllPublicPlaceGuides();
 
-  // Finds all of the user's created place guides.
+  /** Finds all of the user's created place guides. */
   public List<PlaceGuide> getCreatedPlaceGuides(String creatorId);
 
-  // Finds all of the user's created place guides that are public 
-  // (available to be viewed by other users).
+  /**
+  * Finds all of the user's created place guides that are public 
+  * (available to be viewed by other users).
+  */
   public List<PlaceGuide> getCreatedPublicPlaceGuides(String creatorId);
 
-  // Finds all of the user's created place guides that are private
-  // (not available to be viewed by other users).
+  /**
+  * Finds all of the user's created place guides that are private
+  * (not available to be viewed by other users).
+  */
   public List<PlaceGuide> getCreatedPrivatePlaceGuides(String creatorId);
 
   public List<PlaceGuide> getBookmarkedPlaceGuides(String userId);
