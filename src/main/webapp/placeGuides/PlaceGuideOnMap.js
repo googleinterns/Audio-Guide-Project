@@ -9,7 +9,7 @@ class PlaceGuideOnMap {
         this.toggleInfoWindowOnMarkerClick();
         this.highlightPlaceGuideOnMarkerDoubleClick();
         this.stopAnimationOnMarkerClick();
-        this.stopanimationOnMapClick();
+        this.stopAnimationOnMapClick();
     }
 
     highlight() {
@@ -18,7 +18,7 @@ class PlaceGuideOnMap {
 
     highlightPlaceGuideOnMarkerDoubleClick() {
         var thisPlaceGuideOnMap = this;
-        this._marker.addListener("dblclick", placeGuideManager.highlight(thisPlaceGuideOnMap._id));
+        this._marker.addListener("dblclick", placeGuideManager.highlightPlaceGuide(thisPlaceGuideOnMap._id));
     }
 
     toggleInfoWindowOnMarkerClick() {
