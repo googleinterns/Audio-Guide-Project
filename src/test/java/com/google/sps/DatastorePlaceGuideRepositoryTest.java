@@ -24,6 +24,7 @@ import java.util.Arrays;
 import java.util.Set;
 import java.util.HashSet;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.fail;
 import static org.junit.Assert.assertEquals;
 
@@ -356,6 +357,29 @@ public final class DatastorePlaceGuideRepositoryTest {
     Key deletedEntityKey = KeyFactory.createKey(DatastorePlaceGuideRepository.ENTITY_KIND, 
                                                                               A_PUBLIC_ID);
     Entity deletedEntity = datastore.get(deletedEntityKey);
+  }
+
+  @Test
+  public void placeGuideExists_placeGuideDoesNotExists_returnFalse() {
+    List<PlaceGuide> testPlaceGuidesList = Arrays.asList(testPublicPlaceGuideB,
+                                                         testPrivatePlaceGuideB,
+                                                         testPrivatePlaceGuideA);
+    saveTestPlaceGuidesEntities(testPlaceGuidesList);
+    Key testPublicPlaceGuideAKey = 
+        KeyFactory.createKey(DatastorePlaceGuideRepository.ENTITY_KIND, A_PUBLIC_ID);
+    assertFalse(placeGuideRepository.placeGuideExists(testPublicPlaceGuideAKey));
+  }
+
+  @Test
+  public void placeGuideExists_placeGuideDoesExists_returnTrue() {
+    List<PlaceGuide> testPlaceGuidesList = Arrays.asList(testPublicPlaceGuideA,
+                                                         testPublicPlaceGuideB,
+                                                         testPrivatePlaceGuideB,
+                                                         testPrivatePlaceGuideA);
+    saveTestPlaceGuidesEntities(testPlaceGuidesList);
+    Key testPublicPlaceGuideAKey = 
+        KeyFactory.createKey(DatastorePlaceGuideRepository.ENTITY_KIND, A_PUBLIC_ID);
+    assertTrue(placeGuideRepository.placeGuideExists(testPublicPlaceGuideAKey));
   }
 
   @After
