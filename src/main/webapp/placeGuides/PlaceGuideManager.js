@@ -10,7 +10,12 @@ class PlaceGuideManager {
     }
 
     update(bounds, zoom) {
-
+        this._placeGuideRepository.update(bounds, zoom)
+            .then(response => {
+                var placeGuides = this._placeGuideRepository.placeGuides();
+                this._mapPlaceGuideDisplayer.update(placeGuides);
+                this._mapPlaceGuideDisplayer.update(placeGuides);
+            })
     }
 
     removePlaceGuide(placeGuideId) {
