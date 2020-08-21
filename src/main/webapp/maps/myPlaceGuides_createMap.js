@@ -22,5 +22,5 @@ function createMap() {
 
   addGeolocationFunctionality(map);
   addSearchingFunctionality(map);
-  PlaceDisplayer.displayPlaceGuidesOfUser(map);
+  //PlaceDisplayer.displayPlaceGuidesOfUser(map);
 }

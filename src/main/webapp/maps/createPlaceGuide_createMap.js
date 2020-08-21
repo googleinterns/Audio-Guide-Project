@@ -26,5 +26,5 @@ function createMap() {
 
   addGeolocationFunctionality(map);
   addLocationChoosingAndSavingFunctionality(map)
-  PlaceDisplayer.displayPlaceGuidesOfUser(map);
+  //PlaceDisplayer.displayPlaceGuidesOfUser(map);
 }
