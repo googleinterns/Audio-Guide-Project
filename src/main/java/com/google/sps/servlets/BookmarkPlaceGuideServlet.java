@@ -53,10 +53,10 @@ public class BookmarkPlaceGuideServlet extends HttpServlet {
     String bookmarkHandlingType = request.getParameter(BOOKMARK_HANDLING_TYPE_PARAMETER);
     BookmarkPlaceGuideQueryType queryType = 
         BookmarkPlaceGuideQueryType.valueOf(bookmarkHandlingType);
-    handlePlaceGuide(queryType, placeGuideId);
+    togglePlaceGuideBookmark(queryType, placeGuideId);
   }
 
-  private void handlePlaceGuide(
+  private void togglePlaceGuideBookmark(
       BookmarkPlaceGuideQueryType bookmarkPlaceGuideQueryType, long placeGuideId) {
     switch(bookmarkPlaceGuideQueryType) {
       case BOOKMARK:
