@@ -78,15 +78,6 @@ class Place {
     this.onPositionChange();
   }
 
-  get mapsPlaceName() {
-    if (this._mapsPlace != null) {
-      return this._mapsPlace.name;
-    } else {
-      // No name available. Use coordinates for naming;
-      return this._position.toString();
-    }
-  }
-
   set infoWindowContent(content) {
     this._infoWindow.setContent(content);
   }
