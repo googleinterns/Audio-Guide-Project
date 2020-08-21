@@ -34,7 +34,6 @@ public class User {
   @Nullable
   private final String imgKey;
 
-  // Contains the unique identifier of the corresponding bookmarked place guides.
   private final Set<Long> bookmarkedPlaceGuidesIds; 
 
   public static class Builder {
