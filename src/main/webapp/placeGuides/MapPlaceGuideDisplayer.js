@@ -26,7 +26,7 @@ class MapPlaceGuideDisplayer {
             if (placeGuides.hasOwnProperty(placeGuideId)) {           
                 if(!this._placeGuidesOnMap.hasOwnProperty(placeGuideId)) {
                     // new placeGuide should be constructed.
-                    this._placeGuidesOnMap[placeGuideId].remove();
+                    this._placeGuidesOnMap[placeGuideId] = this.constructPlaceGuideOnMapFromPlaceGuide(placeGuides[placeGuideId]);
                 }
             }
         }
@@ -35,15 +35,15 @@ class MapPlaceGuideDisplayer {
     constructPlaceGuideOnMapFromPlaceGuide(placeGuide) {
         var placeType;
         if (placeGuide.isPublic) {
-            placeType = placeType.PUBLIC;
+            placeType = PlaceType.PUBLIC;
         } else {
-            placeType = placeType.PRIVATE;
+            placeType = PlaceType.PRIVATE;
         }
         return new PlaceGuideOnMap(this._map, 
                                    placeGuide.id, 
                                    placeGuide.name, 
-                                   placeGuide.position, 
-                                   placeGuide.mapsPlace, 
+                                   placeGuide.location.position, 
+                                   placeGuide.location.mapsPlace, 
                                    placeGuide.creator,
                                    placeGuide.description, 
                                    placeType);

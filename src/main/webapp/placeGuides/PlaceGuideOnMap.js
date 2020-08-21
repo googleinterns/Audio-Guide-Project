@@ -4,7 +4,7 @@ class PlaceGuideOnMap {
         this._id;
         this._infoWindowClosed = true;
         this._infoWindow = PlaceGuideOnMap.getInfoWindow(name, position, place, creator, description);
-        this._marker = PlaceGuideOnMap.setupMarker(map, placeType, name, position);
+        this._marker = PlaceGuideOnMap.getMarker(map, placeType, name, position);
         this.closeInfoWindowOnMapClick();
         this.toggleInfoWindowOnMarkerClick();
         this.highlightPlaceGuideOnMarkerDoubleClick();

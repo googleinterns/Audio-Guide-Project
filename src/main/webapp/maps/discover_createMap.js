@@ -8,9 +8,13 @@ var map;
 var placeGuideManager;
 
 function createMap() {
-   var map = new MapWidget();
-   map.addGeolocationFunctionality();
-   map.addSearchingFunctionality();
+   var mapWidget = new MapWidget();
+   mapWidget.addGeolocationFunctionality();
+   mapWidget.addSearchingFunctionality();
+   map = mapWidget.map;
    var placeGuideRepository = new PlaceGuideRepository(PlaceGuideRepository.QueryType.ALL_PUBLIC_IN_MAP_AREA);
    placeGuideManager = new PlaceGuideManager(map, placeGuideRepository);
+   var corner1 = new google.maps.LatLng(10, 10);
+   var corner2 = new google.maps.LatLng(10, 10);
+   placeGuideManager.update(new google.maps.LatLngBounds(corner1, corner2), 12);
 }

@@ -10,9 +10,9 @@ class PlaceGuideManager {
     }
 
     update(bounds, zoom) {
-        this._placeGuideRepository.update(bounds, zoom)
+        this._placeGuideRepository.updatePlaceGuides(bounds, zoom)
             .then(response => {
-                var placeGuides = this._placeGuideRepository.placeGuides();
+                var placeGuides = this._placeGuideRepository.placeGuides;
                 this._mapPlaceGuideDisplayer.update(placeGuides);
                 this._mapPlaceGuideDisplayer.update(placeGuides);
             })

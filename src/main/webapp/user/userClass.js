@@ -4,7 +4,7 @@ class User {
         this._email = email;
         this._name = name;
         this._publicPortfolio = publicPortfolio;
-        this.imgKey = imgKey;
+        this._imgKey = imgKey;
     }
 
     get id() {

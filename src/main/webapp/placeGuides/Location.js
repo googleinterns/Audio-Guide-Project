@@ -8,7 +8,7 @@ class Location {
         }
     }
 
-    static constructLocationBasedOnCoordinates() {
+    static constructLocationBasedOnCoordinates(positionLat, positionLng) {
         return new Location(new google.maps.LatLng(positionLat, positionLng), null);
     }
 
@@ -28,5 +28,13 @@ class Location {
                 }
             });
         });
+    }
+
+    get position() {
+        return this._position;
+    }
+
+    get mapsPlace() {
+        return this._mapsPlace;
     }
 }

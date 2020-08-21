@@ -17,16 +17,27 @@ class PlaceGuideRepository {
         var url = new URL("/place-guide-data", document.URL);
         url.searchParams.append("placeGuideType", this._queryType);
         url.searchParams.append("regionCorners", bounds.toUrlValue());
-        return fetch(url)
-            .catch(error => console.log("PlaceGuideServlet: failed to fetch: " + error))
-            .then(response => response.json())
-            .catch(error => console.log('updatePlaceGuides: failed to convert response to JSON' + error))
-            .then(placeGuideWithCreatorPairs => this._placeGudies = buildPlaceGuideDictionaryFromResponse(placeGuideWithCreatorPairs))
-            .catch(error => "updatePlaceGuides: unable to build placeGuide dictionary: " + error);
+        return new Promise(function (resolve, reject) {
+            resolve();
+        })
+        // return fetch(url)
+        //     .catch(error => console.log("PlaceGuideServlet: failed to fetch: " + error))
+        //     .then(response => response.json())
+        //     .catch(error => console.log('updatePlaceGuides: failed to convert response to JSON' + error))
+        //     .then(placeGuideWithCreatorPairs => this._placeGudies = buildPlaceGuideDictionaryFromResponse(placeGuideWithCreatorPairs))
+        //     .catch(error => "updatePlaceGuides: unable to build placeGuide dictionary: " + error);
     }
 
     get placeGuides() {
+        this.setDummyData();
         return this._placeGuides;
+    }
+
+    setDummyData() {
+        var location = Location.constructLocationBasedOnCoordinates(10, 20);
+        var user = new User("12", "email", "name", true, "I am user", "imgkey");
+        var placeGuide = new PlaceGuide(123, "placeGuide1", location, "audioKey", 3, "imgKey", user, true, true, true);
+        this._placeGuides[123] = placeGuide;
     }
 
     removePlaceGuide(placeGuideId) {
@@ -94,7 +105,7 @@ class PlaceGuideRepository {
             }
              else {
                  // TODO: figure out how to get coordinates from GeoPt
-                 var location = Location.constructLoctaionBasedOnCoordinates(10, 20);
+                 var location = Location.constructLocationBasedOnCoordinates(10, 20);
                  var placeGuide = new PlaceGuide(placeGuideResponse.id, 
                                                 placeGuideResponse.name, 
                                                 location, 
