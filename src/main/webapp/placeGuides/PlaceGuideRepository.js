@@ -12,7 +12,15 @@ class PlaceGuideRepository {
     }
 
     updatePlaceGuides() {
-
+        var url = new URL("/place-guide-data", document.URL);
+        url.searchParams.append("placeGuideType", this._queryType);
+        return fetch(url)
+            .catch(error => console.log("PlaceGuideServlet: failed to fetch: " + error))
+            .then(response => response.json())
+            .catch(error => console.log('updatePlaceGuides: failed to convert response to JSON' + error))
+            .then(placeGuideWithCreatorPairs => {
+            
+            });
     }
 
     get placeGuides() {
@@ -38,9 +46,64 @@ class PlaceGuideRepository {
         url.searchParams.append("placeGuideId", placeGuideId);
         if (this._placeGuides.bookmarkedByCurrentUser) {
             url.searchParams.append("bookmarkHandlingType", "BOOKMARK");
+        } else {
             url.searchParams.append("bookmarkHandlingType", "REMOVE");
         }
         return fetch(url)
             .catch(error => console.log("BookmarkPlaceGuideServlet: failed to fetch: " + error));
+    }
+
+    static buildPlaceGuideDictionaryFromResponse(placeGuideWithCreatorPairs) {
+        var placeGuidesDict = {};
+        for (var i = 0; i < placeGuideWithCreatorPairs.length; i++) {
+            var placeGuide = getPlaceGuideWithPlaceGudieWithCreatorPair(placeGuideWithCreatorPairs[i]);
+        }
+    }
+
+    static getPlaceGuideFromPlaceGuideWithCreatorPair(placeGuideWithCreatorPair) {
+        new Promise(function (resolve, reject) {
+            var creator = this.getUserFromResponse(placeGuideWithCreatorPair.creator);
+            var placeGuideResponse = placeGuideWithCreatorPair.placeGuide;
+            if(placeGuideResponse.placeId !== undefined) {
+                Location.constructLocationBasedOnPlaceId(placeGuideResponse.placeId)
+                    .then(location => {
+                    var placeGuide = new PlaceGuide(placeGuideResponse.id, 
+                                                    placeGuideResponse.name, 
+                                                    location, 
+                                                    placeGuideResponse.audioKey, 
+                                                    placeGuideResponse.length, 
+                                                    placeGuideResponse.imageKey,
+                                                    creator,
+                                                    placeGuideResponse.isPublic, 
+                                                    placeGuideWithCreatorPair.createdByCurrentUser, 
+                                                    placeGuideWithCreatorPair.bookmarkedByCurrentUser);
+                    resolve(placeGuide);
+                    });
+            }
+             else {
+                 // TODO: figure out how to get coordinates from GeoPt
+                 var location = Location.constructLoctaionBasedOnCoordinates(10, 20);
+                 var placeGuide = new PlaceGuide(placeGuideResponse.id, 
+                                                placeGuideResponse.name, 
+                                                location, 
+                                                placeGuideResponse.audioKey, 
+                                                placeGuideResponse.length, 
+                                                placeGuideResponse.imageKey,
+                                                creator,
+                                                placeGuideResponse.isPublic, 
+                                                placeGuideWithCreatorPair.createdByCurrentUser, 
+                                                placeGuideWithCreatorPair.bookmarkedByCurrentUser);
+                 resolve(placeGuide);
+             }
+        });
+
+    }
+
+    static getUserFromResponse(userResponse) {
+        return new User(userResponse.id, 
+                        userResponse.email,
+                        userResponse.name,
+                        userResponse.publicPortfolio,
+                        userResponse.imgKey);
     }
 }
