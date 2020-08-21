@@ -330,22 +330,6 @@ public final class DatastorePlaceGuideRepositoryTest {
     assertTrue(compare(expected, result));
   }
 
-  @Test
-  public void getBookmarkedPlaceGuides_allBookmarkedPlaceGuidesDontExistAnymore_bookmarkedPlaceGuidesBecomesEmpty() {
-    // Store user to database.
-    userRepository.saveUser(userA);
-
-    List<PlaceGuide> expected = Arrays.asList();
-    List<PlaceGuide> result = placeGuideRepository.getBookmarkedPlaceGuides(CREATOR_A_ID);
-    assertEquals(expected, result);
-
-    // Check if the user's {@code bookmarkedPlaceGuides} is empty. If it's empty, then datastore
-    // will store it as a null value.
-    User testUserA = userRepository.getUser(CREATOR_A_ID);
-    Set<Long> expectedSet = new HashSet<>();
-    assertEquals(expectedSet, testUserA.getBookmarkedPlaceGuidesIds());
-  }
-
   @Test(expected = EntityNotFoundException.class)
   public void deletePlaceGuide_theChosenPlaceGuideHasBeenDeleted_throwExceptionSinceEntityDoesntExist() throws EntityNotFoundException{
     List<PlaceGuide> testPlaceGuidesList = Arrays.asList(testPublicPlaceGuideA,

@@ -131,14 +131,11 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository {
     }
     Set<Long> bookmarkedIds = user.getBookmarkedPlaceGuidesIds();
     List<Long> bookmarkedIdsCopy = new ArrayList<>(bookmarkedIds);
-    int bookmarkedIdsCopyIndex = 0;
-    while (bookmarkedIdsCopyIndex < bookmarkedIdsCopy.size()) {
-      long placeGuideId = bookmarkedIdsCopy.get(bookmarkedIdsCopyIndex);
+    for (long placeGuideId : bookmarkedIdsCopy) {
       Key placeGuideEntityKey = KeyFactory.createKey(ENTITY_KIND, placeGuideId);
       try {
         Entity placeGuideEntity = datastore.get(placeGuideEntityKey);
         bookmarkedPlaceGuides.add(getPlaceGuideFromEntity(placeGuideEntity));
-        bookmarkedIdsCopyIndex++;
       } catch(EntityNotFoundException err) {
         System.out.println("Place Guide does not exist anymore.");
       }
