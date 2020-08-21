@@ -140,13 +140,9 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository {
         bookmarkedPlaceGuides.add(getPlaceGuideFromEntity(placeGuideEntity));
         bookmarkedIdsCopyIndex++;
       } catch(EntityNotFoundException err) {
-        bookmarkedIdsCopy.remove(bookmarkedIdsCopyIndex);
+        System.out.println("Place Guide does not exist anymore.");
       }
     }
-    Set<Long> updatedBookmarkedIdsCopy = new HashSet<>(bookmarkedIdsCopy);
-    // Update and save user with updated {@code bookmarkedPlaceGuides}.
-    User updatedUser = getUpdatedUser(user, updatedBookmarkedIdsCopy);
-    userRepository.saveUser(updatedUser);
     return bookmarkedPlaceGuides;
   }
 
