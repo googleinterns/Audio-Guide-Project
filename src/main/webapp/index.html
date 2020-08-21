@@ -21,20 +21,26 @@
         <label for = "name">Name:</label><br>
         <input type = "text" name = "name" id = "name"><br>
 
-        <label for = "imgKey">Upload image</label>
-        <input type = "file" name = "imgKey" id = "imgKey">
+        <label for = "imgKey">Upload image</label><br>
+        <input type = "file" name = "imgKey" id = "imgKey"><br>
 
-        <label for = "deleteImg"></label>
-        <input type = "checkbox" name = "deleteImg" value = "delete" id = "deleteImg">Delete previous image
+        <div id = "imageDiv">
+        <br>
+        <img alt = "image preview" id = "imagePreview">
+        <br>
+        </div>
+
+        <label for = "deleteImg">Delete Previous Image : </label><br>
+        <input type = "checkbox" name = "deleteImg" value = "delete" id = "deleteImg"><br>
 
         <label for = "selfIntroduction">Self Introduction:</label><br>
-        <textarea name = "selfIntroduction" rows = "4" cols = "50" id = "selfIntroduction"></textarea>
+        <textarea name = "selfIntroduction" rows = "4" cols = "50" id = "selfIntroduction"></textarea><br>
 
-        <label for = "publicPortfolio">Account Status:</label>
+        <label for = "publicPortfolio">Account Status:</label><br>
         <select name = "publicPortfolio" id = "publicPortfolio">
             <option value = "public">public</option>
             <option value = "private">private</option>
-        </select>
+        </select><br>
 
         <input type = "submit" value = "Submit">
     </form>
