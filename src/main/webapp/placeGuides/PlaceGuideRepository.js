@@ -54,10 +54,20 @@ class PlaceGuideRepository {
     }
 
     static buildPlaceGuideDictionaryFromResponse(placeGuideWithCreatorPairs) {
-        var placeGuidesDict = {};
-        for (var i = 0; i < placeGuideWithCreatorPairs.length; i++) {
-            var placeGuide = getPlaceGuideWithPlaceGudieWithCreatorPair(placeGuideWithCreatorPairs[i]);
-        }
+        return new Promise(function (resolve, reject) {
+            var placeGuidesDict = {};
+            var promises = [];
+            for (var i = 0; i < placeGuideWithCreatorPairs.length; i++) {
+                promises.push(
+                    getPlaceGuideFromPlaceGuideWithCreatorPair(placeGuideWithCreatorPairs[i])
+                    .then(placeGuide => {
+                            placeGuidesDict[placeGuide.id] = placeGuide;
+                    }));
+            }
+            Promise.all(promises).then(() => {
+                resolve(placeGuidesDict);
+            });
+        });
     }
 
     static getPlaceGuideFromPlaceGuideWithCreatorPair(placeGuideWithCreatorPair) {
