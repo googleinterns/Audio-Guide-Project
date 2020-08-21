@@ -126,29 +126,28 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository {
         UserRepositoryFactory.getUserRepository(RepositoryType.DATASTORE);
     List<PlaceGuide> bookmarkedPlaceGuides = new ArrayList<>();
     User user = userRepository.getUser(userId);
-    if (user != null) {
-      Set<Long> bookmarkedIds = user.getBookmarkedPlaceGuidesIds();
-      List<Long> bookmarkedIdsCopy = new ArrayList<>(bookmarkedIds);
-      int bookmarkedIdsCopyIndex = 0;
-      while (bookmarkedIdsCopyIndex < bookmarkedIdsCopy.size()) {
-        long placeGuideId = bookmarkedIdsCopy.get(bookmarkedIdsCopyIndex);
-        Key placeGuideEntityKey = KeyFactory.createKey(ENTITY_KIND, placeGuideId);
-        try {
-          Entity placeGuideEntity = datastore.get(placeGuideEntityKey);
-          bookmarkedPlaceGuides.add(getPlaceGuideFromEntity(placeGuideEntity));
-          bookmarkedIdsCopyIndex++;
-        } catch(EntityNotFoundException err) {
-          bookmarkedIdsCopy.remove(bookmarkedIdsCopyIndex);
-        }
-      }
-      Set<Long> updatedBookmarkedIdsCopy = new HashSet<>(bookmarkedIdsCopy);
-      // Update and save user with updated {@code bookmarkedPlaceGuides}.
-      User updatedUser = getUpdatedUser(user, updatedBookmarkedIdsCopy);
-      userRepository.saveUser(updatedUser);
-      return bookmarkedPlaceGuides;
-    } else {
+    if (user == null) {
       throw new IllegalStateException("Cannot get bookmarked place guides for non-existent user!");
     }
+    Set<Long> bookmarkedIds = user.getBookmarkedPlaceGuidesIds();
+    List<Long> bookmarkedIdsCopy = new ArrayList<>(bookmarkedIds);
+    int bookmarkedIdsCopyIndex = 0;
+    while (bookmarkedIdsCopyIndex < bookmarkedIdsCopy.size()) {
+      long placeGuideId = bookmarkedIdsCopy.get(bookmarkedIdsCopyIndex);
+      Key placeGuideEntityKey = KeyFactory.createKey(ENTITY_KIND, placeGuideId);
+      try {
+        Entity placeGuideEntity = datastore.get(placeGuideEntityKey);
+        bookmarkedPlaceGuides.add(getPlaceGuideFromEntity(placeGuideEntity));
+        bookmarkedIdsCopyIndex++;
+      } catch(EntityNotFoundException err) {
+        bookmarkedIdsCopy.remove(bookmarkedIdsCopyIndex);
+      }
+    }
+    Set<Long> updatedBookmarkedIdsCopy = new HashSet<>(bookmarkedIdsCopy);
+    // Update and save user with updated {@code bookmarkedPlaceGuides}.
+    User updatedUser = getUpdatedUser(user, updatedBookmarkedIdsCopy);
+    userRepository.saveUser(updatedUser);
+    return bookmarkedPlaceGuides;
   }
 
   private User getUpdatedUser(User user, Set<Long> updatedBookmarkedPlaceGuidesIds) {
