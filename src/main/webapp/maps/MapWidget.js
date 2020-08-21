@@ -43,13 +43,10 @@ class MapWidget {
         chosenLocation.visible = false;
         chosenLocation.draggable = true;
         chosenLocation.triggerChosenLocationChangeEvent = true;
-        document.getElementById("map")
-            .addEventListener(CHOSEN_LOCATION_CHANGE_EVENT, function () {
-                chosenLocation.visible = true;
-            });
         var searchBox = new SearchBox(this._map, chosenLocation, "search-box");
         searchBox.init();
-        enableChoosingLocationByClick(this._map, chosenLocation);
+        var locationPicker = new LocationPicker(this._map, chosenLocation);
+        locationPicker.init();
         // Save location functionality.
         var locationSaver = new LocationSaver(this._map, chosenLocation);
         locationSaver.init();

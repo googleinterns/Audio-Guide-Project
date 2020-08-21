@@ -23,9 +23,11 @@ class LocationSaver {
     this._map.controls[google.maps.ControlPosition.BOTTOM_CENTER]
         .push(this._saveLocationControlButton);
     var saveLocationButton = this._saveLocationControlButton;
+    var chosenPlace = this._chosenPlace;
     document.getElementById("map")
         .addEventListener(CHOSEN_LOCATION_CHANGE_EVENT, function () {
           saveLocationButton.disabled = false;
+          chosenPlace.visible = true;
         });
   }
 
@@ -48,11 +50,7 @@ class LocationSaver {
       this._savedPlace.position = this._chosenPlace.position;
     }
     this._chosenPlace.visible = false;
-    var chosenPlace = this._chosenPlace;
-    document.getElementById("map")
-        .addEventListener(CHOSEN_LOCATION_CHANGE_EVENT, function () {
-          chosenPlace.visible = true;
-        });
+    this._saveLocationControlButton.disabled = true;
     alert(LocationSaver.SAVED_LOCATION_MESSAGE);
   }
 
