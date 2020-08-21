@@ -4,9 +4,12 @@ import org.jetbrains.annotations.Nullable;
 import com.google.sps.placeGuide.PlaceGuide;
 import java.util.List;
 import com.google.sps.user.User;
+import com.google.appengine.api.datastore.Key;
 
 /** Interface for handling place guide. */
 public interface PlaceGuideRepository {
+
+  public long saveAndGeneratePlaceGuideId();
 
   public void savePlaceGuide(PlaceGuide placeGuide);
 
@@ -30,4 +33,6 @@ public interface PlaceGuideRepository {
   public List<PlaceGuide> getBookmarkedPlaceGuides(String userId);
 
   public void deletePlaceGuide(long placeGuideId);
+
+  public boolean placeGuideExists(Key placeGuideEntityKey);
 }

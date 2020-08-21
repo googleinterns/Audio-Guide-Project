@@ -18,6 +18,9 @@ import com.google.appengine.api.datastore.*;
 import com.google.sps.user.User;
 import com.google.sps.user.repository.UserRepository;
 import com.google.sps.placeGuide.repository.impl.DatastorePlaceGuideRepository;
+import com.google.sps.placeGuide.repository.PlaceGuideRepository;
+import com.google.sps.placeGuide.repository.PlaceGuideRepositoryFactory;
+import com.google.sps.data.RepositoryType;
 import org.jetbrains.annotations.Nullable;
 import java.util.Set;
 import java.util.HashSet;
@@ -101,10 +104,13 @@ public class DatastoreUserRepository implements UserRepository {
 
   @Override
   public void bookmarkPlaceGuide(long placeGuideId, String userId) {
+    
+    PlaceGuideRepository placeGuideRepository = 
+        PlaceGuideRepositoryFactory.getPlaceGuideRepository(RepositoryType.DATASTORE);
     // Check if the corresponding placeGuide is in the database.
     Key placeGuideEntityKey = 
         KeyFactory.createKey(DatastorePlaceGuideRepository.ENTITY_KIND, placeGuideId);
-    if (placeGuideExists(placeGuideEntityKey)) {
+    if (placeGuideRepository.placeGuideExists(placeGuideEntityKey)) {
       User user = getUser(userId);
       if (user != null) {
         Set<Long> bookmarkedIds = user.getBookmarkedPlaceGuidesIds();
@@ -112,22 +118,13 @@ public class DatastoreUserRepository implements UserRepository {
         bookmarkedIdsCopy.add(placeGuideId);
 
       // Update and save user with the updated {@code bookmarkedPlaceGuides}.
-        saveUpdatedUser(user, bookmarkedIdsCopy);
+        User updatedUser = getUpdatedUser(user, bookmarkedIdsCopy);
+        saveUser(updatedUser);
       } else {
         throw new IllegalStateException("Non-existing user cannot bookmark a place guide!");
       }
     } else {
       throw new IllegalStateException("Can't bookmark a non-existing place guide!");
-    }
-  }
-
-  private boolean placeGuideExists(Key placeGuideEntityKey) {
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    try {
-      datastore.get(placeGuideEntityKey);
-      return true;
-    } catch(EntityNotFoundException err) {
-      return false;
     }
   }
 
@@ -140,13 +137,14 @@ public class DatastoreUserRepository implements UserRepository {
       bookmarkedPlaceGuidesIdsCopy.remove(placeGuideId);
       
       // Update user with the new set.
-      saveUpdatedUser(user, bookmarkedPlaceGuidesIdsCopy);
+      User updatedUser = getUpdatedUser(user, bookmarkedPlaceGuidesIdsCopy);
+      saveUser(updatedUser);
     } else {
       throw new IllegalStateException("Cannot remove bookmarked place guides from non-existent user!");
     }
   }
 
-  private void saveUpdatedUser(User user, Set<Long> updatedBookmarkedPlaceGuidesIds) {
+  private User getUpdatedUser(User user, Set<Long> updatedBookmarkedPlaceGuidesIds) {
     User updatedUser =
         new User.Builder(user.getId(), user.getEmail())
         .setBookmarkedPlaceGuidesIds(updatedBookmarkedPlaceGuidesIds)
@@ -155,6 +153,6 @@ public class DatastoreUserRepository implements UserRepository {
         .setPublicPortfolio(user.portfolioIsPublic())
         .addImgKey(user.getImgKey())
         .build();
-    saveUser(updatedUser);
+    return updatedUser;
   }
 }

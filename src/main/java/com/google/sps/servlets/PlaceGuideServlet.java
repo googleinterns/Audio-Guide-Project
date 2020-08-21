@@ -130,10 +130,7 @@ public class PlaceGuideServlet extends HttpServlet {
     if (!idStringValue.isEmpty()) {
       id = Long.parseLong(idStringValue);
     } else {
-      // Create PlaceGuide entity id.
-      Entity placeGuideEntity = new Entity(DatastorePlaceGuideRepository.ENTITY_KIND);
-      datastore.put(placeGuideEntity);
-      id = placeGuideEntity.getKey().getId();
+      id = placeGuideRepository.saveAndGeneratePlaceGuideId();
     }
     String audioKey = getUploadedFileBlobKey(request, AUDIO_KEY_INPUT);
     // The audioKey can be null if the user did not upload any audio file. Hence, it will

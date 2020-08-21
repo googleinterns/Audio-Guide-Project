@@ -26,8 +26,6 @@ import com.google.sps.user.User;
 public class DatastorePlaceGuideRepository implements PlaceGuideRepository {
 
   private final DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-  private final UserRepository userRepository =
-      UserRepositoryFactory.getUserRepository(RepositoryType.DATASTORE);
   public static final String ENTITY_KIND = "PlaceGuide";
   public static final String NAME_PROPERTY = "name";
   public static final String AUDIO_KEY_PROPERTY = "audioKey";
@@ -39,6 +37,13 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository {
   public static final String LENGTH_PROPERTY = "length";
   public static final String IMAGE_KEY_PROPERTY = "imageKey";
   public static final String PLACE_NAME_PROPERTY = "placeName";
+
+  @Override
+  public long saveAndGeneratePlaceGuideId() {
+    Entity placeGuideEntity = new Entity(DatastorePlaceGuideRepository.ENTITY_KIND);
+    datastore.put(placeGuideEntity);
+    return placeGuideEntity.getKey().getId();
+  }
   
   @Override
   public void savePlaceGuide(PlaceGuide placeGuide) {
@@ -119,6 +124,8 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository {
 
   @Override
   public List<PlaceGuide> getBookmarkedPlaceGuides(String userId) {
+    UserRepository userRepository =
+        UserRepositoryFactory.getUserRepository(RepositoryType.DATASTORE);
     List<PlaceGuide> bookmarkedPlaceGuides = new ArrayList<>();
     User user = userRepository.getUser(userId);
     if (user != null) {
@@ -138,14 +145,15 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository {
       }
       Set<Long> updatedBookmarkedIdsCopy = new HashSet<>(bookmarkedIdsCopy);
       // Update and save user with updated {@code bookmarkedPlaceGuides}.
-      saveUpdatedUser(user, updatedBookmarkedIdsCopy);
+      User updatedUser = getUpdatedUser(user, updatedBookmarkedIdsCopy);
+      userRepository.saveUser(updatedUser);
       return bookmarkedPlaceGuides;
     } else {
       throw new IllegalStateException("Cannot get bookmarked place guides for non-existent user!");
     }
   }
 
-  private void saveUpdatedUser(User user, Set<Long> updatedBookmarkedPlaceGuidesIds) {
+  private User getUpdatedUser(User user, Set<Long> updatedBookmarkedPlaceGuidesIds) {
     User updatedUser =
         new User.Builder(user.getId(), user.getEmail())
         .setBookmarkedPlaceGuidesIds(updatedBookmarkedPlaceGuidesIds)
@@ -154,7 +162,7 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository {
         .setPublicPortfolio(user.portfolioIsPublic())
         .addImgKey(user.getImgKey())
         .build();
-    userRepository.saveUser(updatedUser);
+    return updatedUser;
   }
 
   private PlaceGuide getPlaceGuideFromEntity(Entity placeGuideEntity) {
@@ -185,5 +193,15 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository {
   public void deletePlaceGuide(long placeGuideId) {
     Key placeGuideEntityKey = KeyFactory.createKey(ENTITY_KIND, placeGuideId);
     datastore.delete(placeGuideEntityKey);
+  }
+
+  @Override
+  public boolean placeGuideExists(Key placeGuideEntityKey) {
+    try {
+      datastore.get(placeGuideEntityKey);
+      return true;
+    } catch(EntityNotFoundException err) {
+      return false;
+    }
   }
 }
