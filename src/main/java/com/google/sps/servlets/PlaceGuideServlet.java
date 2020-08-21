@@ -125,18 +125,8 @@ public class PlaceGuideServlet extends HttpServlet {
 
   private PlaceGuide getPlaceGuideFromRequest(HttpServletRequest request) {
     String name = request.getParameter(NAME_INPUT);
-    String audioKey = getUploadedFileBlobKey(request, AUDIO_KEY_INPUT);
-
-    // The audioKey can be null if the user did not upload any audio file. Hence, it will
-    // get the previous audioKey.
-    if (audioKey == null) {
-      audioKey
-    }
-    float latitude = Float.parseFloat(request.getParameter(LATITUDE_INPUT));
-    float longitude = Float.parseFloat(request.getParameter(LONGITUDE_INPUT));
-    GeoPt coordinate = new GeoPt(latitude, longitude);
-    String idStringValue = request.getParameter(ID_INPUT);
     long id;
+    String idStringValue = request.getParameter(ID_INPUT);
     if (!idStringValue.isEmpty()) {
       id = Long.parseLong(idStringValue);
     } else {
@@ -145,6 +135,16 @@ public class PlaceGuideServlet extends HttpServlet {
       datastore.put(placeGuideEntity);
       id = placeGuideEntity.getKey().getId();
     }
+    String audioKey = getUploadedFileBlobKey(request, AUDIO_KEY_INPUT);
+    // The audioKey can be null if the user did not upload any audio file. Hence, it will
+    // get the previous audioKey.
+    if (audioKey == null) {
+      audioKey = placeGuideRepository.getPlaceGuide(id).getAudioKey();
+    }
+    float latitude = Float.parseFloat(request.getParameter(LATITUDE_INPUT));
+    float longitude = Float.parseFloat(request.getParameter(LONGITUDE_INPUT));
+    GeoPt coordinate = new GeoPt(latitude, longitude);
+
     PlaceGuide.Builder newPlaceGuideBuilder = new PlaceGuide.Builder(id, name, audioKey, userId, 
                                                                      coordinate);
 
@@ -166,6 +166,9 @@ public class PlaceGuideServlet extends HttpServlet {
     }
     String imageKey = getUploadedFileBlobKey(request, IMAGE_KEY_INPUT);
     if (imageKey != null) {
+      newPlaceGuideBuilder.setImageKey(imageKey);
+    } else if(request.getParameterValues(DELETE_IMAGE_INPUT) == null) {
+      imageKey = placeGuideRepository.getPlaceGuide(id).getImageKey();
       newPlaceGuideBuilder.setImageKey(imageKey);
     }
     String placeName = request.getParameter(PLACE_NAME_INPUT);

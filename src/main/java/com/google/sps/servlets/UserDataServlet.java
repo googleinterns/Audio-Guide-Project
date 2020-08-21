@@ -86,7 +86,7 @@ public class UserDataServlet extends HttpServlet {
         !prevUserData.getImgKey().equals(user.getImgKey())) {
       // Delete previous image blob from blobstore, because it was overwritten or deleted.
       deleteBlobWithGivenKeyValue(prevUserData.getImgKey());
-    }
+    } 
     userRepository.saveUser(user);
     response.sendRedirect("/index.html");
   }
@@ -133,7 +133,7 @@ public class UserDataServlet extends HttpServlet {
     } else if (request.getParameterValues(DELETE_IMG_INPUT) == null) {
       // The user didn't submit a new photo, but they didn't choose to delete the old one either.
       // Keep old photo in the database.
-      imgKey = userRepository.getUser(userService.getCurrentUser().getUserId()).getImgKey();
+      imgKey = prevUserData.getImgKey();
       newUserBuilder.addImgKey(imgKey);
     }
     return newUserBuilder.build();

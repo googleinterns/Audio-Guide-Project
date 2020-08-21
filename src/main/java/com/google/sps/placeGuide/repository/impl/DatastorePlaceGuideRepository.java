@@ -63,6 +63,18 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository {
     return placeGuideEntity;
   }
 
+  @Nullable
+  @Override
+  public PlaceGuide getPlaceGuide(long placeGuideId) {
+    Key placeGuideEntityKey = KeyFactory.createKey(ENTITY_KIND, placeGuideId);
+    try {
+      Entity placeGuideEntity = datastore.get(placeGuideEntityKey);
+      return getPlaceGuideFromEntity(placeGuideEntity);
+    } catch(EntityNotFoundException err) {
+      return null;
+    }
+  }
+
   @Override
   public List<PlaceGuide> getAllPublicPlaceGuides() {
     Filter queryFilter = new FilterPredicate(IS_PUBLIC_PROPERTY, FilterOperator.EQUAL, true);
@@ -173,10 +185,5 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository {
   public void deletePlaceGuide(long placeGuideId) {
     Key placeGuideEntityKey = KeyFactory.createKey(ENTITY_KIND, placeGuideId);
     datastore.delete(placeGuideEntityKey);
-  }
-
-  @Override
-  public boolean placeGuideExists() {
-     
   }
 }

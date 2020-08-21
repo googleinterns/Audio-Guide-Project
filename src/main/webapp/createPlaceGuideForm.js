@@ -60,7 +60,8 @@ function testGivenCoordinate() {
 }
 
 function fillFormWithPlaceGuideData(placeGuide) {
-  // Set required attribute to false.
+  // Set required attribute to false since there must be a previous audio key 
+  // from the previous place guide data.
   document.getElementById("audioKey").required = false;
 
   setFormInputValue(document.getElementById("id"), placeGuide.id);
