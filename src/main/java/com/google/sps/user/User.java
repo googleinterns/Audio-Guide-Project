@@ -86,6 +86,17 @@ public class User {
     }
   }
 
+  public User.Builder toBuilder() {
+    User.Builder newUserBuilder = 
+        new User.Builder(id, email)
+        .setBookmarkedPlaceGuidesIds(bookmarkedPlaceGuidesIds)
+        .setName(name)
+        .addSelfIntroduction(selfIntroduction)
+        .setPublicPortfolio(publicPortfolio)
+        .addImgKey(imgKey);
+    return newUserBuilder;
+  }
+
   private User(Builder builder) {
     this.id = builder.id;
     this.email = builder.email;
