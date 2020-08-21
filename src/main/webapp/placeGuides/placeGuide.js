@@ -57,6 +57,10 @@ class PlaceGuide {
     get bookmarkedByCurrentUser() {
         return this._bookmarkedBuCurrentUser;
     }
+
+    set bookmarkedByCurrentUser(newValue) {
+        this._bookmarkedBuCurrentUser = newValue;
+    }
 }
 
 
