@@ -10,10 +10,11 @@ class MapPlaceGuideDisplayer {
     }
 
     remove(placeGuideId) {
-
+        this._placeGuidesOnMap[placeGuideId].remove();
+        delete this._placeGuidesOnMap[placeGuideId];
     }
 
     highlight(placeGuideId) {
-
+        this._placeGuidesOnMap[placeGuideId].highlight();
     }
 }
