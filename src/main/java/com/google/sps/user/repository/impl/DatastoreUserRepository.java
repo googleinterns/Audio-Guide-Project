@@ -118,7 +118,8 @@ public class DatastoreUserRepository implements UserRepository {
         bookmarkedIdsCopy.add(placeGuideId);
 
       // Update and save user with the updated {@code bookmarkedPlaceGuides}.
-        User updatedUser = getUpdatedUser(user, bookmarkedIdsCopy);
+        User updatedUser = 
+            user.toBuilder().setBookmarkedPlaceGuidesIds(bookmarkedIdsCopy).build();
         saveUser(updatedUser);
       } else {
         throw new IllegalStateException("Non-existing user cannot bookmark a place guide!");
@@ -137,14 +138,11 @@ public class DatastoreUserRepository implements UserRepository {
       bookmarkedPlaceGuidesIdsCopy.remove(placeGuideId);
       
       // Update user with the new set.
-      User updatedUser = getUpdatedUser(user, bookmarkedPlaceGuidesIdsCopy);
+      User updatedUser = 
+          user.toBuilder().setBookmarkedPlaceGuidesIds(bookmarkedPlaceGuidesIdsCopy).build();
       saveUser(updatedUser);
     } else {
       throw new IllegalStateException("Cannot remove bookmarked place guides from non-existent user!");
     }
-  }
-
-  private User getUpdatedUser(User user, Set<Long> updatedBookmarkedPlaceGuidesIds) {
-    return user.toBuilder().setBookmarkedPlaceGuidesIds(updatedBookmarkedPlaceGuidesIds).build();
   }
 }

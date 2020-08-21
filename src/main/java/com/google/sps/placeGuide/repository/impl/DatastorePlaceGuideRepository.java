@@ -143,10 +143,6 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository {
     return bookmarkedPlaceGuides;
   }
 
-  private User getUpdatedUser(User user, Set<Long> updatedBookmarkedPlaceGuidesIds) {
-    return user.toBuilder().setBookmarkedPlaceGuidesIds(updatedBookmarkedPlaceGuidesIds).build();
-  }
-
   private PlaceGuide getPlaceGuideFromEntity(Entity placeGuideEntity) {
     long id = placeGuideEntity.getKey().getId();
     String name = (String) placeGuideEntity.getProperty(NAME_PROPERTY);
