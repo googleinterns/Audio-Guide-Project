@@ -111,19 +111,7 @@ public class DatastoreUserRepository implements UserRepository {
     Key placeGuideEntityKey = 
         KeyFactory.createKey(DatastorePlaceGuideRepository.ENTITY_KIND, placeGuideId);
     if (placeGuideRepository.placeGuideExists(placeGuideEntityKey)) {
-      User user = getUser(userId);
-      if (user != null) {
-        Set<Long> bookmarkedIds = user.getBookmarkedPlaceGuidesIds();
-        Set<Long> bookmarkedIdsCopy = new HashSet<>(bookmarkedIds);
-        bookmarkedIdsCopy.add(placeGuideId);
-
-      // Update and save user with the updated {@code bookmarkedPlaceGuides}.
-        User updatedUser = 
-            user.toBuilder().setBookmarkedPlaceGuidesIds(bookmarkedIdsCopy).build();
-        saveUser(updatedUser);
-      } else {
-        throw new IllegalStateException("Non-existing user cannot bookmark a place guide!");
-      }
+      toggleBookmarkedPlaceGuide(placeGuideId, userId);
     } else {
       throw new IllegalStateException("Can't bookmark a non-existing place guide!");
     }
@@ -131,18 +119,26 @@ public class DatastoreUserRepository implements UserRepository {
 
   @Override
   public void removeBookmarkedPlaceGuide(long placeGuideId, String userId) {
-    User user = getUser(userId);
-    if (user != null) {
-      Set<Long> bookmarkedPlaceGuidesIds = user.getBookmarkedPlaceGuidesIds();
-      Set<Long> bookmarkedPlaceGuidesIdsCopy = new HashSet<>(bookmarkedPlaceGuidesIds);
-      bookmarkedPlaceGuidesIdsCopy.remove(placeGuideId);
-      
-      // Update user with the new set.
-      User updatedUser = 
-          user.toBuilder().setBookmarkedPlaceGuidesIds(bookmarkedPlaceGuidesIdsCopy).build();
-      saveUser(updatedUser);
-    } else {
-      throw new IllegalStateException("Cannot remove bookmarked place guides from non-existent user!");
-    }
+    toggleBookmarkedPlaceGuide(placeGuideId, userId);
+  }
+
+  private void toggleBookmarkedPlaceGuide(long placeGuideId, String userId) {
+      User user = getUser(userId);
+      if (user != null) {
+        Set<Long> bookmarkedIds = user.getBookmarkedPlaceGuidesIds();
+        Set<Long> bookmarkedIdsCopy = new HashSet<>(bookmarkedIds);
+        if (bookmarkedIdsCopy.contains(placeGuideId)) {
+          bookmarkedIdsCopy.remove(placeGuideId);
+        } else {
+          bookmarkedIdsCopy.add(placeGuideId);
+        }
+
+      // Update and save user with the updated {@code bookmarkedPlaceGuides}.
+        User updatedUser = 
+            user.toBuilder().setBookmarkedPlaceGuidesIds(bookmarkedIdsCopy).build();
+        saveUser(updatedUser);
+      } else {
+        throw new IllegalStateException("Cannot perform operation on non-existing user!");
+      }
   }
 }
