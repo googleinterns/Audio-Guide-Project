@@ -17,35 +17,36 @@
             <li><a href = "createPlaceGuide.html">Create Place Guide</a><li>
         </ul>
     </header>
-  <div id="createProfile">
-    <form method = "POST" id = "portfolioForm" enctype = "multipart/form-data">
-        <label for = "name">Name:</label><br>
-        <input type = "text" name = "name" id = "name"><br>
 
-        <label for = "imgKey">Upload image</label><br>
-        <input type = "file" name = "imgKey" id = "imgKey"><br>
+    <div id="createProfile">
+        <form method = "POST" id = "portfolioForm" enctype = "multipart/form-data">
+            <label for = "name">Name:</label><br>
+            <input type = "text" name = "name" id = "name"><br>
 
-        <div id = "imageDiv">
-        <br>
-        <img alt = "image preview" id = "imagePreview">
-        <br>
-        </div>
+            <label for = "imgKey">Upload image</label><br>
+            <input type = "file" name = "imgKey" id = "imgKey"><br>
 
-        <label for = "deleteImg">Delete Previous Image : </label><br>
-        <input type = "checkbox" name = "deleteImg" value = "delete" id = "deleteImg"><br>
+            <div id = "imageDiv">
+            <br>
+            <img alt = "image preview" id = "imagePreview">
+            <br>
+            </div>
 
-        <label for = "selfIntroduction">Self Introduction:</label><br>
-        <textarea name = "selfIntroduction" rows = "4" cols = "50" id = "selfIntroduction"></textarea><br>
+            <label for = "deleteImg">Delete Previous Image : </label><br>
+            <input type = "checkbox" name = "deleteImg" value = "delete" id = "deleteImg"><br>
 
-        <label for = "publicPortfolio">Account Status:</label><br>
-        <select name = "publicPortfolio" id = "publicPortfolio">
-            <option value = "public">public</option>
-            <option value = "private">private</option>
-        </select><br>
+            <label for = "selfIntroduction">Self Introduction:</label><br>
+            <textarea name = "selfIntroduction" rows = "4" cols = "50" id = "selfIntroduction"></textarea><br>
 
-        <input type = "submit" value = "Submit">
-    </form>
-    <button id = "logout">Logout</button>
-  </div>
+            <label for = "publicPortfolio">Account Status:</label><br>
+            <select name = "publicPortfolio" id = "publicPortfolio">
+                <option value = "public">public</option>
+                <option value = "private">private</option>
+            </select><br>
+
+            <input type = "submit" value = "Submit">
+        </form>
+        <button id = "logout">Logout</button>
+    </div>
 </body>
 </html>
