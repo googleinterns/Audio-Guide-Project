@@ -68,7 +68,7 @@ function fillFormWithPlaceGuideData(placeGuide) {
 
   setFormInputValue(document.getElementById("id"), placeGuide.id);
   setFormInputValue(document.getElementById("name"), placeGuide.name);
-  setBlobKeySrcToElement("audioKey", placeGuide.audioKey, "audioPlayer", false);
+  setBlobKeySrcToElement(placeGuide.audioKey, "audioPlayer", false);
   if (placeGuide.isPublic) {
     document.getElementById("isPublic").value = "public";
   } else {
@@ -79,18 +79,7 @@ function fillFormWithPlaceGuideData(placeGuide) {
   setFormInputValue(document.getElementById("length"), placeGuide.length);
   setFormInputValue(document.getElementById("description"), placeGuide.description);
   if (placeGuide.imageKey != undefined) {
-    setBlobKeySrcToElement("imageKey", placeGuide.imageKey, "imagePreview", true);
+    setBlobKeySrcToElement(placeGuide.imageKey, "imagePreview", true);
   }
   setFormInputValue(document.getElementById("placeName"), DUMMY_DATA_FOR_PLACE_NAME);
-}
-
-function setBlobKeySrcToElement(inputId, blobKey, previewId, displayBlock) {
-  const input = document.getElementById(inputId);
-  const preview = document.getElementById(previewId);
-  if (displayBlock) {
-    preview.style.display = "block";
-  }
-  const src = new URL("/serve-blob", document.URL);
-  src.searchParams.append('blob-key', blobKey);
-  preview.setAttribute("src", src);
 }

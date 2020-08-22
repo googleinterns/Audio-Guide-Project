@@ -25,20 +25,9 @@ function fillPortfolioFormWithUserData() {
       document.getElementById("publicPortfolio").value = "private";
     }
     if (user.imgKey != undefined) {
-      setBlobKeySrcToElement("imgKey", user.imgKey, "imagePreview", true);
+      setBlobKeySrcToElement(user.imgKey, "imagePreview", true);
     }
   });
-}
-
-function setBlobKeySrcToElement(inputId, blobKey, previewId, displayBlock) {
-  const input = document.getElementById(inputId);
-  const preview = document.getElementById(previewId);
-  if (displayBlock) {
-    preview.style.display = "block";
-  }
-  const src = new URL("/serve-blob", document.URL);
-  src.searchParams.append('blob-key', blobKey);
-  preview.setAttribute("src", src);
 }
 
 /**
