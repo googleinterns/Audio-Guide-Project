@@ -27,7 +27,7 @@ function getBlobstoreUploadUrlFromServlet(formType) {
  * Sets the destination url of the post method for the createPlaceGuide form to uploadUrl.
  */
 function setFormActionUrl(uploadUrl, formId) {
-  var form = document.getElementById("formId");
+  var form = document.getElementById(formId);
   form.action = uploadUrl;
 }
 

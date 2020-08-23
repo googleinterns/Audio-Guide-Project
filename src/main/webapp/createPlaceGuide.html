@@ -9,7 +9,7 @@
 </head>
 <body onload = "setUpCreatePlaceGuidePage()">
     <div id="createPlaceGuide">
-        <form method = "POST" id = "formId" enctype = "multipart/form-data">
+        <form method = "POST" id = "createPlaceGuideForm" enctype = "multipart/form-data">
             <input type="hidden" id="id" name="id">
             <input type="hidden" id="placeId" name="placeId">
             <br>
@@ -56,9 +56,9 @@
             </fieldset>
             <input type = "submit" value = "Submit">
         </form>
-    
+
         <button type = "button" id = "logout">Logout</button>
-    
+
         <button id = "testExistingPlaceGuide" onclick = "testExistingPlaceGuide()">Test Input Existing PlaceGuide</button>
         <button id = "testGivenCoordinate" onclick = "testGivenCoordinate()">Test Input Coordinate</button>
     </div>
