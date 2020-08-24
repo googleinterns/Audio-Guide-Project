@@ -21,7 +21,7 @@ class PlaceGuideOnList {
       const editButton = document.createElement("button");
       editButton.addEventListener("click", function() {
         // Prompt to createPlaceGuide.html.
-        setupCreatePlaceGuide();
+        
       });
     }
 
