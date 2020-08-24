@@ -2,7 +2,6 @@ class MapPlaceGuideDisplayer {
     constructor(map) {
         this._map = map;
         this._placeGuidesOnMap = {};
-        this._highlightedPlaceGuideId = null;
     }
 
     update(placeGuides) {
@@ -55,10 +54,10 @@ class MapPlaceGuideDisplayer {
     }
 
     highlight(placeGuideId) {
-        if (this._highlightedPlaceGuideId != null) {
-            this._placeGuidesOnMap[this._highlightedPlaceGuideId].stopHighlightingAnimation();
-        }
         this._placeGuidesOnMap[placeGuideId].highlight();
-        this._highlightedPlaceGuideId = placeGuideId;
+    }
+
+    unhighlight(placeGuideId) {
+        this._placeGuidesOnMap[placeGuideId].unhighlight();
     }
 }

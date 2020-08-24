@@ -14,4 +14,8 @@ class ListPlaceGuideDisplayer {
     highlight(placeGuideId) {
 
     }
+
+    unhighlight(placeGuideId) {
+        
+    }
 }

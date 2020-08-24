@@ -5,29 +5,38 @@ class PlaceGuideOnMap {
         this._infoWindowClosed = true;
         this._infoWindow = PlaceGuideOnMap.getInfoWindow(name, position, place, creator, description);
         this._marker = PlaceGuideOnMap.getMarker(map, placeType, name, position);
+        this._highlighted = false;
         this.closeInfoWindowOnMapClick();
         this.toggleInfoWindowOnMarkerClick();
-        this.highlightPlaceGuideOnMarkerDoubleClick();
-        this.stopAnimationOnMarkerClick();
-        this.stopAnimationOnMapClick();
+        this.highlightOnMarkerDoubleClick();
+        this.unhighlightOnMapClick();
+        this.unhighlightOnMarkerClick();
     }
 
     get id() {
         return this._id;
     }
 
+    isHighlighted() {
+        return this._highlighted;
+    }
+
     highlight() {
+        this._highlighted = true;
         this._marker.setAnimation(google.maps.Animation.BOUNCE);
     }
 
-    stopHighlightingAnimation() {
+    unhighlight() {
+        this._highlighted = false;
         this._marker.setAnimation(null);
     }
 
-    highlightPlaceGuideOnMarkerDoubleClick() {
+    highlightOnMarkerDoubleClick() {
         var thisPlaceGuideOnMap = this;
         this._marker.addListener("dblclick", () => {
-            placeGuideManager.highlightPlaceGuide(thisPlaceGuideOnMap.id);
+            if (!thisPlaceGuideOnMap.isHighlighted()) {
+                placeGuideManager.highlightPlaceGuide(thisPlaceGuideOnMap.id);
+            }
         });
     }
 
@@ -42,10 +51,12 @@ class PlaceGuideOnMap {
         });
     }
 
-    stopAnimationOnMarkerClick() {
+    unhighlightOnMarkerClick() {
         var thisPlaceGuideOnMap = this;
         this._marker.addListener('click', () => {
-            thisPlaceGuideOnMap.stopHighlightingAnimation();
+            if (thisPlaceGuideOnMap.isHighlighted()) {
+                placeGuideManager.unhighlightPlaceGuide();
+            }
         });
     }
 
@@ -58,10 +69,12 @@ class PlaceGuideOnMap {
         });
     }
 
-    stopAnimationOnMapClick() {
+    unhighlightOnMapClick() {
         var thisPlaceGuideOnMap = this;
         this._map.addListener('click', function (mapsMouseEvent) {
-            thisPlaceGuideOnMap.stopHighlightingAnimation();
+            if (thisPlaceGuideOnMap.isHighlighted()) {
+                placeGuideManager.unhighlightPlaceGuide();
+            }
         });
     }
 
