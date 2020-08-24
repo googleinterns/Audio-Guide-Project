@@ -45,7 +45,7 @@ class PlaceGuideOnMap {
     }
 
     remove() {
-        this.marker.setMap(null);
+        this._marker.setMap(null);
     }
 
     highlightOnMarkerDoubleClick() {

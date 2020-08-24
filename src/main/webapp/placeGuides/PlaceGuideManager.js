@@ -1,5 +1,4 @@
 class PlaceGuideManager {
-    static MIN_ZOOM = 10;
 
     constructor(map, placeGuideRepository) {
         this._map = map;
@@ -10,9 +9,6 @@ class PlaceGuideManager {
     }
 
     update(bounds, zoom) {
-        console.log("update placeGuides within bounds and zoom");
-        console.log(bounds);
-        console.log(zoom);
         this._placeGuideRepository.updatePlaceGuides(bounds, zoom)
             .then(response => {
                 var placeGuides = this._placeGuideRepository.placeGuides;

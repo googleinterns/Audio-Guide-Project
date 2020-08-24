@@ -14,7 +14,7 @@ class MapPlaceGuideDisplayer {
             if (this._placeGuidesOnMap.hasOwnProperty(placeGuideId)) {           
                 if(!placeGuides.hasOwnProperty(placeGuideId)) {
                     // This placeGuide is not needed anymore.
-                    this._placeGuidesOnMap[placeGuideId].remove();
+                    this.remove(placeGuideId);
                 }
             }
         }
