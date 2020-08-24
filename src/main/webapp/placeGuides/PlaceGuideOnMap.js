@@ -20,6 +20,10 @@ class PlaceGuideOnMap {
         this._marker.setAnimation(google.maps.Animation.BOUNCE);
     }
 
+    stopHighlightingAnimation() {
+        this._marker.setAnimation(null);
+    }
+
     highlightPlaceGuideOnMarkerDoubleClick() {
         var thisPlaceGuideOnMap = this;
         this._marker.addListener("dblclick", () => {
@@ -41,7 +45,7 @@ class PlaceGuideOnMap {
     stopAnimationOnMarkerClick() {
         var thisPlaceGuideOnMap = this;
         this._marker.addListener('click', () => {
-            thisPlaceGuideOnMap._marker.setAnimation(null);
+            thisPlaceGuideOnMap.stopHighlightingAnimation();
         });
     }
 
@@ -57,7 +61,7 @@ class PlaceGuideOnMap {
     stopAnimationOnMapClick() {
         var thisPlaceGuideOnMap = this;
         this._map.addListener('click', function (mapsMouseEvent) {
-            thisPlaceGuideOnMap._marker.setAnimation(null);
+            thisPlaceGuideOnMap.stopHighlightingAnimation();
         });
     }
 
