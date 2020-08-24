@@ -4,7 +4,8 @@ class PlaceGuideOnList {
       audioKey, audioLength, isPublic, imageKey, createdByCurrentUser, 
       bookmarkedByCurrentUser, latitude, longitude) {
     const placeGuideDiv = document.createElement("div");
-    placeGuideDiv.setAttribute('id', placeGuideId);
+    const divId = "placeGuideOnList-" + "{" + placeGuideId + "}";
+    placeGuideDiv.setAttribute('id', divId);
     
     placeGuideDiv.addEventListener('click', function() {
       PlaceGuideManager.highlightPlaceGuide(placeGuideId);
