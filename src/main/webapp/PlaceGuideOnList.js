@@ -8,7 +8,7 @@ class PlaceGuideOnList {
     placeGuideDiv.setAttribute('id', divId);
     
     placeGuideDiv.addEventListener('click', function() {
-      PlaceGuideManager.highlightPlaceGuide(placeGuideId);
+      placeGuideManager.highlightPlaceGuide(placeGuideId);
     });
 
     createBlobView(audioKey, "audio", placeGuideDiv);
@@ -18,7 +18,7 @@ class PlaceGuideOnList {
       const deleteButton = document.createElement("button");
       deleteButton.addEventListener("click", function() {
         if (window.confirm("Click ok if you want to delete the place guide")) {
-          PlaceGuideManager.remove(placeGuideId);
+          placeGuideManager.remove(placeGuideId);
         }
       });
       placeGuideDiv.appendChild(deleteButton);
