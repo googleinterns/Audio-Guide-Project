@@ -14,7 +14,7 @@ function initPage() {
    map = mapWidget.map;
    var placeGuideRepository = new PlaceGuideRepository(PlaceGuideRepository.QueryType.CREATED_ALL_IN_MAP_AREA);
    placeGuideManager = new PlaceGuideManager(map, placeGuideRepository);
-   var corner1 = new google.maps.LatLng(10, 10);
-   var corner2 = new google.maps.LatLng(10, 10);
-   placeGuideManager.update(new google.maps.LatLngBounds(corner1, corner2), 12);
+   google.maps.event.addListener(map, 'idle', function() {
+        placeGuideManager.update(map.getBounds(), map.getZoom());
+   });
 }

@@ -20,7 +20,6 @@ class PlaceGuideRepository {
         var thisQueryType = this._queryType;
         return new Promise(function (resolve, reject) {
             var isAllPublic = thisQueryType == PlaceGuideRepository.QueryType.ALL_PUBLIC_IN_MAP_AREA || thisQueryType == PlaceGuideRepository.QueryType.CREATED_PUBLIC_IN_MAP_AREA;
-            console.log(isAllPublic);
             var location = Location.constructLocationBasedOnCoordinates(10, 20);
             var user = new User("id1", "email", "name", true, "I am user", "imgkey");
             var placeGuide = new PlaceGuide(111, "placeGuide1", location, "audioKey", 3, "imgKey", user, "This is a placeGuide", isAllPublic, true, true);
