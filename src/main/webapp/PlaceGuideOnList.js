@@ -19,7 +19,9 @@ class PlaceGuideOnList {
       });
 
       const editButton = document.createElement("button");
-      editButton.addEventListener()
+      editButton.addEventListener("click", function() {
+        
+      });
     }
 
   }
