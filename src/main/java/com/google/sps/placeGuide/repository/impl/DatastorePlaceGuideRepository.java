@@ -1,26 +1,25 @@
 package com.google.sps.placeGuide.repository.impl;
 
 import com.google.appengine.api.datastore.*;
-import com.google.appengine.api.datastore.Query.Filter;
-import com.google.appengine.api.datastore.Query.FilterPredicate;
-import com.google.appengine.api.datastore.Query.FilterOperator;
-import com.google.appengine.api.datastore.Query.CompositeFilter;
-import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
-import com.google.sps.placeGuide.PlaceGuide;
 import com.google.appengine.api.datastore.GeoPt;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.Collections;
-import org.jetbrains.annotations.Nullable;
+import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
+import com.google.appengine.api.datastore.Query.Filter;
+import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.appengine.api.datastore.Query.FilterPredicate;
+import com.google.appengine.api.datastore.Query.GeoRegion;
+import com.google.appengine.api.datastore.Query.StContainsFilter;
+import com.google.sps.data.RepositoryType;
+import com.google.sps.placeGuide.PlaceGuide;
 import com.google.sps.placeGuide.repository.PlaceGuideRepository;
-import com.google.sps.user.repository.impl.DatastoreUserRepository;
+import com.google.sps.user.User;
 import com.google.sps.user.repository.UserRepository;
 import com.google.sps.user.repository.UserRepositoryFactory;
-import com.google.sps.data.RepositoryType;
-import com.google.sps.user.User;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import org.jetbrains.annotations.Nullable;
 
 /** Class for handling place guide repository using datastore. */
 public class DatastorePlaceGuideRepository implements PlaceGuideRepository {
@@ -43,7 +42,7 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository {
     datastore.put(placeGuideEntity);
     return placeGuideEntity.getKey().getId();
   }
-  
+
   @Override
   public void savePlaceGuide(PlaceGuide placeGuide) {
     Entity placeGuideEntity = createPlaceGuideEntity(placeGuide);
@@ -73,7 +72,7 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository {
     try {
       Entity placeGuideEntity = datastore.get(placeGuideEntityKey);
       return getPlaceGuideFromEntity(placeGuideEntity);
-    } catch(EntityNotFoundException err) {
+    } catch (EntityNotFoundException err) {
       return null;
     }
   }
@@ -94,18 +93,75 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository {
 
   @Override
   public List<PlaceGuide> getCreatedPublicPlaceGuides(String creatorId) {
-    Filter queryFilter = CompositeFilterOperator.and(Arrays.asList(
-                        new FilterPredicate(CREATOR_ID_PROPERTY, FilterOperator.EQUAL, creatorId),
-                        new FilterPredicate(IS_PUBLIC_PROPERTY, FilterOperator.EQUAL, true)));
+    Filter queryFilter =
+        CompositeFilterOperator.and(
+            Arrays.asList(
+                new FilterPredicate(CREATOR_ID_PROPERTY, FilterOperator.EQUAL, creatorId),
+                new FilterPredicate(IS_PUBLIC_PROPERTY, FilterOperator.EQUAL, true)));
     Query query = new Query(ENTITY_KIND).setFilter(queryFilter);
     return getPlaceGuidesList(query);
   }
 
   @Override
   public List<PlaceGuide> getCreatedPrivatePlaceGuides(String creatorId) {
-    Filter queryFilter = CompositeFilterOperator.and(Arrays.asList(
-                        new FilterPredicate(CREATOR_ID_PROPERTY, FilterOperator.EQUAL, creatorId),
-                        new FilterPredicate(IS_PUBLIC_PROPERTY, FilterOperator.EQUAL, false)));
+    Filter queryFilter =
+        CompositeFilterOperator.and(
+            Arrays.asList(
+                new FilterPredicate(CREATOR_ID_PROPERTY, FilterOperator.EQUAL, creatorId),
+                new FilterPredicate(IS_PUBLIC_PROPERTY, FilterOperator.EQUAL, false)));
+    Query query = new Query(ENTITY_KIND).setFilter(queryFilter);
+    return getPlaceGuidesList(query);
+  }
+
+  @Override
+  public List<PlaceGuide> getAllPublicPlaceGuidesInMapArea(
+      GeoPt northEastCorner, GeoPt southWestCorner) {
+    Filter publicityFilter = new FilterPredicate(IS_PUBLIC_PROPERTY, FilterOperator.EQUAL, true);
+    Filter mapAreaFilter =
+        new StContainsFilter(
+            COORDINATE_PROPERTY, new GeoRegion.Rectangle(southWestCorner, northEastCorner));
+    Filter queryFilter = CompositeFilterOperator.and(publicityFilter, mapAreaFilter);
+    Query query = new Query(ENTITY_KIND).setFilter(queryFilter);
+    return getPlaceGuidesList(query);
+  }
+
+  @Override
+  public List<PlaceGuide> getCreatedPlaceGuidesInMapArea(
+      String creatorId, GeoPt northEastCorner, GeoPt southWestCorner) {
+    Filter mapAreaFilter =
+        new StContainsFilter(
+            COORDINATE_PROPERTY, new GeoRegion.Rectangle(southWestCorner, northEastCorner));
+    Filter creatorFilter =
+        new FilterPredicate(CREATOR_ID_PROPERTY, FilterOperator.EQUAL, creatorId);
+    Filter queryFilter = CompositeFilterOperator.and(mapAreaFilter, creatorFilter);
+    Query query = new Query(ENTITY_KIND).setFilter(queryFilter);
+    return getPlaceGuidesList(query);
+  }
+
+  @Override
+  public List<PlaceGuide> getCreatedPublicPlaceGuidesInMapArea(
+      String creatorId, GeoPt northEastCorner, GeoPt southWestCorner) {
+    Filter publicityFilter = new FilterPredicate(IS_PUBLIC_PROPERTY, FilterOperator.EQUAL, true);
+    Filter mapAreaFilter =
+        new StContainsFilter(
+            COORDINATE_PROPERTY, new GeoRegion.Rectangle(southWestCorner, northEastCorner));
+    Filter creatorFilter =
+        new FilterPredicate(CREATOR_ID_PROPERTY, FilterOperator.EQUAL, creatorId);
+    Filter queryFilter = CompositeFilterOperator.and(publicityFilter, mapAreaFilter, creatorFilter);
+    Query query = new Query(ENTITY_KIND).setFilter(queryFilter);
+    return getPlaceGuidesList(query);
+  }
+
+  @Override
+  public List<PlaceGuide> getCreatedPrivatePlaceGuidesInMapArea(
+      String creatorId, GeoPt northEastCorner, GeoPt southWestCorner) {
+    Filter publicityFilter = new FilterPredicate(IS_PUBLIC_PROPERTY, FilterOperator.EQUAL, false);
+    Filter mapAreaFilter =
+        new StContainsFilter(
+            COORDINATE_PROPERTY, new GeoRegion.Rectangle(southWestCorner, northEastCorner));
+    Filter creatorFilter =
+        new FilterPredicate(CREATOR_ID_PROPERTY, FilterOperator.EQUAL, creatorId);
+    Filter queryFilter = CompositeFilterOperator.and(publicityFilter, mapAreaFilter, creatorFilter);
     Query query = new Query(ENTITY_KIND).setFilter(queryFilter);
     return getPlaceGuidesList(query);
   }
@@ -136,7 +192,7 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository {
       try {
         Entity placeGuideEntity = datastore.get(placeGuideEntityKey);
         bookmarkedPlaceGuides.add(getPlaceGuideFromEntity(placeGuideEntity));
-      } catch(EntityNotFoundException err) {
+      } catch (EntityNotFoundException err) {
         System.out.println("Place Guide does not exist anymore.");
       }
     }
@@ -154,7 +210,7 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository {
     String description = (String) placeGuideEntity.getProperty(DESCRIPTION_PROPERTY);
     long length = (long) placeGuideEntity.getProperty(LENGTH_PROPERTY);
     String imageKey = (String) placeGuideEntity.getProperty(IMAGE_KEY_PROPERTY);
-    PlaceGuide placeGuide = 
+    PlaceGuide placeGuide =
         new PlaceGuide.Builder(id, name, audioKey, creatorId, coordinate)
             .setPlaceId(placeId)
             .setLength(length)
@@ -176,7 +232,7 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository {
     try {
       datastore.get(placeGuideEntityKey);
       return true;
-    } catch(EntityNotFoundException err) {
+    } catch (EntityNotFoundException err) {
       return false;
     }
   }
