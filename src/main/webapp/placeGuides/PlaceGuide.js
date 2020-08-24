@@ -5,7 +5,7 @@
 
 
 class PlaceGuide {
-    constructor(id, name, location, audioKey, audioLength, imgKey, creator, isPublic, createdByCurrentUser, bookmarkedByCurrentUser) {
+    constructor(id, name, location, audioKey, audioLength, imgKey, creator, description, isPublic, createdByCurrentUser, bookmarkedByCurrentUser) {
         this._id = id;
         this._name = name;
         this._location = location;
@@ -13,6 +13,7 @@ class PlaceGuide {
         this._audioLength = audioLength;
         this._imgKey = imgKey;
         this._creator = creator;
+        this._description = description;
         this._isPublic = isPublic;
         this._createdByCurrentuser = createdByCurrentUser;
         this._bookmarkedBuCurrentUser = bookmarkedByCurrentUser;
@@ -44,6 +45,10 @@ class PlaceGuide {
 
     get creator() {
         return this._creator;
+    }
+
+    get description() {
+        return this._description;
     }
 
     get isPublic() {

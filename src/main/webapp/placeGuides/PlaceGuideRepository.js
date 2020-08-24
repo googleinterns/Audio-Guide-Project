@@ -36,7 +36,7 @@ class PlaceGuideRepository {
     setDummyData() {
         var location = Location.constructLocationBasedOnCoordinates(10, 20);
         var user = new User("12", "email", "name", true, "I am user", "imgkey");
-        var placeGuide = new PlaceGuide(123, "placeGuide1", location, "audioKey", 3, "imgKey", user, true, true, true);
+        var placeGuide = new PlaceGuide(123, "placeGuide1", location, "audioKey", 3, "imgKey", user, "This is a placeGuide", true, true, true);
         this._placeGuides[123] = placeGuide;
     }
 

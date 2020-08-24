@@ -1,7 +1,7 @@
 class PlaceGuideOnMap {
     constructor(map, id, name, position, place, creator, description, placeType) {
         this._map = map;
-        this._id;
+        this._id = id;
         this._infoWindowClosed = true;
         this._infoWindow = PlaceGuideOnMap.getInfoWindow(name, position, place, creator, description);
         this._marker = PlaceGuideOnMap.getMarker(map, placeType, name, position);
@@ -12,13 +12,23 @@ class PlaceGuideOnMap {
         this.stopAnimationOnMapClick();
     }
 
+    get id() {
+        return this._id;
+    }
+
     highlight() {
         this._marker.setAnimation(google.maps.Animation.BOUNCE);
     }
 
     highlightPlaceGuideOnMarkerDoubleClick() {
         var thisPlaceGuideOnMap = this;
-        this._marker.addListener("dblclick", placeGuideManager.highlightPlaceGuide(thisPlaceGuideOnMap._id));
+        console.log("setup highlicht placeGuide with marker: ");
+        console.log(thisPlaceGuideOnMap);
+        this._marker.addListener("dblclick", () => {
+            console.log("try to highlicht placeGuide with id: ");
+             console.log(thisPlaceGuideOnMap.id);
+            placeGuideManager.highlightPlaceGuide(thisPlaceGuideOnMap.id);
+        });
     }
 
     toggleInfoWindowOnMarkerClick() {
@@ -56,7 +66,7 @@ class PlaceGuideOnMap {
     }
 
     static getMarker(map, placeType, name, position) {
-        var markerIcon = PlaceGuideOnMap.getMarkerIcon();
+        var markerIcon = PlaceGuideOnMap.getMarkerIcon(placeType);
         var marker = new google.maps.Marker({
             position: position,
             title: name,
@@ -71,7 +81,7 @@ class PlaceGuideOnMap {
         if (placeType.icon != null) {
             markerIcon = this._placeType.icon;
         } else {
-            markerIcon = getColoredMarkerIcon(this._placeType.iconColor);
+            markerIcon = getColoredMarkerIcon(placeType.iconColor);
         }
         return markerIcon;
     }
