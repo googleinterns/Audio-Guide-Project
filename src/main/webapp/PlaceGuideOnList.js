@@ -19,9 +19,9 @@ class PlaceGuideOnList {
       });
 
       const editButton = document.createElement("button");
+      const queryString = 
       editButton.addEventListener("click", function() {
-        // Prompt to createPlaceGuide.html.
-        
+        window.location = "./createPlaceGuide.html?";
       });
     }
 
@@ -34,4 +34,8 @@ function createBlobView(blobKey, elementType, parentDiv) {
   src.searchParams.append('blob-key', blobKey);
   element.setAttribute("src", src);
   parentDiv.appendChild(element);
+}
+
+function generateQueryString(placeGuideId, placeName, placeId, name, audioSrc, imageSrc, description, length, isPublic, latitude, longitude) {
+  
 }
