@@ -8,7 +8,7 @@ class PlaceGuideOnList {
     placeGuideDiv.setAttribute('id', divId);
     
     placeGuideDiv.addEventListener('click', function() {
-      placeGuideManager.highlightPlaceGuide(placeGuideId);
+      highlightOnInfoBoxClick(placeGuideId);
     });
 
     createBlobView(audioKey, "audio", placeGuideDiv);
@@ -60,6 +60,10 @@ class PlaceGuideOnList {
     placeGuideDiv.appendChild(downloadLink);
 
   }
+}
+
+function highlightOnInfoBoxClick(placeGuideId) {
+  placeGuideManager.highlightPlaceGuide(placeGuideId);
 }
 
 function createBlobView(blobKey, elementType, parentDiv) {
