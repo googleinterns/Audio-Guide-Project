@@ -47,7 +47,7 @@ public final class PlaceGuideWithCreatorPairTest {
   public static final String PLACE_ID = "placeId";
   public static final GeoPt COORDINATE = new GeoPt((float) 3.14, (float) 2.56);
   public static final boolean IS_PUBLIC = true;
-  public static final long LENGTH = new Long(60);
+  public static final long LENGTH = 60L;
   public static final String DESCRIPTION = "description";
   public static final String IMAGE_KEY = "imageKey";
 
