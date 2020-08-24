@@ -3,17 +3,32 @@ class PlaceGuideOnList {
     const placeGuideDiv = document.createElement("div");
     placeGuideDiv.setAttribute('id', placeGuideId);
     
-    // Set onclick event to highlight the place guide on the list.
     placeGuideDiv.addEventListener('click', function() {
       PlaceGuideManager.highlightPlaceGuide(placeGuideId);
     });
 
-    const placeGuideAudio = document.createElement("audio");
-    if (displayBlock) {
-      preview.style.display = "block";
+    createBlobView(audioKey, "audio", placeGuideDiv);
+    createBlobView(imageKey, "img", placeGuideDiv);
+
+    if (createdByCurrentUser) {
+      const deleteButton = document.createElement("button");
+      deleteButton.addEventListener("click", function() {
+        if (window.confirm("Click ok if you want to delete the place guide")) {
+          PlaceGuideManager.remove(placeGuideId);
+        }
+      });
+
+      const editButton = document.createElement("button");
+      editButton.addEventListener()
     }
-    const src = new URL("/serve-blob", document.URL);
-    src.searchParams.append('blob-key', blobKey);
-    preview.setAttribute("src", src);
+
   }
+}
+
+function createBlobView(blobKey, elementType, parentDiv) {
+  const element = document.createElement(elementType);
+  const src = new URL("/serve-blob", document.URL);
+  src.searchParams.append('blob-key', blobKey);
+  element.setAttribute("src", src);
+  parentDiv.appendChild(element);
 }
