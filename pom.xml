@@ -107,7 +107,7 @@
                 <version>2.2.0</version>
                 <configuration>
                     <!-- TODO: set project ID. -->
-                    <deploy.projectId>denniswillie-step-2020</deploy.projectId>
+                    <deploy.projectId>fbori-step-2020</deploy.projectId>
                     <deploy.version>1</deploy.version>
                 </configuration>
             </plugin>
@@ -134,6 +134,29 @@
                 </annotationProcessorPaths>
               </configuration>
             </plugin>
+                 
+            <plugin>
+              <groupId>com.cosium.code</groupId>
+              <artifactId>git-code-format-maven-plugin</artifactId>
+              <version>2.6</version>
+              <executions>
+                <!-- On commit, format the modified java files -->
+                <execution>
+                  <id>install-formatter-hook</id>
+                  <goals>
+                    <goal>install-hooks</goal>
+                  </goals>
+                </execution>
+                <!-- On Maven verify phase, fail if any file
+                (including unmodified) is badly formatted -->
+                <execution>
+                  <id>validate-code-format</id>
+                  <goals>
+                    <goal>validate-code-format</goal>
+                  </goals>
+                </execution>
+              </executions>
+            </plugin>                 
         </plugins>
     </build>
   

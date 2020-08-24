@@ -11,29 +11,7 @@ class PlaceGuideOnList {
 
     createBlobView(audioKey, "audio", placeGuideDiv);
     createBlobView(imageKey, "img", placeGuideDiv);
-
-    if (createdByCurrentUser) {
-      const deleteButton = document.createElement("button");
-      deleteButton.addEventListener("click", function() {
-        if (window.confirm("Click ok if you want to delete the place guide")) {
-          placeGuideManager.remove(placeGuideId);
-        }
-      });
-      placeGuideDiv.appendChild(deleteButton);
-
-      const editButton = document.createElement("button");
-      const queryString = 
-      editButton.addEventListener("click", function() {
-        const queryString = 
-            generateQueryString(
-                placeGuideId, placeName, placeId, name, 
-                getBlobSrc(audioKey), getBlobSrc(imageKey), 
-                description, audioLength, isPublic, latitude, longitude);
-        const url = "./createPlaceGuide.html?" + queryString;
-        window.location = url;
-      });
-      placeGuideDiv.appendChild(editButton);
-    }
+    createButtonsIfUserIsCreator(createdByCurrentUser);
 
     const bookmarkButton = document.createElement("button");
     if (bookmarkedByCurrentUser) {
@@ -66,8 +44,6 @@ function highlightOnInfoBoxClick(placeGuideDiv, placeGuideId) {
   });
 }
 
-
-
 function createBlobView(blobKey, elementType, parentDiv) {
   const element = document.createElement(elementType);
   const src = getBlobSrc(blobKey);
@@ -81,7 +57,9 @@ function getBlobSrc(blobKey) {
   return src;
 }
 
-function generateQueryString(placeGuideId, placeName, placeId, name, audioSrc, imageSrc, description, length, isPublic, latitude, longitude) {
+function generateQueryString(
+    placeGuideId, placeName, placeId, name, audioSrc, imageSrc, 
+    description, length, isPublic, latitude, longitude) {
   var params = {
     placeGuideId: placeGuideId,
     placeName: placeName,
@@ -101,4 +79,41 @@ function generateQueryString(placeGuideId, placeName, placeId, name, audioSrc, i
       .map(function(k) {return esc(k) + '=' + esc(params[k]);})
       .join('&');
   return query;
+}
+
+function createButtonsIfUserIsCreator(createdByCurrentUser, placeGuideDiv, placeGuideId) {
+  if (createdByCurrentUser) {
+    createDeleteButton(placeGuideDiv, placeGuideId);
+    createEditButton(
+        placeGuideDiv, placeGuideId, placeName, placeId, name, 
+        audioKey, imageKey, description, audioLength, isPublic, 
+        latitude, longitude);
+  }
+}
+
+function createDeleteButton(placeGuideDiv, placeGuideId) {
+  const deleteButton = document.createElement("button");
+  deleteButton.addEventListener("click", function() {
+    if (window.confirm("Click ok if you want to delete the place guide")) {
+      placeGuideManager.remove(placeGuideId);
+    }
+  });
+  placeGuideDiv.appendChild(deleteButton);
+}
+
+function createEditButton(
+    placeGuideDiv, placeGuideId, placeName, placeId, name, 
+    audioKey, imageKey, description, audioLength, isPublic, 
+    latitude, longitude) {
+  const editButton = document.createElement("button");
+  editButton.addEventListener("click", function() {
+    const queryString = 
+        generateQueryString(
+            placeGuideId, placeName, placeId, name, 
+            getBlobSrc(audioKey), getBlobSrc(imageKey), 
+            description, audioLength, isPublic, latitude, longitude);
+    const url = "./createPlaceGuide.html?" + queryString;
+    window.location = url;
+  });
+  placeGuideDiv.appendChild(editButton);
 }

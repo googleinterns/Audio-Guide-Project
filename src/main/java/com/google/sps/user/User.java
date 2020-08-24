@@ -14,40 +14,31 @@
 
 package com.google.sps.user;
 
-import java.util.Objects;
-import org.jetbrains.annotations.Nullable;
-import java.util.Set;
-import java.util.HashSet;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
+import org.jetbrains.annotations.Nullable;
 
-/**
- * Stores the data related to one user.
- */
+/** Stores the data related to one user. */
 public class User {
   private final String id;
   private final String email;
   private final boolean publicPortfolio;
-  @Nullable
-  private final String name;
-  @Nullable
-  private final String selfIntroduction;
-  @Nullable
-  private final String imgKey;
+  @Nullable private final String name;
+  @Nullable private final String selfIntroduction;
+  @Nullable private final String imgKey;
 
-  // Contains the unique identifier of the corresponding bookmarked place guides.
-  private final Set<Long> bookmarkedPlaceGuidesIds; 
+  private final Set<Long> bookmarkedPlaceGuidesIds;
 
   public static class Builder {
     // Required.
     private final String id;
     private final String email;
     // Optional.
-    @Nullable
-    private String name;
-    @Nullable
-    private String selfIntroduction;
-    @Nullable
-    private String imgKey;
+    @Nullable private String name;
+    @Nullable private String selfIntroduction;
+    @Nullable private String imgKey;
     private boolean publicPortfolio = false;
     private Set<Long> bookmarkedPlaceGuidesIds = new HashSet<>();
 
@@ -84,6 +75,17 @@ public class User {
     public User build() {
       return new User(this);
     }
+  }
+
+  public User.Builder toBuilder() {
+    User.Builder newUserBuilder =
+        new User.Builder(id, email)
+            .setBookmarkedPlaceGuidesIds(bookmarkedPlaceGuidesIds)
+            .setName(name)
+            .addSelfIntroduction(selfIntroduction)
+            .setPublicPortfolio(publicPortfolio)
+            .addImgKey(imgKey);
+    return newUserBuilder;
   }
 
   private User(Builder builder) {
@@ -125,14 +127,14 @@ public class User {
   }
 
   @Override
-  public boolean equals(Object o){
+  public boolean equals(Object o) {
     if (!(o instanceof User)) {
       return false;
     }
     User user = (User) o;
     return user.getId().equals(this.getId());
   }
-  
+
   @Override
   public int hashCode() {
     return Objects.hash(id);

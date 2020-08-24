@@ -1,5 +1,3 @@
-const DUMMY_DATA_FOR_PLACE_NAME = "placeName";
-
 /**
  * Handles setting up the create place guide form whenever the page is loaded.
  */
