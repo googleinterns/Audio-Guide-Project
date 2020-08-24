@@ -7,7 +7,7 @@
 var map;
 var placeGuideManager;
 
-function createMap() {
+function initPage() {
    var mapWidget = new MapWidget();
    mapWidget.addGeolocationFunctionality();
    mapWidget.addSearchingFunctionality();

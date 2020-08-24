@@ -17,10 +17,13 @@ class PlaceGuideRepository {
         url.searchParams.append("placeGuideType", this._queryType);
         url.searchParams.append("regionCorners", bounds.toUrlValue());
         var thisPlaceGuides = this._placeGuides;
+        var thisQueryType = this._queryType;
         return new Promise(function (resolve, reject) {
+            var isAllPublic = thisQueryType == PlaceGuideRepository.QueryType.ALL_PUBLIC_IN_MAP_AREA || thisQueryType == PlaceGuideRepository.QueryType.CREATED_PUBLIC_IN_MAP_AREA;
+            console.log(isAllPublic);
             var location = Location.constructLocationBasedOnCoordinates(10, 20);
             var user = new User("id1", "email", "name", true, "I am user", "imgkey");
-            var placeGuide = new PlaceGuide(111, "placeGuide1", location, "audioKey", 3, "imgKey", user, "This is a placeGuide", false, true, true);
+            var placeGuide = new PlaceGuide(111, "placeGuide1", location, "audioKey", 3, "imgKey", user, "This is a placeGuide", isAllPublic, true, true);
             thisPlaceGuides[placeGuide.id] = placeGuide;
             var location2 = Location.constructLocationBasedOnCoordinates(46.792268,23.537362);
             var user2 = new User("id2", "email2", "name2", true, "I am user2", "imgkey2");
@@ -33,7 +36,7 @@ class PlaceGuideRepository {
             }).then(response => {
                 Location.constructLocationBasedOnPlaceId("ChIJM3bYao8OSUcRpHGkCCTD9yM").then(location4 => {
                     var user4 = new User("id4", "email4", "name4", true, "I am user4", "imgkey4");
-                    var placeGuide4 = new PlaceGuide(444, "placeGuide4", location4, "audioKey4", 4, "imgKey4", user4, "This is a placeGuide4", false, true, false);
+                    var placeGuide4 = new PlaceGuide(444, "placeGuide4", location4, "audioKey4", 4, "imgKey4", user4, "This is a placeGuide4", isAllPublic, true, false);
                     thisPlaceGuides[placeGuide4.id] = placeGuide4;
                 }).then(response => resolve());
             });
@@ -114,7 +117,7 @@ class PlaceGuideRepository {
                     });
             }
              else {
-                 // TODO: figure out how to get coordinates from GeoPt
+                 // TODO: figure out how to get coordinates from GeoPt.
                  var location = Location.constructLocationBasedOnCoordinates(10, 20);
                  var placeGuide = new PlaceGuide(placeGuideResponse.id, 
                                                 placeGuideResponse.name, 

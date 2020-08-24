@@ -8,7 +8,7 @@
  * creation.
  * Display place guides: displays the place guides created by the currently logged in user.
  */
-function createMap() {
+function initPage() {
   var map = new MapWidget();
    map.addGeolocationFunctionality();
    map.addLocationChoosingAndSavingFunctionality();
