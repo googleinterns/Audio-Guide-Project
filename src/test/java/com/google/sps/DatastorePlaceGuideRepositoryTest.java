@@ -1,5 +1,6 @@
 package com.google.sps;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -11,9 +12,14 @@ import com.google.sps.placeGuide.PlaceGuide;
 import com.google.sps.placeGuide.repository.PlaceGuideRepository;
 import com.google.sps.placeGuide.repository.PlaceGuideRepositoryFactory;
 import com.google.sps.placeGuide.repository.impl.DatastorePlaceGuideRepository;
+import com.google.sps.user.User;
+import com.google.sps.user.repository.UserRepository;
+import com.google.sps.user.repository.UserRepositoryFactory;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,6 +31,8 @@ public final class DatastorePlaceGuideRepositoryTest {
 
   private final LocalServiceTestHelper helper =
       new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
+  private final UserRepository userRepository =
+      UserRepositoryFactory.getUserRepository(RepositoryType.DATASTORE);
 
   public static final long A_PUBLIC_ID = 12345;
   public static final long B_PUBLIC_ID = 23456;
@@ -42,6 +50,22 @@ public final class DatastorePlaceGuideRepositoryTest {
   public static final String DESCRIPTION = "description";
   public static final String PREVIOUS_DESCRIPTION = "previous description";
   public static final String IMAGE_KEY = "imageKey";
+
+  public static final String OTHER_USER_EMAIL = "otherUser@gmail.com";
+  public static final Set<Long> OTHER_USER_BOOKMARKED_PLACE_GUIDES_IDS = new HashSet<>();
+  public static final String CREATOR_A_EMAIL = "creatorA@gmail.com";
+  public static final Set<Long> CREATOR_A_BOOKMARKED_PLACE_GUIDES_IDS =
+      new HashSet<>(Arrays.asList(A_PUBLIC_ID, B_PUBLIC_ID));
+
+  private final User testUser =
+      new User.Builder(OTHER_USER_ID, OTHER_USER_EMAIL)
+          .setBookmarkedPlaceGuidesIds(OTHER_USER_BOOKMARKED_PLACE_GUIDES_IDS)
+          .build();
+
+  private final User userA =
+      new User.Builder(CREATOR_A_ID, CREATOR_A_EMAIL)
+          .setBookmarkedPlaceGuidesIds(CREATOR_A_BOOKMARKED_PLACE_GUIDES_IDS)
+          .build();
 
   // PlaceGuides' parameters used for map-related queries.
   // PlaceGudies of user C.
@@ -390,6 +414,39 @@ public final class DatastorePlaceGuideRepositoryTest {
     assertTrue(compare(expected, result));
   }
 
+  @Test
+  public void
+      getBookmarkedPlaceGuides_allPlaceGuidesExistAndUserExists_returnCorrespondingPlaceGuides() {
+    List<PlaceGuide> testPlaceGuidesList =
+        Arrays.asList(
+            testPublicPlaceGuideA,
+            testPublicPlaceGuideB,
+            testPrivatePlaceGuideB,
+            testPrivatePlaceGuideA);
+    saveTestPlaceGuidesEntities(testPlaceGuidesList);
+
+    // Store user to database.
+    userRepository.saveUser(userA);
+    List<PlaceGuide> expected = Arrays.asList(testPublicPlaceGuideA, testPublicPlaceGuideB);
+    List<PlaceGuide> result = placeGuideRepository.getBookmarkedPlaceGuides(CREATOR_A_ID);
+    assertTrue(compare(expected, result));
+  }
+
+  @Test(expected = IllegalStateException.class)
+  public void getBookmarkedPlaceGuides_nonExistentUser_throwsError() {
+    List<PlaceGuide> testPlaceGuidesList =
+        Arrays.asList(
+            testPublicPlaceGuideA,
+            testPublicPlaceGuideB,
+            testPrivatePlaceGuideB,
+            testPrivatePlaceGuideA);
+    saveTestPlaceGuidesEntities(testPlaceGuidesList);
+
+    List<PlaceGuide> expected = Arrays.asList(testPublicPlaceGuideA, testPublicPlaceGuideB);
+    List<PlaceGuide> result = placeGuideRepository.getBookmarkedPlaceGuides(CREATOR_A_ID);
+    assertTrue(compare(expected, result));
+  }
+
   @Test(expected = EntityNotFoundException.class)
   public void
       deletePlaceGuide_theChosenPlaceGuideHasBeenDeleted_throwExceptionSinceEntityDoesntExist()
@@ -405,6 +462,30 @@ public final class DatastorePlaceGuideRepositoryTest {
     Key deletedEntityKey =
         KeyFactory.createKey(DatastorePlaceGuideRepository.ENTITY_KIND, A_PUBLIC_ID);
     Entity deletedEntity = datastore.get(deletedEntityKey);
+  }
+
+  @Test
+  public void placeGuideExists_placeGuideDoesNotExists_returnFalse() {
+    List<PlaceGuide> testPlaceGuidesList =
+        Arrays.asList(testPublicPlaceGuideB, testPrivatePlaceGuideB, testPrivatePlaceGuideA);
+    saveTestPlaceGuidesEntities(testPlaceGuidesList);
+    Key testPublicPlaceGuideAKey =
+        KeyFactory.createKey(DatastorePlaceGuideRepository.ENTITY_KIND, A_PUBLIC_ID);
+    assertFalse(placeGuideRepository.placeGuideExists(testPublicPlaceGuideAKey));
+  }
+
+  @Test
+  public void placeGuideExists_placeGuideDoesExists_returnTrue() {
+    List<PlaceGuide> testPlaceGuidesList =
+        Arrays.asList(
+            testPublicPlaceGuideA,
+            testPublicPlaceGuideB,
+            testPrivatePlaceGuideB,
+            testPrivatePlaceGuideA);
+    saveTestPlaceGuidesEntities(testPlaceGuidesList);
+    Key testPublicPlaceGuideAKey =
+        KeyFactory.createKey(DatastorePlaceGuideRepository.ENTITY_KIND, A_PUBLIC_ID);
+    assertTrue(placeGuideRepository.placeGuideExists(testPublicPlaceGuideAKey));
   }
 
   @Test

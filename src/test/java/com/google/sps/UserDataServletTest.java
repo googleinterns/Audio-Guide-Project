@@ -42,23 +42,28 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.Collections;
 
 @RunWith(JUnit4.class)
 public final class UserDataServletTest {
   private static final String ID = "userid";
   private static final String EMAIL = "user@gmail.com";
+  private static final Set<Long> EMPTY_BOOKMARKED_PLACE_GUIDES_IDS = null;
+  private static final Set<Long> BOOKMARKED_PLACE_GUIDES_IDS = new HashSet<>(Arrays.asList((long) 12345));
   private static final String NAME = "username";
   private static final String SELF_INTRODUCTION = "I am the user";
   private static final String IMG_KEY = "/img.com";
 
   private final User toSaveUser =
       new User.Builder(ID, EMAIL)
+          .setBookmarkedPlaceGuidesIds(BOOKMARKED_PLACE_GUIDES_IDS)
           .setName(NAME)
           .setPublicPortfolio(true)
           .addSelfIntroduction(SELF_INTRODUCTION)
           .addImgKey(IMG_KEY)
           .build();
-  private User toGetUser;
 
   private UserDataServlet userDataServlet;
   private Map<String, Object> attributeToValue = new HashMap<>();
@@ -94,7 +99,7 @@ public final class UserDataServletTest {
   }
 
   @Test
-  public void doPost() throws IOException, ServletException {
+  public void doPost_InexistentUser_returnsEmptyBookmarkedPlaceGuides() throws IOException, ServletException {
     // Mock request and response.
     when(request.getParameter(UserDataServlet.NAME_INPUT)).thenReturn(NAME);
     when(request.getParameter(UserDataServlet.SELF_INTRODUCTION_INPUT))
@@ -124,6 +129,119 @@ public final class UserDataServletTest {
       assertEquals(NAME, userEntity.getProperty(DatastoreUserRepository.NAME_PROPERTY));
       assertEquals(EMAIL, userEntity.getProperty(DatastoreUserRepository.EMAIL_PROPERTY));
       assertEquals(
+          null, 
+          userEntity.getProperty(DatastoreUserRepository.BOOKMARKED_PLACE_GUIDES_IDS_PROPERTY));
+      assertEquals(
+          SELF_INTRODUCTION,
+          userEntity.getProperty(DatastoreUserRepository.SELF_INTRODUCTION_PROPERTY));
+      assertEquals(
+          false, userEntity.getProperty(DatastoreUserRepository.PUBLIC_PORTFOLIO_PROPERTY));
+      assertEquals(IMG_KEY, userEntity.getProperty(DatastoreUserRepository.IMG_KEY_PROPERTY));
+    } catch (EntityNotFoundException e) {
+      fail("Entity not found: " + e);
+    }
+  }
+
+  @Test
+  public void doPost_userExistsWithEmptyBookmarkedPlaceGuides_returnsEmptyBookmarkedPlaceGuides() throws IOException, ServletException {
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
+    // Store user's previous data.
+    Entity prevUserEntity = new Entity(DatastoreUserRepository.ENTITY_KIND, ID);
+    prevUserEntity.setProperty(DatastoreUserRepository.EMAIL_PROPERTY, EMAIL);
+    prevUserEntity.setProperty(
+        DatastoreUserRepository.BOOKMARKED_PLACE_GUIDES_IDS_PROPERTY, 
+        EMPTY_BOOKMARKED_PLACE_GUIDES_IDS);
+    prevUserEntity.setProperty(DatastoreUserRepository.PUBLIC_PORTFOLIO_PROPERTY, true);
+    datastore.put(prevUserEntity);
+
+    // Mock request and response.
+    when(request.getParameter(UserDataServlet.NAME_INPUT)).thenReturn(NAME);
+    when(request.getParameter(UserDataServlet.SELF_INTRODUCTION_INPUT))
+        .thenReturn(SELF_INTRODUCTION);
+    when(request.getParameter(UserDataServlet.PUBLIC_PORTFOLIO_INPUT)).thenReturn("private");
+    StringWriter sw = new StringWriter();
+    PrintWriter pw = new PrintWriter(sw);
+    when(response.getWriter()).thenReturn(pw);
+
+    // Mock blobstoreService and blobInfoFactory.
+    Map<String, List<BlobKey>> blobs = new HashMap<>();
+    BlobKey blobKey = new BlobKey(IMG_KEY);
+    blobs.put(UserDataServlet.IMG_KEY_INPUT, Arrays.asList(blobKey));
+    when(blobstoreService.getUploads(request)).thenReturn(blobs);
+    BlobInfo blobInfo = new BlobInfo(blobKey, "img", new Date(), "file.img", 1);
+    when(blobInfoFactory.loadBlobInfo(blobKey)).thenReturn(blobInfo);
+
+    // Save the currenly logged in user's data.
+    userDataServlet = new UserDataServlet(blobstoreService, blobInfoFactory);
+    userDataServlet.doPost(request, response);
+
+    // Get the currently logged in user's previously saved data.
+    Key userKey = KeyFactory.createKey(DatastoreUserRepository.ENTITY_KIND, ID);
+    try {
+      Entity userEntity = datastore.get(userKey);
+      assertEquals(NAME, userEntity.getProperty(DatastoreUserRepository.NAME_PROPERTY));
+      assertEquals(EMAIL, userEntity.getProperty(DatastoreUserRepository.EMAIL_PROPERTY));
+      assertEquals(
+          null, 
+          userEntity.getProperty(DatastoreUserRepository.BOOKMARKED_PLACE_GUIDES_IDS_PROPERTY));
+      assertEquals(
+          SELF_INTRODUCTION,
+          userEntity.getProperty(DatastoreUserRepository.SELF_INTRODUCTION_PROPERTY));
+      assertEquals(
+          false, userEntity.getProperty(DatastoreUserRepository.PUBLIC_PORTFOLIO_PROPERTY));
+      assertEquals(IMG_KEY, userEntity.getProperty(DatastoreUserRepository.IMG_KEY_PROPERTY));
+    } catch (EntityNotFoundException e) {
+      fail("Entity not found: " + e);
+    }
+  }
+
+  @Test
+  public void doPost_userExistsWithFilledBookmarkedPlaceGuides_returnsFilledBookmarkedPlaceGuides() throws IOException, ServletException {
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
+    // Store user's previous data.
+    Entity prevUserEntity = new Entity(DatastoreUserRepository.ENTITY_KIND, ID);
+    prevUserEntity.setProperty(DatastoreUserRepository.EMAIL_PROPERTY, EMAIL);
+    prevUserEntity.setProperty(
+        DatastoreUserRepository.BOOKMARKED_PLACE_GUIDES_IDS_PROPERTY, 
+        BOOKMARKED_PLACE_GUIDES_IDS);
+    prevUserEntity.setProperty(DatastoreUserRepository.PUBLIC_PORTFOLIO_PROPERTY, true);
+    datastore.put(prevUserEntity);
+
+    // Mock request and response.
+    when(request.getParameter(UserDataServlet.NAME_INPUT)).thenReturn(NAME);
+    when(request.getParameter(UserDataServlet.SELF_INTRODUCTION_INPUT))
+        .thenReturn(SELF_INTRODUCTION);
+    when(request.getParameter(UserDataServlet.PUBLIC_PORTFOLIO_INPUT)).thenReturn("private");
+    StringWriter sw = new StringWriter();
+    PrintWriter pw = new PrintWriter(sw);
+    when(response.getWriter()).thenReturn(pw);
+
+    // Mock blobstoreService and blobInfoFactory.
+    Map<String, List<BlobKey>> blobs = new HashMap<>();
+    BlobKey blobKey = new BlobKey(IMG_KEY);
+    blobs.put(UserDataServlet.IMG_KEY_INPUT, Arrays.asList(blobKey));
+    when(blobstoreService.getUploads(request)).thenReturn(blobs);
+    BlobInfo blobInfo = new BlobInfo(blobKey, "img", new Date(), "file.img", 1);
+    when(blobInfoFactory.loadBlobInfo(blobKey)).thenReturn(blobInfo);
+
+    // Save the currenly logged in user's data.
+    userDataServlet = new UserDataServlet(blobstoreService, blobInfoFactory);
+    userDataServlet.doPost(request, response);
+
+    // Get the currently logged in user's previously saved data.
+    Key userKey = KeyFactory.createKey(DatastoreUserRepository.ENTITY_KIND, ID);
+    try {
+      Entity userEntity = datastore.get(userKey);
+      assertEquals(NAME, userEntity.getProperty(DatastoreUserRepository.NAME_PROPERTY));
+      assertEquals(EMAIL, userEntity.getProperty(DatastoreUserRepository.EMAIL_PROPERTY));
+      List<Long> resultList = 
+          (ArrayList) userEntity.getProperty(
+              DatastoreUserRepository.BOOKMARKED_PLACE_GUIDES_IDS_PROPERTY);
+      Set<Long> resultSet = new HashSet<>(resultList);
+      assertEquals(BOOKMARKED_PLACE_GUIDES_IDS, resultSet);
+      assertEquals(
           SELF_INTRODUCTION,
           userEntity.getProperty(DatastoreUserRepository.SELF_INTRODUCTION_PROPERTY));
       assertEquals(
@@ -140,6 +258,9 @@ public final class UserDataServletTest {
     Entity userEntity = new Entity(DatastoreUserRepository.ENTITY_KIND, toSaveUser.getId());
     userEntity.setProperty(DatastoreUserRepository.NAME_PROPERTY, toSaveUser.getName());
     userEntity.setProperty(DatastoreUserRepository.EMAIL_PROPERTY, toSaveUser.getEmail());
+    userEntity.setProperty(
+        DatastoreUserRepository.BOOKMARKED_PLACE_GUIDES_IDS_PROPERTY, 
+        toSaveUser.getBookmarkedPlaceGuidesIds());
     userEntity.setProperty(
         DatastoreUserRepository.PUBLIC_PORTFOLIO_PROPERTY, toSaveUser.portfolioIsPublic());
     userEntity.setProperty(
@@ -164,6 +285,7 @@ public final class UserDataServletTest {
     User resultUser = gson.fromJson(sw.toString(), User.class);
     assertEquals(ID, resultUser.getId());
     assertEquals(EMAIL, resultUser.getEmail());
+    assertEquals(BOOKMARKED_PLACE_GUIDES_IDS, resultUser.getBookmarkedPlaceGuidesIds());
     assertEquals(NAME, resultUser.getName());
     assertTrue(resultUser.portfolioIsPublic());
     assertEquals(SELF_INTRODUCTION, resultUser.getSelfIntroduction());

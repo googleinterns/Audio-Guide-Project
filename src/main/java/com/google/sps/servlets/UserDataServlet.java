@@ -22,15 +22,19 @@ import com.google.sps.data.RepositoryType;
 import com.google.sps.user.User;
 import com.google.sps.user.repository.UserRepository;
 import com.google.sps.user.repository.UserRepositoryFactory;
+import com.google.sps.user.repository.impl.DatastoreUserRepository;
 import org.jetbrains.annotations.Nullable;
+import com.google.appengine.api.datastore.*;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
+import java.util.Set;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.List;
 
 /**
  * This servlet handles users' data.
@@ -75,14 +79,14 @@ public class UserDataServlet extends HttpServlet {
    */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    User user = getUserFromRequest(request);
     User prevUserData = userRepository.getUser(userService.getCurrentUser().getUserId());
-    if (prevUserData != null
-            && prevUserData.getImgKey() != null
-            && !prevUserData.getImgKey().equals(user.getImgKey())) {
+    User user = getUserFromRequest(request, prevUserData);
+    if (prevUserData != null && 
+        prevUserData.getImgKey() != null && 
+        !prevUserData.getImgKey().equals(user.getImgKey())) {
       // Delete previous image blob from blobstore, because it was overwritten or deleted.
       deleteBlobWithGivenKeyValue(prevUserData.getImgKey());
-    }
+    } 
     userRepository.saveUser(user);
     response.sendRedirect("/index.html");
   }
@@ -102,10 +106,14 @@ public class UserDataServlet extends HttpServlet {
     blobstoreService.delete(blobKey);
   }
 
-  private User getUserFromRequest(HttpServletRequest request) {
+  private User getUserFromRequest(HttpServletRequest request, User prevUserData) {
     String id = userService.getCurrentUser().getUserId();
     String email = userService.getCurrentUser().getEmail();
     User.Builder newUserBuilder = new User.Builder(id, email);
+    if (prevUserData != null && !prevUserData.getBookmarkedPlaceGuidesIds().isEmpty()) {
+      Set<Long> bookmarkedPlaceGuidesIds = prevUserData.getBookmarkedPlaceGuidesIds();
+      newUserBuilder.setBookmarkedPlaceGuidesIds(bookmarkedPlaceGuidesIds);
+    }
     String name = request.getParameter(NAME_INPUT);
     if (!name.isEmpty()) {
       newUserBuilder.setName(name);
@@ -125,7 +133,7 @@ public class UserDataServlet extends HttpServlet {
     } else if (request.getParameterValues(DELETE_IMG_INPUT) == null) {
       // The user didn't submit a new photo, but they didn't choose to delete the old one either.
       // Keep old photo in the database.
-      imgKey = userRepository.getUser(userService.getCurrentUser().getUserId()).getImgKey();
+      imgKey = prevUserData.getImgKey();
       newUserBuilder.addImgKey(imgKey);
     }
     return newUserBuilder.build();

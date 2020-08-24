@@ -30,6 +30,8 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -38,17 +40,23 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.Arrays;
 
 @RunWith(JUnit4.class)
 public final class UserCreationServletTest {
   private static final String ID = "userid";
   private static final String EMAIL = "user@gmail.com";
+  private static final Set<Long> BOOKMARKED_PLACE_GUIDES_IDS = new HashSet<>(Arrays.asList((long) 12345));
+  private static final Set<Long> EMPTY_BOOKMARKED_PLACE_GUIDES_IDS = null;
   private static final String NAME = "username";
   private static final String SELF_INTRODUCTION = "I am the user";
   private static final String IMG_KEY = "img1234";
 
   private final User toSaveUser =
       new User.Builder(ID, EMAIL)
+          .setBookmarkedPlaceGuidesIds(BOOKMARKED_PLACE_GUIDES_IDS)
           .setName(NAME)
           .addSelfIntroduction(SELF_INTRODUCTION)
           .addImgKey(IMG_KEY)
@@ -87,6 +95,9 @@ public final class UserCreationServletTest {
     // Create entity to save.
     Entity userEntity = new Entity(DatastoreUserRepository.ENTITY_KIND, toSaveUser.getId());
     userEntity.setProperty(DatastoreUserRepository.EMAIL_PROPERTY, toSaveUser.getEmail());
+    userEntity.setProperty(
+        DatastoreUserRepository.BOOKMARKED_PLACE_GUIDES_IDS_PROPERTY, 
+        toSaveUser.getBookmarkedPlaceGuidesIds());
     userEntity.setProperty(DatastoreUserRepository.NAME_PROPERTY, toSaveUser.getName());
     userEntity.setProperty(
         DatastoreUserRepository.PUBLIC_PORTFOLIO_PROPERTY, toSaveUser.portfolioIsPublic());
@@ -108,6 +119,13 @@ public final class UserCreationServletTest {
       userEntity = datastore.get(userKey);
       assertEquals(NAME, userEntity.getProperty(DatastoreUserRepository.NAME_PROPERTY));
       assertEquals(EMAIL, userEntity.getProperty(DatastoreUserRepository.EMAIL_PROPERTY));
+      List<Long> resultList = 
+          (ArrayList) userEntity.getProperty(
+              DatastoreUserRepository.BOOKMARKED_PLACE_GUIDES_IDS_PROPERTY);
+      Set<Long> resultSet = new HashSet<>(resultList);
+      assertEquals(
+          BOOKMARKED_PLACE_GUIDES_IDS, 
+          resultSet);
       assertEquals(
           SELF_INTRODUCTION,
           userEntity.getProperty(DatastoreUserRepository.SELF_INTRODUCTION_PROPERTY));
@@ -131,6 +149,9 @@ public final class UserCreationServletTest {
     try {
       Entity userEntity = datastore.get(userKey);
       assertEquals(EMAIL, userEntity.getProperty(DatastoreUserRepository.EMAIL_PROPERTY));
+      assertEquals(
+          EMPTY_BOOKMARKED_PLACE_GUIDES_IDS, 
+          userEntity.getProperty(DatastoreUserRepository.BOOKMARKED_PLACE_GUIDES_IDS_PROPERTY));
     } catch (EntityNotFoundException e) {
       fail("Entity not found: " + e);
     }

@@ -16,6 +16,9 @@ package com.google.sps.user;
 
 import java.util.Objects;
 import org.jetbrains.annotations.Nullable;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.Collections;
 
 /**
  * Stores the data related to one user.
@@ -31,6 +34,8 @@ public class User {
   @Nullable
   private final String imgKey;
 
+  private final Set<Long> bookmarkedPlaceGuidesIds; 
+
   public static class Builder {
     // Required.
     private final String id;
@@ -43,10 +48,16 @@ public class User {
     @Nullable
     private String imgKey;
     private boolean publicPortfolio = false;
+    private Set<Long> bookmarkedPlaceGuidesIds = new HashSet<>();
 
     public Builder(String id, String email) {
       this.id = id;
       this.email = email;
+    }
+
+    public Builder setBookmarkedPlaceGuidesIds(Set<Long> bookmarkedPlaceGuidesIds) {
+      this.bookmarkedPlaceGuidesIds = bookmarkedPlaceGuidesIds;
+      return this;
     }
 
     public Builder setName(String name) {
@@ -74,6 +85,17 @@ public class User {
     }
   }
 
+  public User.Builder toBuilder() {
+    User.Builder newUserBuilder = 
+        new User.Builder(id, email)
+        .setBookmarkedPlaceGuidesIds(bookmarkedPlaceGuidesIds)
+        .setName(name)
+        .addSelfIntroduction(selfIntroduction)
+        .setPublicPortfolio(publicPortfolio)
+        .addImgKey(imgKey);
+    return newUserBuilder;
+  }
+
   private User(Builder builder) {
     this.id = builder.id;
     this.email = builder.email;
@@ -81,6 +103,7 @@ public class User {
     this.selfIntroduction = builder.selfIntroduction;
     this.imgKey = builder.imgKey;
     this.publicPortfolio = builder.publicPortfolio;
+    this.bookmarkedPlaceGuidesIds = builder.bookmarkedPlaceGuidesIds;
   }
 
   public String getId() {
@@ -105,6 +128,10 @@ public class User {
 
   public boolean portfolioIsPublic() {
     return publicPortfolio;
+  }
+
+  public Set<Long> getBookmarkedPlaceGuidesIds() {
+    return Collections.unmodifiableSet(bookmarkedPlaceGuidesIds);
   }
 
   @Override
