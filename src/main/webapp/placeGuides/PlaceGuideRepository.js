@@ -17,8 +17,31 @@ class PlaceGuideRepository {
         var url = new URL("/place-guide-data", document.URL);
         url.searchParams.append("placeGuideType", this._queryType);
         url.searchParams.append("regionCorners", bounds.toUrlValue());
+        var thisPlaceGuides = this._placeGuides;
         return new Promise(function (resolve, reject) {
-            resolve();
+            var location = Location.constructLocationBasedOnCoordinates(10, 20);
+            var user = new User("id1", "email", "name", true, "I am user", "imgkey");
+            var placeGuide = new PlaceGuide(111, "placeGuide1", location, "audioKey", 3, "imgKey", user, "This is a placeGuide", false, true, true);
+            thisPlaceGuides[placeGuide.id] = placeGuide;
+            var location2 = Location.constructLocationBasedOnCoordinates(46.792268,23.537362);
+            var user2 = new User("id2", "email2", "name2", true, "I am user2", "imgkey2");
+            var placeGuide2 = new PlaceGuide(222, "placeGuide2", location2, "audioKey2", 5, "imgKey2", user2, "This is a placeGuide2", true, false, false);
+            thisPlaceGuides[placeGuide2.id] = placeGuide2;
+            Location.constructLocationBasedOnPlaceId("ChIJe-ff-71RqEcRqvy8lRR4PHo").then(location3 => {
+                console.log("location 3 finished");
+                var user3 = new User("id3", "email3", "name3", true, "I am user3", "imgkey3");
+                var placeGuide3 = new PlaceGuide(333, "placeGuide3", location3, "audioKey3", 4, "imgKey3", user3, "This is a placeGuide3", true, true, false);
+                thisPlaceGuides[placeGuide3.id] = placeGuide3;
+            }).then(response => {
+                Location.constructLocationBasedOnPlaceId("ChIJM3bYao8OSUcRpHGkCCTD9yM").then(location4 => {
+                    console.log("location 4 finished");
+                    var user4 = new User("id4", "email4", "name4", true, "I am user4", "imgkey4");
+                    var placeGuide4 = new PlaceGuide(444, "placeGuide4", location4, "audioKey4", 4, "imgKey4", user4, "This is a placeGuide4", false, true, false);
+                    thisPlaceGuides[placeGuide4.id] = placeGuide4;
+                    console.log("thisPlaceGuides before resolving the promise");
+                    console.log(thisPlaceGuides);
+                }).then(response => resolve());
+            });
         })
         // return fetch(url)
         //     .catch(error => console.log("PlaceGuideServlet: failed to fetch: " + error))
@@ -29,15 +52,7 @@ class PlaceGuideRepository {
     }
 
     get placeGuides() {
-        this.setDummyData();
         return this._placeGuides;
-    }
-
-    setDummyData() {
-        var location = Location.constructLocationBasedOnCoordinates(10, 20);
-        var user = new User("12", "email", "name", true, "I am user", "imgkey");
-        var placeGuide = new PlaceGuide(123, "placeGuide1", location, "audioKey", 3, "imgKey", user, "This is a placeGuide", true, true, true);
-        this._placeGuides[123] = placeGuide;
     }
 
     removePlaceGuide(placeGuideId) {
