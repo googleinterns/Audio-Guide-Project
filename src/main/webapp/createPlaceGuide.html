@@ -20,7 +20,7 @@
             <input type="hidden" id="placeId" name="placeId">
             <br>
             <label for = "name">Name:</label><br>
-            <input type = "text" name = "name" id = "name" required pattern = "[A-Za-z0-9]+" title = "Enter alphanumeric string!">
+            <input type = "text" name = "name" id = "name" required pattern = "[A-Za-z0-9\s]+" title = "Enter alphanumeric string!">
             <br>
             <label for = "audioKey">Upload audio file</label>
             <input type = "file" name = "audioKey" id = "audioKey" required>
@@ -40,7 +40,7 @@
             <input type = "checkbox" name = "deleteImage" value = "delete" id = "deleteImage">
             <br>
             <label for = "description">Description:</label><br>
-            <textarea name = "description" rows = "4" cols = "50" id = "description"></textarea>
+            <textarea name = "description" rows = "4" cols = "50" id = "description" pattern = "[A-Za-z0-9\s]+" title = "Enter alphanumeric string!"></textarea>
             <br>
             <label for = "length">Amount of time needed in minute(s):</label><br>
             <input type = "number" name = "length" id = "length" min = "0"><br>
