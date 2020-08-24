@@ -3,10 +3,6 @@ class Location {
         this._mapsPlace = mapsPlace;
         if (this._mapsPlace != null) {
             this._position = this._mapsPlace.geometry.location;
-            console.log("construct location with mapsPlace: ");
-            console.log(this._mapsPlace);
-            console.log("position is: ");
-            console.log(this._position);
         } else {
             this._position = position;
         }
@@ -24,12 +20,8 @@ class Location {
         };
         return new Promise(function (resolve, reject) {
             var service = new google.maps.places.PlacesService(map);
-            console.log("PlacesService and map ");
-            console.log(service);
-            console.log(map);
             service.getDetails(request, (place, status) => {
                 if (status === google.maps.places.PlacesServiceStatus.OK) {
-                    console.log("PlacesService for " + placeId + " finished with OK");
                     resolve(new Location(null, place));
                 } else {
                     reject(new Error('Couldn\'t find the place' + placeId));

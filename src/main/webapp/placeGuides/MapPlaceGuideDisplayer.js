@@ -2,7 +2,6 @@ class MapPlaceGuideDisplayer {
     constructor(map) {
         this._map = map;
         this._placeGuidesOnMap = {};
-        console.log("MapPlaceGuideDisplayer constructed");
     }
 
     update(placeGuides) {
@@ -27,8 +26,6 @@ class MapPlaceGuideDisplayer {
                 if(!this._placeGuidesOnMap.hasOwnProperty(placeGuideId)) {
                     // new placeGuide should be constructed.
                     this._placeGuidesOnMap[placeGuideId] = this.constructPlaceGuideOnMapFromPlaceGuide(placeGuides[placeGuideId]);
-                    console.log("create placeGuideOnMap for id = " + placeGuideId);
-                    console.log(this._placeGuidesOnMap[placeGuideId]);
                 }
             }
         }
@@ -57,14 +54,6 @@ class MapPlaceGuideDisplayer {
     }
 
     highlight(placeGuideId) {
-        console.log("searching for placeGuideOnMap with id = " + placeGuideId);
-         for (var existingPlaceGuideId in this._placeGuidesOnMap) {
-            if (this._placeGuidesOnMap.hasOwnProperty(existingPlaceGuideId)) {           
-                console.log("existing placeGuideOnMap with id " + existingPlaceGuideId);
-            }
-        }
-        console.log("found placeGuideOnMap: ");
-        console.log( this._placeGuidesOnMap[placeGuideId]);
         this._placeGuidesOnMap[placeGuideId].highlight();
     }
 }

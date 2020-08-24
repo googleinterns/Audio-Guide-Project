@@ -9,7 +9,6 @@ class PlaceGuideRepository {
     constructor(queryType) {
         this._queryType = queryType;
         this._placeGuides = {}; // Init dictionary. 
-        console.log("PlaceGuideRepository constructed");
     }
 
     updatePlaceGuides(bounds, zoom) {
@@ -28,18 +27,14 @@ class PlaceGuideRepository {
             var placeGuide2 = new PlaceGuide(222, "placeGuide2", location2, "audioKey2", 5, "imgKey2", user2, "This is a placeGuide2", true, false, false);
             thisPlaceGuides[placeGuide2.id] = placeGuide2;
             Location.constructLocationBasedOnPlaceId("ChIJe-ff-71RqEcRqvy8lRR4PHo").then(location3 => {
-                console.log("location 3 finished");
                 var user3 = new User("id3", "email3", "name3", true, "I am user3", "imgkey3");
                 var placeGuide3 = new PlaceGuide(333, "placeGuide3", location3, "audioKey3", 4, "imgKey3", user3, "This is a placeGuide3", true, true, false);
                 thisPlaceGuides[placeGuide3.id] = placeGuide3;
             }).then(response => {
                 Location.constructLocationBasedOnPlaceId("ChIJM3bYao8OSUcRpHGkCCTD9yM").then(location4 => {
-                    console.log("location 4 finished");
                     var user4 = new User("id4", "email4", "name4", true, "I am user4", "imgkey4");
                     var placeGuide4 = new PlaceGuide(444, "placeGuide4", location4, "audioKey4", 4, "imgKey4", user4, "This is a placeGuide4", false, true, false);
                     thisPlaceGuides[placeGuide4.id] = placeGuide4;
-                    console.log("thisPlaceGuides before resolving the promise");
-                    console.log(thisPlaceGuides);
                 }).then(response => resolve());
             });
         })

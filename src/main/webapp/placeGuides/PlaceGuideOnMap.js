@@ -22,11 +22,7 @@ class PlaceGuideOnMap {
 
     highlightPlaceGuideOnMarkerDoubleClick() {
         var thisPlaceGuideOnMap = this;
-        console.log("setup highlicht placeGuide with marker: ");
-        console.log(thisPlaceGuideOnMap);
         this._marker.addListener("dblclick", () => {
-            console.log("try to highlicht placeGuide with id: ");
-             console.log(thisPlaceGuideOnMap.id);
             placeGuideManager.highlightPlaceGuide(thisPlaceGuideOnMap.id);
         });
     }
