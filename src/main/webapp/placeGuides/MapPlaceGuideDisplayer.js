@@ -37,8 +37,7 @@ class MapPlaceGuideDisplayer {
         } else {
             placeType = PlaceType.PRIVATE;
         }
-        return new PlaceGuideOnMap(map,
-                                   placeGuide.id, 
+        return new PlaceGuideOnMap(placeGuide.id, 
                                    placeGuide.name, 
                                    placeGuide.location.position, 
                                    placeGuide.location.mapsPlace, 

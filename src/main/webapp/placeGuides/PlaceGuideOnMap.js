@@ -1,10 +1,9 @@
 class PlaceGuideOnMap {
-    constructor(map, id, name, position, place, creator, description, placeType) {
-        this._map = map;
+    constructor(id, name, position, place, creator, description, placeType) {
         this._id = id;
         this._infoWindowClosed = true;
         this._infoWindow = PlaceGuideOnMap.getInfoWindow(name, position, place, creator, description);
-        this._marker = PlaceGuideOnMap.getMarker(map, placeType, name, position);
+        this._marker = PlaceGuideOnMap.getMarker(placeType, name, position);
         this._highlighted = false;
         this.closeInfoWindowOnMapClick();
         this.toggleInfoWindowOnMarkerClick();
@@ -40,7 +39,7 @@ class PlaceGuideOnMap {
     }
 
     openInfoWindow() {
-        this._infoWindow.open(this._map, this._marker);
+        this._infoWindow.open(map, this._marker);
         this._infoWindowClosed = false;
     }
 
@@ -79,7 +78,7 @@ class PlaceGuideOnMap {
 
     closeInfoWindowOnMapClick() {
         var thisPlaceGuideOnMap = this;
-        this._map.addListener('click', function (mapsMouseEvent) {
+        map.addListener('click', function (mapsMouseEvent) {
             if (!thisPlaceGuideOnMap._infoWindowClosed) {
                 thisPlaceGuideOnMap.closeInfoWindow();
             }
@@ -88,14 +87,14 @@ class PlaceGuideOnMap {
 
     unhighlightOnMapClick() {
         var thisPlaceGuideOnMap = this;
-        this._map.addListener('click', function (mapsMouseEvent) {
+        map.addListener('click', function (mapsMouseEvent) {
             if (thisPlaceGuideOnMap.isHighlighted()) {
                 placeGuideManager.unhighlightPlaceGuide();
             }
         });
     }
 
-    static getMarker(map, placeType, name, position) {
+    static getMarker(placeType, name, position) {
         var markerIcon = PlaceGuideOnMap.getMarkerIcon(placeType);
         var marker = new google.maps.Marker({
             position: position,
