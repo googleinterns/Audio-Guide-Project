@@ -11,6 +11,8 @@ class PlaceGuideManager {
         this._placeGuideRepository.updatePlaceGuides(bounds, zoom)
             .then(response => {
                 var placeGuides = this._placeGuideRepository.placeGuides;
+                console.log("received placeGuides: ");
+                console.log(placeGuides);
                 this._mapPlaceGuideDisplayer.update(placeGuides);
                 this._mapPlaceGuideDisplayer.update(placeGuides);
             })
