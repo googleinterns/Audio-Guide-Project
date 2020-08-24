@@ -15,6 +15,7 @@
 package com.google.sps.servlets;
 
 import com.google.appengine.api.blobstore.*;
+import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
@@ -22,19 +23,17 @@ import com.google.sps.data.RepositoryType;
 import com.google.sps.user.User;
 import com.google.sps.user.repository.UserRepository;
 import com.google.sps.user.repository.UserRepositoryFactory;
-import org.jetbrains.annotations.Nullable;
-
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
+import org.jetbrains.annotations.Nullable;
 
-/**
- * This servlet handles users' data.
- */
+/** This servlet handles users' data. */
 @WebServlet("/user-data-servlet")
 public class UserDataServlet extends HttpServlet {
   public static final String NAME_INPUT = "name";
@@ -45,22 +44,18 @@ public class UserDataServlet extends HttpServlet {
   public static final String DELETE_IMG_INPUT = "deleteImg";
 
   private final UserRepository userRepository =
-          UserRepositoryFactory.getUserRepository(RepositoryType.DATASTORE);;
+      UserRepositoryFactory.getUserRepository(RepositoryType.DATASTORE);;
   private final UserService userService = UserServiceFactory.getUserService();;
 
   private final BlobstoreService blobstoreService;
   private final BlobInfoFactory blobInfoFactory;
 
-  /**
-   * For production.
-   */
+  /** For production. */
   public UserDataServlet() {
     this(BlobstoreServiceFactory.getBlobstoreService(), new BlobInfoFactory());
   }
 
-  /**
-   * For testing purposes.
-   */
+  /** For testing purposes. */
   public UserDataServlet(BlobstoreService blobstoreService, BlobInfoFactory blobInfoFactory) {
     this.blobstoreService = blobstoreService;
     this.blobInfoFactory = blobInfoFactory;
@@ -75,11 +70,11 @@ public class UserDataServlet extends HttpServlet {
    */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    User user = getUserFromRequest(request);
     User prevUserData = userRepository.getUser(userService.getCurrentUser().getUserId());
+    User user = getUserFromRequest(request, prevUserData);
     if (prevUserData != null
-            && prevUserData.getImgKey() != null
-            && !prevUserData.getImgKey().equals(user.getImgKey())) {
+        && prevUserData.getImgKey() != null
+        && !prevUserData.getImgKey().equals(user.getImgKey())) {
       // Delete previous image blob from blobstore, because it was overwritten or deleted.
       deleteBlobWithGivenKeyValue(prevUserData.getImgKey());
     }
@@ -87,9 +82,7 @@ public class UserDataServlet extends HttpServlet {
     response.sendRedirect("/index.html");
   }
 
-  /**
-   * Returns the data of the user who is currently logged in.
-   */
+  /** Returns the data of the user who is currently logged in. */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     User user = userRepository.getUser(userService.getCurrentUser().getUserId());
@@ -102,10 +95,14 @@ public class UserDataServlet extends HttpServlet {
     blobstoreService.delete(blobKey);
   }
 
-  private User getUserFromRequest(HttpServletRequest request) {
+  private User getUserFromRequest(HttpServletRequest request, User prevUserData) {
     String id = userService.getCurrentUser().getUserId();
     String email = userService.getCurrentUser().getEmail();
     User.Builder newUserBuilder = new User.Builder(id, email);
+    if (prevUserData != null && !prevUserData.getBookmarkedPlaceGuidesIds().isEmpty()) {
+      Set<Long> bookmarkedPlaceGuidesIds = prevUserData.getBookmarkedPlaceGuidesIds();
+      newUserBuilder.setBookmarkedPlaceGuidesIds(bookmarkedPlaceGuidesIds);
+    }
     String name = request.getParameter(NAME_INPUT);
     if (!name.isEmpty()) {
       newUserBuilder.setName(name);
@@ -125,7 +122,7 @@ public class UserDataServlet extends HttpServlet {
     } else if (request.getParameterValues(DELETE_IMG_INPUT) == null) {
       // The user didn't submit a new photo, but they didn't choose to delete the old one either.
       // Keep old photo in the database.
-      imgKey = userRepository.getUser(userService.getCurrentUser().getUserId()).getImgKey();
+      imgKey = prevUserData.getImgKey();
       newUserBuilder.addImgKey(imgKey);
     }
     return newUserBuilder.build();

@@ -7,8 +7,8 @@
     <script id = "maps-api" async defer></script>
     <link rel = "stylesheet" href = "style.css">
 </head>
-<body onload = "setApiKeyAndMapsCallback()">
-    <header> 
+<body onload = "setUpCreatePlaceGuidePage()">
+     <header> 
         <ul>
             <li><a href = "index.html">Home</a></li>
             <li><a href = "discover.html">Discover</a></li>
@@ -16,6 +16,61 @@
             <li><a href = "createPlaceGuide.html">Create PlaceGuide</a></li>
         </ul>
     </header>
+    
+    <div id="createPlaceGuide">
+        <form method = "POST" id = "createPlaceGuideForm" enctype = "multipart/form-data">
+            <input type="hidden" id="id" name="id">
+            <input type="hidden" id="placeId" name="placeId">
+            <br>
+            <label for = "name">Name:</label><br>
+            <input type = "text" name = "name" id = "name" required>
+            <br>
+            <label for = "audioKey">Upload audio file</label>
+            <input type = "file" name = "audioKey" id = "audioKey" required>
+            <br>
+            <audio id = "audioPlayer" controls>
+                <source type="audio/mpeg">
+            </audio>
+            <br>
+            <label for = "imageKey">Upload image</label>
+            <input type = "file" name = "imageKey" id = "imageKey">
+            <div id = "imageDiv">
+            <br>
+            <img alt = "image preview" id = "imagePreview">
+            <br>
+            </div>
+            <label for = "deleteImage">Delete previous image</label>
+            <input type = "checkbox" name = "deleteImage" value = "delete" id = "deleteImage">
+            <br>
+            <label for = "description">Description:</label><br>
+            <textarea name = "description" rows = "4" cols = "50" id = "description"></textarea>
+            <br>
+            <label for = "length">Amount of time needed in minute(s):</label><br>
+            <input type = "number" name = "length" id = "length" min = "0"><br>
+            <label for = "isPublic">Place Guide Status:</label>
+            <select name = "isPublic" id = "isPublic">
+                <option value = "public">public</option>
+                <option value = "private">private</option>
+            </select>
+            <br>
+            <fieldset>
+                <legend>Chosen place information: </legend>
+                <label for = "placeName">place name : </label><br>
+                <input type = "text" name = "placeName" id = "placeName" readonly><br>
+                <label for = "latitude">latitude : </label><br>
+                <input type = "text" name = "latitude" id = "latitude" required onkeypress="return false;"><br>
+                <label for = "longitude">longitude : </label><br>
+                <input type = "text" name = "longitude" id = "longitude" required onkeypress="return false;"><br>
+                <br>        
+            </fieldset>
+            <input type = "submit" value = "Submit">
+        </form>
+
+        <button type = "button" id = "logout">Logout</button>
+
+        <button id = "testExistingPlaceGuide" onclick = "testExistingPlaceGuide()">Test Input Existing PlaceGuide</button>
+        <button id = "testGivenCoordinate" onclick = "testGivenCoordinate()">Test Input Coordinate</button>
+    </div>
 
     <input id = "search-box" type = "text" placeholder = "Search for a new place!"/>
     <div id = "map"></div>
@@ -27,6 +82,10 @@
     <script src = "./placeGuides/show_placeGuides.js"></script>
     <script src = "./maps/LocationPicker.js"></script>
     <script src = "./maps/LocationSaver.js"></script>
+    <script src = "createPlaceGuideForm.js"></script>
+    <script src = "setUpFormBlobstore.js"></script>
+    <script src = "user.js"></script>
+    <script src = "setupCreatePlaceGuide.js"></script>
     <script src="https://unpkg.com/@google/markerclustererplus@4.0.1/dist/markerclustererplus.min.js"></script>
     <script src = "./maps/MapWidget.js"></script>
     <script src = "./placeGuides/Location.js"></script>

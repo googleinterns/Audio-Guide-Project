@@ -14,18 +14,25 @@
 
 package com.google.sps.data;
 
-/** Specifies the possible form types and their form handler servlets. */
-public enum FormType {
-  PORTFOLIO_FORM("/user-data-servlet"),
-  CREATE_PLACE_GUIDE_FORM("/place-guide-data");
+/** Specifies the possible form types of queries for PlaceGuides. */
+public enum PlaceGuideQueryType {
+  ALL_PUBLIC(false),
+  CREATED_ALL(false),
+  CREATED_PUBLIC(false),
+  CREATED_PRIVATE(false),
+  BOOKMARKED(false),
+  ALL_PUBLIC_IN_MAP_AREA(true),
+  CREATED_ALL_IN_MAP_AREA(true),
+  CREATED_PUBLIC_IN_MAP_AREA(true),
+  CREATED_PRIVATE_IN_MAP_AREA(true);
 
-  private final String formHandlerServletName;
+  private final boolean requiresCoordinates;
 
-  FormType(String formHandlerServletName) {
-    this.formHandlerServletName = formHandlerServletName;
+  PlaceGuideQueryType(boolean requiresCoordinates) {
+    this.requiresCoordinates = requiresCoordinates;
   }
 
-  public String getFormHandlerServletName() {
-    return formHandlerServletName;
+  public boolean requiresCoordinates() {
+    return this.requiresCoordinates;
   }
 }
