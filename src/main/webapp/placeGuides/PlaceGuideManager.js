@@ -1,11 +1,10 @@
 class PlaceGuideManager {
 
-    constructor(map, placeGuideRepository) {
-        this._map = map;
+    constructor(placeGuideRepository) {
         this._placeGuideRepository = placeGuideRepository;
         this._highlightedPlaceGuideId = null;
-        this._mapPlaceGuideDisplayer = new MapPlaceGuideDisplayer(this._map);
-        this._listPlaceGuideDisplayer = new ListPlaceGuideDisplayer(this._map);
+        this._mapPlaceGuideDisplayer = new MapPlaceGuideDisplayer();
+        this._listPlaceGuideDisplayer = new ListPlaceGuideDisplayer();
     }
 
     update(bounds, zoom) {

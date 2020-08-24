@@ -18,7 +18,7 @@ function initPage() {
    mapWidget.addLocationChoosingAndSavingFunctionality();
    map = mapWidget.map;
    var placeGuideRepository = new PlaceGuideRepository(PlaceGuideRepository.QueryType.CREATED_ALL_IN_MAP_AREA);
-   placeGuideManager = new PlaceGuideManager(map, placeGuideRepository);
+   placeGuideManager = new PlaceGuideManager(placeGuideRepository);
    google.maps.event.addListener(map, 'idle', function() {
         placeGuideManager.update(map.getBounds(), map.getZoom());
    });

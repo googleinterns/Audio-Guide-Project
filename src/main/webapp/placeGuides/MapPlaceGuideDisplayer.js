@@ -1,6 +1,5 @@
 class MapPlaceGuideDisplayer {
-    constructor(map) {
-        this._map = map;
+    constructor() {
         this._placeGuidesOnMap = {};
     }
 
@@ -38,7 +37,7 @@ class MapPlaceGuideDisplayer {
         } else {
             placeType = PlaceType.PRIVATE;
         }
-        return new PlaceGuideOnMap(this._map, 
+        return new PlaceGuideOnMap(map,
                                    placeGuide.id, 
                                    placeGuide.name, 
                                    placeGuide.location.position, 
