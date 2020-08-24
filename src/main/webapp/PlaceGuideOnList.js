@@ -7,9 +7,7 @@ class PlaceGuideOnList {
     const divId = "placeGuideOnList-" + "{" + placeGuideId + "}";
     placeGuideDiv.setAttribute('id', divId);
     
-    placeGuideDiv.addEventListener('click', function() {
-      highlightOnInfoBoxClick(placeGuideId);
-    });
+    highlightOnInfoBoxClick(placeGuideDiv, placeGuideId);
 
     createBlobView(audioKey, "audio", placeGuideDiv);
     createBlobView(imageKey, "img", placeGuideDiv);
@@ -62,9 +60,13 @@ class PlaceGuideOnList {
   }
 }
 
-function highlightOnInfoBoxClick(placeGuideId) {
-  placeGuideManager.highlightPlaceGuide(placeGuideId);
+function highlightOnInfoBoxClick(placeGuideDiv, placeGuideId) {
+  placeGuideDiv.addEventListener('click', function() {
+    highlightOnInfoBoxClick(placeGuideId);
+  });
 }
+
+
 
 function createBlobView(blobKey, elementType, parentDiv) {
   const element = document.createElement(elementType);
