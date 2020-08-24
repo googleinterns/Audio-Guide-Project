@@ -31,6 +31,8 @@ class Place {
     this.setupRepresentationOnMap();
   }
 
+  // Some objects' behaviour is conditioned by the chosenLocation's positionChanges
+  // To enable listening to this event, this flag must be set to true.
   // Other Places won't trigger the event.
   set triggerChosenLocationChangeEvent(trigger) {
     this._triggerChosenLocationChangeEvent = trigger;
@@ -39,9 +41,6 @@ class Place {
   set visible(visibility) {
     this._marker.setVisible(visibility);
   }
-
-  // Some objects' behaviour is conditioned by the chosenLocation's positionChanges
-  // To enable listening to this event, this flag must be set to true.
 
   set draggable(draggability) {
     this._marker.setDraggable(draggability);
@@ -76,10 +75,6 @@ class Place {
     this._position = this._mapsPlace.geometry.location;
     this._marker.setPosition(this._position);
     this.onPositionChange();
-  }
-
-  set infoWindowContent(content) {
-    this._infoWindow.setContent(content);
   }
 
   static constructPlaceBasedOnCoordinates(map, positionLat, positionLng,
@@ -118,13 +113,11 @@ class Place {
       });
       // Close the open infowindow if the user clicks anywhere else on the map.
       var thisPlace = this;
-      if (this._hasInfoWindow) {
-        this._map.addListener('click', function (mapsMouseEvent) {
-          if (!thisPlace._infoWindowClosed) {
-            thisPlace.closeInfoWindow();
-          }
-        });
-      }
+      this._map.addListener('click', function (mapsMouseEvent) {
+        if (!thisPlace._infoWindowClosed) {
+        thisPlace.closeInfoWindow();
+        }
+      });
     }
   }
 
