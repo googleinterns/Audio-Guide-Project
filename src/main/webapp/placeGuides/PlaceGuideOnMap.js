@@ -24,11 +24,28 @@ class PlaceGuideOnMap {
     highlight() {
         this._highlighted = true;
         this._marker.setAnimation(google.maps.Animation.BOUNCE);
+        this.openInfoWindow();
     }
 
     unhighlight() {
+        console.log("finish animation");
         this._highlighted = false;
         this._marker.setAnimation(null);
+        this.closeInfoWindow();
+    }
+
+    closeInfoWindow() {
+        this._infoWindow.close();
+        this._infoWindowClosed = true;
+    }
+
+    openInfoWindow() {
+        this._infoWindow.open(this._map, this._marker);
+        this._infoWindowClosed = false;
+    }
+
+    remove() {
+        this.marker.setMap(null);
     }
 
     highlightOnMarkerDoubleClick() {
@@ -118,19 +135,5 @@ class PlaceGuideOnMap {
             "<h4> Place: " + placeName + "</h4>" +
             "<p>" + description + "</p>";
         return content;
-    }
-
-    closeInfoWindow() {
-        this._infoWindow.close();
-        this._infoWindowClosed = true;
-    }
-
-    openInfoWindow() {
-        this._infoWindow.open(this._map, this._marker);
-        this._infoWindowClosed = false;
-    }
-
-    remove() {
-        this.marker.setMap(null);
     }
 }
