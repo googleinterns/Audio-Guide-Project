@@ -9,17 +9,20 @@ class MapPlaceGuideDisplayer {
     update(placeGuides) {
         this.removePreviousPlaceGuidesFromMap(placeGuides);
         this.addNewPlaceGuidesToMap(placeGuides);
-        this.addClustering();
+        this.updateMarkerClusters();
     }
 
-    addClustering() {
+    updateMarkerClusters() {
+        if (this._markerClusterer != undefined) {
+            this._markerClusterer.clearMarkers();
+        }
         var markers = [];
          for (var placeGuideId in this._placeGuidesOnMap) {
             if (this._placeGuidesOnMap.hasOwnProperty(placeGuideId)) {           
                 markers.push(this._placeGuidesOnMap[placeGuideId].marker);
             }
         }
-        var markerCluster = new MarkerClusterer(map, markers,
+        this._markerClusterer = new MarkerClusterer(map, markers,
               {imagePath: './img/m'});
     }
 
