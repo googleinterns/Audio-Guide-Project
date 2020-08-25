@@ -3,6 +3,21 @@ class PlaceGuideOnList {
       placeGuideId, placeName, placeId, name, creator, description, 
       audioKey, audioLength, isPublic, imageKey, createdByCurrentUser, 
       bookmarkedByCurrentUser, latitude, longitude) {
+
+    this.placeGuideProperties = {
+      placeGuideId: placeGuideId,
+      placeName: placeName,
+      placeId: placeId,
+      name: name,
+      audioKey: audioKey,
+      imageKey: imageKey,
+      description: description,
+      audioLength: audioLength,
+      isPublic: isPublic,
+      latitude: latitude,
+      longitude: longitude
+    }
+
     const placeGuideDiv = document.createElement("div");
     const divId = "placeGuideOnList-" + "{" + placeGuideId + "}";
     placeGuideDiv.setAttribute('id', divId);
@@ -12,29 +27,26 @@ class PlaceGuideOnList {
     createBlobView(audioKey, "audio", placeGuideDiv);
     createBlobView(imageKey, "img", placeGuideDiv);
     createButtonsIfUserIsCreator(createdByCurrentUser);
+    createBookmarkButton(bookmarkedByCurrentUser, placeGuideDiv);
+    createDownloadButton(audioKey, placeGuideDiv);
+  }
+}
 
-    const bookmarkButton = document.createElement("button");
-    if (bookmarkedByCurrentUser) {
-      bookmarkButton.innerText = "unbookmark";
-    } else {
-      bookmarkButton.innerText = "bookmark";
-    }
-    bookmarkButton.addEventListener("click", function() {
-      if (bookmarkButton.innerText == "unbookmark") {
-        bookmarkButton.innerText == "bookmark";
-      } else {
-        bookmarkButton.innerText == "unbookmark";
-      }
-      PlaceGuideManager.toggleBookmark(placeGuideId);
-    });
-    placeGuideDiv.appendChild(bookmarkButton);
+function displayPlaceGuideInfo(placeGuideDiv, placeGuideProperties) {
+  const name = document.createElement("h3");
+  name.setAttribute('id', 'placeGuideOnListName');
+  name.innerText = placeGuideProperties.name;
 
-    const downloadLink = document.createElement("a");
-    downloadLink.setAttribute("href", getBlobSrc(audioKey));
-    downloadLink.setAttribute("download", "audio_file");
-    downloadLink.innerText = "Download audio file";
-    placeGuideDiv.appendChild(downloadLink);
+  if (placeGuideProperties.description != undefined) {
+    const description = document.createElement("h4");
+    description.setAttribute('id', 'placeGuideOnListDescription');
+    description.innerText = placeGuideProperties.description;
+  }
 
+  if (placeGuideProperties.audioLength != undefined) {
+    const audioLength = document.createElement("h5");
+    audioLength.setAttribute('id', "placeGuideOnListAudioLength");
+    audioLength.innerText = placeGuideProperties.audioLength + "minutes";
   }
 }
 
@@ -57,37 +69,21 @@ function getBlobSrc(blobKey) {
   return src;
 }
 
-function generateQueryString(
-    placeGuideId, placeName, placeId, name, audioSrc, imageSrc, 
-    description, length, isPublic, latitude, longitude) {
-  var params = {
-    placeGuideId: placeGuideId,
-    placeName: placeName,
-    placeId: placeId,
-    name: name,
-    audioSrc: audioSrc,
-    imageSrc: imageSrc,
-    description: description,
-    length: length,
-    isPublic: isPublic,
-    latitude: latitude,
-    longitude: longitude 
-  };
-
+function generateQueryString(placeGuideProperties) {
   var esc = encodeURIComponent;
-  var query = Object.keys(params)
+  var query = Object.keys(placeGuideProperties)
       .map(function(k) {return esc(k) + '=' + esc(params[k]);})
       .join('&');
   return query;
 }
 
-function createButtonsIfUserIsCreator(createdByCurrentUser, placeGuideDiv, placeGuideId) {
+/**
+ * Creates delete and edit button.
+ */
+function createButtonsIfUserIsCreator(createdByCurrentUser, placeGuideDiv, placeGuideProperties) {
   if (createdByCurrentUser) {
-    createDeleteButton(placeGuideDiv, placeGuideId);
-    createEditButton(
-        placeGuideDiv, placeGuideId, placeName, placeId, name, 
-        audioKey, imageKey, description, audioLength, isPublic, 
-        latitude, longitude);
+    createDeleteButton(placeGuideDiv, placeGuideProperties.placeGuideId);
+    createEditButton(placeGuideDiv, placeGuideProperties);
   }
 }
 
@@ -101,19 +97,40 @@ function createDeleteButton(placeGuideDiv, placeGuideId) {
   placeGuideDiv.appendChild(deleteButton);
 }
 
-function createEditButton(
-    placeGuideDiv, placeGuideId, placeName, placeId, name, 
-    audioKey, imageKey, description, audioLength, isPublic, 
-    latitude, longitude) {
+function createEditButton(placeGuideDiv, placeGuideProperties) {
   const editButton = document.createElement("button");
   editButton.addEventListener("click", function() {
-    const queryString = 
-        generateQueryString(
-            placeGuideId, placeName, placeId, name, 
-            getBlobSrc(audioKey), getBlobSrc(imageKey), 
-            description, audioLength, isPublic, latitude, longitude);
+    const queryString = generateQueryString(placeGuideProperties);
     const url = "./createPlaceGuide.html?" + queryString;
     window.location = url;
   });
   placeGuideDiv.appendChild(editButton);
+}
+
+function createBookmarkButton(bookmarkedByCurrentUser, placeGuideDiv) {
+  const bookmarkButton = document.createElement("button");
+  if (bookmarkedByCurrentUser) {
+    bookmarkButton.innerText = "unbookmark";
+  } else {
+    bookmarkButton.innerText = "bookmark";
+  }
+  bookmarkButton.addEventListener("click", function() {
+    if (bookmarkButton.innerText == "unbookmark") {
+      bookmarkButton.innerText == "bookmark";
+    } else {
+      bookmarkButton.innerText == "unbookmark";
+    }
+    placeGuideManager.toggleBookmark(placeGuideId);
+  });
+  placeGuideDiv.appendChild(bookmarkButton);
+}
+
+function createDownloadButton(audioKey, placeGuideDiv) {
+  const downloadButton = document.createElement("button");
+  const downloadLink = document.createElement("a");
+  downloadLink.setAttribute("href", getBlobSrc(audioKey));
+  downloadLink.setAttribute("download", "audio_file");
+  downloadLink.innerText = "Download audio file";
+  downloadButton.appendChild(downloadLink);
+  placeGuideDiv.appendChild(downloadButton);
 }
