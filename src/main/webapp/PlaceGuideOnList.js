@@ -131,6 +131,6 @@ function createDownloadButton(audioKey, placeGuideDiv) {
   downloadLink.setAttribute("href", getBlobSrc(audioKey));
   downloadLink.setAttribute("download", "audio_file");
   downloadLink.innerText = "Download audio file";
-  downloadButton.appendChild(downloadLink);
-  placeGuideDiv.appendChild(downloadButton);
+  downloadLink.appendChild(downloadButton);
+  placeGuideDiv.appendChild(downloadLink);
 }

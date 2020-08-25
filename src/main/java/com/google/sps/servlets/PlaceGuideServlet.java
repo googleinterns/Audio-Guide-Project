@@ -158,6 +158,7 @@ public class PlaceGuideServlet extends HttpServlet {
   }
 
   private PlaceGuide getPlaceGuideFromRequest(HttpServletRequest request) {
+    boolean newPlaceGuide = false;
     String name = request.getParameter(NAME_INPUT);
     long id;
     String idStringValue = request.getParameter(ID_INPUT);
@@ -165,6 +166,7 @@ public class PlaceGuideServlet extends HttpServlet {
       id = Long.parseLong(idStringValue);
     } else {
       id = placeGuideRepository.saveAndGeneratePlaceGuideId();
+      newPlaceGuide = true;
     }
     String audioKey = getUploadedFileBlobKey(request, AUDIO_KEY_INPUT);
     // The audioKey can be null if the user did not upload any audio file. Hence, it will
@@ -199,8 +201,10 @@ public class PlaceGuideServlet extends HttpServlet {
     if (imageKey != null) {
       newPlaceGuideBuilder.setImageKey(imageKey);
     } else if (request.getParameterValues(DELETE_IMAGE_INPUT) == null) {
-      imageKey = placeGuideRepository.getPlaceGuide(id).getImageKey();
-      newPlaceGuideBuilder.setImageKey(imageKey);
+      if (!newPlaceGuide) {
+        PlaceGuide prevPlaceGuide = placeGuideRepository.getPlaceGuide(id);
+        newPlaceGuideBuilder.setImageKey(prevPlaceGuide.getImageKey());
+      }
     }
     return newPlaceGuideBuilder.build();
   }
