@@ -18,6 +18,7 @@ class PlaceGuideRepository {
             var url = new URL("/place-guide-data", document.URL);
             url.searchParams.append("placeGuideType", this._queryType);
             url.searchParams.append("regionCorners", bounds.toUrlValue());
+            console.log("fetching from url = " + url);
             var thisRepository = this;
             return fetch(url)
                 .catch(error => console.log("PlaceGuideServlet: failed to fetch: " + error))
