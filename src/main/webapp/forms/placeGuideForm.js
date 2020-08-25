@@ -16,17 +16,17 @@ function activatePreviewFeature() {
 function setSrcToElementOnChangeEvent(elementId, previewId, displayBlock) {
   const element = document.getElementById(elementId);
   const preview = document.getElementById(previewId);
-  element.addEventListener("change", function() {
+  element.addEventListener("change", function () {
     const file = this.files[0];
     console.log(this.files);
 
     if (file) {
       const reader = new FileReader();
       if (displayBlock) {
-        preview.style.display = "block"; 
+        preview.style.display = "block";
       }
 
-      reader.addEventListener("load", function() {
+      reader.addEventListener("load", function () {
         preview.setAttribute("src", this.result);
       });
 
@@ -42,7 +42,7 @@ function testExistingPlaceGuide() {
     if (placeGuides === undefined || placeGuides.length == 0) {
       console.log("place guide does not exist yet.");
     } else {
-      fillFormWithPlaceGuideData(placeGuides[0]); 
+      fillFormWithPlaceGuideData(placeGuides[0]);
     }
   });
 }
@@ -50,18 +50,18 @@ function testExistingPlaceGuide() {
 // For testing.
 async function getFetchedList() {
   return fetch('/place-guide-data?placeGuideType=ALL_PUBLIC', {method: 'GET'})
-  .then((response) => {
-      return response.json();
-  });
+      .then((response) => {
+        return response.json();
+      });
 }
 
 // For testing.
 function updateLocation(position, placeId, placeName) {
   document.getElementById("placeId").setAttribute("value", placeId);
   if (placeName != null) {
-      document.getElementById("placeName").setAttribute("value", placeName);
+    document.getElementById("placeName").setAttribute("value", placeName);
   } else {
-      document.getElementById("placeName").setAttribute("value", "-");
+    document.getElementById("placeName").setAttribute("value", "-");
   }
   document.getElementById("latitude").setAttribute("value", position.lat());
   document.getElementById("longitude").setAttribute("value", position.lng());

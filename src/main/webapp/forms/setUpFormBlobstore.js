@@ -12,7 +12,7 @@ function addBlobstoreUploadUrlToForm(formType, formId) {
  */
 function getBlobstoreUploadUrlFromServlet(formType) {
   var url = new URL("/blobstore-upload-url", document.URL);
-  url.searchParams.append('formType', formType)
+  url.searchParams.append('formType', formType);
   return fetch(url)
       .catch(error => console.log("getBlobstoreUploadUrlFromServlet: failed to fetch: " + error))
       .then(uploadUrl => uploadUrl.text())

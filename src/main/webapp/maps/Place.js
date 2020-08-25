@@ -115,7 +115,7 @@ class Place {
       var thisPlace = this;
       this._map.addListener('click', function (mapsMouseEvent) {
         if (!thisPlace._infoWindowClosed) {
-        thisPlace.closeInfoWindow();
+          thisPlace.closeInfoWindow();
         }
       });
     }

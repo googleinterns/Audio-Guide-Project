@@ -7,21 +7,21 @@
  */
 
 class LocationPicker {
-    constructor(map, chosenPlace) {
-        this._map = map;
-        this._chosenPlace = chosenPlace;
-    }
+  constructor(map, chosenPlace) {
+    this._map = map;
+    this._chosenPlace = chosenPlace;
+  }
 
-    // The LocationPicker starts listening to and handling 
-    // map-click events when init() is called. 
-    init() {
-        var chosenPlace = this._chosenPlace;
-        this._map.addListener('click', function (mapsMouseEvent) {
-            if (mapsMouseEvent.placeId) {
-                chosenPlace.updatePlaceAndCenterBasedOnId(mapsMouseEvent.placeId)
-            } else {
-                chosenPlace.position = mapsMouseEvent.latLng;
-            }
-        });
-    }
+  // The LocationPicker starts listening to and handling
+  // map-click events when init() is called.
+  init() {
+    var chosenPlace = this._chosenPlace;
+    this._map.addListener('click', function (mapsMouseEvent) {
+      if (mapsMouseEvent.placeId) {
+        chosenPlace.updatePlaceAndCenterBasedOnId(mapsMouseEvent.placeId)
+      } else {
+        chosenPlace.position = mapsMouseEvent.latLng;
+      }
+    });
+  }
 }

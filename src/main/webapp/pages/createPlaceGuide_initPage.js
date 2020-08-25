@@ -13,33 +13,33 @@ var map;
 var placeGuideManager;
 
 function initPage() {
-    authenticateUser().then(userAuthenticationStatus => {
-        if (!userAuthenticationStatus.isLoggedIn) {
-            location.replace(userAuthenticationStatus.loginUrl);
-        } else {
-            addLinktoLogoutButton(userAuthenticationStatus.logoutUrl);
-            setUpCreatePlaceGuideForm();
-            var mapWidget = new MapWidget();
-            mapWidget.addGeolocationFunctionality();
-            mapWidget.addLocationChoosingAndSavingFunctionality();
-            map = mapWidget.map;
-            var placeGuideRepository = new PlaceGuideRepository(PlaceGuideRepository.QueryType.CREATED_ALL_IN_MAP_AREA);
-            placeGuideManager = new PlaceGuideManager(placeGuideRepository);
-            google.maps.event.addListener(map, 'idle', function() {
-                    placeGuideManager.update(map.getBounds(), map.getZoom());
-            });
-            document.getElementById("map")
-                    .addEventListener(MapWidget.SAVE_LOCATION_EVENT, function () {
-                        handleSaveLocationEvent(mapWidget);
-                    });
-        }
+  authenticateUser().then(userAuthenticationStatus => {
+    if (!userAuthenticationStatus.isLoggedIn) {
+      location.replace(userAuthenticationStatus.loginUrl);
+    } else {
+      addLinktoLogoutButton(userAuthenticationStatus.logoutUrl);
+      setUpCreatePlaceGuideForm();
+      var mapWidget = new MapWidget();
+      mapWidget.addGeolocationFunctionality();
+      mapWidget.addLocationChoosingAndSavingFunctionality();
+      map = mapWidget.map;
+      var placeGuideRepository = new PlaceGuideRepository(PlaceGuideRepository.QueryType.CREATED_ALL_IN_MAP_AREA);
+      placeGuideManager = new PlaceGuideManager(placeGuideRepository);
+      google.maps.event.addListener(map, 'idle', function () {
+        placeGuideManager.update(map.getBounds(), map.getZoom());
+      });
+      document.getElementById("map")
+          .addEventListener(MapWidget.SAVE_LOCATION_EVENT, function () {
+            handleSaveLocationEvent(mapWidget);
+          });
+    }
   });
 }
 
 function handleSaveLocationEvent(mapWidget) {
-     if (mapWidget.savedLocation.place != null) {
-        updateLocation(mapWidget.savedLocation.position, mapWidget.savedLocation.place.place_id, mapWidget.savedLocation.place.name);
-    } else {
-        updateLocation(mapWidget.savedLocation.position, null, null);
-    }
+  if (mapWidget.savedLocation.place != null) {
+    updateLocation(mapWidget.savedLocation.position, mapWidget.savedLocation.place.place_id, mapWidget.savedLocation.place.name);
+  } else {
+    updateLocation(mapWidget.savedLocation.position, null, null);
+  }
 }

@@ -1,79 +1,79 @@
 /**
- * This class is responsible for representing the placeGuides on the map. 
+ * This class is responsible for representing the placeGuides on the map.
  */
 class MapPlaceGuideDisplayer {
-    constructor() {
-        this._placeGuidesOnMap = {};
-    }
+  constructor() {
+    this._placeGuidesOnMap = {};
+  }
 
-    update(placeGuides) {
-        this.removePreviousPlaceGuidesFromMap(placeGuides);
-        this.addNewPlaceGuidesToMap(placeGuides);
-        this.updateMarkerClusters();
-    }
+  update(placeGuides) {
+    this.removePreviousPlaceGuidesFromMap(placeGuides);
+    this.addNewPlaceGuidesToMap(placeGuides);
+    this.updateMarkerClusters();
+  }
 
-    updateMarkerClusters() {
-        if (this._markerClusterer != undefined) {
-            this._markerClusterer.clearMarkers();
+  updateMarkerClusters() {
+    if (this._markerClusterer != undefined) {
+      this._markerClusterer.clearMarkers();
+    }
+    var markers = [];
+    for (var placeGuideId in this._placeGuidesOnMap) {
+      if (this._placeGuidesOnMap.hasOwnProperty(placeGuideId)) {
+        markers.push(this._placeGuidesOnMap[placeGuideId].marker);
+      }
+    }
+    this._markerClusterer = new MarkerClusterer(map, markers,
+        {imagePath: './img/m'});
+  }
+
+  removePreviousPlaceGuidesFromMap(placeGuides) {
+    for (var placeGuideId in this._placeGuidesOnMap) {
+      if (this._placeGuidesOnMap.hasOwnProperty(placeGuideId)) {
+        if (!placeGuides.hasOwnProperty(placeGuideId)) {
+          // This placeGuide is not needed anymore.
+          this.remove(placeGuideId);
         }
-        var markers = [];
-         for (var placeGuideId in this._placeGuidesOnMap) {
-            if (this._placeGuidesOnMap.hasOwnProperty(placeGuideId)) {           
-                markers.push(this._placeGuidesOnMap[placeGuideId].marker);
-            }
+      }
+    }
+  }
+
+  addNewPlaceGuidesToMap(placeGuides) {
+    for (var placeGuideId in placeGuides) {
+      if (placeGuides.hasOwnProperty(placeGuideId)) {
+        if (!this._placeGuidesOnMap.hasOwnProperty(placeGuideId)) {
+          // new placeGuide should be constructed.
+          this._placeGuidesOnMap[placeGuideId] = this.constructPlaceGuideOnMapFromPlaceGuide(placeGuides[placeGuideId]);
         }
-        this._markerClusterer = new MarkerClusterer(map, markers,
-              {imagePath: './img/m'});
+      }
     }
+  }
 
-    removePreviousPlaceGuidesFromMap(placeGuides) {
-        for (var placeGuideId in this._placeGuidesOnMap) {
-            if (this._placeGuidesOnMap.hasOwnProperty(placeGuideId)) {           
-                if(!placeGuides.hasOwnProperty(placeGuideId)) {
-                    // This placeGuide is not needed anymore.
-                    this.remove(placeGuideId);
-                }
-            }
-        }
+  constructPlaceGuideOnMapFromPlaceGuide(placeGuide) {
+    var placeType;
+    if (placeGuide.isPublic) {
+      placeType = PlaceType.PUBLIC;
+    } else {
+      placeType = PlaceType.PRIVATE;
     }
+    return new PlaceGuideOnMap(placeGuide.id,
+        placeGuide.name,
+        placeGuide.location.position,
+        placeGuide.location.mapsPlace,
+        placeGuide.creator,
+        placeGuide.description,
+        placeType);
+  }
 
-    addNewPlaceGuidesToMap(placeGuides) {
-        for (var placeGuideId in placeGuides) {
-            if (placeGuides.hasOwnProperty(placeGuideId)) {           
-                if(!this._placeGuidesOnMap.hasOwnProperty(placeGuideId)) {
-                    // new placeGuide should be constructed.
-                    this._placeGuidesOnMap[placeGuideId] = this.constructPlaceGuideOnMapFromPlaceGuide(placeGuides[placeGuideId]);
-                }
-            }
-        }
-    }
+  remove(placeGuideId) {
+    this._placeGuidesOnMap[placeGuideId].remove();
+    delete this._placeGuidesOnMap[placeGuideId];
+  }
 
-    constructPlaceGuideOnMapFromPlaceGuide(placeGuide) {
-        var placeType;
-        if (placeGuide.isPublic) {
-            placeType = PlaceType.PUBLIC;
-        } else {
-            placeType = PlaceType.PRIVATE;
-        }
-        return new PlaceGuideOnMap(placeGuide.id, 
-                                   placeGuide.name, 
-                                   placeGuide.location.position, 
-                                   placeGuide.location.mapsPlace, 
-                                   placeGuide.creator,
-                                   placeGuide.description, 
-                                   placeType);
-    }
+  highlight(placeGuideId) {
+    this._placeGuidesOnMap[placeGuideId].highlight();
+  }
 
-    remove(placeGuideId) {
-        this._placeGuidesOnMap[placeGuideId].remove();
-        delete this._placeGuidesOnMap[placeGuideId];
-    }
-
-    highlight(placeGuideId) {
-        this._placeGuidesOnMap[placeGuideId].highlight();
-    }
-
-    unhighlight(placeGuideId) {
-        this._placeGuidesOnMap[placeGuideId].unhighlight();
-    }
+  unhighlight(placeGuideId) {
+    this._placeGuidesOnMap[placeGuideId].unhighlight();
+  }
 }
