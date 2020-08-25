@@ -85,7 +85,7 @@ class Place {
   static constructPlaceBasedOnPlaceId(map, placeId, name, placeType, hasInfoWindow) {
     var request = {
       placeId: placeId,
-      fields: ['address_components', 'name', 'geometry']
+      fields: ['address_components', 'name', 'geometry', 'place_id']
     };
     return new Promise(function (resolve, reject) {
       var service = new google.maps.places.PlacesService(map);
@@ -181,7 +181,7 @@ class Place {
   updatePlaceAndCenterBasedOnId(id) {
     var request = {
       placeId: id,
-      fields: ['address_components', 'name', 'geometry']
+      fields: ['address_components', 'name', 'geometry', 'place_id']
     };
     var service = new google.maps.places.PlacesService(this._map);
     service.getDetails(request, (place, status) => {

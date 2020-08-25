@@ -16,7 +16,7 @@ class Location {
     static constructLocationBasedOnPlaceId(placeId) {
         var request = {
             placeId: placeId,
-            fields: ['address_components', 'name', 'geometry']
+            fields: ['address_components', 'name', 'geometry', 'place_id']
         };
         return new Promise(function (resolve, reject) {
             var service = new google.maps.places.PlacesService(map);

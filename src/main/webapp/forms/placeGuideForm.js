@@ -56,7 +56,8 @@ async function getFetchedList() {
 }
 
 // For testing.
-function updateLocation(position, placeName) {
+function updateLocation(position, placeId, placeName) {
+  document.getElementById("placeId").setAttribute("value", placeId);
   if (placeName != null) {
       document.getElementById("placeName").setAttribute("value", placeName);
   } else {

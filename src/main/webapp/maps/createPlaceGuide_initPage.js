@@ -24,11 +24,11 @@ function initPage() {
    });
    document.getElementById("map")
         .addEventListener(MapWidget.SAVE_LOCATION_EVENT, function () {
-            var savedLocation = mapWidget.savedLocation;
-            if (savedLocation.place != null) {
-                updateLocation(mapWidget.savedLocation.position, mapWidget.savedLocation.place.name);
+            if (mapWidget.savedLocation.place != null) {
+                console.log("found place id = " + mapWidget.savedLocation.place.place_id)
+                updateLocation(mapWidget.savedLocation.position, mapWidget.savedLocation.place.place_id, mapWidget.savedLocation.place.name);
             } else {
-                updateLocation(mapWidget.savedLocation.position, null);
+                updateLocation(mapWidget.savedLocation.position, null, null);
             }
             
         });
