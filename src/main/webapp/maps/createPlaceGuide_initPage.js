@@ -22,4 +22,14 @@ function initPage() {
    google.maps.event.addListener(map, 'idle', function() {
         placeGuideManager.update(map.getBounds(), map.getZoom());
    });
+   document.getElementById("map")
+        .addEventListener(MapWidget.SAVE_LOCATION_EVENT, function () {
+            var savedLocation = mapWidget.savedLocation;
+            if (savedLocation.place != null) {
+                updateLocation(mapWidget.savedLocation.position, mapWidget.savedLocation.place.name);
+            } else {
+                updateLocation(mapWidget.savedLocation.position, null);
+            }
+            
+        });
 }

@@ -52,7 +52,7 @@ class LocationSaver {
     }
     this._chosenPlace.visible = false;
     this._saveLocationControlButton.disabled = true;
-    document.getElementById("map").dispatchEvent(new Event(LocationSaver.SAVE_LOCATION_EVENT));
+    document.getElementById("map").dispatchEvent(new Event(MapWidget.SAVE_LOCATION_EVENT));
     alert(LocationSaver.SAVED_LOCATION_MESSAGE);
   }
 

@@ -56,9 +56,14 @@ async function getFetchedList() {
 }
 
 // For testing.
-function testGivenCoordinate() {
-  document.getElementById("latitude").setAttribute("value", 3.14);
-  document.getElementById("longitude").setAttribute("value", 2.56);
+function updateLocation(position, placeName) {
+  if (placeName != null) {
+      document.getElementById("placeName").setAttribute("value", placeName);
+  } else {
+      document.getElementById("placeName").setAttribute("value", "-");
+  }
+  document.getElementById("latitude").setAttribute("value", position.lat());
+  document.getElementById("longitude").setAttribute("value", position.lng());
 }
 
 function fillFormWithPlaceGuideData(placeGuide) {

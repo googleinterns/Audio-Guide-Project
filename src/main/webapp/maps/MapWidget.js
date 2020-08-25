@@ -1,4 +1,6 @@
 class MapWidget {
+    static SAVE_LOCATION_EVENT = "saveLocationEvent";
+
     constructor() {
         var myMapOptions = {
             zoom: 2,
@@ -18,6 +20,10 @@ class MapWidget {
 
     get map() {
         return this._map;
+    }
+
+    get savedLocation() {
+        return this._locationSaver.savedLocation;
     }
 
     addGeolocationFunctionality() {
@@ -48,7 +54,7 @@ class MapWidget {
         var locationPicker = new LocationPicker(this._map, chosenLocation);
         locationPicker.init();
         // Save location functionality.
-        var locationSaver = new LocationSaver(this._map, chosenLocation);
-        locationSaver.init();
+        this._locationSaver = new LocationSaver(this._map, chosenLocation);
+        this._locationSaver.init();
     }
 }
