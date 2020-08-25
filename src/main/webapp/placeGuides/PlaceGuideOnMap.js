@@ -129,8 +129,12 @@ class PlaceGuideOnMap {
         } else {
             placeName = position.toString();
         }
+        var creatorName = creator.name;
+        if (creatorName == undefined) {
+            creatorName = creator.email;
+        }
         var content = "<h3>" + name + "</h3>" +
-            "<h4> Created by: " + creator.name + "</h4>" +
+            "<h4> Created by: " + creatorName + "</h4>" +
             "<h4> Place: " + placeName + "</h4>" +
             "<p>" + description + "</p>";
         return content;
