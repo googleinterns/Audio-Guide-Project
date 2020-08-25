@@ -9,6 +9,18 @@ class MapPlaceGuideDisplayer {
     update(placeGuides) {
         this.removePreviousPlaceGuidesFromMap(placeGuides);
         this.addNewPlaceGuidesToMap(placeGuides);
+        this.addClustering();
+    }
+
+    addClustering() {
+        var markers = [];
+         for (var placeGuideId in this._placeGuidesOnMap) {
+            if (this._placeGuidesOnMap.hasOwnProperty(placeGuideId)) {           
+                markers.push(this._placeGuidesOnMap[placeGuideId].marker);
+            }
+        }
+        var markerCluster = new MarkerClusterer(map, markers,
+              {imagePath: './img/m'});
     }
 
     removePreviousPlaceGuidesFromMap(placeGuides) {

@@ -16,6 +16,10 @@ class PlaceGuideOnMap {
         this.unhighlightOnMarkerClick();
     }
 
+    get marker() {
+        return this._marker;
+    }
+
     get id() {
         return this._id;
     }
