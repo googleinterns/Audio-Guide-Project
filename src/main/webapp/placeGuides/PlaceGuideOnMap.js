@@ -1,3 +1,7 @@
+/** 
+ * This class is responsible of the representation of one single
+ * placeGuide on map.
+ */
 class PlaceGuideOnMap {
     constructor(id, name, position, place, creator, description, placeType) {
         this._id = id;
@@ -27,7 +31,6 @@ class PlaceGuideOnMap {
     }
 
     unhighlight() {
-        console.log("finish animation");
         this._highlighted = false;
         this._marker.setAnimation(null);
         this.closeInfoWindow();

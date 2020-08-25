@@ -1,9 +1,6 @@
 /**
- * This class holds a place guide's data, related to its place, creator, image, audio and description.
- * The place, similarly to the Place class, can be specified either by coordinates or through a place ID.
+ * This class holds a place guide's data.
  */
-
-
 class PlaceGuide {
     constructor(id, name, location, audioKey, audioLength, imgKey, creator, description, isPublic, createdByCurrentUser, bookmarkedByCurrentUser) {
         this._id = id;

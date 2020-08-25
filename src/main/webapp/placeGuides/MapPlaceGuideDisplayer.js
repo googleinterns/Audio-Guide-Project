@@ -1,3 +1,6 @@
+/**
+ * This class is responsible for representing the placeGuides on the map. 
+ */
 class MapPlaceGuideDisplayer {
     constructor() {
         this._placeGuidesOnMap = {};

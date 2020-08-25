@@ -1,3 +1,6 @@
+/**
+ * This class is responsible for representing the placeGuides on a scrollable list. 
+ */
 class ListPlaceGuideDisplayer {
     constructor() {
         this._placeGuidesOnList = {};

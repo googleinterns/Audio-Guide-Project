@@ -1,3 +1,7 @@
+/** 
+ * This class holds a location's data, which can be specified by 
+ * coordinates or nu a place_id, which will be decoded with PlacesService.
+ */
 class Location {
     constructor(position, mapsPlace) {
         this._mapsPlace = mapsPlace;

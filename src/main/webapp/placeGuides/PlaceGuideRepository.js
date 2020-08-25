@@ -1,3 +1,8 @@
+/**
+ * PlaceGudieRepository is responsible for getting the placeGuides'
+ * data from the database and updating it if needed.
+ * The data is stored in memory until the next query is sent.
+ */
 class PlaceGuideRepository {
     static MIN_ZOOM = 5;
     static QueryType = {
@@ -9,16 +14,14 @@ class PlaceGuideRepository {
     
     constructor(queryType) {
         this._queryType = queryType;
-        this._placeGuides = {}; // Init dictionary. 
+        this._placeGuides = {};
     }
 
     updatePlaceGuides(bounds, zoom) {
-        // TODO add zoom to query.
         if (PlaceGuideRepository.MIN_ZOOM <= zoom) {
             var url = new URL("/place-guide-data", document.URL);
             url.searchParams.append("placeGuideType", this._queryType);
             url.searchParams.append("regionCorners", bounds.toUrlValue());
-            console.log("fetching from url = " + url);
             var thisRepository = this;
             return fetch(url)
                 .catch(error => console.log("PlaceGuideServlet: failed to fetch: " + error))
@@ -75,13 +78,10 @@ class PlaceGuideRepository {
                     PlaceGuideRepository.getPlaceGuideFromPlaceGuideWithCreatorPair(placeGuideWithCreatorPairs[i])
                     .then(placeGuide => {
                             placeGuidesDict[placeGuide.id] = placeGuide;
-                            console.log("Added placeGuide with id = " + placeGuide.id);
                     })
                     .then(finished => resolve())}));
             }
             Promise.all(promises).then(() => {
-                console.log("resolve all promises");
-                console.log(placeGuidesDict);
                 resolve(placeGuidesDict);
             });}
         );
@@ -122,8 +122,6 @@ class PlaceGuideRepository {
                                                 placeGuideResponse.isPublic, 
                                                 placeGuideWithCreatorPair.createdByCurrentUser, 
                                                 placeGuideWithCreatorPair.bookmarkedByCurrentUser);
-                console.log("created PlaceGuide: ");
-                console.log(placeGuide);
                 resolve(placeGuide);
              }
         });

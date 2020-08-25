@@ -1,3 +1,10 @@
+/**
+ * This class is responsible for connecting all the placeGuide-related 
+ * objects: the two displayers and the repository. 
+ * When an event occurs, PlaceGuideManager is triggered and it
+ * sends the commands to the 
+ * classes which are responsible for handling the events. 
+ */
 class PlaceGuideManager {
 
     constructor(placeGuideRepository) {
@@ -11,8 +18,6 @@ class PlaceGuideManager {
         this._placeGuideRepository.updatePlaceGuides(bounds, zoom)
             .then(response => {
                 var placeGuides = this._placeGuideRepository.placeGuides;
-                console.log("received placeGuides: ");
-                console.log(placeGuides);
                 this._mapPlaceGuideDisplayer.update(placeGuides);
                 this._mapPlaceGuideDisplayer.update(placeGuides);
             })
