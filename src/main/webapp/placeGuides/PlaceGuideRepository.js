@@ -27,7 +27,8 @@ class PlaceGuideRepository {
     return new Promise(function (resolve, reject) {
           for (var i = 0; i < placeGuideWithCreatorPairs.length; i++) {
             promises.push(new Promise(function (resolve, reject) {
-              PlaceGuideRepository.getPlaceGuideFromPlaceGuideWithCreatorPair(placeGuideWithCreatorPairs[i])
+              PlaceGuideRepository
+                  .getPlaceGuideFromPlaceGuideWithCreatorPair(placeGuideWithCreatorPairs[i])
                   .then(placeGuide => {
                     placeGuidesDict[placeGuide.id] = placeGuide;
                   })
@@ -63,7 +64,8 @@ class PlaceGuideRepository {
               resolve(placeGuide);
             });
       } else {
-        var location = Location.constructLocationBasedOnCoordinates(placeGuideResponse.coordinate.latitude, placeGuideResponse.coordinate.longitude);
+        var location = Location.constructLocationBasedOnCoordinates(placeGuideResponse.coordinate.latitude,
+                                                                    placeGuideResponse.coordinate.longitude);
         var placeGuide = new PlaceGuide(placeGuideResponse.id,
             placeGuideResponse.name,
             location,
@@ -98,9 +100,12 @@ class PlaceGuideRepository {
       return fetch(url)
           .catch(error => console.log("PlaceGuideServlet: failed to fetch: " + error))
           .then(response => response.json())
-          .catch(error => console.log('updatePlaceGuides: failed to convert response to JSON' + error))
-          .then(placeGuideWithCreatorPairs => PlaceGuideRepository.buildPlaceGuideDictionaryFromResponse(placeGuideWithCreatorPairs))
-          .catch(error => console.log("updatePlaceGuides: unable to build placeGuide dictionary: " + error))
+          .catch(error =>
+              console.log('updatePlaceGuides: failed to convert response to JSON' + error))
+          .then(placeGuideWithCreatorPairs =>
+              PlaceGuideRepository.buildPlaceGuideDictionaryFromResponse(placeGuideWithCreatorPairs))
+          .catch(error =>
+              console.log("updatePlaceGuides: unable to build placeGuide dictionary: " + error))
           .then(placeGuides => thisRepository._placeGuides = placeGuides);
     } else {
       var thisRepository = this;

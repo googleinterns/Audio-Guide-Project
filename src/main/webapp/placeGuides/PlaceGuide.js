@@ -2,7 +2,8 @@
  * This class holds a place guide's data.
  */
 class PlaceGuide {
-  constructor(id, name, location, audioKey, audioLength, imgKey, creator, description, isPublic, createdByCurrentUser, bookmarkedByCurrentUser) {
+  constructor(id, name, location, audioKey, audioLength, imgKey, creator,
+              description, isPublic, createdByCurrentUser, bookmarkedByCurrentUser) {
     this._id = id;
     this._name = name;
     this._location = location;

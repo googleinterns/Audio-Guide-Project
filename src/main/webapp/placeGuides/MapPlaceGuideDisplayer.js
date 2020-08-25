@@ -42,7 +42,8 @@ class MapPlaceGuideDisplayer {
       if (placeGuides.hasOwnProperty(placeGuideId)) {
         if (!this._placeGuidesOnMap.hasOwnProperty(placeGuideId)) {
           // new placeGuide should be constructed.
-          this._placeGuidesOnMap[placeGuideId] = this.constructPlaceGuideOnMapFromPlaceGuide(placeGuides[placeGuideId]);
+          this._placeGuidesOnMap[placeGuideId] =
+              this.constructPlaceGuideOnMapFromPlaceGuide(placeGuides[placeGuideId]);
         }
       }
     }
