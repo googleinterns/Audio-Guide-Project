@@ -8,6 +8,7 @@ class LocationSaver {
   static SAVE_LOCATION_ID = "locationSaverControl";
   static SAVED_LOCATION_MESSAGE = "Location saved!";
   static SAVED_LOCATION_TITLE = "Saved location";
+  static SAVE_LOCATION_EVENT = "saveLocationEvent";
 
   constructor(map, chosenPlace) {
     this._map = map;
@@ -51,6 +52,7 @@ class LocationSaver {
     }
     this._chosenPlace.visible = false;
     this._saveLocationControlButton.disabled = true;
+    document.getElementById("map").dispatchEvent(new Event(LocationSaver.SAVE_LOCATION_EVENT));
     alert(LocationSaver.SAVED_LOCATION_MESSAGE);
   }
 
