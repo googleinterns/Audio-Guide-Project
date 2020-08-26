@@ -117,10 +117,16 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository {
   public List<PlaceGuide> getAllPublicPlaceGuidesInMapArea(
       GeoPt northEastCorner, GeoPt southWestCorner) {
     Filter publicityFilter = new FilterPredicate(IS_PUBLIC_PROPERTY, FilterOperator.EQUAL, true);
-    Filter mapAreaFilter =
-        new StContainsFilter(
-            COORDINATE_PROPERTY, new GeoRegion.Rectangle(southWestCorner, northEastCorner));
-    Filter queryFilter = CompositeFilterOperator.and(publicityFilter, mapAreaFilter);
+    Filter mapAreaFilter1 =
+        new FilterPredicate(
+            COORDINATE_PROPERTY,
+            FilterOperator.GREATER_THAN_OR_EQUAL,
+            southWestCorner.getLatitude());
+    Filter mapAreaFilter2 =
+        new FilterPredicate(
+            COORDINATE_PROPERTY, FilterOperator.LESS_THAN_OR_EQUAL, northEastCorner.getLatitude());
+    Filter queryFilter =
+        CompositeFilterOperator.and(publicityFilter, mapAreaFilter1, mapAreaFilter2);
     Query query = new Query(ENTITY_KIND).setFilter(queryFilter);
     return getPlaceGuidesList(query);
   }
@@ -135,7 +141,8 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository {
         new FilterPredicate(CREATOR_ID_PROPERTY, FilterOperator.EQUAL, creatorId);
     Filter queryFilter = CompositeFilterOperator.and(mapAreaFilter, creatorFilter);
     Query query = new Query(ENTITY_KIND).setFilter(queryFilter);
-    return getPlaceGuidesList(query);
+    return removePlaceGuidesOutsideLongitudeBounds(
+        getPlaceGuidesList(query), southWestCorner.getLongitude(), northEastCorner.getLongitude());
   }
 
   @Override
@@ -164,6 +171,29 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository {
     Filter queryFilter = CompositeFilterOperator.and(publicityFilter, mapAreaFilter, creatorFilter);
     Query query = new Query(ENTITY_KIND).setFilter(queryFilter);
     return getPlaceGuidesList(query);
+  }
+
+  private List<PlaceGuide> removePlaceGuidesOutsideLongitudeBounds(
+      List<PlaceGuide> placeGudies, float westBound, float eastBound) {
+    placeGuides.removeIf(
+        placeGuide ->
+            !isBetweenLongitudeBounds(
+                placeGuide.getCoordinate().getLongitude(), westBound, eastBound));
+    return placeGuides;
+  }
+
+  private boolean isBetweenLongitudeBounds(float longitude, float westBound, float eastBound) {
+    if (westBound < eastBound) {
+      return westBound <= longitude && longitude <= eastBound;
+    } else {
+      // The bounded area crosses the International Date Line(located at longitude 180/-180).
+      // In this case, the westBound is positive and the eastBound is negative.
+      if (longitude > 0) {
+        return longitude > westBound;
+      } else {
+        return longitude < eastBound;
+      }
+    }
   }
 
   private List<PlaceGuide> getPlaceGuidesList(Query query) {
