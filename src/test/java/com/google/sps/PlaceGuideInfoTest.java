@@ -34,16 +34,22 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public final class PlaceGuideInfoTest {
   // User parameters.
-  private static final String USER_ID = "userid";
-  private static final String EMAIL = "user@gmail.com";
-  private static final String USER_NAME = "username";
-  private static final String SELF_INTRODUCTION = "I am the user";
-  private static final String USER_IMG_KEY = "img1234";
+  private static final String CREATOR_USER_ID = "creatorUserid";
+  private static final String CREATOR_EMAIL = "creatoruser@gmail.com";
+  private static final String CREATOR_USER_NAME = "creatorUsername";
+  private static final String CREATOR_SELF_INTRODUCTION = "I am the creator user";
+  private static final String CREATOR_USER_IMG_KEY = "img1234Creator";
+
+  private static final String CURRENT_USER_ID = "currentUserid";
+  private static final String CURRENT_EMAIL = "currentUser@gmail.com";
+  private static final String CURRENT_USER_NAME = "currentUsername";
+  private static final String CURRENT_SELF_INTRODUCTION = "I am the current user";
+  private static final String CURRENT_USER_IMG_KEY = "img1234Current";
 
   public static final long PLACEGUIDE_ID = 12345;
   public static final String PLACEGUIDE_NAME = "name";
   public static final String AUDIO_KEY = "audioKey";
-  public static final String CREATOR_ID = USER_ID;
+  public static final String CREATOR_ID = CREATOR_USER_ID;
   public static final String PLACE_ID = "placeId";
   public static final GeoPt COORDINATE = new GeoPt((float) 3.14, (float) 2.56);
   public static final boolean IS_PUBLIC = true;
@@ -51,11 +57,18 @@ public final class PlaceGuideInfoTest {
   public static final String DESCRIPTION = "description";
   public static final String IMAGE_KEY = "imageKey";
 
-  private final User toSaveUser =
-      new User.Builder(USER_ID, EMAIL)
-          .setName(USER_NAME)
-          .addSelfIntroduction(SELF_INTRODUCTION)
-          .addImgKey(USER_IMG_KEY)
+  private final User creatorUser =
+      new User.Builder(CREATOR_USER_ID, CREATOR_EMAIL)
+          .setName(CREATOR_USER_NAME)
+          .addSelfIntroduction(CREATOR_SELF_INTRODUCTION)
+          .addImgKey(CREATOR_USER_IMG_KEY)
+          .build();
+
+  private final User currentUser =
+      new User.Builder(CURRENT_USER_ID, CURRENT_EMAIL)
+          .setName(CURRENT_USER_NAME)
+          .addSelfIntroduction(CURRENT_SELF_INTRODUCTION)
+          .addImgKey(CURRENT_USER_IMG_KEY)
           .build();
 
   private final PlaceGuide toMatchPlaceGuide =
@@ -84,18 +97,20 @@ public final class PlaceGuideInfoTest {
   }
 
   @Test
-  public void createPlaceGuideWithUserPair_existingUser_matchesPlaceGuideWithUser() {
-    myUserRepository.saveUser(toSaveUser);
-    PlaceGuideInfo placeGuideInfo = PlaceGuideInfo.matchPlaceGuideWithCreator(toMatchPlaceGuide);
-    assertEquals(toSaveUser, placeGuideInfo.getCreator());
+  public void constructPlaceGuideInfo_existingUser_matchesPlaceGuideWithUser() {
+    myUserRepository.saveUser(creatorUser);
+    myUserRepository.saveUser(currentUser);
+    PlaceGuideInfo placeGuideInfo = new PlaceGuideInfo(toMatchPlaceGuide, CURRENT_USER_ID);
+    assertEquals(creatorUser, placeGuideInfo.getCreator());
   }
 
   // Remark: this scenario should never occur in real-life.
   // The user's data will be saved the very first time when they access the website, so
   // there cannot exist PlaceGuides with inexistent creators.
   @Test
-  public void createPlaceGuideWithUserPair_nonExistingUser_matchesPlaceGuideWithNullUser() {
-    PlaceGuideInfo placeGuideInfo = PlaceGuideInfo.matchPlaceGuideWithCreator(toMatchPlaceGuide);
+  public void constructPlaceGuideInfo_nonExistingUser_matchesPlaceGuideWithNullUser() {
+    myUserRepository.saveUser(currentUser);
+    PlaceGuideInfo placeGuideInfo = new PlaceGuideInfo(toMatchPlaceGuide, CURRENT_USER_ID);
     assertEquals(null, placeGuideInfo.getCreator());
   }
 }
