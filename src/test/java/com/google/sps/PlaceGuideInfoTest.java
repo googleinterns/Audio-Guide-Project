@@ -19,12 +19,10 @@ import static org.junit.Assert.*;
 import com.google.appengine.api.datastore.*;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
-import com.google.sps.data.RepositoryType;
 import com.google.sps.placeGuide.PlaceGuide;
 import com.google.sps.placeGuideInfo.PlaceGuideInfo;
 import com.google.sps.user.User;
-import com.google.sps.user.repository.UserRepository;
-import com.google.sps.user.repository.UserRepositoryFactory;
+import com.google.sps.user.repository.impl.DatastoreUserRepository;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -90,9 +88,6 @@ public final class PlaceGuideInfoTest {
           .setImageKey(IMAGE_KEY)
           .build();
 
-  private final UserRepository myUserRepository =
-      UserRepositoryFactory.getUserRepository(RepositoryType.DATASTORE);
-
   private final LocalServiceTestHelper helper =
       new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
 
@@ -108,52 +103,72 @@ public final class PlaceGuideInfoTest {
 
   @Test
   public void constructPlaceGuideInfo_matchesPlaceGuideWithUser() {
-    myUserRepository.saveUser(creatorUser);
-    myUserRepository.saveUser(otherUser);
+    saveUser(creatorUser);
+    saveUser(otherUser);
     PlaceGuideInfo placeGuideInfo = new PlaceGuideInfo(toMatchPlaceGuide, OTHER_USER_ID);
     assertEquals(creatorUser, placeGuideInfo.getCreator());
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void constructPlaceGuideInfo_inexistentCreator_throwsIllegalArgumentException() {
-    myUserRepository.saveUser(otherUser);
+    saveUser(otherUser);
     PlaceGuideInfo placeGuideInfo = new PlaceGuideInfo(toMatchPlaceGuide, OTHER_USER_ID);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void constructPlaceGuideInfo_inexistentCurrentUser_throwsIllegalArgumentException() {
-    myUserRepository.saveUser(creatorUser);
+    saveUser(creatorUser);
     PlaceGuideInfo placeGuideInfo = new PlaceGuideInfo(toMatchPlaceGuide, OTHER_USER_ID);
   }
 
   @Test
   public void constructPlaceGuideInfo_currentUserIsCreator_createdByCurrentUserIsTrue() {
-    myUserRepository.saveUser(creatorUser);
+    saveUser(creatorUser);
     PlaceGuideInfo placeGuideInfo = new PlaceGuideInfo(toMatchPlaceGuide, CREATOR_USER_ID);
     assertEquals(true, placeGuideInfo.isCreatedByCurrentUser());
   }
 
   @Test
   public void constructPlaceGuideInfo_currentUserIsNotCreator_createdByCurrentUserIsFalse() {
-    myUserRepository.saveUser(creatorUser);
-    myUserRepository.saveUser(otherUser);
+    saveUser(creatorUser);
+    saveUser(otherUser);
     PlaceGuideInfo placeGuideInfo = new PlaceGuideInfo(toMatchPlaceGuide, OTHER_USER_ID);
     assertEquals(false, placeGuideInfo.isCreatedByCurrentUser());
   }
 
   @Test
   public void constructPlaceGuideInfo_bookmarkedByCurrentUser_bookmarkedByCurrentUserIsTrue() {
-    myUserRepository.saveUser(creatorUser);
-    myUserRepository.saveUser(otherUser);
+    saveUser(creatorUser);
+    saveUser(otherUser);
     PlaceGuideInfo placeGuideInfo = new PlaceGuideInfo(toMatchPlaceGuide, OTHER_USER_ID);
     assertEquals(true, placeGuideInfo.isBookmarkedByCurrentUser());
   }
 
   @Test
   public void constructPlaceGuideInfo_notBookmarkedByCurrentUser_bookmarkedByCurrentUserIsFalse() {
-    myUserRepository.saveUser(creatorUser);
-    myUserRepository.saveUser(otherUser);
+    saveUser(creatorUser);
+    saveUser(otherUser);
     PlaceGuideInfo placeGuideInfo = new PlaceGuideInfo(toMatchPlaceGuide, CREATOR_USER_ID);
     assertEquals(false, placeGuideInfo.isBookmarkedByCurrentUser());
+  }
+
+  private void saveUser(User user) {
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    datastore.put(getUserEntity(user));
+  }
+
+  private Entity getUserEntity(User user) {
+    Entity userEntity = new Entity(DatastoreUserRepository.ENTITY_KIND, user.getId());
+    userEntity.setProperty(DatastoreUserRepository.NAME_PROPERTY, user.getName());
+    userEntity.setProperty(DatastoreUserRepository.EMAIL_PROPERTY, user.getEmail());
+    userEntity.setProperty(
+        DatastoreUserRepository.BOOKMARKED_PLACE_GUIDES_IDS_PROPERTY,
+        user.getBookmarkedPlaceGuidesIds());
+    userEntity.setProperty(
+        DatastoreUserRepository.PUBLIC_PORTFOLIO_PROPERTY, user.portfolioIsPublic());
+    userEntity.setProperty(
+        DatastoreUserRepository.SELF_INTRODUCTION_PROPERTY, user.getSelfIntroduction());
+    userEntity.setProperty(DatastoreUserRepository.IMG_KEY_PROPERTY, user.getImgKey());
+    return userEntity;
   }
 }
