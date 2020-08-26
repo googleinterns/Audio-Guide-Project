@@ -103,14 +103,4 @@ public final class PlaceGuideInfoTest {
     PlaceGuideInfo placeGuideInfo = new PlaceGuideInfo(toMatchPlaceGuide, CURRENT_USER_ID);
     assertEquals(creatorUser, placeGuideInfo.getCreator());
   }
-
-  // Remark: this scenario should never occur in real-life.
-  // The user's data will be saved the very first time when they access the website, so
-  // there cannot exist PlaceGuides with inexistent creators.
-  @Test
-  public void constructPlaceGuideInfo_nonExistingUser_matchesPlaceGuideWithNullUser() {
-    myUserRepository.saveUser(currentUser);
-    PlaceGuideInfo placeGuideInfo = new PlaceGuideInfo(toMatchPlaceGuide, CURRENT_USER_ID);
-    assertEquals(null, placeGuideInfo.getCreator());
-  }
 }

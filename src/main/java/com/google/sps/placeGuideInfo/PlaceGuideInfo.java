@@ -36,12 +36,16 @@ public class PlaceGuideInfo {
   public PlaceGuideInfo(PlaceGuide placeGuide, String currentUserId) {
     this.placeGuide = placeGuide;
     this.creator = userRepository.getUser(this.placeGuide.getCreatorId());
-    this.createdByCurrentUser = this.placeGuide.getCreatorId() == currentUserId;
+    if (this.creator == null) {
+      throw new IllegalArgumentException("The creator of this PlaceGuide does not exist.");
+    }
+    User currentUser = userRepository.getUser(currentUserId);
+    if (currentUserId == null) {
+      throw new IllegalArgumentException("The current user does not exist.");
+    }
     this.bookmarkedByCurrentUser =
-        userRepository
-            .getUser(currentUserId)
-            .getBookmarkedPlaceGuidesIds()
-            .contains(this.placeGuide.getId());
+        currentUser.getBookmarkedPlaceGuidesIds().contains(this.placeGuide.getId());
+    this.createdByCurrentUser = this.placeGuide.getCreatorId() == currentUserId;
   }
 
   public User getCreator() {
