@@ -6,7 +6,6 @@ const DUMMY_DATA_FOR_PLACE_NAME = "placeName";
 function setUpCreatePlaceGuideForm() {
   addBlobstoreUploadUrlToForm("CREATE_PLACE_GUIDE_FORM", "createPlaceGuideForm");
   activatePreviewFeature();
-  var myFunnyNumber = 1;
 }
 
 function activatePreviewFeature() {
