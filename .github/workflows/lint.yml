@@ -11,7 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - run:  |
-          yarn install eslint
+          npm install eslint -D
           yarn
       - name: reviewdog eslint
         uses: reviewdog/action-eslint@v1
