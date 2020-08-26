@@ -13,6 +13,5 @@ jobs:
       - name: reviewdog eslint
         uses: reviewdog/action-eslint@v1
         with:
-          eslint_flags: 'src/'
           reporter: github-pr-review
           fail_on_error: true
