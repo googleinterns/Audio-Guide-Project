@@ -72,9 +72,6 @@ public class PlaceGuideServlet extends HttpServlet {
   /** Saves the recently submitted place guide data. */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    List<PlaceGuide> placeGuides =
-        placeGuideRepository.getAllPublicPlaceGuidesInMapArea(
-            new GeoPt(10, 20), new GeoPt(-10, -20));
     PlaceGuide placeGuide = getPlaceGuideFromRequest(request);
     placeGuideRepository.savePlaceGuide(placeGuide);
     response.sendRedirect("/createPlaceGuide.html");
