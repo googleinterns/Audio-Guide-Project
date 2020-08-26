@@ -40,7 +40,7 @@ public class PlaceGuideInfo {
       throw new IllegalArgumentException("The creator of this PlaceGuide does not exist.");
     }
     User currentUser = userRepository.getUser(currentUserId);
-    if (currentUserId == null) {
+    if (currentUser == null) {
       throw new IllegalArgumentException("The current user does not exist.");
     }
     this.bookmarkedByCurrentUser =

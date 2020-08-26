@@ -40,11 +40,11 @@ public final class PlaceGuideInfoTest {
   private static final String CREATOR_SELF_INTRODUCTION = "I am the creator user";
   private static final String CREATOR_USER_IMG_KEY = "img1234Creator";
 
-  private static final String CURRENT_USER_ID = "currentUserid";
-  private static final String CURRENT_EMAIL = "currentUser@gmail.com";
-  private static final String CURRENT_USER_NAME = "currentUsername";
-  private static final String CURRENT_SELF_INTRODUCTION = "I am the current user";
-  private static final String CURRENT_USER_IMG_KEY = "img1234Current";
+  private static final String OTHER_USER_ID = "otherUserid";
+  private static final String OTHER_EMAIL = "otherUser@gmail.com";
+  private static final String OTHER_USER_NAME = "otherUsername";
+  private static final String OTHER_SELF_INTRODUCTION = "I am the other user";
+  private static final String OTHER_USER_IMG_KEY = "img1234other";
 
   public static final long PLACEGUIDE_ID = 12345;
   public static final String PLACEGUIDE_NAME = "name";
@@ -64,11 +64,11 @@ public final class PlaceGuideInfoTest {
           .addImgKey(CREATOR_USER_IMG_KEY)
           .build();
 
-  private final User currentUser =
-      new User.Builder(CURRENT_USER_ID, CURRENT_EMAIL)
-          .setName(CURRENT_USER_NAME)
-          .addSelfIntroduction(CURRENT_SELF_INTRODUCTION)
-          .addImgKey(CURRENT_USER_IMG_KEY)
+  private final User otherUser =
+      new User.Builder(OTHER_USER_ID, OTHER_EMAIL)
+          .setName(OTHER_USER_NAME)
+          .addSelfIntroduction(OTHER_SELF_INTRODUCTION)
+          .addImgKey(OTHER_USER_IMG_KEY)
           .build();
 
   private final PlaceGuide toMatchPlaceGuide =
@@ -97,10 +97,25 @@ public final class PlaceGuideInfoTest {
   }
 
   @Test
-  public void constructPlaceGuideInfo_existingUser_matchesPlaceGuideWithUser() {
+  public void constructPlaceGuideInfo_matchesPlaceGuideWithUser() {
     myUserRepository.saveUser(creatorUser);
-    myUserRepository.saveUser(currentUser);
-    PlaceGuideInfo placeGuideInfo = new PlaceGuideInfo(toMatchPlaceGuide, CURRENT_USER_ID);
+    myUserRepository.saveUser(otherUser);
+    PlaceGuideInfo placeGuideInfo = new PlaceGuideInfo(toMatchPlaceGuide, OTHER_USER_ID);
     assertEquals(creatorUser, placeGuideInfo.getCreator());
+  }
+
+  @Test
+  public void constructPlaceGuideInfo_currentUserIsCreator_createdByCurrentUserIsTrue() {
+    myUserRepository.saveUser(creatorUser);
+    PlaceGuideInfo placeGuideInfo = new PlaceGuideInfo(toMatchPlaceGuide, CREATOR_USER_ID);
+    assertEquals(true, placeGuideInfo.isCreatedByCurrentUser());
+  }
+
+  @Test
+  public void constructPlaceGuideInfo_currentUserIsNotCreator_createdByCurrentUserIsFalse() {
+    myUserRepository.saveUser(creatorUser);
+    myUserRepository.saveUser(otherUser);
+    PlaceGuideInfo placeGuideInfo = new PlaceGuideInfo(toMatchPlaceGuide, OTHER_USER_ID);
+    assertEquals(false, placeGuideInfo.isCreatedByCurrentUser());
   }
 }
