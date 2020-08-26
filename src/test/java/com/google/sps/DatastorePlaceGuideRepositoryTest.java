@@ -67,7 +67,7 @@ public final class DatastorePlaceGuideRepositoryTest {
           .setBookmarkedPlaceGuidesIds(CREATOR_A_BOOKMARKED_PLACE_GUIDES_IDS)
           .build();
 
-  // PlaceGuides' parameters used for map-related queries.
+  // PlaceGuides' parameters used for map-related queries, with a region not crossing the IDL.
   // PlaceGudies of user C.
   public static final long C_INNER_PUBLIC_ID = 56789;
   public static final long C_INNER_PRIVATE_ID = 98765;
@@ -75,9 +75,9 @@ public final class DatastorePlaceGuideRepositoryTest {
   public static final long C_OUTER_PRIVATE_ID = 9876;
   public static final String CREATOR_C_ID = "creatorC_Id";
   public static final GeoPt C_INNER_PUBLIC_COORDINATE = new GeoPt((float) 10, (float) -5);
-  public static final GeoPt C_INNER_PRIVATE_COORDINATE = new GeoPt((float) -10, (float) 10);
-  public static final GeoPt C_OUTER_PUBLIC_COORDINATE = new GeoPt((float) 30, (float) -10);
-  public static final GeoPt C_OUTER_PRIVATE_COORDINATE = new GeoPt((float) -10, (float) -45);
+  public static final GeoPt C_INNER_PRIVATE_COORDINATE = new GeoPt((float) -10, (float) 0);
+  public static final GeoPt C_OUTER_PUBLIC_COORDINATE = new GeoPt((float) 5, (float) -20);
+  public static final GeoPt C_OUTER_PRIVATE_COORDINATE = new GeoPt((float) -30, (float) -5);
   // PlaceGudies of user D.
   public static final long D_INNER_PUBLIC_ID = 567890;
   public static final long D_INNER_PRIVATE_ID = 987650;
@@ -89,8 +89,35 @@ public final class DatastorePlaceGuideRepositoryTest {
   public static final GeoPt D_OUTER_PUBLIC_COORDINATE = new GeoPt((float) 60, (float) 10);
   public static final GeoPt D_OUTER_PRIVATE_COORDINATE = new GeoPt((float) -10, (float) -45);
   // Corners of the rectangle for the queried map area.
-  public static final GeoPt NORTH_EAST_CORNER = new GeoPt((float) 15, (float) 15);
-  public static final GeoPt SOUTH_WEST_CORNER = new GeoPt((float) -15, (float) -15);
+  // This is a map area which doesn't cross the IDL.
+  public static final GeoPt NORTH_EAST_CORNER_NO_IDL = new GeoPt((float) 15, (float) 15);
+  public static final GeoPt SOUTH_WEST_CORNER_NO_IDL = new GeoPt((float) -15, (float) -15);
+
+  // PlaceGuides' parameters used for map-related queries, with a region crossing the IDL.
+  // PlaceGudies of user F.
+  public static final long E_INNER_PUBLIC_ID = 567891;
+  public static final long E_INNER_PRIVATE_ID = 987651;
+  public static final long E_OUTER_PUBLIC_ID = 678901;
+  public static final long E_OUTER_PRIVATE_ID = 98761;
+  public static final String CREATOR_E_ID = "creatorE_Id";
+  public static final GeoPt E_INNER_PUBLIC_COORDINATE = new GeoPt((float) 10, (float) -170);
+  public static final GeoPt E_INNER_PRIVATE_COORDINATE = new GeoPt((float) -10, (float) 180);
+  public static final GeoPt E_OUTER_PUBLIC_COORDINATE = new GeoPt((float) 5, (float) -150);
+  public static final GeoPt E_OUTER_PRIVATE_COORDINATE = new GeoPt((float) -30, (float) 170);
+  // PlaceGudies of user F.
+  public static final long F_INNER_PUBLIC_ID = 567892;
+  public static final long F_INNER_PRIVATE_ID = 987652;
+  public static final long F_OUTER_PUBLIC_ID = 678902;
+  public static final long F_OUTER_PRIVATE_ID = 98762;
+  public static final String CREATOR_F_ID = "creatorF_Id";
+  public static final GeoPt F_INNER_PUBLIC_COORDINATE = new GeoPt((float) 20, (float) 175);
+  public static final GeoPt F_INNER_PRIVATE_COORDINATE = new GeoPt((float) -20, (float) -160);
+  public static final GeoPt F_OUTER_PUBLIC_COORDINATE = new GeoPt((float) 60, (float) -140);
+  public static final GeoPt F_OUTER_PRIVATE_COORDINATE = new GeoPt((float) -10, (float) 160);
+  // Corners of the rectangle for the queried map area.
+  // This is a map area which crosses the IDL.
+  public static final GeoPt NORTH_EAST_CORNER_WITH_IDL = new GeoPt((float) 20, (float) -160);
+  public static final GeoPt SOUTH_WEST_CORNER_WITH_IDL = new GeoPt((float) -20, (float) 160);
 
   private final PlaceGuide testPublicPlaceGuideA =
       new PlaceGuide.Builder(A_PUBLIC_ID, NAME, AUDIO_KEY, CREATOR_A_ID, COORDINATE)
@@ -201,6 +228,82 @@ public final class DatastorePlaceGuideRepositoryTest {
   private final PlaceGuide testOuterPrivatePlaceGuideD =
       new PlaceGuide.Builder(
               D_OUTER_PRIVATE_ID, NAME, AUDIO_KEY, CREATOR_D_ID, D_OUTER_PUBLIC_COORDINATE)
+          .setPlaceId(PLACE_ID)
+          .setLength(LENGTH)
+          .setDescription(DESCRIPTION)
+          .setImageKey(IMAGE_KEY)
+          .build();
+
+  private final PlaceGuide testInnerPublicPlaceGuideE =
+      new PlaceGuide.Builder(
+              E_INNER_PUBLIE_ID, NAME, AUDIO_KEY, CREATOR_E_ID, E_INNER_PUBLIC_COORDINATE)
+          .setPlaceId(PLACE_ID)
+          .setPlaceGuideStatus(IS_PUBLIC)
+          .setLength(LENGTH)
+          .setDescription(DESCRIPTION)
+          .setImageKey(IMAGE_KEY)
+          .build();
+
+  private final PlaceGuide testInnerPrivatePlaceGuideE =
+      new PlaceGuide.Builder(
+              E_INNER_PRIVATE_ID, NAME, AUDIO_KEY, CREATOR_E_ID, E_INNER_PRIVATE_COORDINATE)
+          .setPlaceId(PLACE_ID)
+          .setLength(LENGTH)
+          .setDescription(DESCRIPTION)
+          .setImageKey(IMAGE_KEY)
+          .build();
+
+  private final PlaceGuide testOuterPublicPlaceGuideE =
+      new PlaceGuide.Builder(
+              E_OUTER_PUBLIC_ID, NAME, AUDIO_KEY, CREATOR_E_ID, E_OUTER_PUBLIC_COORDINATE)
+          .setPlaceId(PLACE_ID)
+          .setPlaceGuideStatus(IS_PUBLIC)
+          .setLength(LENGTH)
+          .setDescription(DESCRIPTION)
+          .setImageKey(IMAGE_KEY)
+          .build();
+
+  private final PlaceGuide testOuterPrivatePlaceGuideE =
+      new PlaceGuide.Builder(
+              E_OUTER_PRIVATE_ID, NAME, AUDIO_KEY, CREATOR_E_ID, E_OUTER_PUBLIC_COORDINATE)
+          .setPlaceId(PLACE_ID)
+          .setLength(LENGTH)
+          .setDescription(DESCRIPTION)
+          .setImageKey(IMAGE_KEY)
+          .build();
+
+  private final PlaceGuide testInnerPublicPlaceGuideD =
+      new PlaceGuide.Builder(
+              D_INNER_PUBLIC_ID, NAME, AUDIO_KEY, CREATOR_D_ID, D_INNER_PUBLIC_COORDINATE)
+          .setPlaceId(PLACE_ID)
+          .setPlaceGuideStatus(IS_PUBLIC)
+          .setLength(LENGTH)
+          .setDescription(DESCRIPTION)
+          .setImageKey(IMAGE_KEY)
+          .build();
+
+  private final PlaceGuide testInnerPrivatePlaceGuideF =
+      new PlaceGuide.Builder(
+              F_INNER_PRIVATE_ID, NAME, AUDIO_KEY, CREATOR_F_ID, F_INNER_PRIVATE_COORDINATE)
+          .setPlaceId(PLACE_ID)
+          .setLength(LENGTH)
+          .setDescription(DESCRIPTION)
+          .setImageKey(IMAGE_KEY)
+          .build();
+
+  private final PlaceGuide testOuterPublicPlaceGuideF =
+      new PlaceGuide.Builder(
+              F_OUTER_PUBLIC_ID, NAME, AUDIO_KEY, CREATOR_F_ID, F_OUTER_PUBLIC_COORDINATE)
+          .setPlaceId(PLACE_ID)
+          .setPlaceGuideStatus(IS_PUBLIC)
+          .setLength(LENGTH)
+          .setDescription(DESCRIPTION)
+          .setImageKey(IMAGE_KEY)
+          .build();
+
+  private final PlaceGuide testOuterPrivatePlaceGuideF =
+      new PlaceGuide.Builder(
+              F_OUTER_PRIVATE_ID, NAME, AUDIO_KEY, CREATOR_F_ID, F_OUTER_PUBLIC_COORDINATE)
           .setPlaceId(PLACE_ID)
           .setLength(LENGTH)
           .setDescription(DESCRIPTION)
