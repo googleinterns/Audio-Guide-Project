@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.google.sps.placeGuideWithCreatorPair;
+package com.google.sps.placeGuideInfo;
 
 import com.google.sps.data.RepositoryType;
 import com.google.sps.placeGuide.PlaceGuide;
@@ -25,20 +25,20 @@ import com.google.sps.user.repository.UserRepositoryFactory;
  * to return the complete information about a place guide from the servlets, including the user's
  * data, in one object.
  */
-public class PlaceGuideWithCreatorPair {
+public class PlaceGuideInfo {
   private User creator;
   private PlaceGuide placeGuide;
   private static final UserRepository userRepository =
       UserRepositoryFactory.getUserRepository(RepositoryType.DATASTORE);;
 
-  private PlaceGuideWithCreatorPair(User creator, PlaceGuide placeGuide) {
+  private PlaceGuideInfo(User creator, PlaceGuide placeGuide) {
     this.creator = creator;
     this.placeGuide = placeGuide;
   }
 
-  public static PlaceGuideWithCreatorPair matchPlaceGuideWithCreator(PlaceGuide placeGuide) {
+  public static PlaceGuideInfo matchPlaceGuideWithCreator(PlaceGuide placeGuide) {
     User creator = userRepository.getUser(placeGuide.getCreatorId());
-    return new PlaceGuideWithCreatorPair(creator, placeGuide);
+    return new PlaceGuideInfo(creator, placeGuide);
   }
 
   public User getCreator() {

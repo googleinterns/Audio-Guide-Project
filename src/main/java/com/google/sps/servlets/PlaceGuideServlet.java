@@ -10,7 +10,7 @@ import com.google.sps.data.RepositoryType;
 import com.google.sps.placeGuide.PlaceGuide;
 import com.google.sps.placeGuide.repository.PlaceGuideRepository;
 import com.google.sps.placeGuide.repository.PlaceGuideRepositoryFactory;
-import com.google.sps.placeGuideWithCreatorPair.PlaceGuideWithCreatorPair;
+import com.google.sps.placeGuideInfo.PlaceGuideInfo;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -97,20 +97,17 @@ public class PlaceGuideServlet extends HttpServlet {
     }
     List<PlaceGuide> placeGuides =
         getPlaceGuides(placeGuideQueryType, northEastCorner, southWestCorner);
-    List<PlaceGuideWithCreatorPair> placeGuideWithCreatorPairs =
-        getPlaceGuideWithCreatorPairs(placeGuides);
+    List<PlaceGuideInfo> placeGuideInfos = getPlaceGuideInfos(placeGuides);
     response.setContentType("application/json;");
-    response.getWriter().println(convertToJsonUsingGson(placeGuideWithCreatorPairs));
+    response.getWriter().println(convertToJsonUsingGson(placeGuideInfos));
   }
 
-  private List<PlaceGuideWithCreatorPair> getPlaceGuideWithCreatorPairs(
-      List<PlaceGuide> placeGuides) {
-    List<PlaceGuideWithCreatorPair> placeGuideWithCreatorPairs = new ArrayList<>();
+  private List<PlaceGuideInfo> getPlaceGuideInfos(List<PlaceGuide> placeGuides) {
+    List<PlaceGuideInfo> placeGuideInfos = new ArrayList<>();
     for (PlaceGuide placeGuide : placeGuides) {
-      placeGuideWithCreatorPairs.add(
-          PlaceGuideWithCreatorPair.matchPlaceGuideWithCreator(placeGuide));
+      placeGuideInfos.add(PlaceGuideInfo.matchPlaceGuideWithCreator(placeGuide));
     }
-    return placeGuideWithCreatorPairs;
+    return placeGuideInfos;
   }
 
   private List<PlaceGuide> getPlaceGuides(

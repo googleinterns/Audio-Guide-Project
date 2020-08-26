@@ -21,7 +21,7 @@ import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestC
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.google.sps.data.RepositoryType;
 import com.google.sps.placeGuide.PlaceGuide;
-import com.google.sps.placeGuideWithCreatorPair.PlaceGuideWithCreatorPair;
+import com.google.sps.placeGuideInfo.PlaceGuideInfo;
 import com.google.sps.user.User;
 import com.google.sps.user.repository.UserRepository;
 import com.google.sps.user.repository.UserRepositoryFactory;
@@ -32,7 +32,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
-public final class PlaceGuideWithCreatorPairTest {
+public final class PlaceGuideInfoTest {
   // User parameters.
   private static final String USER_ID = "userid";
   private static final String EMAIL = "user@gmail.com";
@@ -86,9 +86,8 @@ public final class PlaceGuideWithCreatorPairTest {
   @Test
   public void createPlaceGuideWithUserPair_existingUser_matchesPlaceGuideWithUser() {
     myUserRepository.saveUser(toSaveUser);
-    PlaceGuideWithCreatorPair placeGuideWithCreatorPair =
-        PlaceGuideWithCreatorPair.matchPlaceGuideWithCreator(toMatchPlaceGuide);
-    assertEquals(toSaveUser, placeGuideWithCreatorPair.getCreator());
+    PlaceGuideInfo placeGuideInfo = PlaceGuideInfo.matchPlaceGuideWithCreator(toMatchPlaceGuide);
+    assertEquals(toSaveUser, placeGuideInfo.getCreator());
   }
 
   // Remark: this scenario should never occur in real-life.
@@ -96,8 +95,7 @@ public final class PlaceGuideWithCreatorPairTest {
   // there cannot exist PlaceGuides with inexistent creators.
   @Test
   public void createPlaceGuideWithUserPair_nonExistingUser_matchesPlaceGuideWithNullUser() {
-    PlaceGuideWithCreatorPair placeGuideWithCreatorPair =
-        PlaceGuideWithCreatorPair.matchPlaceGuideWithCreator(toMatchPlaceGuide);
-    assertEquals(null, placeGuideWithCreatorPair.getCreator());
+    PlaceGuideInfo placeGuideInfo = PlaceGuideInfo.matchPlaceGuideWithCreator(toMatchPlaceGuide);
+    assertEquals(null, placeGuideInfo.getCreator());
   }
 }
