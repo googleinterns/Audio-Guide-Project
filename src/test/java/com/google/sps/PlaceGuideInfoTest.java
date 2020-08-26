@@ -50,7 +50,6 @@ public final class PlaceGuideInfoTest {
   private static final long PLACEGUIDE_ID = 12345;
   private static final String PLACEGUIDE_NAME = "name";
   private static final String AUDIO_KEY = "audioKey";
-  private static final String CREATOR_ID = CREATOR_USER_ID;
   private static final String PLACE_ID = "placeId";
   private static final GeoPt COORDINATE = new GeoPt((float) 3.14, (float) 2.56);
   private static final boolean IS_PUBLIC = true;
@@ -80,7 +79,7 @@ public final class PlaceGuideInfoTest {
           .build();
 
   private final PlaceGuide toMatchPlaceGuide =
-      new PlaceGuide.Builder(PLACEGUIDE_ID, PLACEGUIDE_NAME, AUDIO_KEY, CREATOR_ID, COORDINATE)
+      new PlaceGuide.Builder(PLACEGUIDE_ID, PLACEGUIDE_NAME, AUDIO_KEY, CREATOR_USER_ID, COORDINATE)
           .setPlaceId(PLACE_ID)
           .setPlaceGuideStatus(IS_PUBLIC)
           .setLength(LENGTH)
