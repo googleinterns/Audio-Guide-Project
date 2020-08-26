@@ -512,6 +512,11 @@ public final class DatastorePlaceGuideRepositoryTest {
         placeGuideRepository.getAllPublicPlaceGuidesInMapArea(NORTH_EAST_CORNER, SOUTH_WEST_CORNER);
     List<PlaceGuide> expected =
         Arrays.asList(testInnerPublicPlaceGuideC, testInnerPublicPlaceGuideD);
+    System.out.println("!!!Result is:");
+    for (PlaceGuide placeGuide : result) {
+      System.out.println(
+          placeGuide.getId() + " with coordinates: " + placeGuide.getCoordinate().toString());
+    }
     assertTrue(compare(expected, result));
   }
 

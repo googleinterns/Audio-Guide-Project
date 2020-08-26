@@ -119,14 +119,13 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository {
     Filter publicityFilter = new FilterPredicate(IS_PUBLIC_PROPERTY, FilterOperator.EQUAL, true);
     Filter mapAreaFilter1 =
         new FilterPredicate(
-            COORDINATE_PROPERTY,
-            FilterOperator.GREATER_THAN_OR_EQUAL,
-            southWestCorner.getLatitude());
+            COORDINATE_PROPERTY, FilterOperator.GREATER_THAN_OR_EQUAL, southWestCorner);
     Filter mapAreaFilter2 =
         new FilterPredicate(
-            COORDINATE_PROPERTY, FilterOperator.LESS_THAN_OR_EQUAL, northEastCorner.getLatitude());
+            COORDINATE_PROPERTY, FilterOperator.LESS_THAN_OR_EQUAL, northEastCorner);
     Filter queryFilter =
-        CompositeFilterOperator.and(publicityFilter, mapAreaFilter1, mapAreaFilter2);
+        CompositeFilterOperator.and(
+            publicityFilter, mapAreaFilter1, mapAreaFilter2); // , mapAreaFilter1, mapAreaFilter2);
     Query query = new Query(ENTITY_KIND).setFilter(queryFilter);
     return getPlaceGuidesList(query);
   }
@@ -141,8 +140,8 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository {
         new FilterPredicate(CREATOR_ID_PROPERTY, FilterOperator.EQUAL, creatorId);
     Filter queryFilter = CompositeFilterOperator.and(mapAreaFilter, creatorFilter);
     Query query = new Query(ENTITY_KIND).setFilter(queryFilter);
-    return removePlaceGuidesOutsideLongitudeBounds(
-        getPlaceGuidesList(query), southWestCorner.getLongitude(), northEastCorner.getLongitude());
+    return // removePlaceGuidesOutsideLongitudeBounds(
+    getPlaceGuidesList(query); // , southWestCorner.getLongitude(), northEastCorner.getLongitude());
   }
 
   @Override
@@ -174,12 +173,13 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository {
   }
 
   private List<PlaceGuide> removePlaceGuidesOutsideLongitudeBounds(
-      List<PlaceGuide> placeGudies, float westBound, float eastBound) {
-    placeGuides.removeIf(
+      List<PlaceGuide> placeGuides, float westBound, float eastBound) {
+    List<PlaceGuide> placeGuidesCopy = new ArrayList<>(placeGuides);
+    placeGuidesCopy.removeIf(
         placeGuide ->
             !isBetweenLongitudeBounds(
                 placeGuide.getCoordinate().getLongitude(), westBound, eastBound));
-    return placeGuides;
+    return placeGuidesCopy;
   }
 
   private boolean isBetweenLongitudeBounds(float longitude, float westBound, float eastBound) {
