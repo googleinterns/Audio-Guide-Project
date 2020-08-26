@@ -10,7 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - run:  npm install eslint -D
+      - run:  |
+          yarn install eslint
+          yarn
       - name: reviewdog eslint
         uses: reviewdog/action-eslint@v1
         with:
