@@ -28,17 +28,20 @@ import com.google.sps.user.repository.UserRepositoryFactory;
 public class PlaceGuideInfo {
   private User creator;
   private PlaceGuide placeGuide;
+  private boolean createdByCurrentUser;
+  private boolean bookmarkedByCurrentUser;
   private static final UserRepository userRepository =
       UserRepositoryFactory.getUserRepository(RepositoryType.DATASTORE);;
 
-  private PlaceGuideInfo(User creator, PlaceGuide placeGuide) {
-    this.creator = creator;
+  public PlaceGuideInfo(PlaceGuide placeGuide, String currentUserId) {
     this.placeGuide = placeGuide;
-  }
-
-  public static PlaceGuideInfo matchPlaceGuideWithCreator(PlaceGuide placeGuide) {
-    User creator = userRepository.getUser(placeGuide.getCreatorId());
-    return new PlaceGuideInfo(creator, placeGuide);
+    this.creator = userRepository.getUser(this.placeGuide.getCreatorId());
+    this.createdByCurrentUser = this.placeGuide.getCreatorId() == currentUserId;
+    this.bookmarkedByCurrentUser =
+        userRepository
+            .getUser(currentUserId)
+            .getBookmarkedPlaceGuidesIds()
+            .contains(this.placeGuide.getId());
   }
 
   public User getCreator() {
@@ -47,5 +50,13 @@ public class PlaceGuideInfo {
 
   public PlaceGuide getPlaceGuide() {
     return placeGuide;
+  }
+
+  public boolean isCreatedByCurrentUser() {
+    return this.createdByCurrentUser;
+  }
+
+  public boolean isBookmarkedByCurrentUser() {
+    return this.bookmarkedByCurrentUser;
   }
 }
