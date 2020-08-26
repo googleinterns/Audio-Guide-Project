@@ -21,9 +21,10 @@ import com.google.sps.user.repository.UserRepository;
 import com.google.sps.user.repository.UserRepositoryFactory;
 
 /**
- * Class which unites a place guide's information with its creators information. This class is used
- * to return the complete information about a place guide from the servlets, including the user's
- * data, in one object.
+ * Class which unites a place guide's information with its creators information, and specifies the
+ * placeGuide's relation to the currently logged in user (whether it was created and/or bookmarked
+ * by the currently logged in user. This class is used to return the complete information about a
+ * place guide from the servlets, in one object.
  */
 public class PlaceGuideInfo {
   private User creator;
