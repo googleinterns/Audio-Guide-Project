@@ -104,6 +104,18 @@ public final class PlaceGuideInfoTest {
     assertEquals(creatorUser, placeGuideInfo.getCreator());
   }
 
+  @Test(expected = IllegalArgumentException.class)
+  public void constructPlaceGuideInfo_inexistentCreator_throwsIllegalArgumentException() {
+    myUserRepository.saveUser(otherUser);
+    PlaceGuideInfo placeGuideInfo = new PlaceGuideInfo(toMatchPlaceGuide, OTHER_USER_ID);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void constructPlaceGuideInfo_inexistentCurrentUser_throwsIllegalArgumentException() {
+    myUserRepository.saveUser(creatorUser);
+    PlaceGuideInfo placeGuideInfo = new PlaceGuideInfo(toMatchPlaceGuide, OTHER_USER_ID);
+  }
+
   @Test
   public void constructPlaceGuideInfo_currentUserIsCreator_createdByCurrentUserIsTrue() {
     myUserRepository.saveUser(creatorUser);
