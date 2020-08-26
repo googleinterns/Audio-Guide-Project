@@ -25,6 +25,9 @@ import com.google.sps.placeGuideInfo.PlaceGuideInfo;
 import com.google.sps.user.User;
 import com.google.sps.user.repository.UserRepository;
 import com.google.sps.user.repository.UserRepositoryFactory;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -46,22 +49,28 @@ public final class PlaceGuideInfoTest {
   private static final String OTHER_SELF_INTRODUCTION = "I am the other user";
   private static final String OTHER_USER_IMG_KEY = "img1234other";
 
-  public static final long PLACEGUIDE_ID = 12345;
-  public static final String PLACEGUIDE_NAME = "name";
-  public static final String AUDIO_KEY = "audioKey";
-  public static final String CREATOR_ID = CREATOR_USER_ID;
-  public static final String PLACE_ID = "placeId";
-  public static final GeoPt COORDINATE = new GeoPt((float) 3.14, (float) 2.56);
-  public static final boolean IS_PUBLIC = true;
-  public static final long LENGTH = 60L;
-  public static final String DESCRIPTION = "description";
-  public static final String IMAGE_KEY = "imageKey";
+  private static final long PLACEGUIDE_ID = 12345;
+  private static final String PLACEGUIDE_NAME = "name";
+  private static final String AUDIO_KEY = "audioKey";
+  private static final String CREATOR_ID = CREATOR_USER_ID;
+  private static final String PLACE_ID = "placeId";
+  private static final GeoPt COORDINATE = new GeoPt((float) 3.14, (float) 2.56);
+  private static final boolean IS_PUBLIC = true;
+  private static final long LENGTH = 60L;
+  private static final String DESCRIPTION = "description";
+  private static final String IMAGE_KEY = "imageKey";
+
+  private static final Set<Long> CREATOR_USER_BOOKMARKED_PLACEGUIDE_IDS =
+      new HashSet<>(Arrays.asList(1L, 2L, 3L));
+  private static final Set<Long> OTHER_USER_BOOKMARKED_PLACEGUIDE_IDS =
+      new HashSet<Long>(Arrays.asList(1L, 2L, PLACEGUIDE_ID));
 
   private final User creatorUser =
       new User.Builder(CREATOR_USER_ID, CREATOR_EMAIL)
           .setName(CREATOR_USER_NAME)
           .addSelfIntroduction(CREATOR_SELF_INTRODUCTION)
           .addImgKey(CREATOR_USER_IMG_KEY)
+          .setBookmarkedPlaceGuidesIds(CREATOR_USER_BOOKMARKED_PLACEGUIDE_IDS)
           .build();
 
   private final User otherUser =
@@ -69,6 +78,7 @@ public final class PlaceGuideInfoTest {
           .setName(OTHER_USER_NAME)
           .addSelfIntroduction(OTHER_SELF_INTRODUCTION)
           .addImgKey(OTHER_USER_IMG_KEY)
+          .setBookmarkedPlaceGuidesIds(OTHER_USER_BOOKMARKED_PLACEGUIDE_IDS)
           .build();
 
   private final PlaceGuide toMatchPlaceGuide =
@@ -129,5 +139,21 @@ public final class PlaceGuideInfoTest {
     myUserRepository.saveUser(otherUser);
     PlaceGuideInfo placeGuideInfo = new PlaceGuideInfo(toMatchPlaceGuide, OTHER_USER_ID);
     assertEquals(false, placeGuideInfo.isCreatedByCurrentUser());
+  }
+
+  @Test
+  public void constructPlaceGuideInfo_bookmarkedByCurrentUser_bookmarkedByCurrentUserIsTrue() {
+    myUserRepository.saveUser(creatorUser);
+    myUserRepository.saveUser(otherUser);
+    PlaceGuideInfo placeGuideInfo = new PlaceGuideInfo(toMatchPlaceGuide, OTHER_USER_ID);
+    assertEquals(true, placeGuideInfo.isBookmarkedByCurrentUser());
+  }
+
+  @Test
+  public void constructPlaceGuideInfo_notBookmarkedByCurrentUser_bookmarkedByCurrentUserIsFalse() {
+    myUserRepository.saveUser(creatorUser);
+    myUserRepository.saveUser(otherUser);
+    PlaceGuideInfo placeGuideInfo = new PlaceGuideInfo(toMatchPlaceGuide, CREATOR_USER_ID);
+    assertEquals(false, placeGuideInfo.isBookmarkedByCurrentUser());
   }
 }
