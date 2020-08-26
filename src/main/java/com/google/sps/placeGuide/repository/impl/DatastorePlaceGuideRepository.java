@@ -6,8 +6,6 @@ import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
 import com.google.appengine.api.datastore.Query.Filter;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
-import com.google.appengine.api.datastore.Query.GeoRegion;
-import com.google.appengine.api.datastore.Query.StContainsFilter;
 import com.google.sps.data.RepositoryType;
 import com.google.sps.placeGuide.PlaceGuide;
 import com.google.sps.placeGuide.repository.PlaceGuideRepository;
@@ -133,43 +131,59 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository {
   @Override
   public List<PlaceGuide> getCreatedPlaceGuidesInMapArea(
       String creatorId, GeoPt northEastCorner, GeoPt southWestCorner) {
-    Filter mapAreaFilter =
-        new StContainsFilter(
-            COORDINATE_PROPERTY, new GeoRegion.Rectangle(southWestCorner, northEastCorner));
+    Filter southBoundFilter =
+        new FilterPredicate(
+            COORDINATE_PROPERTY, FilterOperator.GREATER_THAN_OR_EQUAL, southWestCorner);
+    Filter northBoundFilter =
+        new FilterPredicate(
+            COORDINATE_PROPERTY, FilterOperator.LESS_THAN_OR_EQUAL, northEastCorner);
     Filter creatorFilter =
         new FilterPredicate(CREATOR_ID_PROPERTY, FilterOperator.EQUAL, creatorId);
-    Filter queryFilter = CompositeFilterOperator.and(mapAreaFilter, creatorFilter);
+    Filter queryFilter =
+        CompositeFilterOperator.and(creatorFilter, southBoundFilter, northBoundFilter);
     Query query = new Query(ENTITY_KIND).setFilter(queryFilter);
-    return // removePlaceGuidesOutsideLongitudeBounds(
-    getPlaceGuidesList(query); // , southWestCorner.getLongitude(), northEastCorner.getLongitude());
+    return removePlaceGuidesOutsideLongitudeBounds(
+        getPlaceGuidesList(query), southWestCorner.getLongitude(), northEastCorner.getLongitude());
   }
 
   @Override
   public List<PlaceGuide> getCreatedPublicPlaceGuidesInMapArea(
       String creatorId, GeoPt northEastCorner, GeoPt southWestCorner) {
     Filter publicityFilter = new FilterPredicate(IS_PUBLIC_PROPERTY, FilterOperator.EQUAL, true);
-    Filter mapAreaFilter =
-        new StContainsFilter(
-            COORDINATE_PROPERTY, new GeoRegion.Rectangle(southWestCorner, northEastCorner));
+    Filter southBoundFilter =
+        new FilterPredicate(
+            COORDINATE_PROPERTY, FilterOperator.GREATER_THAN_OR_EQUAL, southWestCorner);
+    Filter northBoundFilter =
+        new FilterPredicate(
+            COORDINATE_PROPERTY, FilterOperator.LESS_THAN_OR_EQUAL, northEastCorner);
     Filter creatorFilter =
         new FilterPredicate(CREATOR_ID_PROPERTY, FilterOperator.EQUAL, creatorId);
-    Filter queryFilter = CompositeFilterOperator.and(publicityFilter, mapAreaFilter, creatorFilter);
+    Filter queryFilter =
+        CompositeFilterOperator.and(
+            publicityFilter, southBoundFilter, northBoundFilter, creatorFilter);
     Query query = new Query(ENTITY_KIND).setFilter(queryFilter);
-    return getPlaceGuidesList(query);
+    return removePlaceGuidesOutsideLongitudeBounds(
+        getPlaceGuidesList(query), southWestCorner.getLongitude(), northEastCorner.getLongitude());
   }
 
   @Override
   public List<PlaceGuide> getCreatedPrivatePlaceGuidesInMapArea(
       String creatorId, GeoPt northEastCorner, GeoPt southWestCorner) {
     Filter publicityFilter = new FilterPredicate(IS_PUBLIC_PROPERTY, FilterOperator.EQUAL, false);
-    Filter mapAreaFilter =
-        new StContainsFilter(
-            COORDINATE_PROPERTY, new GeoRegion.Rectangle(southWestCorner, northEastCorner));
+    Filter southBoundFilter =
+        new FilterPredicate(
+            COORDINATE_PROPERTY, FilterOperator.GREATER_THAN_OR_EQUAL, southWestCorner);
+    Filter northBoundFilter =
+        new FilterPredicate(
+            COORDINATE_PROPERTY, FilterOperator.LESS_THAN_OR_EQUAL, northEastCorner);
     Filter creatorFilter =
         new FilterPredicate(CREATOR_ID_PROPERTY, FilterOperator.EQUAL, creatorId);
-    Filter queryFilter = CompositeFilterOperator.and(publicityFilter, mapAreaFilter, creatorFilter);
+    Filter queryFilter =
+        CompositeFilterOperator.and(
+            publicityFilter, southBoundFilter, northBoundFilter, creatorFilter);
     Query query = new Query(ENTITY_KIND).setFilter(queryFilter);
-    return getPlaceGuidesList(query);
+    return removePlaceGuidesOutsideLongitudeBounds(
+        getPlaceGuidesList(query), southWestCorner.getLongitude(), northEastCorner.getLongitude());
   }
 
   private List<PlaceGuide> removePlaceGuidesOutsideLongitudeBounds(
@@ -189,9 +203,9 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository {
       // The bounded area crosses the International Date Line(located at longitude 180/-180).
       // In this case, the westBound is positive and the eastBound is negative.
       if (longitude > 0) {
-        return longitude > westBound;
+        return longitude >= westBound;
       } else {
-        return longitude < eastBound;
+        return longitude <= eastBound;
       }
     }
   }
