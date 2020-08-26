@@ -117,15 +117,17 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository {
   public List<PlaceGuide> getAllPublicPlaceGuidesInMapArea(
       GeoPt northEastCorner, GeoPt southWestCorner) {
     Filter publicityFilter = new FilterPredicate(IS_PUBLIC_PROPERTY, FilterOperator.EQUAL, true);
-    Filter mapAreaFilter1 =
+    Filter southBoundFilter =
         new FilterPredicate(
             COORDINATE_PROPERTY, FilterOperator.GREATER_THAN_OR_EQUAL, southWestCorner);
-    Filter mapAreaFilter2 =
+    Filter northBoundFilter =
         new FilterPredicate(
             COORDINATE_PROPERTY, FilterOperator.LESS_THAN_OR_EQUAL, northEastCorner);
     Filter queryFilter =
         CompositeFilterOperator.and(
-            publicityFilter, mapAreaFilter1, mapAreaFilter2); // , mapAreaFilter1, mapAreaFilter2);
+            publicityFilter,
+            southBoundFilter,
+            northBoundFilter); // , mapAreaFilter1, mapAreaFilter2);
     Query query = new Query(ENTITY_KIND).setFilter(queryFilter);
     return getPlaceGuidesList(query);
   }
