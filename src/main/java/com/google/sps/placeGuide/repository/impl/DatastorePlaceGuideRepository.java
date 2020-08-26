@@ -124,12 +124,10 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository {
         new FilterPredicate(
             COORDINATE_PROPERTY, FilterOperator.LESS_THAN_OR_EQUAL, northEastCorner);
     Filter queryFilter =
-        CompositeFilterOperator.and(
-            publicityFilter,
-            southBoundFilter,
-            northBoundFilter); // , mapAreaFilter1, mapAreaFilter2);
+        CompositeFilterOperator.and(publicityFilter, southBoundFilter, northBoundFilter);
     Query query = new Query(ENTITY_KIND).setFilter(queryFilter);
-    return getPlaceGuidesList(query);
+    return removePlaceGuidesOutsideLongitudeBounds(
+        getPlaceGuidesList(query), southWestCorner.getLongitude(), northEastCorner.getLongitude());
   }
 
   @Override
