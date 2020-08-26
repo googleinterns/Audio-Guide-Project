@@ -105,7 +105,7 @@ public class PlaceGuideServlet extends HttpServlet {
   private List<PlaceGuideInfo> getPlaceGuideInfos(List<PlaceGuide> placeGuides) {
     List<PlaceGuideInfo> placeGuideInfos = new ArrayList<>();
     for (PlaceGuide placeGuide : placeGuides) {
-      placeGuideInfos.add(PlaceGuideInfo.matchPlaceGuideWithCreator(placeGuide));
+      placeGuideInfos.add(new PlaceGuideInfo(placeGuide, userId));
     }
     return placeGuideInfos;
   }
