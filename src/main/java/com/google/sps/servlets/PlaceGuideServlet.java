@@ -45,7 +45,6 @@ public class PlaceGuideServlet extends HttpServlet {
       BlobstoreService blobstoreService,
       BlobInfoFactory blobInfoFactory,
       DatastoreService datastore) {
-    // System.out.println("!!!Create new user servlet");
     this.userId = userId;
     this.blobstoreService = blobstoreService;
     this.blobInfoFactory = blobInfoFactory;
@@ -96,8 +95,6 @@ public class PlaceGuideServlet extends HttpServlet {
       northEastCorner =
           new GeoPt(Float.parseFloat(cornerCoordinates[2]), Float.parseFloat(cornerCoordinates[3]));
     }
-    // System.out.println("!!!Sending query: " + placeGuideQueryType);
-    // System.out.println("!!!UserId = : " + userId);
     List<PlaceGuide> placeGuides =
         getPlaceGuides(placeGuideQueryType, northEastCorner, southWestCorner);
     List<PlaceGuideWithCreatorPair> placeGuideWithCreatorPairs =
