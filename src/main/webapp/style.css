@@ -13,6 +13,11 @@ html, body{
     margin: 0 auto; 
 }
 
+:root {
+  --mdc-theme-primary: green;
+  --mdc-theme-secondary: lime;
+}
+
 .control{
     width: 40px;
     height: 40px;
