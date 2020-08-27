@@ -3,24 +3,32 @@ class Menu {
         INDEX: {
             url: "index.html",
             index: 0,
-            icon: "account_circle"
+            icon: "account_circle",
+            label: "My Portfolio"
         },
         DISCOVER: {
             url: "discover.html",
             index: 1,
-            icon: "search"
+            icon: "search",
+            label: "Discover"
         },
         MY_PLACEGUIDES: {
             url: "myPlaceGuides.html",
-            index: 2
+            index: 2,
+            icon: "place",
+            label: "My Guides"
         },
         CREATE_PLACEGUIDE: {
             url: "createPlaceGuide.html",
-            index: 3
+            index: 3,
+            icon: "create",
+            label: "Create Guide"
         },
         BOOKMARKED_PLACEGUIDES: {
             url: "index.html",
-            index: 4
+            index: 4,
+            icon: "bookmark",
+            label: "Bookmarked"
         }
     }
 
