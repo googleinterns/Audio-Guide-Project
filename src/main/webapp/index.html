@@ -8,39 +8,55 @@
     <script src = "setUpFormBlobstore.js"></script>
     <script src = "setupIndex.js"></script>
     <link rel = "stylesheet" href = "style.css">
+    <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
 </head>
-<body onload="setUpUserAndForm()">
-    <header> 
-        <ul>
-            <li><a href = "index.html">Home</a></li>
-            <li><a href = "discover.html">Discover</a></li>
-            <li><a href = "myPlaceGuides.html">My PlaceGuides</a></li>
-            <li><a href = "createPlaceGuide.html">Create PlaceGuide</a></li>
-        </ul>
-    </header>
-  <div id="createProfile">
-    <form method = "POST" id = "portfolioForm" enctype = "multipart/form-data">
-        <label for = "name">Name:</label><br>
-        <input type = "text" name = "name" id = "name"><br>
+</head>
+    <body onload="setUpUserAndForm()">
+        <div class="mdc-tab-bar" role="tablist">
+            <button class="mdc-tab mdc-tab--active" role="tab" aria-selected="true" tabindex="0">
+                <span class="mdc-tab__content">
+                    <span class="mdc-tab__icon material-icons" aria-hidden="true">favorite</span>
+                    <span class="mdc-tab__text-label">Favorites</span>
+                </span>
+                <span class="mdc-tab-indicator mdc-tab-indicator--active">
+                    <span class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
+                </span>
+                <span class="mdc-tab__ripple"></span>
+            </button>
+        </div>
 
-        <label for = "imgKey">Upload image</label>
-        <input type = "file" name = "imgKey" id = "imgKey">
+        <header> 
+            <ul>
+                <li><a href = "index.html">Home</a></li>
+                <li><a href = "discover.html">Discover</a></li>
+                <li><a href = "myPlaceGuides.html">My PlaceGuides</a></li>
+                <li><a href = "createPlaceGuide.html">Create PlaceGuide</a></li>
+            </ul>
+        </header>
+    <div id="createProfile">
+        <form method = "POST" id = "portfolioForm" enctype = "multipart/form-data">
+            <label for = "name">Name:</label><br>
+            <input type = "text" name = "name" id = "name"><br>
 
-        <label for = "deleteImg"></label>
-        <input type = "checkbox" name = "deleteImg" value = "delete" id = "deleteImg">Delete previous image
+            <label for = "imgKey">Upload image</label>
+            <input type = "file" name = "imgKey" id = "imgKey">
 
-        <label for = "selfIntroduction">Self Introduction:</label><br>
-        <textarea name = "selfIntroduction" rows = "4" cols = "50" id = "selfIntroduction"></textarea>
+            <label for = "deleteImg"></label>
+            <input type = "checkbox" name = "deleteImg" value = "delete" id = "deleteImg">Delete previous image
 
-        <label for = "publicPortfolio">Account Status:</label>
-        <select name = "publicPortfolio" id = "publicPortfolio">
-            <option value = "public">public</option>
-            <option value = "private">private</option>
-        </select>
+            <label for = "selfIntroduction">Self Introduction:</label><br>
+            <textarea name = "selfIntroduction" rows = "4" cols = "50" id = "selfIntroduction"></textarea>
 
-        <input type = "submit" value = "Submit">
-    </form>
-    <button id = "logout">Logout</button>
-  </div>
+            <label for = "publicPortfolio">Account Status:</label>
+            <select name = "publicPortfolio" id = "publicPortfolio">
+                <option value = "public">public</option>
+                <option value = "private">private</option>
+            </select>
+
+            <input type = "submit" value = "Submit">
+        </form>
+        <button id = "logout">Logout</button>
+    </div>
 </body>
 </html>
