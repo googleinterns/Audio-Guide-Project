@@ -23,7 +23,7 @@ function setUpUserAndForm() {
     if (!userAuthenticationStatus.isLoggedIn) {
       location.replace(userAuthenticationStatus.loginUrl);
     } else {
-      let menu = new Menu(Menu.PAGE_NAMES.INDEX);
+      const menu = new Menu(Menu.PAGE_NAMES.INDEX);
       addLinktoLogoutButton(userAuthenticationStatus.logoutUrl);
       saveUserInDatabase().then(setUpPortfolioForm());
     }

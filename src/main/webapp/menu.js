@@ -51,7 +51,6 @@ class Menu {
         tabs[pageName.index].focus();
         tabBar.listen('MDCTabBar:activated', function(event) {
             var url = new URL(Menu.PAGE_NUMBERS[event.detail.index].url, document.URL);
-            console.log("Activated tab: " + event.detail.index);
             window.location = url;
         });
     }
