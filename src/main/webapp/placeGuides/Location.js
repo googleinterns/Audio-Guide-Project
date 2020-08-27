@@ -1,6 +1,6 @@
 /**
  * This class holds a location's data, which can be specified by
- * coordinates or nu a place_id, which will be decoded with PlacesService.
+ * coordinates or by a place_id, which will be decoded with PlacesService.
  */
 class Location {
   constructor(position, mapsPlace) {
@@ -24,7 +24,6 @@ class Location {
     return new Location(new google.maps.LatLng(positionLat, positionLng), null);
   }
 
-  // TODO set map to global or pas it as parameter
   static constructLocationBasedOnPlaceId(placeId) {
     var request = {
       placeId: placeId,
