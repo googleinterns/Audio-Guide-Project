@@ -1,28 +1,42 @@
-const tabBar = new mdc.tabBar.MDCTabBar(document.querySelector('.mdc-tab-bar'));
-const tabs = document.querySelectorAll('.mdc-tab');
+class Menu {
+    static PAGE_NAMES = {
+        INDEX: {
+            url: index.html,
+            index: 0
+        },
+        DISCOVER: {
+            url: discover.html,
+            index: 1
+        },
+        MY_PLACEGUIDES: {
+            url: myPlaceGuides.html,
+            index: 2
+        },
+        CREATE_PLACEGUIDE: {
+            url: createPlaceGudie.html,
+            index: 3
+        },
+        BOOKMARKED_PLACEGUIDES: {
+            url: index.html,
+            index: 4
+        }
+    }
 
-tabBar.listen('MDCTabBar:activated', function(event) {
-  var url;
-  switch(event.detail.index) {
-    case 0:
-        // The portfolio page is currently on index.html.
-        url = new URL("/index.html", document.URL);
-        break;
-    case 1:
-        var url = new URL("/discover.html", document.URL);
-        break;
-    case 2:
-        var url = new URL("/myPlaceGuides.html", document.URL);
-        break;
-    case 3:
-        var url = new URL("createPlaceGuide.html", document.URL);
-        break;
-    case 4:
-        // The bookmarkedPlaceGuides page is not ready yet.
-        var url = new URL("/index.html", document.URL);
-        break;
-    default:
-        var url = new URL(document.url);
-  }
-  window.location = url;
-});
+    static PAGE_NUMBERS = {
+        0: Menu.PAGE_NAMES.INDEX,
+        1: Menu.PAGE_NAMES.DISCOVER,
+        2: Menu.PAGE_NAMES.MY_PLACEGUIDES,
+        3: Menu.PAGE_NAMES.CREATE_PLACEGUIDE,
+        4: Menu.PAGE_NAMES.BOOKMARKED_PLACEGUIDES
+    }
+
+    constructor(pageName) {
+        const tabBar = new mdc.tabBar.MDCTabBar(document.querySelector('.mdc-tab-bar'));
+        const tabs = document.querySelectorAll('.mdc-tab');
+        tabBar.activate(pageName.index);
+        tabBar.listen('MDCTabBar:activated', function(event) {
+            var url = new Url(Menu.PAGE_NUMBERS[event.detail.index].url, document.URL);
+            window.location = url;
+        });
+    }
+}
