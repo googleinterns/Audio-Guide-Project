@@ -1,23 +1,25 @@
 class Menu {
     static PAGE_NAMES = {
         INDEX: {
-            url: index.html,
-            index: 0
+            url: "index.html",
+            index: 0,
+            icon: "account_circle"
         },
         DISCOVER: {
-            url: discover.html,
-            index: 1
+            url: "discover.html",
+            index: 1,
+            icon: "search"
         },
         MY_PLACEGUIDES: {
-            url: myPlaceGuides.html,
+            url: "myPlaceGuides.html",
             index: 2
         },
         CREATE_PLACEGUIDE: {
-            url: createPlaceGudie.html,
+            url: "createPlaceGuide.html",
             index: 3
         },
         BOOKMARKED_PLACEGUIDES: {
-            url: index.html,
+            url: "index.html",
             index: 4
         }
     }
@@ -33,9 +35,9 @@ class Menu {
     constructor(pageName) {
         const tabBar = new mdc.tabBar.MDCTabBar(document.querySelector('.mdc-tab-bar'));
         const tabs = document.querySelectorAll('.mdc-tab');
-        tabBar.activate(pageName.index);
+        tabBar.activateTab(pageName.index);
         tabBar.listen('MDCTabBar:activated', function(event) {
-            var url = new Url(Menu.PAGE_NUMBERS[event.detail.index].url, document.URL);
+            var url = new URL(Menu.PAGE_NUMBERS[event.detail.index].url, document.URL);
             window.location = url;
         });
     }
