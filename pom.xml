@@ -16,8 +16,9 @@
         <maven.compiler.testTarget>8</maven.compiler.testTarget>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <failOnMissingWebXml>false</failOnMissingWebXml>
-        <!-- Required for ErrorProne -->     
-        <javac.version>9+181-r4173-1</javac.version>      
+        <!-- Required for ErrorProne -->
+        <javac.version>9+181-r4173-1</javac.version>
+        <errorProneJavac>${com.google.errorprone:javac:jar}</errorProneJavac>
     </properties>
 
     <dependencies>
@@ -94,6 +95,19 @@
             <artifactId>json-simple</artifactId>
             <version>1.1</version>
         </dependency>
+
+        <!-- Annotations from the Checker Framework: nullness, interning, locking, ... -->
+        <dependency>
+            <groupId>org.checkerframework</groupId>
+            <artifactId>checker-qual</artifactId>
+            <version>3.6.0</version>
+        </dependency>
+        <!-- If using JDK 8, add the following additional dependency. -->
+        <dependency>
+            <groupId>com.google.errorprone</groupId>
+            <artifactId>javac</artifactId>
+            <version>9+181-r4173-1</version>
+        </dependency>
     </dependencies>
 
 
@@ -111,76 +125,108 @@
                     <deploy.version>1</deploy.version>
                 </configuration>
             </plugin>
-          
-            <!-- Error prone is a plugin that provides static analysis to
-                 help find bugs early. https://errorprone.info/ -->          
+
             <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-compiler-plugin</artifactId>
-              <version>3.8.0</version>
-              <configuration>
-                <source>8</source>
-                <target>8</target>
-                <compilerArgs>
-                  <arg>-XDcompilePolicy=simple</arg>
-                  <arg>-Xplugin:ErrorProne</arg>
-                </compilerArgs>
-                <annotationProcessorPaths>
-                  <path>
-                    <groupId>com.google.errorprone</groupId>
-                    <artifactId>error_prone_core</artifactId>
-                    <version>2.4.0</version>
-                  </path>
-                </annotationProcessorPaths>
-              </configuration>
+                <!-- This plugin will set properties values using dependency information -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>properties</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
-                 
+
+            <!-- Error prone is a plugin that provides static analysis to
+                 help find bugs early. https://errorprone.info/ -->
             <plugin>
-              <groupId>com.cosium.code</groupId>
-              <artifactId>git-code-format-maven-plugin</artifactId>
-              <version>2.6</version>
-              <executions>
-                <!-- On commit, format the modified java files -->
-                <execution>
-                  <id>install-formatter-hook</id>
-                  <goals>
-                    <goal>install-hooks</goal>
-                  </goals>
-                </execution>
-                <!-- On Maven verify phase, fail if any file
-                (including unmodified) is badly formatted -->
-                <execution>
-                  <id>validate-code-format</id>
-                  <goals>
-                    <goal>validate-code-format</goal>
-                  </goals>
-                </execution>
-              </executions>
-            </plugin>                 
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.0</version>
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
+                    <compilerArgs>
+                        <arg>-XDcompilePolicy=simple</arg>
+                        <arg>-Xplugin:ErrorProne</arg>
+                        <arg>-J-Xbootclasspath/p:${errorProneJavac}</arg>
+                    </compilerArgs>
+                    <compilerArguments>
+                        <Xmaxerrs>10000</Xmaxerrs>
+                        <Xmaxwarns>10000</Xmaxwarns>
+                    </compilerArguments>
+                    <!-- Without showWarnings and verbose, maven-compiler-plugin may not show output. -->
+                    <showWarnings>true</showWarnings>
+                    <verbose>true</verbose>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>com.google.errorprone</groupId>
+                            <artifactId>error_prone_core</artifactId>
+                            <version>2.4.0</version>
+                        </path>
+                        <path>
+                            <groupId>org.checkerframework</groupId>
+                            <artifactId>checker</artifactId>
+                            <version>3.6.0</version>
+                        </path>
+                    </annotationProcessorPaths>
+                    <annotationProcessors>
+                        <!-- Add all the checkers you want to enable here -->
+                        <annotationProcessor>org.checkerframework.checker.nullness.NullnessChecker</annotationProcessor>
+                    </annotationProcessors>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>com.cosium.code</groupId>
+                <artifactId>git-code-format-maven-plugin</artifactId>
+                <version>2.6</version>
+                <executions>
+                    <!-- On commit, format the modified java files -->
+                    <execution>
+                        <id>install-formatter-hook</id>
+                        <goals>
+                            <goal>install-hooks</goal>
+                        </goals>
+                    </execution>
+                    <!-- On Maven verify phase, fail if any file
+                    (including unmodified) is badly formatted -->
+                    <execution>
+                        <id>validate-code-format</id>
+                        <goals>
+                            <goal>validate-code-format</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
-  
+
     <!-- using github.com/google/error-prone-javac is required when running on JDK 8 -->
     <profiles>
-      <profile>
-        <id>jdk8</id>
-        <activation>
-          <jdk>1.8</jdk>
-        </activation>
-        <build>
-          <plugins>
-            <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-compiler-plugin</artifactId>
-              <configuration>
-                <fork>true</fork>
-                <compilerArgs combine.children="append">
-                  <arg>-J-Xbootclasspath/p:${settings.localRepository}/com/google/errorprone/javac/${javac.version}/javac-${javac.version}.jar</arg>
-                </compilerArgs>
-              </configuration>
-            </plugin>
-          </plugins>
-        </build>
-      </profile>
-    </profiles>  
+        <profile>
+            <id>jdk8</id>
+            <activation>
+                <jdk>1.8</jdk>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <configuration>
+                            <fork>true</fork>
+                            <compilerArgs combine.children="append">
+                                <arg>
+                                    -J-Xbootclasspath/p:${settings.localRepository}/com/google/errorprone/javac/${javac.version}/javac-${javac.version}.jar
+                                </arg>
+                            </compilerArgs>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
