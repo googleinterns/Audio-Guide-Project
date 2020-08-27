@@ -42,16 +42,13 @@ class Menu {
 
     constructor(pageName) {
         const NO_TABS = 5;
-        const tabBar = new mdc.tabBar.MDCTabBar(document.querySelector('.mdc-tab-bar'));
-        var tabs = [];
         for (var i = 0; i < NO_TABS; i++) {
             var tab = this.createMenuTab(i);
             document.querySelector('.mdc-tab-scroller__scroll-content').appendChild(tab);
-            tabs.push(tab);
         }
+        const tabBar = new mdc.tabBar.MDCTabBar(document.querySelector('.mdc-tab-bar'));
         tabBar.activateTab(pageName.index);
         tabBar.listen('MDCTabBar:activated', function(event) {
-            console.log("activated tab: " + event.detail.index);
             var url = new URL(Menu.PAGE_NUMBERS[event.detail.index].url, document.URL);
             window.location = url;
         });
@@ -63,14 +60,51 @@ class Menu {
         tab.setAttribute("role", "tab");
         tab.setAttribute("aria-selected", "true");
         tab.setAttribute("tabindex", "0");
-        tab.innerHTML = "<span class=\"mdc-tab__content\">\
-                                <span class=\"mdc-tab__icon material-icons\" aria-hidden=\"true\">" + Menu.PAGE_NUMBERS[index].icon + "</span>\
-                                <span class=\"mdc-tab__text-label\">" + Menu.PAGE_NUMBERS[index].label + "</span>\
-                            </span>\
-                            <span class=\"mdc-tab-indicator\">\
-                                <span class=\"mdc-tab-indicator__content mdc-tab-indicator__content--underline\"></span>\
-                            </span>\
-                            <span class=\"mdc-tab__ripple\"></span>";
+        tab.appendChild(this.createTabContent(index));
+        tab.appendChild(this.createTabIndicator());
+        tab.appendChild(this.createTabRipple());
         return tab;
+    }
+
+    createTabContent(index) {
+        var content = document.createElement("span");
+        content.setAttribute("class", "mdc-tab__content");
+        content.appendChild(this.createIcon(index));
+        content.appendChild(this.createLabel(index));
+        return content;
+    }
+
+    createTabIndicator() {
+        var indicator = document.createElement("span");
+        indicator.setAttribute("class", "mdc-tab-indicator");
+        indicator.appendChild(this.createIndicatorContent());
+        return indicator;
+    }
+
+    createTabRipple() {
+        var ripple = document.createElement("span");
+        ripple.setAttribute("class", "mdc-tab__ripple");
+        return ripple;
+    }
+
+    createIndicatorContent() {
+        var indicatorContent = document.createElement("span");
+        indicatorContent.setAttribute("class", "mdc-tab-indicator__content mdc-tab-indicator__content--underline");
+        return indicatorContent;
+    }
+
+    createLabel(index) {
+        var label = document.createElement("span");
+        label.setAttribute("class", "mdc-tab__text-label");
+        label.innerText = Menu.PAGE_NUMBERS[index].label;
+        return label;
+    }
+
+    createIcon(index) {
+        var icon = document.createElement("span");
+        icon.setAttribute("class", "mdc-tab__icon material-icons");
+        icon.setAttribute("aria-hidden", true)
+        icon.innerText = Menu.PAGE_NUMBERS[index].icon;
+        return icon;
     }
 }
