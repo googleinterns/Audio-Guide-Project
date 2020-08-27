@@ -5,6 +5,7 @@
  * Display place guides: displays all the public place guides.
  */
 function createMap() {
+  let menu = new Menu(Menu.PAGE_NAMES.DISCOVER);
   var myMapOptions = {
     zoom: 2,
     center: new google.maps.LatLng(0, 0),

@@ -9,6 +9,7 @@
  * Display place guides: displays the place guides created by the currently logged in user.
  */
 function createMap() {
+  let menu = new Menu(Menu.PAGE_NAMES.CREATE_PLACEGUIDE);
   var myMapOptions = {
     zoom: 2,
     center: new google.maps.LatLng(0, 0),
