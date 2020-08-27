@@ -43,25 +43,25 @@ class Menu {
     constructor(pageName) {
         const NO_TABS = 5;
         for (var i = 0; i < NO_TABS; i++) {
-            var tab = this.createMenuTab(i);
+            var tab = this.createMenuTab(i, i == pageName.index);
             document.querySelector('.mdc-tab-scroller__scroll-content').appendChild(tab);
         }
         const tabBar = new mdc.tabBar.MDCTabBar(document.querySelector('.mdc-tab-bar'));
-        tabBar.activateTab(pageName.index);
+        const tabs = document.querySelectorAll('.mdc-tab');
         tabBar.listen('MDCTabBar:activated', function(event) {
             var url = new URL(Menu.PAGE_NUMBERS[event.detail.index].url, document.URL);
             window.location = url;
         });
     }
 
-    createMenuTab(index) {
+    createMenuTab(index, focused) {
         var tab = document.createElement("button");
         tab.setAttribute("class", "mdc-tab mdc-tab--active");
         tab.setAttribute("role", "tab");
         tab.setAttribute("aria-selected", "true");
         tab.setAttribute("tabindex", "0");
         tab.appendChild(this.createTabContent(index));
-        tab.appendChild(this.createTabIndicator());
+        tab.appendChild(this.createTabIndicator(focused));
         tab.appendChild(this.createTabRipple());
         return tab;
     }
@@ -74,9 +74,13 @@ class Menu {
         return content;
     }
 
-    createTabIndicator() {
+    createTabIndicator(focused) {
         var indicator = document.createElement("span");
-        indicator.setAttribute("class", "mdc-tab-indicator");
+        if (focused) {
+            indicator.setAttribute("class", "mdc-tab-indicator mdc-tab-indicator--active")
+        } else {
+            indicator.setAttribute("class", "mdc-tab-indicator");
+        }
         indicator.appendChild(this.createIndicatorContent());
         return indicator;
     }
