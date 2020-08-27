@@ -43,20 +43,26 @@ class Menu {
     constructor(pageName) {
         const NO_TABS = 5;
         for (var i = 0; i < NO_TABS; i++) {
-            var tab = this.createMenuTab(i, i == pageName.index);
+            var tab = this.createMenuTab(i,  i == pageName.index);
             document.querySelector('.mdc-tab-scroller__scroll-content').appendChild(tab);
         }
         const tabBar = new mdc.tabBar.MDCTabBar(document.querySelector('.mdc-tab-bar'));
         const tabs = document.querySelectorAll('.mdc-tab');
+        tabs[pageName.index].focus();
         tabBar.listen('MDCTabBar:activated', function(event) {
             var url = new URL(Menu.PAGE_NUMBERS[event.detail.index].url, document.URL);
+            console.log("Activated tab: " + event.detail.index);
             window.location = url;
         });
     }
 
     createMenuTab(index, focused) {
         var tab = document.createElement("button");
-        tab.setAttribute("class", "mdc-tab mdc-tab--active");
+        if (focused) {
+            tab.setAttribute("class", "mdc-tab mdc-tab--active");
+        } else {
+            tab.setAttribute("class", "mdc-tab");
+        }
         tab.setAttribute("role", "tab");
         tab.setAttribute("aria-selected", "true");
         tab.setAttribute("tabindex", "0");
