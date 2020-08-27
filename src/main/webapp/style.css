@@ -8,6 +8,12 @@ html, body{
     height: 100%;
 }
 
+body{
+    font-family: 'Roboto';
+    margin: 0;
+    padding-top: 0.1px;
+}
+
 #map {
     height: 90%; 
     margin: 0 auto; 
@@ -86,5 +92,18 @@ form img {
 
 #imagePreview {
   display: none;
+  width: 100%;
+}
+
+.my-card {
+  height: 350px;
+  width: 350px;
+}
+
+.my-card-content {
+  padding: 16px;
+}
+
+.my-place-guide-image {
   width: 100%;
 }

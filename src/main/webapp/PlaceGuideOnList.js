@@ -4,7 +4,7 @@ class PlaceGuideOnList {
       audioKey, audioLength, isPublic, imageKey, createdByCurrentUser, 
       bookmarkedByCurrentUser, latitude, longitude) {
 
-    this.placeGuideProperties = {
+    this._placeGuideProperties = {
       placeGuideId: placeGuideId,
       placeName: placeName,
       placeId: placeId,
@@ -18,35 +18,57 @@ class PlaceGuideOnList {
       longitude: longitude
     }
 
-    const placeGuideDiv = document.createElement("div");
-    const divId = "placeGuideOnList-" + "{" + placeGuideId + "}";
-    placeGuideDiv.setAttribute('id', divId);
-    
-    highlightOnInfoBoxClick(placeGuideDiv, placeGuideId);
-
-    createBlobView(audioKey, "audio", placeGuideDiv);
-    createBlobView(imageKey, "img", placeGuideDiv);
-    createButtonsIfUserIsCreator(createdByCurrentUser);
-    createBookmarkButton(bookmarkedByCurrentUser, placeGuideDiv);
-    createDownloadButton(audioKey, placeGuideDiv);
+    fillPlaceGuideOnList(
+        createPlaceGuideDiv(placeGuideId, creator), 
+        this._placeGuideProperties, 
+        createdByCurrentUser, 
+        bookmarkedByCurrentUser);
+  }
+  get placeGuideProperties() {
+    return this._placeGuideProperties;
   }
 }
 
-function displayPlaceGuideInfo(placeGuideDiv, placeGuideProperties) {
+function createPlaceGuideDiv(placeGuideId, creator) {
+  const placeGuideDiv = document.createElement("div");
+  const divId = "placeGuideOnList-" + "{" + placeGuideId + "}";
+  placeGuideDiv.setAttribute('id', divId);
+  placeGuideDiv.appendChild(new User(creator).userRepresentationDiv);
+  return placeGuideDiv;
+}
+
+function fillPlaceGuideOnList(
+    placeGuideDiv, placeGuideProperties, createdByCurrentUser, bookmarkedByCurrentUser) {
+  createPlaceGuideInfoDiv(placeGuideDiv, placeGuideProperties);    
+  highlightOnInfoBoxClick(placeGuideDiv, placeGuideProperties.placeGuideId);
+
+  createBlobView(placeGuideProperties.audioKey, "audio", placeGuideDiv);
+  createBlobView(placeGuideProperties.imageKey, "img", placeGuideDiv);
+  createButtonsIfUserIsCreator(createdByCurrentUser, placeGuideDiv, placeGuideProperties);
+  createBookmarkButton(bookmarkedByCurrentUser, placeGuideDiv);
+  createDownloadButton(placeGuideProperties.audioKey, placeGuideDiv);
+}
+
+function createPlaceGuideInfoDiv(placeGuideDiv, placeGuideProperties) {
+  const placeGuideInfoDiv = document.createElement("div");
+  placeGuideInfoDiv.setAttribute("class", "placeGuideOnListInfo");
   const name = document.createElement("h3");
   name.setAttribute('id', 'placeGuideOnListName');
   name.innerText = placeGuideProperties.name;
+  placeGuideDiv.appendChild(name);
 
   if (placeGuideProperties.description != undefined) {
     const description = document.createElement("h4");
     description.setAttribute('id', 'placeGuideOnListDescription');
     description.innerText = placeGuideProperties.description;
+    placeGuideDiv.appendChild(description);
   }
 
   if (placeGuideProperties.audioLength != undefined) {
     const audioLength = document.createElement("h5");
     audioLength.setAttribute('id', "placeGuideOnListAudioLength");
     audioLength.innerText = placeGuideProperties.audioLength + "minutes";
+    placeGuideDiv.appendChild(audioLength);
   }
 }
 
@@ -56,11 +78,11 @@ function highlightOnInfoBoxClick(placeGuideDiv, placeGuideId) {
   });
 }
 
-function createBlobView(blobKey, elementType, parentDiv) {
+function createBlobView(blobKey, elementType, placeGuideDiv) {
   const element = document.createElement(elementType);
   const src = getBlobSrc(blobKey);
   element.setAttribute("src", src);
-  parentDiv.appendChild(element);
+  placeGuideDiv.appendChild(element);
 }
 
 function getBlobSrc(blobKey) {
