@@ -204,9 +204,8 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository {
       // In this case, the westBound is positive and the eastBound is negative.
       if (longitude > 0) {
         return longitude >= westBound;
-      } else {
-        return longitude <= eastBound;
       }
+      return longitude <= eastBound;
     }
   }
 
