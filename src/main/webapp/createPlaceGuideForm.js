@@ -38,11 +38,11 @@ function setSrcToElementOnChangeEvent(elementId, previewId, displayBlock) {
 // Just a test by fetching actual place guides' data from database 
 // to see if image and audio previewing also works with files from blobstore.
 function testExistingPlaceGuide() {
-  getFetchedList().then(placeGuidesCreatorPair => {
-    if (placeGuidesCreatorPair === undefined || placeGuidesCreatorPair.length == 0) {
+  getFetchedList().then(placeGuideCreatorPairs => {
+    if (placeGuideCreatorPairs === undefined || placeGuideCreatorPairs.length == 0) {
       console.log("place guide does not exist yet.");
     } else {
-      fillFormWithPlaceGuideData(placeGuidesCreatorPair[0].placeGuide); 
+      fillFormWithPlaceGuideData(placeGuideCreatorPairs[0].placeGuide); 
     }
   });
 }
