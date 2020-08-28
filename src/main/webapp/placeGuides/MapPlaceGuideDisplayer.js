@@ -12,6 +12,26 @@ class MapPlaceGuideDisplayer {
     this.updateMarkerClusters();
   }
 
+  adjustMapToShowAll() {
+    let minLat = 90;
+    let maxLat = -90;
+    let minLng = 180;
+    let maxLng = -180;
+    for (const placeGuideId in this._placeGuidesOnMap) {
+      if (this._placeGuidesOnMap.hasOwnProperty(placeGuideId)) {
+        var position = this._placeGuidesOnMap[placeGuideId];
+        minLat = Math.min(position.lat(), minLat);
+        maxLat = Math.max(position.lat(), maxLat);
+        minLng = Math.min(position.lng(), minLng);
+        maxLng = Math.min(position.lng(), maxLng);
+      }
+    }
+    var southWestCorner = new google.maps.LatLng(minLat, minLng);
+    var northEastCorner = new google.maps.LatLng(maxLat, maxLng);
+    map.setZoom(15);
+    map.fitBounds(southWestCorner, northEastCorner);
+  }
+
   updateMarkerClusters() {
     if (this._markerClusterer != undefined) {
       this._markerClusterer.clearMarkers();
