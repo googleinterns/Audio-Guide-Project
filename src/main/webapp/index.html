@@ -21,7 +21,7 @@
     <div id="createProfile">
         <form method = "POST" id = "portfolioForm" enctype = "multipart/form-data">
             <label for = "name">Name:</label><br>
-            <input type = "text" name = "name" id = "name" pattern = "[A-Za-z0-9\s]+" title = "Enter alphanumeric string!"><br>
+            <input type = "text" name = "name" id = "name" pattern = "[A-Za-z\s]+" title = "Enter appropriate name!" maxlength = "20"><br>
 
             <label for = "imgKey">Upload image</label><br>
             <input type = "file" name = "imgKey" id = "imgKey"><br>
@@ -36,7 +36,7 @@
             <input type = "checkbox" name = "deleteImg" value = "delete" id = "deleteImg"><br>
 
             <label for = "selfIntroduction">Self Introduction:</label><br>
-            <textarea name = "selfIntroduction" rows = "4" cols = "50" id = "selfIntroduction" pattern = "[A-Za-z0-9\s]+" title = "Enter alphanumeric string!"></textarea><br>
+            <textarea name = "selfIntroduction" rows = "4" cols = "50" id = "selfIntroduction"  maxlength = "200" pattern = "[A-Za-z0-9,.\s]+" title = "You can only enter alphabets, numbers, periods, and comas!"></textarea><br>
 
             <label for = "publicPortfolio">Account Status:</label><br>
             <select name = "publicPortfolio" id = "publicPortfolio">
