@@ -2,7 +2,7 @@
  * Handles setting up the portfolio form whenever the page is loaded.
  */
 function setUpPortfolioForm() {
-  addBlobstoreUploadUrlToForm("PORTFOLIO_FORM", "portfolioForm");
+  addBlobstoreUploadUrlToForm('PORTFOLIO_FORM', 'portfolioForm');
   fillPortfolioFormWithUserData();
 }
 
@@ -11,17 +11,17 @@ function setUpPortfolioForm() {
  * and fill's the form inputs with this data.
  */
 function fillPortfolioFormWithUserData() {
-  getUserDataFromServlet().then(user => {
-    setFormInputValue(document.getElementById("name"), user.name);
-    setFormInputValue(document.getElementById("selfIntroduction"), user.selfIntroduction);
+  getUserDataFromServlet().then((user) => {
+    setFormInputValue(document.getElementById('name'), user.name);
+    setFormInputValue(document.getElementById('selfIntroduction'), user.selfIntroduction);
     if (user.publicPortfolio) {
-      document.getElementById("publicPortfolio").value = "public";
+      document.getElementById('publicPortfolio').value = 'public';
     } else {
-      document.getElementById("publicPortfolio").value = "private";
+      document.getElementById('publicPortfolio').value = 'private';
     }
     if (user.imgKey != undefined) {
-      var img = createImgElement(user.imgKey);
-      document.getElementById("portfolioForm").appendChild(img);
+      const img = createImgElement(user.imgKey);
+      document.getElementById('portfolioForm').appendChild(img);
     }
   });
 }
@@ -31,9 +31,9 @@ function fillPortfolioFormWithUserData() {
  * relying on the blobstore API for serving the blob.
  */
 function createImgElement(srcBlobKey) {
-  var url = new URL("/serve-blob", document.URL);
+  const url = new URL('/serve-blob', document.URL);
   url.searchParams.append('blob-key', srcBlobKey);
-  var img = document.createElement("img");
+  const img = document.createElement('img');
   img.src = url;
   return img;
 }
@@ -43,10 +43,10 @@ function createImgElement(srcBlobKey) {
  */
 function getUserDataFromServlet() {
   return fetch('/user-data-servlet')
-      .catch(error => console.log("user-servlet: failed to fetch: " + error))
-      .then(response => response.json())
-      .catch(error => console.log('fillFormInputsWithData: failed to convert to json: ' + error))
-      .then(response => {
+      .catch((error) => console.log('user-servlet: failed to fetch: ' + error))
+      .then((response) => response.json())
+      .catch((error) => console.log('fillFormInputsWithData: failed to convert to json: ' + error))
+      .then((response) => {
         return response;
       });
 }

@@ -25,12 +25,12 @@ class Location {
   }
 
   static constructLocationBasedOnPlaceId(placeId) {
-    var request = {
+    const request = {
       placeId: placeId,
-      fields: ['address_components', 'name', 'geometry', 'place_id']
+      fields: ['address_components', 'name', 'geometry', 'place_id'],
     };
-    return new Promise(function (resolve, reject) {
-      var service = new google.maps.places.PlacesService(map);
+    return new Promise(function(resolve, reject) {
+      const service = new google.maps.places.PlacesService(map);
       service.getDetails(request, (place, status) => {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
           resolve(new Location(null, place));

@@ -3,7 +3,7 @@
  */
 class PlaceGuide {
   constructor(id, name, location, audioKey, audioLength, imgKey, creator,
-              description, isPublic, createdByCurrentUser, bookmarkedByCurrentUser) {
+      description, isPublic, createdByCurrentUser, bookmarkedByCurrentUser) {
     this._id = id;
     this._name = name;
     this._location = location;

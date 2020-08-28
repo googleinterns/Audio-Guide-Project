@@ -16,8 +16,8 @@ class MapPlaceGuideDisplayer {
     if (this._markerClusterer != undefined) {
       this._markerClusterer.clearMarkers();
     }
-    var markers = [];
-    for (var placeGuideId in this._placeGuidesOnMap) {
+    const markers = [];
+    for (const placeGuideId in this._placeGuidesOnMap) {
       if (this._placeGuidesOnMap.hasOwnProperty(placeGuideId)) {
         markers.push(this._placeGuidesOnMap[placeGuideId].marker);
       }
@@ -27,7 +27,7 @@ class MapPlaceGuideDisplayer {
   }
 
   removePreviousPlaceGuidesFromMap(placeGuides) {
-    for (var placeGuideId in this._placeGuidesOnMap) {
+    for (const placeGuideId in this._placeGuidesOnMap) {
       if (this._placeGuidesOnMap.hasOwnProperty(placeGuideId)) {
         if (!placeGuides.hasOwnProperty(placeGuideId)) {
           // This placeGuide is not needed anymore.
@@ -38,7 +38,7 @@ class MapPlaceGuideDisplayer {
   }
 
   addNewPlaceGuidesToMap(placeGuides) {
-    for (var placeGuideId in placeGuides) {
+    for (const placeGuideId in placeGuides) {
       if (placeGuides.hasOwnProperty(placeGuideId)) {
         if (!this._placeGuidesOnMap.hasOwnProperty(placeGuideId)) {
           // new placeGuide should be constructed.
@@ -50,7 +50,7 @@ class MapPlaceGuideDisplayer {
   }
 
   constructPlaceGuideOnMapFromPlaceGuide(placeGuide) {
-    var placeType;
+    let placeType;
     if (placeGuide.isPublic) {
       placeType = PlaceType.PUBLIC;
     } else {

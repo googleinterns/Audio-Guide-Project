@@ -20,7 +20,7 @@ class ListPlaceGuideDisplayer {
   }
 
   removePreviousPlaceGuidesFromList(placeGuides) {
-    for (var placeGuideId in this._placeGuidesOnList) {
+    for (const placeGuideId in this._placeGuidesOnList) {
       if (this._placeGuidesOnList.hasOwnProperty(placeGuideId)) {
         if (!placeGuides.hasOwnProperty(placeGuideId)) {
           // This placeGuide is not needed anymore.
@@ -31,7 +31,7 @@ class ListPlaceGuideDisplayer {
   }
 
   addNewPlaceGuidesToList(placeGuides) {
-    for (var placeGuideId in placeGuides) {
+    for (const placeGuideId in placeGuides) {
       if (placeGuides.hasOwnProperty(placeGuideId)) {
         if (!this._placeGuidesOnList.hasOwnProperty(placeGuideId)) {
           // new placeGuide should be constructed.

@@ -6,7 +6,6 @@
  * classes which are responsible for handling the events.
  */
 class PlaceGuideManager {
-
   constructor(placeGuideRepository) {
     this._placeGuideRepository = placeGuideRepository;
     this._highlightedPlaceGuideId = null;
@@ -16,11 +15,11 @@ class PlaceGuideManager {
 
   update(bounds, zoom) {
     this._placeGuideRepository.updatePlaceGuides(bounds, zoom)
-        .then(response => {
-          var placeGuides = this._placeGuideRepository.placeGuides;
+        .then((response) => {
+          const placeGuides = this._placeGuideRepository.placeGuides;
           this._mapPlaceGuideDisplayer.update(placeGuides);
           this._mapPlaceGuideDisplayer.update(placeGuides);
-        })
+        });
   }
 
   removePlaceGuide(placeGuideId) {

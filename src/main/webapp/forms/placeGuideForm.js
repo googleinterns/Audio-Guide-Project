@@ -1,33 +1,33 @@
-const DUMMY_DATA_FOR_PLACE_NAME = "placeName";
+const DUMMY_DATA_FOR_PLACE_NAME = 'placeName';
 
 /**
  * Handles setting up the create place guide form whenever the page is loaded.
  */
 function setUpCreatePlaceGuideForm() {
-  addBlobstoreUploadUrlToForm("CREATE_PLACE_GUIDE_FORM", "createPlaceGuideForm");
+  addBlobstoreUploadUrlToForm('CREATE_PLACE_GUIDE_FORM', 'createPlaceGuideForm');
   activatePreviewFeature();
 }
 
 function activatePreviewFeature() {
-  setSrcToElementOnChangeEvent("imageKey", "imagePreview", true);
-  setSrcToElementOnChangeEvent("audioKey", "audioPlayer", false);
+  setSrcToElementOnChangeEvent('imageKey', 'imagePreview', true);
+  setSrcToElementOnChangeEvent('audioKey', 'audioPlayer', false);
 }
 
 function setSrcToElementOnChangeEvent(elementId, previewId, displayBlock) {
   const element = document.getElementById(elementId);
   const preview = document.getElementById(previewId);
-  element.addEventListener("change", function () {
+  element.addEventListener('change', function() {
     const file = this.files[0];
     console.log(this.files);
 
     if (file) {
       const reader = new FileReader();
       if (displayBlock) {
-        preview.style.display = "block";
+        preview.style.display = 'block';
       }
 
-      reader.addEventListener("load", function () {
-        preview.setAttribute("src", this.result);
+      reader.addEventListener('load', function() {
+        preview.setAttribute('src', this.result);
       });
 
       reader.readAsDataURL(file);
@@ -35,12 +35,12 @@ function setSrcToElementOnChangeEvent(elementId, previewId, displayBlock) {
   });
 }
 
-// Just a test by fetching actual place guides' data from database 
+// Just a test by fetching actual place guides' data from database
 // to see if image and audio previewing also works with files from blobstore.
 function testExistingPlaceGuide() {
-  getFetchedList().then(placeGuides => {
+  getFetchedList().then((placeGuides) => {
     if (placeGuides === undefined || placeGuides.length == 0) {
-      console.log("place guide does not exist yet.");
+      console.log('place guide does not exist yet.');
     } else {
       fillFormWithPlaceGuideData(placeGuides[0]);
     }
@@ -57,46 +57,46 @@ async function getFetchedList() {
 
 // For testing.
 function updateLocation(position, placeId, placeName) {
-  document.getElementById("placeId").setAttribute("value", placeId);
+  document.getElementById('placeId').setAttribute('value', placeId);
   if (placeName != null) {
-    document.getElementById("placeName").setAttribute("value", placeName);
+    document.getElementById('placeName').setAttribute('value', placeName);
   } else {
-    document.getElementById("placeName").setAttribute("value", "-");
+    document.getElementById('placeName').setAttribute('value', '-');
   }
-  document.getElementById("latitude").setAttribute("value", position.lat());
-  document.getElementById("longitude").setAttribute("value", position.lng());
+  document.getElementById('latitude').setAttribute('value', position.lat());
+  document.getElementById('longitude').setAttribute('value', position.lng());
 }
 
 function fillFormWithPlaceGuideData(placeGuide) {
-  // Set required attribute to false since there must be a previous audio key 
+  // Set required attribute to false since there must be a previous audio key
   // from the previous place guide data.
-  document.getElementById("audioKey").required = false;
+  document.getElementById('audioKey').required = false;
 
-  setFormInputValue(document.getElementById("id"), placeGuide.id);
-  setFormInputValue(document.getElementById("name"), placeGuide.name);
-  setBlobKeySrcToElement("audioKey", placeGuide.audioKey, "audioPlayer", false);
+  setFormInputValue(document.getElementById('id'), placeGuide.id);
+  setFormInputValue(document.getElementById('name'), placeGuide.name);
+  setBlobKeySrcToElement('audioKey', placeGuide.audioKey, 'audioPlayer', false);
   if (placeGuide.isPublic) {
-    document.getElementById("isPublic").value = "public";
+    document.getElementById('isPublic').value = 'public';
   } else {
-    document.getElementById("isPublic").value = "private";
+    document.getElementById('isPublic').value = 'private';
   }
-  setFormInputValue(document.getElementById("latitude"), placeGuide.coordinate.latitude);
-  setFormInputValue(document.getElementById("longitude"), placeGuide.coordinate.longitude);
-  setFormInputValue(document.getElementById("length"), placeGuide.length);
-  setFormInputValue(document.getElementById("description"), placeGuide.description);
+  setFormInputValue(document.getElementById('latitude'), placeGuide.coordinate.latitude);
+  setFormInputValue(document.getElementById('longitude'), placeGuide.coordinate.longitude);
+  setFormInputValue(document.getElementById('length'), placeGuide.length);
+  setFormInputValue(document.getElementById('description'), placeGuide.description);
   if (placeGuide.imageKey != undefined) {
-    setBlobKeySrcToElement("imageKey", placeGuide.imageKey, "imagePreview", true);
+    setBlobKeySrcToElement('imageKey', placeGuide.imageKey, 'imagePreview', true);
   }
-  setFormInputValue(document.getElementById("placeName"), DUMMY_DATA_FOR_PLACE_NAME);
+  setFormInputValue(document.getElementById('placeName'), DUMMY_DATA_FOR_PLACE_NAME);
 }
 
 function setBlobKeySrcToElement(inputId, blobKey, previewId, displayBlock) {
   const input = document.getElementById(inputId);
   const preview = document.getElementById(previewId);
   if (displayBlock) {
-    preview.style.display = "block";
+    preview.style.display = 'block';
   }
-  const src = new URL("/serve-blob", document.URL);
+  const src = new URL('/serve-blob', document.URL);
   src.searchParams.append('blob-key', blobKey);
-  preview.setAttribute("src", src);
+  preview.setAttribute('src', src);
 }

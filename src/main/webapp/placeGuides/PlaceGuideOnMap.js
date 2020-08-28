@@ -25,8 +25,8 @@ class PlaceGuideOnMap {
   }
 
   static getMarker(placeType, name, position) {
-    var markerIcon = PlaceGuideOnMap.getMarkerIcon(placeType);
-    var marker = new google.maps.Marker({
+    const markerIcon = PlaceGuideOnMap.getMarkerIcon(placeType);
+    const marker = new google.maps.Marker({
       position: position,
       title: name,
       icon: markerIcon,
@@ -36,7 +36,7 @@ class PlaceGuideOnMap {
   }
 
   static getMarkerIcon(placeType) {
-    var markerIcon;
+    let markerIcon;
     if (placeType.icon != null) {
       markerIcon = this._placeType.icon;
     } else {
@@ -53,20 +53,20 @@ class PlaceGuideOnMap {
   }
 
   static getInfoWindowContent(name, position, place, creator, description) {
-    var placeName;
+    let placeName;
     if (place != null) {
       placeName = place.name;
     } else {
       placeName = position.toString();
     }
-    var creatorName = creator.name;
+    let creatorName = creator.name;
     if (creatorName == undefined) {
       creatorName = creator.email;
     }
-    var content = "<h3>" + name + "</h3>" +
-        "<h4> Created by: " + creatorName + "</h4>" +
-        "<h4> Place: " + placeName + "</h4>" +
-        "<p>" + description + "</p>";
+    const content = '<h3>' + name + '</h3>' +
+        '<h4> Created by: ' + creatorName + '</h4>' +
+        '<h4> Place: ' + placeName + '</h4>' +
+        '<p>' + description + '</p>';
     return content;
   }
 
@@ -101,8 +101,8 @@ class PlaceGuideOnMap {
   }
 
   highlightOnMarkerDoubleClick() {
-    var thisPlaceGuideOnMap = this;
-    this._marker.addListener("dblclick", () => {
+    const thisPlaceGuideOnMap = this;
+    this._marker.addListener('dblclick', () => {
       if (!thisPlaceGuideOnMap.isHighlighted()) {
         placeGuideManager.highlightPlaceGuide(thisPlaceGuideOnMap.id);
       }
@@ -110,7 +110,7 @@ class PlaceGuideOnMap {
   }
 
   toggleInfoWindowOnMarkerClick() {
-    var thisPlaceGuideOnMap = this;
+    const thisPlaceGuideOnMap = this;
     this._marker.addListener('click', () => {
       if (thisPlaceGuideOnMap._infoWindowClosed) {
         thisPlaceGuideOnMap.openInfoWindow();
@@ -121,7 +121,7 @@ class PlaceGuideOnMap {
   }
 
   unhighlightOnMarkerClick() {
-    var thisPlaceGuideOnMap = this;
+    const thisPlaceGuideOnMap = this;
     this._marker.addListener('click', () => {
       if (thisPlaceGuideOnMap.isHighlighted()) {
         placeGuideManager.unhighlightPlaceGuide();
@@ -130,8 +130,8 @@ class PlaceGuideOnMap {
   }
 
   closeInfoWindowOnMapClick() {
-    var thisPlaceGuideOnMap = this;
-    map.addListener('click', function (mapsMouseEvent) {
+    const thisPlaceGuideOnMap = this;
+    map.addListener('click', function(mapsMouseEvent) {
       if (!thisPlaceGuideOnMap._infoWindowClosed) {
         thisPlaceGuideOnMap.closeInfoWindow();
       }
@@ -139,8 +139,8 @@ class PlaceGuideOnMap {
   }
 
   unhighlightOnMapClick() {
-    var thisPlaceGuideOnMap = this;
-    map.addListener('click', function (mapsMouseEvent) {
+    const thisPlaceGuideOnMap = this;
+    map.addListener('click', function(mapsMouseEvent) {
       if (thisPlaceGuideOnMap.isHighlighted()) {
         placeGuideManager.unhighlightPlaceGuide();
       }
