@@ -25,7 +25,6 @@ import org.jetbrains.annotations.Nullable;
 @WebServlet("/place-guide-data")
 public class PlaceGuideServlet extends HttpServlet {
 
-  private final String userId;
   private final BlobstoreService blobstoreService;
   private final BlobInfoFactory blobInfoFactory;
   private final DatastoreService datastore;
@@ -33,7 +32,6 @@ public class PlaceGuideServlet extends HttpServlet {
   // For production.
   public PlaceGuideServlet() {
     this(
-        UserServiceFactory.getUserService().getCurrentUser().getUserId(),
         BlobstoreServiceFactory.getBlobstoreService(),
         new BlobInfoFactory(),
         DatastoreServiceFactory.getDatastoreService());
@@ -41,11 +39,9 @@ public class PlaceGuideServlet extends HttpServlet {
 
   // For testing.
   public PlaceGuideServlet(
-      String userId,
       BlobstoreService blobstoreService,
       BlobInfoFactory blobInfoFactory,
       DatastoreService datastore) {
-    this.userId = userId;
     this.blobstoreService = blobstoreService;
     this.blobInfoFactory = blobInfoFactory;
     this.datastore = datastore;
@@ -116,6 +112,7 @@ public class PlaceGuideServlet extends HttpServlet {
   private List<PlaceGuide> getPlaceGuides(
       PlaceGuideQueryType placeGuideQueryType, GeoPt northEastCorner, GeoPt southWestCorner) {
     List<PlaceGuide> placeGuides;
+    String userId = UserServiceFactory.getUserService().getCurrentUser().getUserId();
     switch (placeGuideQueryType) {
       case ALL_PUBLIC:
         placeGuides = placeGuideRepository.getAllPublicPlaceGuides();
@@ -173,6 +170,7 @@ public class PlaceGuideServlet extends HttpServlet {
       audioKey = placeGuideRepository.getPlaceGuide(id).getAudioKey();
     }
 
+    String userId = UserServiceFactory.getUserService().getCurrentUser().getUserId();
     float latitude = Float.parseFloat(request.getParameter(LATITUDE_INPUT));
     float longitude = Float.parseFloat(request.getParameter(LONGITUDE_INPUT));
     GeoPt coordinate = new GeoPt(latitude, longitude);
