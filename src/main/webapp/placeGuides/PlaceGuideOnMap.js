@@ -6,7 +6,8 @@ class PlaceGuideOnMap {
   constructor(id, name, position, place, creator, description, placeType) {
     this._id = id;
     this._infoWindowClosed = true;
-    this._infoWindow = PlaceGuideOnMap.getInfoWindow(name, position, place, creator, description);
+    this._infoWindow = PlaceGuideOnMap
+        .getInfoWindow(name, position, place, creator, description);
     this._marker = PlaceGuideOnMap.getMarker(placeType, name, position);
     this._highlighted = false;
     this.closeInfoWindowOnMapClick();
@@ -47,7 +48,8 @@ class PlaceGuideOnMap {
 
   static getInfoWindow(name, position, place, creator, description) {
     return new google.maps.InfoWindow({
-      content: PlaceGuideOnMap.getInfoWindowContent(name, position, place, creator, description),
+      content: PlaceGuideOnMap
+          .getInfoWindowContent(name, position, place, creator, description),
       maxWidth: 200,
     });
   }

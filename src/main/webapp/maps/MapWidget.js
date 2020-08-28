@@ -33,7 +33,8 @@ class MapWidget {
 
   addSearchingFunctionality() {
     var searchResult =
-        Place.constructPlaceBasedOnCoordinates(this._map, 0, 0,
+        Place.constructPlaceBasedOnCoordinates(
+            this._map, 0, 0,
             "Search Result", PlaceType.SEARCH_RESULT, true);
     searchResult.visible = false;
     var searchBox = new SearchBox(this._map, searchResult, "search-box");
@@ -42,14 +43,17 @@ class MapWidget {
 
   addLocationChoosingAndSavingFunctionality() {
     // Choose location functionality.
-    // Remark that chosenLocation can be updated from the SearchBox and by clicking as well.
+    // Remark that chosenLocation can be updated
+    // from the SearchBox and by clicking as well.
     var chosenLocation =
-        Place.constructPlaceBasedOnCoordinates(this._map, 0, 0,
+        Place.constructPlaceBasedOnCoordinates(
+            this._map, 0, 0,
             "Picked Location", PlaceType.SEARCH_RESULT, true);
     chosenLocation.visible = false;
     chosenLocation.draggable = true;
     chosenLocation.triggerChosenLocationChangeEvent = true;
-    var searchBox = new SearchBox(this._map, chosenLocation, "search-box");
+    var searchBox = new SearchBox(
+        this._map, chosenLocation, "search-box");
     searchBox.init();
     var locationPicker = new LocationPicker(this._map, chosenLocation);
     locationPicker.init();

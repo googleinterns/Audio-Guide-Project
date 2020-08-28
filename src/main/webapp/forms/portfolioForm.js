@@ -13,7 +13,8 @@ function setUpPortfolioForm() {
 function fillPortfolioFormWithUserData() {
   getUserDataFromServlet().then(user => {
     setFormInputValue(document.getElementById("name"), user.name);
-    setFormInputValue(document.getElementById("selfIntroduction"), user.selfIntroduction);
+    setFormInputValue(document.getElementById("selfIntroduction"),
+        user.selfIntroduction);
     if (user.publicPortfolio) {
       document.getElementById("publicPortfolio").value = "public";
     } else {
@@ -45,7 +46,9 @@ function getUserDataFromServlet() {
   return fetch('/user-data-servlet')
       .catch(error => console.log("user-servlet: failed to fetch: " + error))
       .then(response => response.json())
-      .catch(error => console.log('fillFormInputsWithData: failed to convert to json: ' + error))
+      .catch(error =>
+          console.log(
+              'fillFormInputsWithData: failed to convert to json: ' + error))
       .then(response => {
         return response;
       });
