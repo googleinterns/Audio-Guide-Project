@@ -57,11 +57,10 @@ class Menu {
 
   createMenuTab(index, focused) {
     var tab = document.createElement("button");
+    tab.setAttribute("class", "mdc-tab");
     if (focused) {
-      tab.setAttribute("class", "mdc-tab mdc-tab--active");
-    } else {
-      tab.setAttribute("class", "mdc-tab");
-    }
+      tab.classList.add("mdc-tab--active")
+    } 
     tab.setAttribute("role", "tab");
     tab.setAttribute("aria-selected", "true");
     tab.setAttribute("tabindex", "0");
@@ -81,10 +80,9 @@ class Menu {
 
   createTabIndicator(focused) {
     var indicator = document.createElement("span");
+    indicator.setAttribute("class", "mdc-tab-indicator");
     if (focused) {
-      indicator.setAttribute("class", "mdc-tab-indicator mdc-tab-indicator--active")
-    } else {
-      indicator.setAttribute("class", "mdc-tab-indicator");
+      indicator.classList.add("mdc-tab-indicator--active")
     }
     indicator.appendChild(this.createIndicatorContent());
     return indicator;
@@ -98,7 +96,7 @@ class Menu {
 
   createIndicatorContent() {
     var indicatorContent = document.createElement("span");
-    indicatorContent.setAttribute("class", "mdc-tab-indicator__content mdc-tab-indicator__content--underline");
+    indicatorContent.classList.add("mdc-tab-indicator__content", "mdc-tab-indicator__content--underline");
     return indicatorContent;
   }
 
@@ -111,7 +109,7 @@ class Menu {
 
   createIcon(index) {
     var icon = document.createElement("span");
-    icon.setAttribute("class", "mdc-tab__icon material-icons");
+    icon.classList.add("mdc-tab__icon", "material-icons");
     icon.setAttribute("aria-hidden", true);
     icon.innerText = Menu.PAGE_NUMBERS[index].icon;
     return icon;
