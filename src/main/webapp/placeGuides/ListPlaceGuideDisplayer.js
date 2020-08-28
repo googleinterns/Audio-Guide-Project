@@ -1,5 +1,5 @@
 /**
- * This class is responsible for representing 
+ * This class is responsible for representing
  * the placeGuides on a scrollable list.
  */
 class ListPlaceGuideDisplayer {
@@ -38,8 +38,8 @@ class ListPlaceGuideDisplayer {
           // new placeGuide should be constructed.
           this._placeGuidesOnList[placeGuideId] =
               this.
-                  constructPlaceGuideOnListFromPlaceGuide
-                    (placeGuides[placeGuideId]);
+                  constructPlaceGuideOnListFromPlaceGuide(
+                      placeGuides[placeGuideId]);
           this.addToList(placeGuideId);
         }
       }
