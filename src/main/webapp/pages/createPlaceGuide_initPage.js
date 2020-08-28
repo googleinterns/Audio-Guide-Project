@@ -30,7 +30,7 @@ function initPage() {
               PlaceGuideRepository.QueryType.CREATED_ALL_IN_MAP_AREA);
       placeGuideManager = new PlaceGuideManager(placeGuideRepository);
       google.maps.event.addListener(map, 'idle', function () {
-        placeGuideManager.update(map.getBounds(), map.getZoom());
+        placeGuideManager.update(map.getBounds(), map.getZoom(), false);
       });
       document.getElementById("map")
           .addEventListener(MapWidget.SAVE_LOCATION_EVENT, function () {

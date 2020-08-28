@@ -21,7 +21,7 @@ function initPage() {
               PlaceGuideRepository.QueryType.ALL_PUBLIC_IN_MAP_AREA);
       placeGuideManager = new PlaceGuideManager(placeGuideRepository);
       google.maps.event.addListener(map, 'idle', function () {
-        placeGuideManager.update(map.getBounds(), map.getZoom());
+        placeGuideManager.update(map.getBounds(), map.getZoom(), false);
       });
     }
   });
