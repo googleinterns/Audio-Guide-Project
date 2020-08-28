@@ -5,15 +5,15 @@ const DUMMY_DATA_FOR_PLACE_NAME = 'placeName';
  */
 function setUpCreatePlaceGuideForm() {
   addBlobstoreUploadUrlToForm(
-      "CREATE_PLACE_GUIDE_FORM", "createPlaceGuideForm");
+      'CREATE_PLACE_GUIDE_FORM', 'createPlaceGuideForm');
   activatePreviewFeature();
 }
 
 function activatePreviewFeature() {
   setSrcToElementOnChangeEvent(
-      "imageKey", "imagePreview", true);
+      'imageKey', 'imagePreview', true);
   setSrcToElementOnChangeEvent(
-      "audioKey", "audioPlayer", false);
+      'audioKey', 'audioPlayer', false);
 }
 
 function setSrcToElementOnChangeEvent(elementId, previewId, displayBlock) {
@@ -62,18 +62,18 @@ async function getFetchedList() {
 // For testing.
 function updateLocation(position, placeId, placeName) {
   document.getElementById(
-      "placeId").setAttribute("value", placeId);
+      'placeId').setAttribute('value', placeId);
   if (placeName != null) {
     document.getElementById(
-        "placeName").setAttribute("value", placeName);
+        'placeName').setAttribute('value', placeName);
   } else {
     document.getElementById(
-        "placeName").setAttribute("value", "-");
+        'placeName').setAttribute('value', '-');
   }
   document.getElementById(
-      "latitude").setAttribute("value", position.lat());
+      'latitude').setAttribute('value', position.lat());
   document.getElementById(
-      "longitude").setAttribute("value", position.lng());
+      'longitude').setAttribute('value', position.lng());
 }
 
 function fillFormWithPlaceGuideData(placeGuide) {
@@ -81,33 +81,33 @@ function fillFormWithPlaceGuideData(placeGuide) {
   // from the previous place guide data.
   document.getElementById('audioKey').required = false;
 
-  setFormInputValue(document.getElementById("id"), placeGuide.id);
-  setFormInputValue(document.getElementById("name"), placeGuide.name);
+  setFormInputValue(document.getElementById('id'), placeGuide.id);
+  setFormInputValue(document.getElementById('name'), placeGuide.name);
   setBlobKeySrcToElement(
-      "audioKey", placeGuide.audioKey, "audioPlayer", false);
+      'audioKey', placeGuide.audioKey, 'audioPlayer', false);
   if (placeGuide.isPublic) {
     document.getElementById('isPublic').value = 'public';
   } else {
     document.getElementById('isPublic').value = 'private';
   }
   setFormInputValue(
-      document.getElementById("latitude"),
+      document.getElementById('latitude'),
       placeGuide.coordinate.latitude);
   setFormInputValue(
-      document.getElementById("longitude"),
+      document.getElementById('longitude'),
       placeGuide.coordinate.longitude);
   setFormInputValue(
-      document.getElementById("length"),
+      document.getElementById('length'),
       placeGuide.length);
   setFormInputValue(
-      document.getElementById("description"),
+      document.getElementById('description'),
       placeGuide.description);
   if (placeGuide.imageKey != undefined) {
     setBlobKeySrcToElement(
-        "imageKey", placeGuide.imageKey,
-        "imagePreview", true);
+        'imageKey', placeGuide.imageKey,
+        'imagePreview', true);
   }
-  setFormInputValue(document.getElementById("placeName"),
+  setFormInputValue(document.getElementById('placeName'),
       DUMMY_DATA_FOR_PLACE_NAME);
 }
 
