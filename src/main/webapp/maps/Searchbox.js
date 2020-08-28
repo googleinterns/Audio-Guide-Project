@@ -27,8 +27,10 @@ class SearchBox {
   // The Searchbox starts listening to and handling 
   // search-related events when init() is called. 
   init() {
-    this._autocomplete.setFields(['address_components', 'geometry', 'name', 'place_id']);
-    this._autocomplete.addListener('place_changed', result => this.setNewSearchResult());
+    this._autocomplete.setFields(['address_components', 'geometry',
+                                  'name', 'place_id']);
+    this._autocomplete.addListener('place_changed',
+                                  result => this.setNewSearchResult());
   }
 
   /**
@@ -57,7 +59,8 @@ class SearchBox {
     var service = new google.maps.places.AutocompleteService();
     var searchResult = this._searchResult;
     var map = this._map;
-    service.getPlacePredictions({input: this._input.value}, function (predictions, status) {
+    service.getPlacePredictions({input: this._input.value},
+        function (predictions, status) {
       if (status != google.maps.places.PlacesServiceStatus.OK) {
         alert(status);
         return;

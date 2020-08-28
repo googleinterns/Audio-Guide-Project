@@ -16,7 +16,8 @@ const CHOSEN_LOCATION_CHANGE_EVENT = "chosenPositionChange";
  * Whenever a new position is set, the mapsPlace is discarded, and vice versa.
  */
 class Place {
-  constructor(map, positionLat, positionLng, name, mapsPlace, placeType, hasInfoWindow) {
+  constructor(map, positionLat, positionLng, name,
+              mapsPlace, placeType, hasInfoWindow) {
     this._map = map;
     this._mapsPlace = mapsPlace;
     this._name = name;
@@ -31,7 +32,8 @@ class Place {
     this.setupRepresentationOnMap();
   }
 
-  // Some objects' behaviour is conditioned by the chosenLocation's positionChanges
+  // Some objects' behaviour is conditioned
+  // by the chosenLocation's positionChanges.
   // To enable listening to this event, this flag must be set to true.
   // Other Places won't trigger the event.
   set triggerChosenLocationChangeEvent(trigger) {
@@ -79,10 +81,12 @@ class Place {
 
   static constructPlaceBasedOnCoordinates(map, positionLat, positionLng,
                                           name, placeType, hasInfoWindow) {
-    return new Place(map, positionLat, positionLng, name, null, placeType, hasInfoWindow);
+    return new Place(map, positionLat, positionLng, name,
+        null, placeType, hasInfoWindow);
   }
 
-  static constructPlaceBasedOnPlaceId(map, placeId, name, placeType, hasInfoWindow) {
+  static constructPlaceBasedOnPlaceId(map, placeId, name,
+                                      placeType, hasInfoWindow) {
     var request = {
       placeId: placeId,
       fields: ['address_components', 'name', 'geometry', 'place_id']
@@ -91,7 +95,8 @@ class Place {
       var service = new google.maps.places.PlacesService(map);
       service.getDetails(request, (place, status) => {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
-          resolve(new Place(map, 0, 0, name, place, placeType, hasInfoWindow));
+          resolve(new Place(map, 0, 0,
+              name, place, placeType, hasInfoWindow));
         } else {
           reject(new Error('Couldnt\'t find the place' + placeId));
         }
@@ -197,12 +202,14 @@ class Place {
 
   onPositionChange() {
     if (this._triggerChosenLocationChangeEvent) {
-      document.getElementById("map").dispatchEvent(this._positionChangeEvent);
+      document.getElementById("map")
+          .dispatchEvent(this._positionChangeEvent);
     }
   }
 }
 
-// Specify different icons/colors for dynamically generated icons for each place type.
+// Specify different icons/colors for dynamically
+// generated icons for each place type.
 var PlaceType = {
   PUBLIC: {
     // Orange icon
@@ -231,7 +238,8 @@ var PlaceType = {
 
 // Get icons from the charts API.
 function getColoredMarkerIcon(color) {
-  var iconBase = 'https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|';
+  var iconBase =
+      'https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|';
   var markerIcon = {
     url: iconBase + color,
     scaledSize: new google.maps.Size(30, 46),

@@ -14,11 +14,15 @@ function getBlobstoreUploadUrlFromServlet(formType) {
   const url = new URL('/blobstore-upload-url', document.URL);
   url.searchParams.append('formType', formType);
   return fetch(url)
-      .catch((error) => console.log('getBlobstoreUploadUrlFromServlet: failed to fetch: ' + error))
-      .then((uploadUrl) => uploadUrl.text())
-      .catch((error) =>
-        console.log('getBlobstoreUploadUrlFromServlet: failed to convert to text: ' + error))
-      .then((uploadUrl) => {
+      .catch(error =>
+          console.log(
+              "getBlobstoreUploadUrlFromServlet: failed to fetch: " + error))
+      .then(uploadUrl => uploadUrl.text())
+      .catch(error =>
+          console.log(
+              'getBlobstoreUploadUrlFromServlet: failed to convert to text: '
+              + error))
+      .then(uploadUrl => {
         return uploadUrl;
       });
 }

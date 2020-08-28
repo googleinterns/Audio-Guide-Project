@@ -19,7 +19,8 @@ class LocationSaver {
     this._savedPlace.visible = false;
     this._chosenPlace = chosenPlace;
     this._saveLocationControlButton =
-        this.createControlButton(LocationSaver.SAVE_LOCATION_TEXT, LocationSaver.SAVE_LOCATION_ID);
+        this.createControlButton(LocationSaver.SAVE_LOCATION_TEXT,
+            LocationSaver.SAVE_LOCATION_ID);
     this._saveLocationControlButton.disabled = true;
     this._map.controls[google.maps.ControlPosition.BOTTOM_CENTER]
         .push(this._saveLocationControlButton);
@@ -52,7 +53,8 @@ class LocationSaver {
     }
     this._chosenPlace.visible = false;
     this._saveLocationControlButton.disabled = true;
-    document.getElementById("map").dispatchEvent(new Event(MapWidget.SAVE_LOCATION_EVENT));
+    document.getElementById("map").dispatchEvent(
+        new Event(MapWidget.SAVE_LOCATION_EVENT));
     alert(LocationSaver.SAVED_LOCATION_MESSAGE);
   }
 

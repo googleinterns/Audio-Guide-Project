@@ -4,13 +4,16 @@ const DUMMY_DATA_FOR_PLACE_NAME = 'placeName';
  * Handles setting up the create place guide form whenever the page is loaded.
  */
 function setUpCreatePlaceGuideForm() {
-  addBlobstoreUploadUrlToForm('CREATE_PLACE_GUIDE_FORM', 'createPlaceGuideForm');
+  addBlobstoreUploadUrlToForm(
+      "CREATE_PLACE_GUIDE_FORM", "createPlaceGuideForm");
   activatePreviewFeature();
 }
 
 function activatePreviewFeature() {
-  setSrcToElementOnChangeEvent('imageKey', 'imagePreview', true);
-  setSrcToElementOnChangeEvent('audioKey', 'audioPlayer', false);
+  setSrcToElementOnChangeEvent(
+      "imageKey", "imagePreview", true);
+  setSrcToElementOnChangeEvent(
+      "audioKey", "audioPlayer", false);
 }
 
 function setSrcToElementOnChangeEvent(elementId, previewId, displayBlock) {
@@ -49,7 +52,8 @@ function testExistingPlaceGuide() {
 
 // For testing.
 async function getFetchedList() {
-  return fetch('/place-guide-data?placeGuideType=ALL_PUBLIC', {method: 'GET'})
+  return fetch(
+      '/place-guide-data?placeGuideType=ALL_PUBLIC', {method: 'GET'})
       .then((response) => {
         return response.json();
       });
@@ -57,14 +61,19 @@ async function getFetchedList() {
 
 // For testing.
 function updateLocation(position, placeId, placeName) {
-  document.getElementById('placeId').setAttribute('value', placeId);
+  document.getElementById(
+      "placeId").setAttribute("value", placeId);
   if (placeName != null) {
-    document.getElementById('placeName').setAttribute('value', placeName);
+    document.getElementById(
+        "placeName").setAttribute("value", placeName);
   } else {
-    document.getElementById('placeName').setAttribute('value', '-');
+    document.getElementById(
+        "placeName").setAttribute("value", "-");
   }
-  document.getElementById('latitude').setAttribute('value', position.lat());
-  document.getElementById('longitude').setAttribute('value', position.lng());
+  document.getElementById(
+      "latitude").setAttribute("value", position.lat());
+  document.getElementById(
+      "longitude").setAttribute("value", position.lng());
 }
 
 function fillFormWithPlaceGuideData(placeGuide) {
@@ -72,22 +81,34 @@ function fillFormWithPlaceGuideData(placeGuide) {
   // from the previous place guide data.
   document.getElementById('audioKey').required = false;
 
-  setFormInputValue(document.getElementById('id'), placeGuide.id);
-  setFormInputValue(document.getElementById('name'), placeGuide.name);
-  setBlobKeySrcToElement('audioKey', placeGuide.audioKey, 'audioPlayer', false);
+  setFormInputValue(document.getElementById("id"), placeGuide.id);
+  setFormInputValue(document.getElementById("name"), placeGuide.name);
+  setBlobKeySrcToElement(
+      "audioKey", placeGuide.audioKey, "audioPlayer", false);
   if (placeGuide.isPublic) {
     document.getElementById('isPublic').value = 'public';
   } else {
     document.getElementById('isPublic').value = 'private';
   }
-  setFormInputValue(document.getElementById('latitude'), placeGuide.coordinate.latitude);
-  setFormInputValue(document.getElementById('longitude'), placeGuide.coordinate.longitude);
-  setFormInputValue(document.getElementById('length'), placeGuide.length);
-  setFormInputValue(document.getElementById('description'), placeGuide.description);
+  setFormInputValue(
+      document.getElementById("latitude"),
+      placeGuide.coordinate.latitude);
+  setFormInputValue(
+      document.getElementById("longitude"),
+      placeGuide.coordinate.longitude);
+  setFormInputValue(
+      document.getElementById("length"),
+      placeGuide.length);
+  setFormInputValue(
+      document.getElementById("description"),
+      placeGuide.description);
   if (placeGuide.imageKey != undefined) {
-    setBlobKeySrcToElement('imageKey', placeGuide.imageKey, 'imagePreview', true);
+    setBlobKeySrcToElement(
+        "imageKey", placeGuide.imageKey,
+        "imagePreview", true);
   }
-  setFormInputValue(document.getElementById('placeName'), DUMMY_DATA_FOR_PLACE_NAME);
+  setFormInputValue(document.getElementById("placeName"),
+      DUMMY_DATA_FOR_PLACE_NAME);
 }
 
 function setBlobKeySrcToElement(inputId, blobKey, previewId, displayBlock) {

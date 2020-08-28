@@ -21,7 +21,8 @@ class Location {
   }
 
   static constructLocationBasedOnCoordinates(positionLat, positionLng) {
-    return new Location(new google.maps.LatLng(positionLat, positionLng), null);
+    return new Location
+    (new google.maps.LatLng(positionLat, positionLng), null);
   }
 
   static constructLocationBasedOnPlaceId(placeId) {

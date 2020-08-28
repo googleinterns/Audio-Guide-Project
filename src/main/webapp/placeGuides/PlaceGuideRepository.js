@@ -65,7 +65,7 @@ class PlaceGuideRepository {
             });
       } else {
         var location = Location.constructLocationBasedOnCoordinates(placeGuideResponse.coordinate.latitude,
-                                                                    placeGuideResponse.coordinate.longitude);
+            placeGuideResponse.coordinate.longitude);
         var placeGuide = new PlaceGuide(placeGuideResponse.id,
             placeGuideResponse.name,
             location,
@@ -98,14 +98,19 @@ class PlaceGuideRepository {
       url.searchParams.append("regionCorners", bounds.toUrlValue());
       var thisRepository = this;
       return fetch(url)
-          .catch(error => console.log("PlaceGuideServlet: failed to fetch: " + error))
+          .catch(error =>
+              console.log("PlaceGuideServlet: failed to fetch: " + error))
           .then(response => response.json())
           .catch(error =>
-              console.log('updatePlaceGuides: failed to convert response to JSON' + error))
+              console.log('updatePlaceGuides: failed to convert response to JSON'
+                  + error))
           .then(placeGuideWithCreatorPairs =>
-              PlaceGuideRepository.buildPlaceGuideDictionaryFromResponse(placeGuideWithCreatorPairs))
+              PlaceGuideRepository
+                  .buildPlaceGuideDictionaryFromResponse(
+                      placeGuideWithCreatorPairs))
           .catch(error =>
-              console.log("updatePlaceGuides: unable to build placeGuide dictionary: " + error))
+              console.log("updatePlaceGuides: unable to build placeGuide dictionary: "
+                  + error))
           .then(placeGuides => thisRepository._placeGuides = placeGuides);
     } else {
       var thisRepository = this;
@@ -123,7 +128,8 @@ class PlaceGuideRepository {
     var url = new URL("/delete-place-guide-data", document.URL);
     url.searchParams.append('id', placeGuideId);
     return fetch(url)
-        .catch(error => console.log("DeletePlaceGuideServlet: failed to fetch: " + error));
+        .catch(error => console.log("DeletePlaceGuideServlet: failed to fetch: "
+            + error));
   }
 
   togglePlaceGuideBookmarkStatus(placeGuideId) {
@@ -139,6 +145,7 @@ class PlaceGuideRepository {
       url.searchParams.append("bookmarkHandlingType", "REMOVE");
     }
     return fetch(url)
-        .catch(error => console.log("BookmarkPlaceGuideServlet: failed to fetch: " + error));
+        .catch(error => console.log("BookmarkPlaceGuideServlet: failed to fetch: "
+            + error));
   }
 }

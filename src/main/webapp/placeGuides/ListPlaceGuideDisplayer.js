@@ -36,7 +36,8 @@ class ListPlaceGuideDisplayer {
         if (!this._placeGuidesOnList.hasOwnProperty(placeGuideId)) {
           // new placeGuide should be constructed.
           this._placeGuidesOnList[placeGuideId] =
-              this.constructPlaceGuideOnListFromPlaceGuide(placeGuides[placeGuideId]);
+              this.
+              constructPlaceGuideOnListFromPlaceGuide(placeGuides[placeGuideId]);
           this.addToList(placeGuideId);
         }
       }
