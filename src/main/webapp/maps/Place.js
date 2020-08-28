@@ -1,6 +1,6 @@
 const PLACE_ZOOM = 14;
 const MAX_ZOOM = 19;
-const CHOSEN_LOCATION_CHANGE_EVENT = "chosenPositionChange";
+const CHOSEN_LOCATION_CHANGE_EVENT = 'chosenPositionChange';
 
 /**
  * This class holds a place's data and handles its representation on the map.
@@ -17,7 +17,7 @@ const CHOSEN_LOCATION_CHANGE_EVENT = "chosenPositionChange";
  */
 class Place {
   constructor(map, positionLat, positionLng, name,
-              mapsPlace, placeType, hasInfoWindow) {
+      mapsPlace, placeType, hasInfoWindow) {
     this._map = map;
     this._mapsPlace = mapsPlace;
     this._name = name;
@@ -46,8 +46,8 @@ class Place {
 
   set draggable(draggability) {
     this._marker.setDraggable(draggability);
-    var thisPlace = this;
-    this._marker.addListener('drag', function () {
+    const thisPlace = this;
+    this._marker.addListener('drag', function() {
       thisPlace.position = this.getPosition();
     });
   }
@@ -80,19 +80,19 @@ class Place {
   }
 
   static constructPlaceBasedOnCoordinates(map, positionLat, positionLng,
-                                          name, placeType, hasInfoWindow) {
+      name, placeType, hasInfoWindow) {
     return new Place(map, positionLat, positionLng, name,
         null, placeType, hasInfoWindow);
   }
 
   static constructPlaceBasedOnPlaceId(map, placeId, name,
-                                      placeType, hasInfoWindow) {
-    var request = {
+      placeType, hasInfoWindow) {
+    const request = {
       placeId: placeId,
-      fields: ['address_components', 'name', 'geometry', 'place_id']
+      fields: ['address_components', 'name', 'geometry', 'place_id'],
     };
-    return new Promise(function (resolve, reject) {
-      var service = new google.maps.places.PlacesService(map);
+    return new Promise(function(resolve, reject) {
+      const service = new google.maps.places.PlacesService(map);
       service.getDetails(request, (place, status) => {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
           resolve(new Place(map, 0, 0,
@@ -117,8 +117,8 @@ class Place {
         }
       });
       // Close the open infowindow if the user clicks anywhere else on the map.
-      var thisPlace = this;
-      this._map.addListener('click', function (mapsMouseEvent) {
+      const thisPlace = this;
+      this._map.addListener('click', function(mapsMouseEvent) {
         if (!thisPlace._infoWindowClosed) {
           thisPlace.closeInfoWindow();
         }
@@ -137,7 +137,7 @@ class Place {
   }
 
   setupMarker() {
-    var markerIcon;
+    let markerIcon;
     if (this._placeType.icon != null) {
       markerIcon = this._placeType.icon;
     } else {
@@ -160,7 +160,7 @@ class Place {
   }
 
   getInfoWindowContent() {
-    var content = "<h3>" + this._name + "</h3>";
+    const content = '<h3>' + this._name + '</h3>';
     return content;
   }
 
@@ -184,25 +184,24 @@ class Place {
    * center the map around it.
    */
   updatePlaceAndCenterBasedOnId(id) {
-    var request = {
+    const request = {
       placeId: id,
-      fields: ['address_components', 'name', 'geometry', 'place_id']
+      fields: ['address_components', 'name', 'geometry', 'place_id'],
     };
-    var service = new google.maps.places.PlacesService(this._map);
+    const service = new google.maps.places.PlacesService(this._map);
     service.getDetails(request, (place, status) => {
       if (status === google.maps.places.PlacesServiceStatus.OK) {
         this.place = place;
         this.centerMapAround();
       } else {
         window.alert(Place.GEOCODER_FAIL_MSG + status);
-
       }
     });
   }
 
   onPositionChange() {
     if (this._triggerChosenLocationChangeEvent) {
-      document.getElementById("map")
+      document.getElementById('map')
           .dispatchEvent(this._positionChangeEvent);
     }
   }
@@ -214,37 +213,37 @@ var PlaceType = {
   PUBLIC: {
     // Orange icon
     icon: null,
-    iconColor: "de8a0b",
+    iconColor: 'de8a0b',
   },
   PRIVATE: {
     // Yellow icon
     icon: null,
-    iconColor: "f7ff05",
+    iconColor: 'f7ff05',
   },
   SEARCH_RESULT: {
     // Green icon
     icon: null,
-    iconColor: "82d613",
+    iconColor: '82d613',
   },
   SAVED_LOCATION: {
     // Blue icon
     icon: null,
-    iconColor: "1d2480",
+    iconColor: '1d2480',
   },
   CURRENT_LOCATION: {
-    icon: "./img/blue_dot.png",
-  }
+    icon: './img/blue_dot.png',
+  },
 };
 
 // Get icons from the charts API.
 function getColoredMarkerIcon(color) {
-  var iconBase =
+  const iconBase =
       'https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|';
-  var markerIcon = {
+  const markerIcon = {
     url: iconBase + color,
     scaledSize: new google.maps.Size(30, 46),
     origin: new google.maps.Point(0, 0),
-    anchor: new google.maps.Point(15, 45)
+    anchor: new google.maps.Point(15, 45),
   };
   return markerIcon;
 }
