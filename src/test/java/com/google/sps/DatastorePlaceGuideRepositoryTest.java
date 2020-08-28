@@ -67,7 +67,7 @@ public final class DatastorePlaceGuideRepositoryTest {
           .setBookmarkedPlaceGuidesIds(CREATOR_A_BOOKMARKED_PLACE_GUIDES_IDS)
           .build();
 
-  // PlaceGuides' parameters used for map-related queries.
+  // PlaceGuides' parameters used for map-related queries, with a region not crossing the IDL.
   // PlaceGudies of user C.
   public static final long C_INNER_PUBLIC_ID = 56789;
   public static final long C_INNER_PRIVATE_ID = 98765;
@@ -75,9 +75,9 @@ public final class DatastorePlaceGuideRepositoryTest {
   public static final long C_OUTER_PRIVATE_ID = 9876;
   public static final String CREATOR_C_ID = "creatorC_Id";
   public static final GeoPt C_INNER_PUBLIC_COORDINATE = new GeoPt((float) 10, (float) -5);
-  public static final GeoPt C_INNER_PRIVATE_COORDINATE = new GeoPt((float) -10, (float) 10);
-  public static final GeoPt C_OUTER_PUBLIC_COORDINATE = new GeoPt((float) 30, (float) -10);
-  public static final GeoPt C_OUTER_PRIVATE_COORDINATE = new GeoPt((float) -10, (float) -45);
+  public static final GeoPt C_INNER_PRIVATE_COORDINATE = new GeoPt((float) -14, (float) 14);
+  public static final GeoPt C_OUTER_PUBLIC_COORDINATE = new GeoPt((float) 5, (float) -20);
+  public static final GeoPt C_OUTER_PRIVATE_COORDINATE = new GeoPt((float) -30, (float) -5);
   // PlaceGudies of user D.
   public static final long D_INNER_PUBLIC_ID = 567890;
   public static final long D_INNER_PRIVATE_ID = 987650;
@@ -89,8 +89,35 @@ public final class DatastorePlaceGuideRepositoryTest {
   public static final GeoPt D_OUTER_PUBLIC_COORDINATE = new GeoPt((float) 60, (float) 10);
   public static final GeoPt D_OUTER_PRIVATE_COORDINATE = new GeoPt((float) -10, (float) -45);
   // Corners of the rectangle for the queried map area.
-  public static final GeoPt NORTH_EAST_CORNER = new GeoPt((float) 15, (float) 15);
-  public static final GeoPt SOUTH_WEST_CORNER = new GeoPt((float) -15, (float) -15);
+  // This is a map area which doesn't cross the IDL.
+  public static final GeoPt NORTH_EAST_CORNER_NO_IDL = new GeoPt((float) 15, (float) 15);
+  public static final GeoPt SOUTH_WEST_CORNER_NO_IDL = new GeoPt((float) -15, (float) -15);
+
+  // PlaceGuides' parameters used for map-related queries, with a region crossing the IDL.
+  // PlaceGudies of user F.
+  public static final long E_INNER_PUBLIC_ID = 567891;
+  public static final long E_INNER_PRIVATE_ID = 987651;
+  public static final long E_OUTER_PUBLIC_ID = 678901;
+  public static final long E_OUTER_PRIVATE_ID = 98761;
+  public static final String CREATOR_E_ID = "creatorE_Id";
+  public static final GeoPt E_INNER_PUBLIC_COORDINATE = new GeoPt((float) 19, (float) 170);
+  public static final GeoPt E_INNER_PRIVATE_COORDINATE = new GeoPt((float) -20, (float) 179);
+  public static final GeoPt E_OUTER_PUBLIC_COORDINATE = new GeoPt((float) 5, (float) -150);
+  public static final GeoPt E_OUTER_PRIVATE_COORDINATE = new GeoPt((float) -30, (float) 170);
+  // PlaceGudies of user F.
+  public static final long F_INNER_PUBLIC_ID = 567892;
+  public static final long F_INNER_PRIVATE_ID = 987652;
+  public static final long F_OUTER_PUBLIC_ID = 678902;
+  public static final long F_OUTER_PRIVATE_ID = 98762;
+  public static final String CREATOR_F_ID = "creatorF_Id";
+  public static final GeoPt F_INNER_PUBLIC_COORDINATE = new GeoPt((float) 18, (float) -175);
+  public static final GeoPt F_INNER_PRIVATE_COORDINATE = new GeoPt((float) -15, (float) -180);
+  public static final GeoPt F_OUTER_PUBLIC_COORDINATE = new GeoPt((float) 60, (float) -140);
+  public static final GeoPt F_OUTER_PRIVATE_COORDINATE = new GeoPt((float) -10, (float) 160);
+  // Corners of the rectangle for the queried map area.
+  // This is a map area which crosses the IDL.
+  public static final GeoPt NORTH_EAST_CORNER_WITH_IDL = new GeoPt((float) 20, (float) -160);
+  public static final GeoPt SOUTH_WEST_CORNER_WITH_IDL = new GeoPt((float) -20, (float) 160);
 
   private final PlaceGuide testPublicPlaceGuideA =
       new PlaceGuide.Builder(A_PUBLIC_ID, NAME, AUDIO_KEY, CREATOR_A_ID, COORDINATE)
@@ -201,6 +228,82 @@ public final class DatastorePlaceGuideRepositoryTest {
   private final PlaceGuide testOuterPrivatePlaceGuideD =
       new PlaceGuide.Builder(
               D_OUTER_PRIVATE_ID, NAME, AUDIO_KEY, CREATOR_D_ID, D_OUTER_PUBLIC_COORDINATE)
+          .setPlaceId(PLACE_ID)
+          .setLength(LENGTH)
+          .setDescription(DESCRIPTION)
+          .setImageKey(IMAGE_KEY)
+          .build();
+
+  private final PlaceGuide testInnerPublicPlaceGuideE =
+      new PlaceGuide.Builder(
+              E_INNER_PUBLIC_ID, NAME, AUDIO_KEY, CREATOR_E_ID, E_INNER_PUBLIC_COORDINATE)
+          .setPlaceId(PLACE_ID)
+          .setPlaceGuideStatus(IS_PUBLIC)
+          .setLength(LENGTH)
+          .setDescription(DESCRIPTION)
+          .setImageKey(IMAGE_KEY)
+          .build();
+
+  private final PlaceGuide testInnerPrivatePlaceGuideE =
+      new PlaceGuide.Builder(
+              E_INNER_PRIVATE_ID, NAME, AUDIO_KEY, CREATOR_E_ID, E_INNER_PRIVATE_COORDINATE)
+          .setPlaceId(PLACE_ID)
+          .setLength(LENGTH)
+          .setDescription(DESCRIPTION)
+          .setImageKey(IMAGE_KEY)
+          .build();
+
+  private final PlaceGuide testOuterPublicPlaceGuideE =
+      new PlaceGuide.Builder(
+              E_OUTER_PUBLIC_ID, NAME, AUDIO_KEY, CREATOR_E_ID, E_OUTER_PUBLIC_COORDINATE)
+          .setPlaceId(PLACE_ID)
+          .setPlaceGuideStatus(IS_PUBLIC)
+          .setLength(LENGTH)
+          .setDescription(DESCRIPTION)
+          .setImageKey(IMAGE_KEY)
+          .build();
+
+  private final PlaceGuide testOuterPrivatePlaceGuideE =
+      new PlaceGuide.Builder(
+              E_OUTER_PRIVATE_ID, NAME, AUDIO_KEY, CREATOR_E_ID, E_OUTER_PUBLIC_COORDINATE)
+          .setPlaceId(PLACE_ID)
+          .setLength(LENGTH)
+          .setDescription(DESCRIPTION)
+          .setImageKey(IMAGE_KEY)
+          .build();
+
+  private final PlaceGuide testInnerPublicPlaceGuideF =
+      new PlaceGuide.Builder(
+              F_INNER_PUBLIC_ID, NAME, AUDIO_KEY, CREATOR_F_ID, F_INNER_PUBLIC_COORDINATE)
+          .setPlaceId(PLACE_ID)
+          .setPlaceGuideStatus(IS_PUBLIC)
+          .setLength(LENGTH)
+          .setDescription(DESCRIPTION)
+          .setImageKey(IMAGE_KEY)
+          .build();
+
+  private final PlaceGuide testInnerPrivatePlaceGuideF =
+      new PlaceGuide.Builder(
+              F_INNER_PRIVATE_ID, NAME, AUDIO_KEY, CREATOR_F_ID, F_INNER_PRIVATE_COORDINATE)
+          .setPlaceId(PLACE_ID)
+          .setLength(LENGTH)
+          .setDescription(DESCRIPTION)
+          .setImageKey(IMAGE_KEY)
+          .build();
+
+  private final PlaceGuide testOuterPublicPlaceGuideF =
+      new PlaceGuide.Builder(
+              F_OUTER_PUBLIC_ID, NAME, AUDIO_KEY, CREATOR_F_ID, F_OUTER_PUBLIC_COORDINATE)
+          .setPlaceId(PLACE_ID)
+          .setPlaceGuideStatus(IS_PUBLIC)
+          .setLength(LENGTH)
+          .setDescription(DESCRIPTION)
+          .setImageKey(IMAGE_KEY)
+          .build();
+
+  private final PlaceGuide testOuterPrivatePlaceGuideF =
+      new PlaceGuide.Builder(
+              F_OUTER_PRIVATE_ID, NAME, AUDIO_KEY, CREATOR_F_ID, F_OUTER_PUBLIC_COORDINATE)
           .setPlaceId(PLACE_ID)
           .setLength(LENGTH)
           .setDescription(DESCRIPTION)
@@ -491,7 +594,8 @@ public final class DatastorePlaceGuideRepositoryTest {
   @Test
   public void getAllPublicPlaceGuidesInMapArea_noExistingPlaceGuides_emptyResult() {
     List<PlaceGuide> result =
-        placeGuideRepository.getAllPublicPlaceGuidesInMapArea(NORTH_EAST_CORNER, SOUTH_WEST_CORNER);
+        placeGuideRepository.getAllPublicPlaceGuidesInMapArea(
+            NORTH_EAST_CORNER_NO_IDL, SOUTH_WEST_CORNER_NO_IDL);
     assertTrue(result.isEmpty());
   }
 
@@ -509,7 +613,8 @@ public final class DatastorePlaceGuideRepositoryTest {
             testOuterPublicPlaceGuideD);
     saveTestPlaceGuidesEntities(testPlaceGuidesList);
     List<PlaceGuide> result =
-        placeGuideRepository.getAllPublicPlaceGuidesInMapArea(NORTH_EAST_CORNER, SOUTH_WEST_CORNER);
+        placeGuideRepository.getAllPublicPlaceGuidesInMapArea(
+            NORTH_EAST_CORNER_NO_IDL, SOUTH_WEST_CORNER_NO_IDL);
     List<PlaceGuide> expected =
         Arrays.asList(testInnerPublicPlaceGuideC, testInnerPublicPlaceGuideD);
     assertTrue(compare(expected, result));
@@ -519,7 +624,7 @@ public final class DatastorePlaceGuideRepositoryTest {
   public void getCreatedPlaceGuidesInMapArea_noExistingPlaceGuides_emptyResult() {
     List<PlaceGuide> result =
         placeGuideRepository.getCreatedPlaceGuidesInMapArea(
-            OTHER_USER_ID, NORTH_EAST_CORNER, SOUTH_WEST_CORNER);
+            OTHER_USER_ID, NORTH_EAST_CORNER_NO_IDL, SOUTH_WEST_CORNER_NO_IDL);
     assertTrue(result.isEmpty());
   }
 
@@ -538,7 +643,7 @@ public final class DatastorePlaceGuideRepositoryTest {
     saveTestPlaceGuidesEntities(testPlaceGuidesList);
     List<PlaceGuide> result =
         placeGuideRepository.getCreatedPlaceGuidesInMapArea(
-            OTHER_USER_ID, NORTH_EAST_CORNER, SOUTH_WEST_CORNER);
+            OTHER_USER_ID, NORTH_EAST_CORNER_NO_IDL, SOUTH_WEST_CORNER_NO_IDL);
     assertTrue(result.isEmpty());
   }
 
@@ -557,7 +662,7 @@ public final class DatastorePlaceGuideRepositoryTest {
     saveTestPlaceGuidesEntities(testPlaceGuidesList);
     List<PlaceGuide> result =
         placeGuideRepository.getCreatedPlaceGuidesInMapArea(
-            CREATOR_C_ID, NORTH_EAST_CORNER, SOUTH_WEST_CORNER);
+            CREATOR_C_ID, NORTH_EAST_CORNER_NO_IDL, SOUTH_WEST_CORNER_NO_IDL);
     List<PlaceGuide> expected =
         Arrays.asList(testInnerPublicPlaceGuideC, testInnerPrivatePlaceGuideC);
     assertTrue(compare(expected, result));
@@ -567,7 +672,7 @@ public final class DatastorePlaceGuideRepositoryTest {
   public void getCreatedPublicPlaceGuidesInMapArea_noExistingPlaceGuides_emptyResult() {
     List<PlaceGuide> result =
         placeGuideRepository.getCreatedPublicPlaceGuidesInMapArea(
-            OTHER_USER_ID, NORTH_EAST_CORNER, SOUTH_WEST_CORNER);
+            OTHER_USER_ID, NORTH_EAST_CORNER_NO_IDL, SOUTH_WEST_CORNER_NO_IDL);
     assertTrue(result.isEmpty());
   }
 
@@ -586,7 +691,7 @@ public final class DatastorePlaceGuideRepositoryTest {
     saveTestPlaceGuidesEntities(testPlaceGuidesList);
     List<PlaceGuide> result =
         placeGuideRepository.getCreatedPublicPlaceGuidesInMapArea(
-            OTHER_USER_ID, NORTH_EAST_CORNER, SOUTH_WEST_CORNER);
+            OTHER_USER_ID, NORTH_EAST_CORNER_NO_IDL, SOUTH_WEST_CORNER_NO_IDL);
     assertTrue(result.isEmpty());
   }
 
@@ -606,7 +711,7 @@ public final class DatastorePlaceGuideRepositoryTest {
     saveTestPlaceGuidesEntities(testPlaceGuidesList);
     List<PlaceGuide> result =
         placeGuideRepository.getCreatedPublicPlaceGuidesInMapArea(
-            CREATOR_C_ID, NORTH_EAST_CORNER, SOUTH_WEST_CORNER);
+            CREATOR_C_ID, NORTH_EAST_CORNER_NO_IDL, SOUTH_WEST_CORNER_NO_IDL);
     List<PlaceGuide> expected = Arrays.asList(testInnerPublicPlaceGuideC);
     assertTrue(compare(expected, result));
   }
@@ -615,7 +720,7 @@ public final class DatastorePlaceGuideRepositoryTest {
   public void getCreatedPrivatePlaceGuidesInMapArea_noExistingPlaceGuides_emptyResult() {
     List<PlaceGuide> result =
         placeGuideRepository.getCreatedPrivatePlaceGuidesInMapArea(
-            OTHER_USER_ID, NORTH_EAST_CORNER, SOUTH_WEST_CORNER);
+            OTHER_USER_ID, NORTH_EAST_CORNER_NO_IDL, SOUTH_WEST_CORNER_NO_IDL);
     assertTrue(result.isEmpty());
   }
 
@@ -634,7 +739,7 @@ public final class DatastorePlaceGuideRepositoryTest {
     saveTestPlaceGuidesEntities(testPlaceGuidesList);
     List<PlaceGuide> result =
         placeGuideRepository.getCreatedPrivatePlaceGuidesInMapArea(
-            OTHER_USER_ID, NORTH_EAST_CORNER, SOUTH_WEST_CORNER);
+            OTHER_USER_ID, NORTH_EAST_CORNER_NO_IDL, SOUTH_WEST_CORNER_NO_IDL);
     assertTrue(result.isEmpty());
   }
 
@@ -654,8 +759,191 @@ public final class DatastorePlaceGuideRepositoryTest {
     saveTestPlaceGuidesEntities(testPlaceGuidesList);
     List<PlaceGuide> result =
         placeGuideRepository.getCreatedPrivatePlaceGuidesInMapArea(
-            CREATOR_C_ID, NORTH_EAST_CORNER, SOUTH_WEST_CORNER);
+            CREATOR_C_ID, NORTH_EAST_CORNER_NO_IDL, SOUTH_WEST_CORNER_NO_IDL);
     List<PlaceGuide> expected = Arrays.asList(testInnerPrivatePlaceGuideC);
+    assertTrue(compare(expected, result));
+  }
+
+  @Test
+  public void getAllPublicPlaceGuidesInMapArea_noExistingPlaceGuides_areaWithIDL_emptyResult() {
+    List<PlaceGuide> result =
+        placeGuideRepository.getAllPublicPlaceGuidesInMapArea(
+            NORTH_EAST_CORNER_WITH_IDL, SOUTH_WEST_CORNER_WITH_IDL);
+    assertTrue(result.isEmpty());
+  }
+
+  @Test
+  public void
+      getAllPublicPlaceGuidesInMapArea_placeGuidesExist_areaWithIDL_resultHasInnerPublicPlaceGuides() {
+    List<PlaceGuide> testPlaceGuidesList =
+        Arrays.asList(
+            testInnerPrivatePlaceGuideE,
+            testInnerPublicPlaceGuideE,
+            testOuterPrivatePlaceGuideE,
+            testOuterPublicPlaceGuideE,
+            testInnerPrivatePlaceGuideF,
+            testInnerPublicPlaceGuideF,
+            testOuterPrivatePlaceGuideF,
+            testOuterPublicPlaceGuideF);
+    saveTestPlaceGuidesEntities(testPlaceGuidesList);
+    List<PlaceGuide> result =
+        placeGuideRepository.getAllPublicPlaceGuidesInMapArea(
+            NORTH_EAST_CORNER_WITH_IDL, SOUTH_WEST_CORNER_WITH_IDL);
+    List<PlaceGuide> expected =
+        Arrays.asList(testInnerPublicPlaceGuideE, testInnerPublicPlaceGuideF);
+    System.out.println("!!!Result is:");
+    for (PlaceGuide placeGuide : result) {
+      System.out.println(
+          placeGuide.getId() + " with coordinates: " + placeGuide.getCoordinate().toString());
+    }
+    assertTrue(compare(expected, result));
+  }
+
+  @Test
+  public void getCreatedPlaceGuidesInMapArea_noExistingPlaceGuides_areaWithIDL_emptyResult() {
+    List<PlaceGuide> result =
+        placeGuideRepository.getCreatedPlaceGuidesInMapArea(
+            OTHER_USER_ID, NORTH_EAST_CORNER_WITH_IDL, SOUTH_WEST_CORNER_WITH_IDL);
+    assertTrue(result.isEmpty());
+  }
+
+  @Test
+  public void getCreatedPlaceGuidesInMapArea_userDoesntOwnAnyPlaceGuides_areaWithIDL_emptyResult() {
+    List<PlaceGuide> testPlaceGuidesList =
+        Arrays.asList(
+            testInnerPrivatePlaceGuideE,
+            testInnerPublicPlaceGuideE,
+            testOuterPrivatePlaceGuideE,
+            testOuterPublicPlaceGuideE,
+            testInnerPrivatePlaceGuideF,
+            testInnerPublicPlaceGuideF,
+            testOuterPrivatePlaceGuideF,
+            testOuterPublicPlaceGuideF);
+    saveTestPlaceGuidesEntities(testPlaceGuidesList);
+    List<PlaceGuide> result =
+        placeGuideRepository.getCreatedPlaceGuidesInMapArea(
+            OTHER_USER_ID, NORTH_EAST_CORNER_WITH_IDL, SOUTH_WEST_CORNER_WITH_IDL);
+    assertTrue(result.isEmpty());
+  }
+
+  @Test
+  public void
+      getCreatedPlaceGuidesInMapArea_userOwnsPlaceGuides_areaWithIDL_resultHasInnerPlaceGuidesOfUser() {
+    List<PlaceGuide> testPlaceGuidesList =
+        Arrays.asList(
+            testInnerPrivatePlaceGuideE,
+            testInnerPublicPlaceGuideE,
+            testOuterPrivatePlaceGuideE,
+            testOuterPublicPlaceGuideE,
+            testInnerPrivatePlaceGuideF,
+            testInnerPublicPlaceGuideF,
+            testOuterPrivatePlaceGuideF,
+            testOuterPublicPlaceGuideF);
+    saveTestPlaceGuidesEntities(testPlaceGuidesList);
+    List<PlaceGuide> result =
+        placeGuideRepository.getCreatedPlaceGuidesInMapArea(
+            CREATOR_E_ID, NORTH_EAST_CORNER_WITH_IDL, SOUTH_WEST_CORNER_WITH_IDL);
+    List<PlaceGuide> expected =
+        Arrays.asList(testInnerPublicPlaceGuideE, testInnerPrivatePlaceGuideE);
+    assertTrue(compare(expected, result));
+  }
+
+  @Test
+  public void getCreatedPublicPlaceGuidesInMapArea_noExistingPlaceGuides_areaWithIDL_emptyResult() {
+    List<PlaceGuide> result =
+        placeGuideRepository.getCreatedPublicPlaceGuidesInMapArea(
+            OTHER_USER_ID, NORTH_EAST_CORNER_WITH_IDL, SOUTH_WEST_CORNER_WITH_IDL);
+    assertTrue(result.isEmpty());
+  }
+
+  @Test
+  public void
+      getCreatedPublicPlaceGuidesInMapArea_userDoesntOwnAnyPlaceGuides_areaWithIDL_emptyResult() {
+    List<PlaceGuide> testPlaceGuidesList =
+        Arrays.asList(
+            testInnerPrivatePlaceGuideE,
+            testInnerPublicPlaceGuideE,
+            testOuterPrivatePlaceGuideE,
+            testOuterPublicPlaceGuideE,
+            testInnerPrivatePlaceGuideF,
+            testInnerPublicPlaceGuideF,
+            testOuterPrivatePlaceGuideF,
+            testOuterPublicPlaceGuideF);
+    saveTestPlaceGuidesEntities(testPlaceGuidesList);
+    List<PlaceGuide> result =
+        placeGuideRepository.getCreatedPublicPlaceGuidesInMapArea(
+            OTHER_USER_ID, NORTH_EAST_CORNER_WITH_IDL, SOUTH_WEST_CORNER_WITH_IDL);
+    assertTrue(result.isEmpty());
+  }
+
+  @Test
+  public void
+      getCreatedPublicPlaceGuidesInMapArea_userOwnsPlaceGuides_areaWithIDL_resultHasInnerPublicPlaceGuidesOfUser() {
+    List<PlaceGuide> testPlaceGuidesList =
+        Arrays.asList(
+            testInnerPrivatePlaceGuideE,
+            testInnerPublicPlaceGuideE,
+            testOuterPrivatePlaceGuideE,
+            testOuterPublicPlaceGuideE,
+            testInnerPrivatePlaceGuideF,
+            testInnerPublicPlaceGuideF,
+            testOuterPrivatePlaceGuideF,
+            testOuterPublicPlaceGuideF);
+    saveTestPlaceGuidesEntities(testPlaceGuidesList);
+    List<PlaceGuide> result =
+        placeGuideRepository.getCreatedPublicPlaceGuidesInMapArea(
+            CREATOR_E_ID, NORTH_EAST_CORNER_WITH_IDL, SOUTH_WEST_CORNER_WITH_IDL);
+    List<PlaceGuide> expected = Arrays.asList(testInnerPublicPlaceGuideE);
+    assertTrue(compare(expected, result));
+  }
+
+  @Test
+  public void
+      getCreatedPrivatePlaceGuidesInMapArea_noExistingPlaceGuides_areaWithIDL_emptyResult() {
+    List<PlaceGuide> result =
+        placeGuideRepository.getCreatedPrivatePlaceGuidesInMapArea(
+            OTHER_USER_ID, NORTH_EAST_CORNER_WITH_IDL, SOUTH_WEST_CORNER_WITH_IDL);
+    assertTrue(result.isEmpty());
+  }
+
+  @Test
+  public void
+      getCreatedPrivatePlaceGuidesInMapArea_userDoesntOwnAnyPlaceGuides_areaWithIDL_emptyResult() {
+    List<PlaceGuide> testPlaceGuidesList =
+        Arrays.asList(
+            testInnerPrivatePlaceGuideE,
+            testInnerPublicPlaceGuideE,
+            testOuterPrivatePlaceGuideE,
+            testOuterPublicPlaceGuideE,
+            testInnerPrivatePlaceGuideF,
+            testInnerPublicPlaceGuideF,
+            testOuterPrivatePlaceGuideF,
+            testOuterPublicPlaceGuideF);
+    saveTestPlaceGuidesEntities(testPlaceGuidesList);
+    List<PlaceGuide> result =
+        placeGuideRepository.getCreatedPrivatePlaceGuidesInMapArea(
+            OTHER_USER_ID, NORTH_EAST_CORNER_WITH_IDL, SOUTH_WEST_CORNER_WITH_IDL);
+    assertTrue(result.isEmpty());
+  }
+
+  @Test
+  public void
+      getCreatedPrivatePlaceGuidesInMapArea_userOwnsPlaceGuides_areaWithIDL_resultHasInnerPublicPlaceGuidesOfUser() {
+    List<PlaceGuide> testPlaceGuidesList =
+        Arrays.asList(
+            testInnerPrivatePlaceGuideE,
+            testInnerPublicPlaceGuideE,
+            testOuterPrivatePlaceGuideE,
+            testOuterPublicPlaceGuideE,
+            testInnerPrivatePlaceGuideF,
+            testInnerPublicPlaceGuideF,
+            testOuterPrivatePlaceGuideF,
+            testOuterPublicPlaceGuideF);
+    saveTestPlaceGuidesEntities(testPlaceGuidesList);
+    List<PlaceGuide> result =
+        placeGuideRepository.getCreatedPrivatePlaceGuidesInMapArea(
+            CREATOR_E_ID, NORTH_EAST_CORNER_WITH_IDL, SOUTH_WEST_CORNER_WITH_IDL);
+    List<PlaceGuide> expected = Arrays.asList(testInnerPrivatePlaceGuideE);
     assertTrue(compare(expected, result));
   }
 
