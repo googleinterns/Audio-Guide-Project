@@ -1,0 +1,151 @@
+/**
+ * This class is responsible of the representation of one single
+ * placeGuide on map.
+ */
+class PlaceGuideOnMap {
+  constructor(id, name, position, place, creator, description, placeType) {
+    this._id = id;
+    this._infoWindowClosed = true;
+    this._infoWindow = PlaceGuideOnMap
+        .getInfoWindow(name, position, place, creator, description);
+    this._marker = PlaceGuideOnMap.getMarker(placeType, name, position);
+    this._highlighted = false;
+    this.closeInfoWindowOnMapClick();
+    this.toggleInfoWindowOnMarkerClick();
+    this.highlightOnMarkerDoubleClick();
+    this.unhighlightOnMapClick();
+    this.unhighlightOnMarkerClick();
+  }
+
+  get marker() {
+    return this._marker;
+  }
+
+  get id() {
+    return this._id;
+  }
+
+  static getMarker(placeType, name, position) {
+    const markerIcon = PlaceGuideOnMap.getMarkerIcon(placeType);
+    const marker = new google.maps.Marker({
+      position: position,
+      title: name,
+      icon: markerIcon,
+      map: map,
+    });
+    return marker;
+  }
+
+  static getMarkerIcon(placeType) {
+    let markerIcon;
+    if (placeType.icon != null) {
+      markerIcon = this._placeType.icon;
+    } else {
+      markerIcon = getColoredMarkerIcon(placeType.iconColor);
+    }
+    return markerIcon;
+  }
+
+  static getInfoWindow(name, position, place, creator, description) {
+    return new google.maps.InfoWindow({
+      content: PlaceGuideOnMap
+          .getInfoWindowContent(name, position, place, creator, description),
+      maxWidth: 200,
+    });
+  }
+
+  static getInfoWindowContent(name, position, place, creator, description) {
+    let placeName;
+    if (place != null) {
+      placeName = place.name;
+    } else {
+      placeName = position.toString();
+    }
+    let creatorName = creator.name;
+    if (creatorName == undefined) {
+      creatorName = creator.email;
+    }
+    const content = '<h3>' + name + '</h3>' +
+        '<h4> Created by: ' + creatorName + '</h4>' +
+        '<h4> Place: ' + placeName + '</h4>' +
+        '<p>' + description + '</p>';
+    return content;
+  }
+
+  isHighlighted() {
+    return this._highlighted;
+  }
+
+  highlight() {
+    this._highlighted = true;
+    this._marker.setAnimation(google.maps.Animation.BOUNCE);
+    this.openInfoWindow();
+  }
+
+  unhighlight() {
+    this._highlighted = false;
+    this._marker.setAnimation(null);
+    this.closeInfoWindow();
+  }
+
+  closeInfoWindow() {
+    this._infoWindow.close();
+    this._infoWindowClosed = true;
+  }
+
+  openInfoWindow() {
+    this._infoWindow.open(map, this._marker);
+    this._infoWindowClosed = false;
+  }
+
+  remove() {
+    this._marker.setMap(null);
+  }
+
+  highlightOnMarkerDoubleClick() {
+    const thisPlaceGuideOnMap = this;
+    this._marker.addListener('dblclick', () => {
+      if (!thisPlaceGuideOnMap.isHighlighted()) {
+        placeGuideManager.highlightPlaceGuide(thisPlaceGuideOnMap.id);
+      }
+    });
+  }
+
+  toggleInfoWindowOnMarkerClick() {
+    const thisPlaceGuideOnMap = this;
+    this._marker.addListener('click', () => {
+      if (thisPlaceGuideOnMap._infoWindowClosed) {
+        thisPlaceGuideOnMap.openInfoWindow();
+      } else {
+        thisPlaceGuideOnMap.closeInfoWindow();
+      }
+    });
+  }
+
+  unhighlightOnMarkerClick() {
+    const thisPlaceGuideOnMap = this;
+    this._marker.addListener('click', () => {
+      if (thisPlaceGuideOnMap.isHighlighted()) {
+        placeGuideManager.unhighlightPlaceGuide();
+      }
+    });
+  }
+
+  closeInfoWindowOnMapClick() {
+    const thisPlaceGuideOnMap = this;
+    map.addListener('click', function(mapsMouseEvent) {
+      if (!thisPlaceGuideOnMap._infoWindowClosed) {
+        thisPlaceGuideOnMap.closeInfoWindow();
+      }
+    });
+  }
+
+  unhighlightOnMapClick() {
+    const thisPlaceGuideOnMap = this;
+    map.addListener('click', function(mapsMouseEvent) {
+      if (thisPlaceGuideOnMap.isHighlighted()) {
+        placeGuideManager.unhighlightPlaceGuide();
+      }
+    });
+  }
+}

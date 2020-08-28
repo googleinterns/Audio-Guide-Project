@@ -30,16 +30,24 @@ class Geolocator {
     this._foundLocation = false;
     this._watchPositionId = -1;
     this._currentLocation =
-        Place.constructPlaceBasedOnCoordinates(map, 0, 0, Geolocator.MY_LOCATION_TITLE, PlaceType.CURRENT_LOCATION, true);
+        Place.constructPlaceBasedOnCoordinates(map,
+            0,
+            0,
+            Geolocator.MY_LOCATION_TITLE,
+            PlaceType.CURRENT_LOCATION,
+            true);
     this._currentLocation.visible = false;
     this._geolocationControlDiv =
         this.createControlDiv(Geolocator.ENABLE_GEOLOCATION_TITLE,
-            Geolocator.DISABLED_GEOLOCATION_IMG_SRC, Geolocator.GEOLOCATION_IMG_ID);
-    this._map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(this._geolocationControlDiv);
+            Geolocator.DISABLED_GEOLOCATION_IMG_SRC,
+            Geolocator.GEOLOCATION_IMG_ID);
+    this._map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(
+        this._geolocationControlDiv);
     this._myLocationControlDiv =
         this.createControlDiv(Geolocator.GO_TO_MY_LOCATION_TITLE,
             "./img/my_location.svg", Geolocator.GO_TO_MY_LOCATION_IMG_ID);
-    this._map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(this._myLocationControlDiv);
+    this._map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(
+        this._myLocationControlDiv);
   }
 
   static convertCurrentLocationToLatLng(location) {
@@ -79,7 +87,8 @@ class Geolocator {
       this._watchPositionId = navigator.geolocation.watchPosition(
           position => {
             this._foundLocation = true;
-            this._currentLocation.position = Geolocator.convertCurrentLocationToLatLng(position);
+            this._currentLocation.position =
+                Geolocator.convertCurrentLocationToLatLng(position);
             this._currentLocation.visible = true;
           },
           error => {

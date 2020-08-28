@@ -15,21 +15,19 @@
 package com.google.sps.user.repository.impl;
 
 import com.google.appengine.api.datastore.*;
-import com.google.sps.user.User;
-import com.google.sps.user.repository.UserRepository;
-import com.google.sps.placeGuide.repository.impl.DatastorePlaceGuideRepository;
+import com.google.sps.data.RepositoryType;
 import com.google.sps.placeGuide.repository.PlaceGuideRepository;
 import com.google.sps.placeGuide.repository.PlaceGuideRepositoryFactory;
-import com.google.sps.data.RepositoryType;
-import org.jetbrains.annotations.Nullable;
-import java.util.Set;
+import com.google.sps.placeGuide.repository.impl.DatastorePlaceGuideRepository;
+import com.google.sps.user.User;
+import com.google.sps.user.repository.UserRepository;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.ArrayList;
+import java.util.Set;
+import org.jetbrains.annotations.Nullable;
 
-/**
- * Handles the storage of comments using the Datastore API.
- */
+/** Handles the storage of comments using the Datastore API. */
 public class DatastoreUserRepository implements UserRepository {
   public static final String ENTITY_KIND = "User";
   public static final String NAME_PROPERTY = "name";
@@ -49,7 +47,8 @@ public class DatastoreUserRepository implements UserRepository {
     Entity userEntity = new Entity(ENTITY_KIND, user.getId());
     userEntity.setProperty(NAME_PROPERTY, user.getName());
     userEntity.setProperty(EMAIL_PROPERTY, user.getEmail());
-    userEntity.setProperty(BOOKMARKED_PLACE_GUIDES_IDS_PROPERTY, user.getBookmarkedPlaceGuidesIds());
+    userEntity.setProperty(
+        BOOKMARKED_PLACE_GUIDES_IDS_PROPERTY, user.getBookmarkedPlaceGuidesIds());
     userEntity.setProperty(PUBLIC_PORTFOLIO_PROPERTY, user.portfolioIsPublic());
     userEntity.setProperty(SELF_INTRODUCTION_PROPERTY, user.getSelfIntroduction());
     userEntity.setProperty(IMG_KEY_PROPERTY, user.getImgKey());
@@ -76,7 +75,7 @@ public class DatastoreUserRepository implements UserRepository {
     String id = (String) userEntity.getKey().getName();
     String name = (String) userEntity.getProperty(NAME_PROPERTY);
     String email = (String) userEntity.getProperty(EMAIL_PROPERTY);
-    List<Long> bookmarkedPlaceGuidesIdsList = 
+    List<Long> bookmarkedPlaceGuidesIdsList =
         (ArrayList) userEntity.getProperty(BOOKMARKED_PLACE_GUIDES_IDS_PROPERTY);
     Set<Long> bookmarkedPlaceGuidesIds;
     if (bookmarkedPlaceGuidesIdsList == null) {
@@ -89,26 +88,26 @@ public class DatastoreUserRepository implements UserRepository {
     String imgKey = (String) userEntity.getProperty(IMG_KEY_PROPERTY);
     User.Builder newUserBuilder =
         new User.Builder(id, email)
-        .setBookmarkedPlaceGuidesIds(bookmarkedPlaceGuidesIds)
-        .setName(name)
-        .addSelfIntroduction(selfIntroduction)
-        .setPublicPortfolio(publicPortfolio)
-        .addImgKey(imgKey);
+            .setBookmarkedPlaceGuidesIds(bookmarkedPlaceGuidesIds)
+            .setName(name)
+            .addSelfIntroduction(selfIntroduction)
+            .setPublicPortfolio(publicPortfolio)
+            .addImgKey(imgKey);
     return newUserBuilder.build();
   }
 
   @Override
   public boolean existingUser(String id) {
-      return getUser(id) != null;
+    return getUser(id) != null;
   }
 
   @Override
   public void bookmarkPlaceGuide(long placeGuideId, String userId) {
-    
-    PlaceGuideRepository placeGuideRepository = 
+
+    PlaceGuideRepository placeGuideRepository =
         PlaceGuideRepositoryFactory.getPlaceGuideRepository(RepositoryType.DATASTORE);
     // Check if the corresponding placeGuide is in the database.
-    Key placeGuideEntityKey = 
+    Key placeGuideEntityKey =
         KeyFactory.createKey(DatastorePlaceGuideRepository.ENTITY_KIND, placeGuideId);
     if (placeGuideRepository.placeGuideExists(placeGuideEntityKey)) {
       toggleBookmarkedPlaceGuide(placeGuideId, userId);
@@ -123,22 +122,21 @@ public class DatastoreUserRepository implements UserRepository {
   }
 
   private void toggleBookmarkedPlaceGuide(long placeGuideId, String userId) {
-      User user = getUser(userId);
-      if (user != null) {
-        Set<Long> bookmarkedIds = user.getBookmarkedPlaceGuidesIds();
-        Set<Long> bookmarkedIdsCopy = new HashSet<>(bookmarkedIds);
-        if (bookmarkedIdsCopy.contains(placeGuideId)) {
-          bookmarkedIdsCopy.remove(placeGuideId);
-        } else {
-          bookmarkedIdsCopy.add(placeGuideId);
-        }
+    User user = getUser(userId);
+    if (user != null) {
+      Set<Long> bookmarkedIds = user.getBookmarkedPlaceGuidesIds();
+      Set<Long> bookmarkedIdsCopy = new HashSet<>(bookmarkedIds);
+      if (bookmarkedIdsCopy.contains(placeGuideId)) {
+        bookmarkedIdsCopy.remove(placeGuideId);
+      } else {
+        bookmarkedIdsCopy.add(placeGuideId);
+      }
 
       // Update and save user with the updated {@code bookmarkedPlaceGuides}.
-        User updatedUser = 
-            user.toBuilder().setBookmarkedPlaceGuidesIds(bookmarkedIdsCopy).build();
-        saveUser(updatedUser);
-      } else {
-        throw new IllegalStateException("Cannot perform operation on non-existing user!");
-      }
+      User updatedUser = user.toBuilder().setBookmarkedPlaceGuidesIds(bookmarkedIdsCopy).build();
+      saveUser(updatedUser);
+    } else {
+      throw new IllegalStateException("Cannot perform operation on non-existing user!");
+    }
   }
 }
