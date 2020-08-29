@@ -14,6 +14,7 @@ class PlaceGuideManager {
   }
 
   update(bounds, zoom, showAll) {
+    console.log("UPDATING PLACEGUIDES IN MANAGER");
     this._placeGuideRepository.updatePlaceGuides(bounds, zoom)
         .then((response) => {
           const placeGuides = this._placeGuideRepository.placeGuides;

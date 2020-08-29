@@ -101,7 +101,7 @@ class PlaceGuideRepository {
       // We display all of them at once.
       var url = new URL("/place-guide-data", document.URL);
       url.searchParams.append("placeGuideType", this._queryType);
-      if (!this._queryType == PlaceGuideRepository.QueryType.BOOKMARKED) {
+      if (this._queryType != PlaceGuideRepository.QueryType.BOOKMARKED) {
         url.searchParams.append("regionCorners", bounds.toUrlValue());
       }
       var thisRepository = this;

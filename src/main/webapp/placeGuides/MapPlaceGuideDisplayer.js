@@ -17,19 +17,23 @@ class MapPlaceGuideDisplayer {
     let maxLat = -90;
     let minLng = 180;
     let maxLng = -180;
+    var noPlaceGuides = 0;
     for (const placeGuideId in this._placeGuidesOnMap) {
       if (this._placeGuidesOnMap.hasOwnProperty(placeGuideId)) {
-        var position = this._placeGuidesOnMap[placeGuideId];
+        var position = this._placeGuidesOnMap[placeGuideId].marker.getPosition();
         minLat = Math.min(position.lat(), minLat);
         maxLat = Math.max(position.lat(), maxLat);
         minLng = Math.min(position.lng(), minLng);
-        maxLng = Math.min(position.lng(), maxLng);
+        maxLng = Math.max(position.lng(), maxLng);
+        noPlaceGuides = noPlaceGuides + 1;
       }
     }
-    var southWestCorner = new google.maps.LatLng(minLat, minLng);
-    var northEastCorner = new google.maps.LatLng(maxLat, maxLng);
-    map.setZoom(15);
-    map.fitBounds(southWestCorner, northEastCorner);
+    if (noPlaceGuides > 0) {
+        var southWestCorner = new google.maps.LatLng(minLat, minLng);
+        var northEastCorner = new google.maps.LatLng(maxLat, maxLng);
+        map.setZoom(15);
+        map.fitBounds(new google.maps.LatLngBounds(southWestCorner, northEastCorner), 10);
+    }
   }
 
   updateMarkerClusters() {
