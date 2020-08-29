@@ -7,6 +7,10 @@ function setUpPortfolioForm() {
   fillPortfolioFormWithUserData();
 }
 
+function activatePreviewFeature() {
+  setSrcToElementOnChangeEvent("imgKey", "imagePreview", true);
+}
+
 /**
  * Gets the currently logged in user's data from the database
  * and fill's the form inputs with this data.
@@ -22,22 +26,9 @@ function fillPortfolioFormWithUserData() {
       document.getElementById('publicPortfolio').value = 'private';
     }
     if (user.imgKey != undefined) {
-      const img = createImgElement(user.imgKey);
-      document.getElementById('portfolioForm').appendChild(img);
+      setBlobKeySrcToElement(user.imgKey, "imagePreview", true);
     }
   });
-}
-
-/**
- * Creates an img element with the given blobKey,
- * relying on the blobstore API for serving the blob.
- */
-function createImgElement(srcBlobKey) {
-  const url = new URL('/serve-blob', document.URL);
-  url.searchParams.append('blob-key', srcBlobKey);
-  const img = document.createElement('img');
-  img.src = url;
-  return img;
 }
 
 /**
