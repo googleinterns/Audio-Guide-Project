@@ -4,6 +4,8 @@
 class MapPlaceGuideDisplayer {
   constructor() {
     this._placeGuidesOnMap = {};
+    this._markerClusterer = new MarkerClusterer(map, [],
+        {imagePath: './img/m'});
   }
 
   update(placeGuides) {
@@ -13,17 +15,17 @@ class MapPlaceGuideDisplayer {
   }
 
   updateMarkerClusters() {
-    if (this._markerClusterer != undefined) {
-      this._markerClusterer.clearMarkers();
-    }
+    // if (this._markerClusterer != undefined) {
+    //   this._markerClusterer.clearMarkers();
+    // }
     const markers = [];
     for (const placeGuideId in this._placeGuidesOnMap) {
       if (this._placeGuidesOnMap.hasOwnProperty(placeGuideId)) {
         markers.push(this._placeGuidesOnMap[placeGuideId].marker);
       }
     }
-    this._markerClusterer = new MarkerClusterer(map, markers,
-        {imagePath: './img/m'});
+    // this._markerClusterer = new MarkerClusterer(map, markers,
+    //     {imagePath: './img/m'});
   }
 
   removePreviousPlaceGuidesFromMap(placeGuides) {
@@ -67,6 +69,7 @@ class MapPlaceGuideDisplayer {
   }
 
   remove(placeGuideId) {
+    this._markerClusterer.removeMarker(this._placeGuidesOnMap[placeGuideId].marker)
     this._placeGuidesOnMap[placeGuideId].remove();
     delete this._placeGuidesOnMap[placeGuideId];
   }
