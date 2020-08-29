@@ -7,7 +7,7 @@
     <script id = "maps-api" async defer></script>
     <link rel = "stylesheet" href = "style.css">
 </head>
-<body onload = "setApiKeyAndMapsCallback()">
+<body onload= "setApiKeyAndMapsCallback()">
     <header> 
         <ul>
             <li><a href = "index.html">Home</a></li>
@@ -20,13 +20,20 @@
     <input id = "search-box" type = "text" placeholder = "Search for a new place!"/>
     <div id = "map"></div>
 
-    <script src = "./maps/geolocation.js"></script>
-    <script src = "./maps/searchbox.js"></script>
-    <script src = "./maps/place.js"></script>
-    <script src = "./maps/placeGuide.js"></script>
-    <script src = "./maps/show_places.js"></script>
+    <script src = "./user/userAuthentication.js"></script>
+    <script src = "./maps/Geolocator.js"></script>
+    <script src = "./maps/Searchbox.js"></script>
+    <script src = "./maps/Place.js"></script>
     <script src="https://unpkg.com/@google/markerclustererplus@4.0.1/dist/markerclustererplus.min.js"></script>
-    <script src = "./maps/functionalities.js"></script>
-    <script src = "./maps/discover_createMap.js"></script>
+    <script src = "./maps/MapWidget.js"></script>
+    <script src = "./placeGuides/Location.js"></script>
+    <script src = "./placeGuides/ListPlaceGuideDisplayer.js"></script>
+    <script src = "./placeGuides/MapPlaceGuideDisplayer.js"></script>
+    <script src = "./placeGuides/PlaceGuideOnMap.js"></script>
+    <script src = "./placeGuides/PlaceGuideManager.js"></script>
+    <script src = "./placeGuides/PlaceGuideRepository.js"></script>
+    <script src = "./placeGuides/PlaceGuide.js"></script>
+    <script src = "./user/User.js"></script>
+    <script src = "./pages/discover_initPage.js"></script>
 </body>
 </html>

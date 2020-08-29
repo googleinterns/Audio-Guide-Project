@@ -1,0 +1,23 @@
+indexes:
+
+- kind: PlaceGuide
+  ancestor: no
+  properties:
+  - name: isPublic
+  - name: coordinate
+    direction: asc
+
+- kind: PlaceGuide
+  ancestor: no
+  properties:
+  - name: creatorId
+  - name: coordinate
+    direction: asc
+
+- kind: PlaceGuide
+  ancestor: no
+  properties:
+  - name: isPublic
+  - name: creatorId
+  - name: coordinate
+    direction: asc
