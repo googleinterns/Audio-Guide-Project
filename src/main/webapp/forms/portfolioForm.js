@@ -2,7 +2,8 @@
  * Handles setting up the portfolio form whenever the page is loaded.
  */
 function setUpPortfolioForm() {
-  addBlobstoreUploadUrlToForm('PORTFOLIO_FORM', 'portfolioForm');
+  addBlobstoreUploadUrlToForm("PORTFOLIO_FORM", "portfolioForm");
+  activatePreviewFeature();
   fillPortfolioFormWithUserData();
 }
 
