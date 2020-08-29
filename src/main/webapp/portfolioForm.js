@@ -3,7 +3,12 @@
  */
 function setUpPortfolioForm() {
   addBlobstoreUploadUrlToForm("PORTFOLIO_FORM", "portfolioForm");
+  activatePreviewFeature();
   fillPortfolioFormWithUserData();
+}
+
+function activatePreviewFeature() {
+  setSrcToElementOnChangeEvent("imgKey", "imagePreview", true);
 }
 
 /**
@@ -20,22 +25,9 @@ function fillPortfolioFormWithUserData() {
       document.getElementById("publicPortfolio").value = "private";
     }
     if (user.imgKey != undefined) {
-      var img = createImgElement(user.imgKey);
-      document.getElementById("portfolioForm").appendChild(img);
+      setBlobKeySrcToElement(user.imgKey, "imagePreview", true);
     }
   });
-}
-
-/**
- * Creates an img element with the given blobKey,
- * relying on the blobstore API for serving the blob.
- */
-function createImgElement(srcBlobKey) {
-  var url = new URL("/serve-blob", document.URL);
-  url.searchParams.append('blob-key', srcBlobKey);
-  var img = document.createElement("img");
-  img.src = url;
-  return img;
 }
 
 /**
