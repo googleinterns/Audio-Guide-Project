@@ -29,10 +29,10 @@ class MapPlaceGuideDisplayer {
       }
     }
     if (noPlaceGuides > 0) {
-        var southWestCorner = new google.maps.LatLng(minLat, minLng);
-        var northEastCorner = new google.maps.LatLng(maxLat, maxLng);
-        map.setZoom(15);
-        map.fitBounds(new google.maps.LatLngBounds(southWestCorner, northEastCorner), 10);
+      var southWestCorner = new google.maps.LatLng(minLat, minLng);
+      var northEastCorner = new google.maps.LatLng(maxLat, maxLng);
+      map.setZoom(15);
+      map.fitBounds(new google.maps.LatLngBounds(southWestCorner, northEastCorner), 10);
     }
   }
 
