@@ -18,12 +18,12 @@ class MapPlaceGuideDisplayer {
     // if (this._markerClusterer != undefined) {
     //   this._markerClusterer.clearMarkers();
     // }
-    const markers = [];
-    for (const placeGuideId in this._placeGuidesOnMap) {
-      if (this._placeGuidesOnMap.hasOwnProperty(placeGuideId)) {
-        markers.push(this._placeGuidesOnMap[placeGuideId].marker);
-      }
-    }
+    // const markers = [];
+    // for (const placeGuideId in this._placeGuidesOnMap) {
+    //   if (this._placeGuidesOnMap.hasOwnProperty(placeGuideId)) {
+    //     markers.push(this._placeGuidesOnMap[placeGuideId].marker);
+    //   }
+    // }
     // this._markerClusterer = new MarkerClusterer(map, markers,
     //     {imagePath: './img/m'});
   }
@@ -47,6 +47,8 @@ class MapPlaceGuideDisplayer {
           this._placeGuidesOnMap[placeGuideId] =
               this.constructPlaceGuideOnMapFromPlaceGuide(
                   placeGuides[placeGuideId]);
+          this._markerClusterer
+            .add(this._placeGuidesOnMap[placeGuideId].marker);
         }
       }
     }
