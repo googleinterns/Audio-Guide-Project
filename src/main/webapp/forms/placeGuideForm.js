@@ -38,14 +38,14 @@ function setSrcToElementOnChangeEvent(elementId, previewId, displayBlock) {
   });
 }
 
-// Just a test by fetching actual place guides' data from database
+// Just a test by fetching actual place guides' data from database 
 // to see if image and audio previewing also works with files from blobstore.
 function testExistingPlaceGuide() {
-  getFetchedList().then((placeGuides) => {
-    if (placeGuides === undefined || placeGuides.length == 0) {
-      console.log('place guide does not exist yet.');
+  getFetchedList().then(placeGuideCreatorPairs => {
+    if (placeGuideCreatorPairs === undefined || placeGuideCreatorPairs.length == 0) {
+      console.log("place guide does not exist yet.");
     } else {
-      fillFormWithPlaceGuideData(placeGuides[0]);
+      fillFormWithPlaceGuideData(placeGuideCreatorPairs[0].placeGuide); 
     }
   });
 }
@@ -74,6 +74,12 @@ function updateLocation(position, placeId, placeName) {
       'latitude').setAttribute('value', position.lat());
   document.getElementById(
       'longitude').setAttribute('value', position.lng());
+}
+
+// For testing.
+function testGivenCoordinate() {
+  document.getElementById("latitude").setAttribute("value", 3.14);
+  document.getElementById("longitude").setAttribute("value", 2.56);
 }
 
 function fillFormWithPlaceGuideData(placeGuide) {
@@ -109,15 +115,4 @@ function fillFormWithPlaceGuideData(placeGuide) {
   }
   setFormInputValue(document.getElementById('placeName'),
       DUMMY_DATA_FOR_PLACE_NAME);
-}
-
-function setBlobKeySrcToElement(inputId, blobKey, previewId, displayBlock) {
-  const input = document.getElementById(inputId);
-  const preview = document.getElementById(previewId);
-  if (displayBlock) {
-    preview.style.display = 'block';
-  }
-  const src = new URL('/serve-blob', document.URL);
-  src.searchParams.append('blob-key', blobKey);
-  preview.setAttribute('src', src);
 }
