@@ -52,7 +52,6 @@ function setSrcToElementOnChangeEvent(elementId, previewId, displayBlock) {
   const preview = document.getElementById(previewId);
   element.addEventListener("change", function() {
     const file = this.files[0];
-    console.log(this.files);
 
     if (file) {
       const reader = new FileReader();

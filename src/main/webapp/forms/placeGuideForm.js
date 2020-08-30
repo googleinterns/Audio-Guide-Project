@@ -76,12 +76,6 @@ function updateLocation(position, placeId, placeName) {
       'longitude').setAttribute('value', position.lng());
 }
 
-// For testing.
-function testGivenCoordinate() {
-  document.getElementById("latitude").setAttribute("value", 3.14);
-  document.getElementById("longitude").setAttribute("value", 2.56);
-}
-
 function fillFormWithPlaceGuideData(placeGuide) {
   // Set required attribute to false since there must be a previous audio key
   // from the previous place guide data.
