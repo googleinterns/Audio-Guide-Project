@@ -3,15 +3,12 @@
 <head>
     <meta charset = "UTF-8">
     <title>Create Place Guide</title>
+    <script src = "./maps/api_key.js"></script>
+    <script id = "maps-api" async defer></script>
     <link rel = "stylesheet" href = "style.css">
 </head>
-<<<<<<< HEAD
-<body onload = "setUpCreatePlaceGuidePage()">
-    <header> 
-=======
 <body onload = "setApiKeyAndMapsCallback()">
-     <header> 
->>>>>>> master
+    <header> 
         <ul>
             <li><a href = "index.html">Home</a></li>
             <li><a href = "discover.html">Discover</a></li>
@@ -19,11 +16,6 @@
             <li><a href = "createPlaceGuide.html">Create PlaceGuide</a></li>
         </ul>
     </header>
-<<<<<<< HEAD
-
-=======
-    
->>>>>>> master
     <div id="createPlaceGuide">
         <form method = "POST" id = "createPlaceGuideForm" enctype = "multipart/form-data">
             <input type="hidden" id="id" name="id">
@@ -81,12 +73,6 @@
     <input id = "search-box" type = "text" placeholder = "Search for a new place!"/>
     <div id = "map"></div>
 
-<<<<<<< HEAD
-    <script src = "setupCreatePlaceGuide.js"></script>
-    <script src = "createPlaceGuideForm.js"></script>
-    <script src = "setUpFormBlobstore.js"></script>
-    <script src = "user.js"></script>
-=======
     <script src = "./maps/Geolocator.js"></script>
     <script src = "./maps/Searchbox.js"></script>
     <script src = "./maps/Place.js"></script>
@@ -106,6 +92,5 @@
     <script src = "./placeGuides/PlaceGuide.js"></script>
     <script src = "./user/User.js"></script>
     <script src = "./pages/createPlaceGuide_initPage.js"></script>
->>>>>>> master
 </body>
 </html>
