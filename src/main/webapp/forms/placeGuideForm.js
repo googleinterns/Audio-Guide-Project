@@ -16,28 +16,6 @@ function activatePreviewFeature() {
       'audioKey', 'audioPlayer', false);
 }
 
-function setSrcToElementOnChangeEvent(elementId, previewId, displayBlock) {
-  const element = document.getElementById(elementId);
-  const preview = document.getElementById(previewId);
-  element.addEventListener('change', function() {
-    const file = this.files[0];
-    console.log(this.files);
-
-    if (file) {
-      const reader = new FileReader();
-      if (displayBlock) {
-        preview.style.display = 'block';
-      }
-
-      reader.addEventListener('load', function() {
-        preview.setAttribute('src', this.result);
-      });
-
-      reader.readAsDataURL(file);
-    }
-  });
-}
-
 // Just a test by fetching actual place guides' data from database 
 // to see if image and audio previewing also works with files from blobstore.
 function testExistingPlaceGuide() {
