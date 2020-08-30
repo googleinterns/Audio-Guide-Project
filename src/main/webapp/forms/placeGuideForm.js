@@ -45,7 +45,7 @@ function testExistingPlaceGuide() {
     if (placeGuideCreatorPairs === undefined || placeGuideCreatorPairs.length == 0) {
       console.log("place guide does not exist yet.");
     } else {
-      fillFormWithPlaceGuideData(placeGuideCreatorPairs[0].placeGuide);
+      fillFormWithPlaceGuideData(placeGuideCreatorPairs[0].placeGuide); 
     }
   });
 }
@@ -90,7 +90,7 @@ function fillFormWithPlaceGuideData(placeGuide) {
   setFormInputValue(document.getElementById('id'), placeGuide.id);
   setFormInputValue(document.getElementById('name'), placeGuide.name);
   setBlobKeySrcToElement(
-      placeGuide.audioKey, 'audioPlayer', false);
+      'audioKey', placeGuide.audioKey, 'audioPlayer', false);
   if (placeGuide.isPublic) {
     document.getElementById('isPublic').value = 'public';
   } else {
@@ -110,7 +110,7 @@ function fillFormWithPlaceGuideData(placeGuide) {
       placeGuide.description);
   if (placeGuide.imageKey != undefined) {
     setBlobKeySrcToElement(
-        placeGuide.imageKey,
+        'imageKey', placeGuide.imageKey,
         'imagePreview', true);
   }
   setFormInputValue(document.getElementById('placeName'),
