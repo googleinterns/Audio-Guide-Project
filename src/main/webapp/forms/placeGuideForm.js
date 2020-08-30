@@ -90,7 +90,7 @@ function fillFormWithPlaceGuideData(placeGuide) {
   setFormInputValue(document.getElementById('id'), placeGuide.id);
   setFormInputValue(document.getElementById('name'), placeGuide.name);
   setBlobKeySrcToElement(
-      'audioKey', placeGuide.audioKey, 'audioPlayer', false);
+      placeGuide.audioKey, 'audioPlayer', false);
   if (placeGuide.isPublic) {
     document.getElementById('isPublic').value = 'public';
   } else {
@@ -110,7 +110,7 @@ function fillFormWithPlaceGuideData(placeGuide) {
       placeGuide.description);
   if (placeGuide.imageKey != undefined) {
     setBlobKeySrcToElement(
-        'imageKey', placeGuide.imageKey,
+        placeGuide.imageKey,
         'imagePreview', true);
   }
   setFormInputValue(document.getElementById('placeName'),
