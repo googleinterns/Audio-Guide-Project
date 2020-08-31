@@ -54,12 +54,15 @@ class MapPlaceGuideDisplayer {
         const southWestCorner = new google.maps.LatLng(minLat, westLng);
         const northEastCorner = new google.maps.LatLng(maxLat, eastLng);
         map.setZoom(15);
-        map.fitBounds(new google.maps.LatLngBounds(southWestCorner, northEastCorner), 10);
+        map.fitBounds(
+            new google.maps.LatLngBounds(southWestCorner, 
+                                         northEastCorner), 
+            10);
     }
   }
 
   static lngDistance(lngWest, lngEast) {
-      if(lngWest < lngEast) {
+      if (lngWest < lngEast) {
           return lngEast - lngWest;
       } else {
           // West points distance from IDL + east points distance to IDL;
@@ -68,11 +71,11 @@ class MapPlaceGuideDisplayer {
       }
   }
 
-  // Sorts placeGuides in an ascending order based on their 
+  // Sorts placeGuides in an ascending order based on their
   // longitude coordinates.
   static comparePlaceGuidesOnMap(placeGuideA, placeGuideB) {
-    let positionA = placeGuideA.marker.getPosition();
-    let positionB = placeGuideB.marker.getPosition();
+    const positionA = placeGuideA.marker.getPosition();
+    const positionB = placeGuideB.marker.getPosition();
     return positionA.lng()-positionB.lng();
   }
 
