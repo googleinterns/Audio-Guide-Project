@@ -12,6 +12,14 @@ class MapPlaceGuideDisplayer {
     this.updateMarkerClusters();
   }
 
+  // This function scans all the placeGuides to find the minimum map area
+  // which contains all of them.
+  // To do so, it finds the minimum and maximum latitude coordinate of all
+  // placeGudies. These will be set as the southern and northern bound of the 
+  // map area.
+  // For longitudes, it firs finds the maximum lane which doesn't contain any
+  // placeGuides(for this purpose, placeGuides are sorted based on their 
+  // longitude coordinate) and then complements it. 
   adjustMapToShowAll() {
     let minLat = 90;
     let maxLat = -90;
