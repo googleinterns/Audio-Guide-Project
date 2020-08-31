@@ -19,6 +19,7 @@ function initPage() {
     if (!userAuthenticationStatus.isLoggedIn) {
       location.replace(userAuthenticationStatus.loginUrl);
     } else {
+      const menu = new Menu(Menu.PAGE_NAMES.CREATE_PLACEGUIDE);
       addLinktoLogoutButton(userAuthenticationStatus.logoutUrl);
       setUpCreatePlaceGuideForm();
       var mapWidget = new MapWidget();

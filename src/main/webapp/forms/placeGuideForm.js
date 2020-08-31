@@ -16,36 +16,14 @@ function activatePreviewFeature() {
       'audioKey', 'audioPlayer', false);
 }
 
-function setSrcToElementOnChangeEvent(elementId, previewId, displayBlock) {
-  const element = document.getElementById(elementId);
-  const preview = document.getElementById(previewId);
-  element.addEventListener('change', function() {
-    const file = this.files[0];
-    console.log(this.files);
-
-    if (file) {
-      const reader = new FileReader();
-      if (displayBlock) {
-        preview.style.display = 'block';
-      }
-
-      reader.addEventListener('load', function() {
-        preview.setAttribute('src', this.result);
-      });
-
-      reader.readAsDataURL(file);
-    }
-  });
-}
-
-// Just a test by fetching actual place guides' data from database
+// Just a test by fetching actual place guides' data from database 
 // to see if image and audio previewing also works with files from blobstore.
 function testExistingPlaceGuide() {
-  getFetchedList().then((placeGuides) => {
-    if (placeGuides === undefined || placeGuides.length == 0) {
-      console.log('place guide does not exist yet.');
+  getFetchedList().then(placeGuideCreatorPairs => {
+    if (placeGuideCreatorPairs === undefined || placeGuideCreatorPairs.length == 0) {
+      console.log("place guide does not exist yet.");
     } else {
-      fillFormWithPlaceGuideData(placeGuides[0]);
+      fillFormWithPlaceGuideData(placeGuideCreatorPairs[0].placeGuide); 
     }
   });
 }
@@ -84,7 +62,7 @@ function fillFormWithPlaceGuideData(placeGuide) {
   setFormInputValue(document.getElementById('id'), placeGuide.id);
   setFormInputValue(document.getElementById('name'), placeGuide.name);
   setBlobKeySrcToElement(
-      'audioKey', placeGuide.audioKey, 'audioPlayer', false);
+      placeGuide.audioKey, 'audioPlayer', false);
   if (placeGuide.isPublic) {
     document.getElementById('isPublic').value = 'public';
   } else {
@@ -104,20 +82,9 @@ function fillFormWithPlaceGuideData(placeGuide) {
       placeGuide.description);
   if (placeGuide.imageKey != undefined) {
     setBlobKeySrcToElement(
-        'imageKey', placeGuide.imageKey,
+        placeGuide.imageKey,
         'imagePreview', true);
   }
   setFormInputValue(document.getElementById('placeName'),
       DUMMY_DATA_FOR_PLACE_NAME);
-}
-
-function setBlobKeySrcToElement(inputId, blobKey, previewId, displayBlock) {
-  const input = document.getElementById(inputId);
-  const preview = document.getElementById(previewId);
-  if (displayBlock) {
-    preview.style.display = 'block';
-  }
-  const src = new URL('/serve-blob', document.URL);
-  src.searchParams.append('blob-key', blobKey);
-  preview.setAttribute('src', src);
 }
