@@ -16,9 +16,7 @@ class Geolocator {
 
   static GEOLOCATION_IMG_ID = "enableGeolocationIcon";
   static ENABLE_GEOLOCATION_TITLE = "Enable geolocation";
-  static DISABLED_GEOLOCATION_IMG_SRC = "./img/geolocation.svg";
   static DISABLE_GEOLOCATION_TITLE = "Disable geolocation";
-  static ENABLE_GEOLOCATION_IMG_SRC = "./img/geolocation_active.svg";
 
   static GO_TO_MY_LOCATION_IMG_ID = "goToMyLocationIcon";
   static GO_TO_MY_LOCATION_TITLE = "Go to my location";
