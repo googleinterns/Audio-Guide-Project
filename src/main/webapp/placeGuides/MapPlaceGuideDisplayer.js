@@ -15,18 +15,18 @@ class MapPlaceGuideDisplayer {
   // This function scans all the placeGuides to find the minimum map area
   // which contains all of them.
   // To do so, it finds the minimum and maximum latitude coordinate of all
-  // placeGudies. These will be set as the southern and northern bound of the 
+  // placeGudies. These will be set as the southern and northern bound of the
   // map area.
   // For longitudes, it firs finds the maximum lane which doesn't contain any
-  // placeGuides(for this purpose, placeGuides are sorted based on their 
-  // longitude coordinate) and then complements it. 
+  // placeGuides(for this purpose, placeGuides are sorted based on their
+  // longitude coordinate) and then complements it.
   adjustMapToShowAll() {
     let minLat = 90;
     let maxLat = -90;
     let maxLngDifference = 0;
     let maxLngDifferenceWestCorner = 0;
     let nextMarkerLng;
-    let placeGuidesOnMap = Object.values(this._placeGuidesOnMap);
+    const placeGuidesOnMap = Object.values(this._placeGuidesOnMap);
     placeGuidesOnMap.sort(MapPlaceGuideDisplayer.comparePlaceGuidesOnMap);
     if (placeGuidesOnMap.length > 0) {
         for (let i = 0; i < placeGuidesOnMap.length; i++) {
@@ -39,7 +39,9 @@ class MapPlaceGuideDisplayer {
                 nextMarkerLng = placeGuidesOnMap[0].marker.getPosition().lng();
             }
             if (MapPlaceGuideDisplayer.lngDistance(position.lng(), nextMarkerLng) > maxLngDifference) {
-                maxLngDifference = MapPlaceGuideDisplayer.lngDistance(position.lng(), nextMarkerLng)
+                maxLngDifference = 
+                    MapPlaceGuideDisplayer.lngDistance(position.lng(),
+                                                       nextMarkerLng);
                 maxLngDifferenceWestCorner = position.lng();
             }
         }

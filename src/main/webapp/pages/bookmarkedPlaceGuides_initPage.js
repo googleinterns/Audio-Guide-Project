@@ -15,11 +15,11 @@ function initPage() {
       location.replace(userAuthenticationStatus.loginUrl);
     } else {
       const menu = new Menu(Menu.PAGE_NAMES.BOOKMARKED_PLACEGUIDES);
-      var mapWidget = new MapWidget();
+      let mapWidget = new MapWidget();
       mapWidget.addGeolocationFunctionality();
       mapWidget.addSearchingFunctionality();
       map = mapWidget.map;
-      var placeGuideRepository =
+      let placeGuideRepository =
           new PlaceGuideRepository(
               PlaceGuideRepository.QueryType.BOOKMARKED);
       placeGuideManager = new PlaceGuideManager(placeGuideRepository);
