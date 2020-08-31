@@ -37,13 +37,13 @@ class Geolocator {
     this._currentLocation.visible = false;
     this._geolocationControlDiv =
         this.createControlDiv(Geolocator.ENABLE_GEOLOCATION_TITLE,
-            "gps_fixed",
+            "gps_off",
             Geolocator.GEOLOCATION_IMG_ID);
     this._map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(
         this._geolocationControlDiv);
     this._myLocationControlDiv =
         this.createControlDiv(Geolocator.GO_TO_MY_LOCATION_TITLE,
-            "gps_off", Geolocator.GO_TO_MY_LOCATION_IMG_ID);
+            "center_focus_strong", Geolocator.GO_TO_MY_LOCATION_IMG_ID);
     this._map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(
         this._myLocationControlDiv);
   }
