@@ -18,17 +18,6 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/bookmark-place-guide")
 public class BookmarkPlaceGuideServlet extends HttpServlet {
 
-  private final String userId;
-
-  // For production.
-  public BookmarkPlaceGuideServlet() {
-    this(UserServiceFactory.getUserService().getCurrentUser().getUserId());
-  }
-
-  public BookmarkPlaceGuideServlet(String userId) {
-    this.userId = userId;
-  }
-
   private static final String PLACE_GUIDE_ID_PARAMETER = "placeGuideId";
   private static final String BOOKMARK_HANDLING_TYPE_PARAMETER = "bookmarkHandlingType";
 
@@ -51,6 +40,7 @@ public class BookmarkPlaceGuideServlet extends HttpServlet {
 
   private void togglePlaceGuideBookmark(
       BookmarkPlaceGuideQueryType bookmarkPlaceGuideQueryType, long placeGuideId) {
+    String userId = UserServiceFactory.getUserService().getCurrentUser().getUserId();
     switch (bookmarkPlaceGuideQueryType) {
       case BOOKMARK:
         userRepository.bookmarkPlaceGuide(placeGuideId, userId);
