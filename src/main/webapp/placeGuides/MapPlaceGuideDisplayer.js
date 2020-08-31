@@ -32,9 +32,9 @@ class MapPlaceGuideDisplayer {
     const minMapAreaBounds = this.getMinMapArea();
     console.log(minMapAreaBounds);
     if (minMapAreaBounds.length > 0) {
-      const southWestCorner = new google.maps.LatLng(minMapAreaBounds[0], 
+      const southWestCorner = new google.maps.LatLng(minMapAreaBounds[0],
                                                      minMapAreaBounds[1]);
-      const northEastCorner = new google.maps.LatLng(minMapAreaBounds[2], 
+      const northEastCorner = new google.maps.LatLng(minMapAreaBounds[2],
                                                      minMapAreaBounds[3]);
       map.setZoom(15);
       map.fitBounds(
