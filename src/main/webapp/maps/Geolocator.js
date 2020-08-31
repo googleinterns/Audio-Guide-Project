@@ -155,7 +155,7 @@ class Geolocator {
   }
 
   static createIcon(iconName, iconId) {
-    var icon = document.createElement("span");
+    var icon = document.createElement("i");
     icon.classList.add("mdc-tab__icon", "material-icons");
     icon.setAttribute("aria-hidden", true);
     icon.setAttribute("id", iconId);
