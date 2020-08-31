@@ -1,9 +1,9 @@
 /**
  * This function initialises the map and adds some functionalities to it:
- * Geolocation: to track the user's current location, 
+ * Geolocation: to track the user's current location,
  * display it and center the map around it.
  * Searching: lets the user search for places and center the map around it.
- * Display place guides: displays the place guides created 
+ * Display place guides: displays the place guides created
  * by the currently logged in user.
  */
 let map;
@@ -15,11 +15,11 @@ function initPage() {
       location.replace(userAuthenticationStatus.loginUrl);
     } else {
       const menu = new Menu(Menu.PAGE_NAMES.MY_PLACEGUIDES);
-      let mapWidget = new MapWidget();
+      const mapWidget = new MapWidget();
       mapWidget.addGeolocationFunctionality();
       mapWidget.addSearchingFunctionality();
       map = mapWidget.map;
-      let placeGuideRepository =
+      const placeGuideRepository =
           new PlaceGuideRepository(
               PlaceGuideRepository.QueryType.CREATED_ALL_IN_MAP_AREA);
       placeGuideManager = new PlaceGuideManager(placeGuideRepository);

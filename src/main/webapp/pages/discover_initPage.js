@@ -14,11 +14,11 @@ function initPage() {
       location.replace(userAuthenticationStatus.loginUrl);
     } else {
       const menu = new Menu(Menu.PAGE_NAMES.DISCOVER);
-      let mapWidget = new MapWidget();
+      const mapWidget = new MapWidget();
       mapWidget.addGeolocationFunctionality();
       mapWidget.addSearchingFunctionality();
       map = mapWidget.map;
-      let placeGuideRepository =
+      const placeGuideRepository =
           new PlaceGuideRepository(
               PlaceGuideRepository.QueryType.ALL_PUBLIC_IN_MAP_AREA);
       placeGuideManager = new PlaceGuideManager(placeGuideRepository);

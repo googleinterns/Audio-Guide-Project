@@ -30,18 +30,19 @@ class MapPlaceGuideDisplayer {
     placeGuidesOnMap.sort(MapPlaceGuideDisplayer.comparePlaceGuidesOnMap);
     if (placeGuidesOnMap.length > 0) {
         for (let i = 0; i < placeGuidesOnMap.length; i++) {
-            let position = placeGuidesOnMap[i].marker.getPosition();
+            const position = placeGuidesOnMap[i].marker.getPosition();
             minLat = Math.min(position.lat(), minLat);
             maxLat = Math.max(position.lat(), maxLat);
             if (i + 1 < placeGuidesOnMap.length) {
-                nextMarkerLng = 
+                nextMarkerLng =
                     placeGuidesOnMap[i+1].marker.getPosition().lng();
             } else {
                 nextMarkerLng = placeGuidesOnMap[0].marker.getPosition().lng();
             }
-            if (MapPlaceGuideDisplayer.lngDistance(position.lng(), nextMarkerLng) >
+            if (MapPlaceGuideDisplayer.lngDistance(position.lng(),
+                                                   nextMarkerLng) >
                      maxLngDifference) {
-                maxLngDifference = 
+                maxLngDifference =
                     MapPlaceGuideDisplayer.lngDistance(position.lng(),
                                                        nextMarkerLng);
                 maxLngDifferenceWestCorner = position.lng();
@@ -49,9 +50,9 @@ class MapPlaceGuideDisplayer {
         }
         let westLng = maxLngDifferenceWestCorner + maxLngDifference;
         if (westLng > 180) westLng -= 360;
-        let eastLng = maxLngDifferenceWestCorner;
-        let southWestCorner = new google.maps.LatLng(minLat, westLng);
-        let northEastCorner = new google.maps.LatLng(maxLat, eastLng);
+        const eastLng = maxLngDifferenceWestCorner;
+        const southWestCorner = new google.maps.LatLng(minLat, westLng);
+        const northEastCorner = new google.maps.LatLng(maxLat, eastLng);
         map.setZoom(15);
         map.fitBounds(new google.maps.LatLngBounds(southWestCorner, northEastCorner), 10);
     }

@@ -22,11 +22,11 @@ function initPage() {
       const menu = new Menu(Menu.PAGE_NAMES.CREATE_PLACEGUIDE);
       addLinktoLogoutButton(userAuthenticationStatus.logoutUrl);
       setUpCreatePlaceGuideForm();
-      let mapWidget = new MapWidget();
+      const mapWidget = new MapWidget();
       mapWidget.addGeolocationFunctionality();
       mapWidget.addLocationChoosingAndSavingFunctionality();
       map = mapWidget.map;
-      let placeGuideRepository =
+      const placeGuideRepository =
           new PlaceGuideRepository(
               PlaceGuideRepository.QueryType.CREATED_ALL_IN_MAP_AREA);
       placeGuideManager = new PlaceGuideManager(placeGuideRepository);
