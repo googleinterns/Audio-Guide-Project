@@ -60,7 +60,7 @@ class Menu {
     tab.setAttribute("class", "mdc-tab");
     if (focused) {
       tab.classList.add("mdc-tab--active")
-    } 
+    }
     tab.setAttribute("role", "tab");
     tab.setAttribute("aria-selected", "true");
     tab.setAttribute("tabindex", "0");
@@ -96,7 +96,8 @@ class Menu {
 
   createIndicatorContent() {
     var indicatorContent = document.createElement("span");
-    indicatorContent.classList.add("mdc-tab-indicator__content", "mdc-tab-indicator__content--underline");
+    indicatorContent.classList.add("mdc-tab-indicator__content",
+                                    "mdc-tab-indicator__content--underline");
     return indicatorContent;
   }
 

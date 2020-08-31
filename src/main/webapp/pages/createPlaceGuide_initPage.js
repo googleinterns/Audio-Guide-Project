@@ -44,8 +44,8 @@ function initPage() {
 function handleSaveLocationEvent(mapWidget) {
   if (mapWidget.savedLocation.place != null) {
     updateLocation(mapWidget.savedLocation.position,
-                  mapWidget.savedLocation.place.place_id,
-                  mapWidget.savedLocation.place.name);
+        mapWidget.savedLocation.place.place_id,
+        mapWidget.savedLocation.place.name);
   } else {
     updateLocation(mapWidget.savedLocation.position, null, null);
   }

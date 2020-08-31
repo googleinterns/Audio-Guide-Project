@@ -6,10 +6,14 @@ class MapPlaceGuideDisplayer {
     this._placeGuidesOnMap = {};
   }
 
-  update(placeGuides) {
-    this.removePreviousPlaceGuidesFromMap(placeGuides);
-    this.addNewPlaceGuidesToMap(placeGuides);
-    this.updateMarkerClusters();
+  static lngDistance(lngWest, lngEast) {
+    if (lngWest < lngEast) {
+      return lngEast - lngWest;
+    } else {
+      // West points distance from IDL + east points distance to IDL;
+      // (180 - lngWest) + (180 + lngEast);
+      return 360 - lngWest + lngEast;
+    }
   }
 
   // This function scans all the placeGuides to find the minimum map area
@@ -19,6 +23,22 @@ class MapPlaceGuideDisplayer {
   // map area.
   // For longitudes, it firs finds the maximum lane which doesn't contain any
   // placeGuides(for this purpose, placeGuides are sorted based on their
+
+  // longitude coordinates.
+  static comparePlaceGuidesOnMap(placeGuideA, placeGuideB) {
+    const positionA = placeGuideA.marker.getPosition();
+    const positionB = placeGuideB.marker.getPosition();
+    return positionA.lng() - positionB.lng();
+  }
+
+  update(placeGuides) {
+    this.removePreviousPlaceGuidesFromMap(placeGuides);
+    this.addNewPlaceGuidesToMap(placeGuides);
+    this.updateMarkerClusters();
+  }
+
+  // Sorts placeGuides in an ascending order based on their
+
   // longitude coordinate) and then complements it.
   adjustMapToShowAll() {
     let minLat = 90;
@@ -29,54 +49,36 @@ class MapPlaceGuideDisplayer {
     const placeGuidesOnMap = Object.values(this._placeGuidesOnMap);
     placeGuidesOnMap.sort(MapPlaceGuideDisplayer.comparePlaceGuidesOnMap);
     if (placeGuidesOnMap.length > 0) {
-        for (let i = 0; i < placeGuidesOnMap.length; i++) {
-            const position = placeGuidesOnMap[i].marker.getPosition();
-            minLat = Math.min(position.lat(), minLat);
-            maxLat = Math.max(position.lat(), maxLat);
-            if (i + 1 < placeGuidesOnMap.length) {
-                nextMarkerLng =
-                    placeGuidesOnMap[i+1].marker.getPosition().lng();
-            } else {
-                nextMarkerLng = placeGuidesOnMap[0].marker.getPosition().lng();
-            }
-            if (MapPlaceGuideDisplayer.lngDistance(position.lng(),
-                                                   nextMarkerLng) >
-                     maxLngDifference) {
-                maxLngDifference =
-                    MapPlaceGuideDisplayer.lngDistance(position.lng(),
-                                                       nextMarkerLng);
-                maxLngDifferenceWestCorner = position.lng();
-            }
+      for (let i = 0; i < placeGuidesOnMap.length; i++) {
+        const position = placeGuidesOnMap[i].marker.getPosition();
+        minLat = Math.min(position.lat(), minLat);
+        maxLat = Math.max(position.lat(), maxLat);
+        if (i + 1 < placeGuidesOnMap.length) {
+          nextMarkerLng =
+              placeGuidesOnMap[i + 1].marker.getPosition().lng();
+        } else {
+          nextMarkerLng = placeGuidesOnMap[0].marker.getPosition().lng();
         }
-        let westLng = maxLngDifferenceWestCorner + maxLngDifference;
-        if (westLng > 180) westLng -= 360;
-        const eastLng = maxLngDifferenceWestCorner;
-        const southWestCorner = new google.maps.LatLng(minLat, westLng);
-        const northEastCorner = new google.maps.LatLng(maxLat, eastLng);
-        map.setZoom(15);
-        map.fitBounds(
-            new google.maps.LatLngBounds(southWestCorner, 
-                                         northEastCorner), 
-            10);
-    }
-  }
-
-  static lngDistance(lngWest, lngEast) {
-      if (lngWest < lngEast) {
-          return lngEast - lngWest;
-      } else {
-          // West points distance from IDL + east points distance to IDL;
-          // (180 - lngWest) + (180 + lngEast);
-          return 360 - lngWest + lngEast;
+        if (MapPlaceGuideDisplayer.lngDistance(position.lng(),
+            nextMarkerLng) >
+            maxLngDifference) {
+          maxLngDifference =
+              MapPlaceGuideDisplayer.lngDistance(position.lng(),
+                  nextMarkerLng);
+          maxLngDifferenceWestCorner = position.lng();
+        }
       }
-  }
-
-  // Sorts placeGuides in an ascending order based on their
-  // longitude coordinates.
-  static comparePlaceGuidesOnMap(placeGuideA, placeGuideB) {
-    const positionA = placeGuideA.marker.getPosition();
-    const positionB = placeGuideB.marker.getPosition();
-    return positionA.lng()-positionB.lng();
+      let westLng = maxLngDifferenceWestCorner + maxLngDifference;
+      if (westLng > 180) westLng -= 360;
+      const eastLng = maxLngDifferenceWestCorner;
+      const southWestCorner = new google.maps.LatLng(minLat, westLng);
+      const northEastCorner = new google.maps.LatLng(maxLat, eastLng);
+      map.setZoom(15);
+      map.fitBounds(
+          new google.maps.LatLngBounds(southWestCorner,
+              northEastCorner),
+          10);
+    }
   }
 
   updateMarkerClusters() {
