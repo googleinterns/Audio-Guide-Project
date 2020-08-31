@@ -5,22 +5,25 @@
     <title>My PlaceGuides</title>
     <script src = "./maps/api_key.js"></script>
     <script id = "maps-api" async defer></script>
+    <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel = "stylesheet" href = "style.css">
 </head>
 <body onload = "setApiKeyAndMapsCallback()">
-    <header> 
-        <ul>
-            <li><a href = "index.html">Home</a></li>
-            <li><a href = "discover.html">Discover</a></li>
-            <li><a href = "myPlaceGuides.html">My PlaceGuides</a></li>
-            <li><a href = "createPlaceGuide.html">Create PlaceGuide</a></li>
-            <li><a href = "bookmarkedPlaceGudies.html">Bookmarked PlaceGuides</a></li>
-        </ul>
-    </header>
+    <div class="mdc-tab-bar" role="tablist">
+        <div class="mdc-tab-scroller">
+            <div class="mdc-tab-scroller__scroll-area">
+                <div class="mdc-tab-scroller__scroll-content">
+                </div>
+            </div>
+        </div>
+    </div>
 
     <input id = "search-box" type = "text" placeholder = "Search for a new place!"/>
     <div id = "map"></div>
 
+    <script src = "./pages/menu.js"></script>
     <script src = "./user/userAuthentication.js"></script>
     <script src = "./maps/Geolocator.js"></script>
     <script src = "./maps/Searchbox.js"></script>

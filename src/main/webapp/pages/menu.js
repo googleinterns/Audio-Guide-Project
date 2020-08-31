@@ -25,7 +25,7 @@ class Menu {
       label: "Create Guide"
     },
     BOOKMARKED_PLACEGUIDES: {
-      url: "index.html",
+      url: "bookmarkedPlaceGuides.html",
       index: 4,
       icon: "bookmark",
       label: "Bookmarked"
