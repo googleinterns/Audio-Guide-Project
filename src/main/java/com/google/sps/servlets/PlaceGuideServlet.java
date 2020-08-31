@@ -25,7 +25,6 @@ import org.jetbrains.annotations.Nullable;
 @WebServlet("/place-guide-data")
 public class PlaceGuideServlet extends HttpServlet {
 
-  private final String userId;
   private final BlobstoreService blobstoreService;
   private final BlobInfoFactory blobInfoFactory;
   private final DatastoreService datastore;
@@ -33,7 +32,6 @@ public class PlaceGuideServlet extends HttpServlet {
   // For production.
   public PlaceGuideServlet() {
     this(
-        UserServiceFactory.getUserService().getCurrentUser().getUserId(),
         BlobstoreServiceFactory.getBlobstoreService(),
         new BlobInfoFactory(),
         DatastoreServiceFactory.getDatastoreService());
@@ -41,11 +39,9 @@ public class PlaceGuideServlet extends HttpServlet {
 
   // For testing.
   public PlaceGuideServlet(
-      String userId,
       BlobstoreService blobstoreService,
       BlobInfoFactory blobInfoFactory,
       DatastoreService datastore) {
-    this.userId = userId;
     this.blobstoreService = blobstoreService;
     this.blobInfoFactory = blobInfoFactory;
     this.datastore = datastore;
@@ -104,6 +100,7 @@ public class PlaceGuideServlet extends HttpServlet {
 
   private List<PlaceGuideInfo> getPlaceGuideInfos(List<PlaceGuide> placeGuides) {
     List<PlaceGuideInfo> placeGuideInfos = new ArrayList<>();
+    String userId = UserServiceFactory.getUserService().getCurrentUser().getUserId();
     for (PlaceGuide placeGuide : placeGuides) {
       placeGuideInfos.add(new PlaceGuideInfo(placeGuide, userId));
     }
@@ -113,6 +110,7 @@ public class PlaceGuideServlet extends HttpServlet {
   private List<PlaceGuide> getPlaceGuides(
       PlaceGuideQueryType placeGuideQueryType, GeoPt northEastCorner, GeoPt southWestCorner) {
     List<PlaceGuide> placeGuides;
+    String userId = UserServiceFactory.getUserService().getCurrentUser().getUserId();
     switch (placeGuideQueryType) {
       case ALL_PUBLIC:
         placeGuides = placeGuideRepository.getAllPublicPlaceGuides();
@@ -155,6 +153,7 @@ public class PlaceGuideServlet extends HttpServlet {
   }
 
   private PlaceGuide getPlaceGuideFromRequest(HttpServletRequest request) {
+    boolean newPlaceGuide = false;
     String name = request.getParameter(NAME_INPUT);
     long id;
     String idStringValue = request.getParameter(ID_INPUT);
@@ -162,6 +161,7 @@ public class PlaceGuideServlet extends HttpServlet {
       id = Long.parseLong(idStringValue);
     } else {
       id = placeGuideRepository.saveAndGeneratePlaceGuideId();
+      newPlaceGuide = true;
     }
     String audioKey = getUploadedFileBlobKey(request, AUDIO_KEY_INPUT);
     // The audioKey can be null if the user did not upload any audio file. Hence, it will
@@ -170,36 +170,39 @@ public class PlaceGuideServlet extends HttpServlet {
       audioKey = placeGuideRepository.getPlaceGuide(id).getAudioKey();
     }
 
+    String userId = UserServiceFactory.getUserService().getCurrentUser().getUserId();
     float latitude = Float.parseFloat(request.getParameter(LATITUDE_INPUT));
     float longitude = Float.parseFloat(request.getParameter(LONGITUDE_INPUT));
     GeoPt coordinate = new GeoPt(latitude, longitude);
-    PlaceGuide.Builder newPlaceGuideBuilder =
+    PlaceGuide.Builder placeGuideBuilder =
         new PlaceGuide.Builder(id, name, audioKey, userId, coordinate);
 
     String publicPlaceGuideStringValue = request.getParameter(IS_PUBLIC_INPUT);
     if (publicPlaceGuideStringValue.equals(IS_PUBLIC_INPUT_VALUE)) {
-      newPlaceGuideBuilder.setPlaceGuideStatus(true);
+      placeGuideBuilder.setPlaceGuideStatus(true);
     }
     String length = request.getParameter(LENGTH_INPUT);
     if (!length.isEmpty()) {
-      newPlaceGuideBuilder.setLength(Long.parseLong(length));
+      placeGuideBuilder.setLength(Long.parseLong(length));
     }
     String placeId = request.getParameter(PLACE_ID_INPUT);
     if (!placeId.isEmpty()) {
-      newPlaceGuideBuilder.setPlaceId(placeId);
+      placeGuideBuilder.setPlaceId(placeId);
     }
     String description = request.getParameter(DESCRIPTION_INPUT);
     if (!description.isEmpty()) {
-      newPlaceGuideBuilder.setDescription(description);
+      placeGuideBuilder.setDescription(description);
     }
     String imageKey = getUploadedFileBlobKey(request, IMAGE_KEY_INPUT);
     if (imageKey != null) {
-      newPlaceGuideBuilder.setImageKey(imageKey);
+      placeGuideBuilder.setImageKey(imageKey);
     } else if (request.getParameterValues(DELETE_IMAGE_INPUT) == null) {
-      imageKey = placeGuideRepository.getPlaceGuide(id).getImageKey();
-      newPlaceGuideBuilder.setImageKey(imageKey);
+      if (!newPlaceGuide) {
+        PlaceGuide prevPlaceGuide = placeGuideRepository.getPlaceGuide(id);
+        placeGuideBuilder.setImageKey(prevPlaceGuide.getImageKey());
+      }
     }
-    return newPlaceGuideBuilder.build();
+    return placeGuideBuilder.build();
   }
 
   @Nullable

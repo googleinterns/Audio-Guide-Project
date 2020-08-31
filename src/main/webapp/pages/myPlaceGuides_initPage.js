@@ -13,6 +13,7 @@ function initPage() {
     if (!userAuthenticationStatus.isLoggedIn) {
       location.replace(userAuthenticationStatus.loginUrl);
     } else {
+      const menu = new Menu(Menu.PAGE_NAMES.MY_PLACEGUIDES);
       var mapWidget = new MapWidget();
       mapWidget.addGeolocationFunctionality();
       mapWidget.addSearchingFunctionality();
