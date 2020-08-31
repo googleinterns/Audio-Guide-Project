@@ -4,26 +4,13 @@
 class MapPlaceGuideDisplayer {
   constructor() {
     this._placeGuidesOnMap = {};
+    this._markerClusterer = new MarkerClusterer(map, [],
+        {imagePath: './img/m'});
   }
 
   update(placeGuides) {
     this.removePreviousPlaceGuidesFromMap(placeGuides);
     this.addNewPlaceGuidesToMap(placeGuides);
-    this.updateMarkerClusters();
-  }
-
-  updateMarkerClusters() {
-    if (this._markerClusterer != undefined) {
-      this._markerClusterer.clearMarkers();
-    }
-    const markers = [];
-    for (const placeGuideId in this._placeGuidesOnMap) {
-      if (this._placeGuidesOnMap.hasOwnProperty(placeGuideId)) {
-        markers.push(this._placeGuidesOnMap[placeGuideId].marker);
-      }
-    }
-    this._markerClusterer = new MarkerClusterer(map, markers,
-        {imagePath: './img/m'});
   }
 
   removePreviousPlaceGuidesFromMap(placeGuides) {
@@ -42,12 +29,18 @@ class MapPlaceGuideDisplayer {
       if (placeGuides.hasOwnProperty(placeGuideId)) {
         if (!this._placeGuidesOnMap.hasOwnProperty(placeGuideId)) {
           // new placeGuide should be constructed.
-          this._placeGuidesOnMap[placeGuideId] =
-              this.constructPlaceGuideOnMapFromPlaceGuide(
-                  placeGuides[placeGuideId]);
+          this.addNewMarker(placeGuideId, placeGuides[placeGuideId]);
         }
       }
     }
+  }
+
+  addNewMarker(placeGuideId, placeGuide) {
+    this._placeGuidesOnMap[placeGuideId] =
+      this.constructPlaceGuideOnMapFromPlaceGuide(
+          placeGuide);
+    this._markerClusterer
+        .addMarker(this._placeGuidesOnMap[placeGuideId].marker);
   }
 
   constructPlaceGuideOnMapFromPlaceGuide(placeGuide) {
@@ -72,6 +65,8 @@ class MapPlaceGuideDisplayer {
   }
 
   remove(placeGuideId) {
+    this._markerClusterer.removeMarker(
+        this._placeGuidesOnMap[placeGuideId].marker);
     this._placeGuidesOnMap[placeGuideId].remove();
     delete this._placeGuidesOnMap[placeGuideId];
   }
