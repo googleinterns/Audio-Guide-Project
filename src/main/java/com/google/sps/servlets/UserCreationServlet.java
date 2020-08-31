@@ -26,13 +26,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Set;
-import java.util.HashSet;
 
 /**
- * This servlet is used for saving the user in the database the first time when they access our website. 
- * This servlet checks if the currently logged in user exists in the database and saves a new user
- * in the database.
+ * This servlet is used for saving the user in the database the first time when they access our
+ * website. This servlet checks if the currently logged in user exists in the database and saves a
+ * new user in the database.
  */
 @WebServlet("/user-creation-servlet")
 public class UserCreationServlet extends HttpServlet {
@@ -44,16 +42,16 @@ public class UserCreationServlet extends HttpServlet {
     userService = UserServiceFactory.getUserService();
   }
 
-  /** 
-   * Saves the new user's data(id and email only, provided by the UserService) to the database, 
-   * if they are not saved already. 
+  /**
+   * Saves the new user's data(id and email only, provided by the UserService) to the database, if
+   * they are not saved already.
    */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     boolean existingUser = userRepository.existingUser(userService.getCurrentUser().getUserId());
     if (!existingUser) {
-        User user = getLoggedInUser();
-        userRepository.saveUser(user);
+      User user = getLoggedInUser();
+      userRepository.saveUser(user);
     }
   }
 
