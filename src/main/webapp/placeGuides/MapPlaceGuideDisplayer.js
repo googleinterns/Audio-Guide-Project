@@ -17,12 +17,14 @@ class MapPlaceGuideDisplayer {
     let maxLat = -90;
     let maxLngDifference = 0;
     let maxLngDifferenceWestCorner = 0;
-    let nextMarkerlng;
+    let nextMarkerLng;
     let placeGuidesOnMap = Object.values(this._placeGuidesOnMap);
-    placeGuidesOnMap.sort(comparePlaceGuidesOnMap);
+    placeGuidesOnMap.sort(MapPlaceGuideDisplayer.comparePlaceGuidesOnMap);
+    console.log(placeGuidesOnMap);
     if (placeGuidesOnMap.length > 0) {
         for (let i = 0; i < placeGuidesOnMap.length; i++) {
-            var position = this._placeGuidesOnMap[placeGuideId].marker.getPosition();
+            var position = placeGuidesOnMap[i].marker.getPosition();
+            console.log("Position " + i + " lng: " + position.lng());
             minLat = Math.min(position.lat(), minLat);
             maxLat = Math.max(position.lat(), maxLat);
             if (i + 1 < placeGuidesOnMap.length) {
@@ -30,23 +32,39 @@ class MapPlaceGuideDisplayer {
             } else {
                 nextMarkerLng = placeGuidesOnMap[0].marker.getPosition().lng();
             }
-            if (nextMarkerLng - pisition.lng() > maxLngDifference) {
-                maxLngDifference = nextMarkerLng - position.lng();
-                maxLngDifferenceWestCorner = position.leng();
+            console.log("Nextmarker lng: " + nextMarkerLng);
+            if (MapPlaceGuideDisplayer.lngDistance(position.lng(), nextMarkerLng) > maxLngDifference) {
+                maxLngDifference = MapPlaceGuideDisplayer.lngDistance(position.lng(), nextMarkerLng)
+                maxLngDifferenceWestCorner = position.lng();
             }
         }
-        let eastCorner = maxLngDifferenceWestCorner + maxLngDifference;
-        if (eastCorner > 180) eastCorner -= 360;
-        let southWestCorner = new google.maps.LatLng(minLat, maxLngDifferenceWestCorner);
-        let northEastCorner = new google.maps.LatLng(maxLat, eastCorner);
+        console.log("Max difference: " + maxLngDifferenceWestCorner + "with west corner; " + maxLngDifferenceWestCorner);
+        let westLng = maxLngDifferenceWestCorner + maxLngDifference;
+        if (westLng > 180) westLng -= 360;
+        let eastLng = maxLngDifferenceWestCorner;
+        let southWestCorner = new google.maps.LatLng(minLat, westLng);
+        let northEastCorner = new google.maps.LatLng(maxLat, eastLng);
         map.setZoom(15);
         map.fitBounds(new google.maps.LatLngBounds(southWestCorner, northEastCorner), 10);
     }
   }
 
+  static lngDistance(lngWest, lngEast) {
+      console.log("Calculating distance for: " + lngWest + " " + lngEast);
+      if(lngWest < lngEast) {
+          console.log("Distance: " + (lngEast - lngWest));
+          return lngEast - lngWest;
+      } else {
+          // West points distance from IDL + east points distance to IDL;
+          // (180 - lngWest) + (180 + lngEast);
+          console.log("Distance: " + (360 - lngWest + lngEast));
+          return 360 - lngWest + lngEast;
+      }
+  }
+
   // Sorts placeGuides in an ascending order based on their 
   // longitude coordinates.
-  comparePlaceGuidesOnMap(placeGuideA, placeGuideB) {
+  static comparePlaceGuidesOnMap(placeGuideA, placeGuideB) {
     let positionA = placeGuideA.marker.getPosition();
     let positionB = placeGuideB.marker.getPosition();
     return positionA.lng()-positionB.lng();
