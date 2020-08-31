@@ -29,17 +29,19 @@ class MapPlaceGuideDisplayer {
   // This function scans all the placeGuides to find the minimum map area
   // which contains all of them.
   adjustMapToShowAll() {
-      var minMapAreaBounds = this.getMinMapArea();
-      console.log(minMapAreaBounds);
-      if (minMapAreaBounds.length > 0) {
-        const southWestCorner = new google.maps.LatLng(minMapAreaBounds[0], minMapAreaBounds[1]);
-        const northEastCorner = new google.maps.LatLng(minMapAreaBounds[2], minMapAreaBounds[3]);
-        map.setZoom(15);
-        map.fitBounds(
-            new google.maps.LatLngBounds(southWestCorner,
-                northEastCorner),
-            10);
-      }
+    const minMapAreaBounds = this.getMinMapArea();
+    console.log(minMapAreaBounds);
+    if (minMapAreaBounds.length > 0) {
+      const southWestCorner = new google.maps.LatLng(minMapAreaBounds[0], 
+                                                     minMapAreaBounds[1]);
+      const northEastCorner = new google.maps.LatLng(minMapAreaBounds[2], 
+                                                     minMapAreaBounds[3]);
+      map.setZoom(15);
+      map.fitBounds(
+        new google.maps.LatLngBounds(southWestCorner,
+                                     northEastCorner),
+        10);
+    }
   }
 
   // This function finds the minimum map area containing all PlaceGuides.
@@ -49,22 +51,22 @@ class MapPlaceGuideDisplayer {
   // For longitudes, it firs finds the maximum lane which doesn't contain any
   // placeGuides(for this purpose, placeGuides are sorted based on their
   // longitude coordinate) and then complements it.
-  // The map area is returned in the format: 
+  // The map area is returned in the format:
   // [southLat, westLng, northLat, eastLng].
   // If no placeGuides are present, an empty array is returned.
   getMinMapArea() {
     const placeGuidesOnMap = Object.values(this._placeGuidesOnMap);
     placeGuidesOnMap.sort(MapPlaceGuideDisplayer.comparePlaceGuidesOnMap);
     if (placeGuidesOnMap.length > 1) {
-        return this.getMinMapArea_multiplePlaceGuides(placeGuidesOnMap);
+      return this.getMinMapAreaForMultiplePlaceGuides(placeGuidesOnMap);
     } else if (placeGuidesOnMap.length == 1) {
-         return this.getMinMapArea_singleGuide(placeGuidesOnMap[0]);
+      return this.getMinMapAreaForSingleGuide(placeGuidesOnMap[0]);
     } else {
-        return [];
+      return [];
     }
   }
 
-  getMinMapArea_multiplePlaceGuides(placeGuidesOnMap) {
+  getMinMapAreaForMultiplePlaceGuides(placeGuidesOnMap) {
     let minLat = 90;
     let maxLat = -90;
     let maxLngDifference = 0;
@@ -74,20 +76,20 @@ class MapPlaceGuideDisplayer {
       const position = placeGuidesOnMap[i].marker.getPosition();
       minLat = Math.min(position.lat(), minLat);
       maxLat = Math.max(position.lat(), maxLat);
-        if (i + 1 < placeGuidesOnMap.length) {
-          nextMarkerLng =
-            placeGuidesOnMap[i + 1].marker.getPosition().lng();
-        } else {
-          nextMarkerLng = placeGuidesOnMap[0].marker.getPosition().lng();
-        }
-        if (MapPlaceGuideDisplayer.lngDistance(position.lng(),
-          nextMarkerLng) >
-          maxLngDifference) {
-          maxLngDifference =
-            MapPlaceGuideDisplayer.lngDistance(position.lng(),
-                nextMarkerLng);
-          maxLngDifferenceWestCorner = position.lng();
-        }
+      if (i + 1 < placeGuidesOnMap.length) {
+        nextMarkerLng =
+        placeGuidesOnMap[i + 1].marker.getPosition().lng();
+      } else {
+        nextMarkerLng = placeGuidesOnMap[0].marker.getPosition().lng();
+      }
+      if (MapPlaceGuideDisplayer.lngDistance(position.lng(),
+        nextMarkerLng) >
+        maxLngDifference) {
+        maxLngDifference =
+          MapPlaceGuideDisplayer.lngDistance(position.lng(),
+            nextMarkerLng);
+        maxLngDifferenceWestCorner = position.lng();
+      }
     }
     let westLng = maxLngDifferenceWestCorner + maxLngDifference;
     if (westLng > 180) westLng -= 360;
@@ -95,7 +97,7 @@ class MapPlaceGuideDisplayer {
     return [minLat, westLng, maxLat, eastLng];
   }
 
-  getMinMapArea_singleGuide(placeGuideOnMap) {
+  getMinMapAreaForSingleGuide(placeGuideOnMap) {
     const position = placeGuideOnMap.marker.getPosition();
     return [position.lat(), position.lng(), position.lat(), position.lng()];
   }
