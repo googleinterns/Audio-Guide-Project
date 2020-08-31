@@ -17,23 +17,34 @@ class MapPlaceGuideDisplayer {
     let maxLat = -90;
     let minLng = 180;
     let maxLng = -180;
-    var noPlaceGuides = 0;
-    for (const placeGuideId in this._placeGuidesOnMap) {
-      if (this._placeGuidesOnMap.hasOwnProperty(placeGuideId)) {
-        var position = this._placeGuidesOnMap[placeGuideId].marker.getPosition();
-        minLat = Math.min(position.lat(), minLat);
-        maxLat = Math.max(position.lat(), maxLat);
-        minLng = Math.min(position.lng(), minLng);
-        maxLng = Math.max(position.lng(), maxLng);
-        noPlaceGuides = noPlaceGuides + 1;
-      }
+    let placeGuidesOnMap = Object.values(this._placeGuidesOnMap);
+    placeGuidesOnMap.sort(comparePlaceGuidesOnMap);
+    if (placeGuidesOnMap.length > 0) {
+        for (const placeGuideId in this._placeGuidesOnMap) {
+        if (this._placeGuidesOnMap.hasOwnProperty(placeGuideId)) {
+            var position = this._placeGuidesOnMap[placeGuideId].marker.getPosition();
+            minLat = Math.min(position.lat(), minLat);
+            maxLat = Math.max(position.lat(), maxLat);
+            minLng = Math.min(position.lng(), minLng);
+            maxLng = Math.max(position.lng(), maxLng);
+            noPlaceGuides = noPlaceGuides + 1;
+        }
+        }
+        if (noPlaceGuides > 0) {
+            var southWestCorner = new google.maps.LatLng(minLat, minLng);
+            var northEastCorner = new google.maps.LatLng(maxLat, maxLng);
+            map.setZoom(15);
+            map.fitBounds(new google.maps.LatLngBounds(southWestCorner, northEastCorner), 10);
+        }
     }
-    if (noPlaceGuides > 0) {
-      var southWestCorner = new google.maps.LatLng(minLat, minLng);
-      var northEastCorner = new google.maps.LatLng(maxLat, maxLng);
-      map.setZoom(15);
-      map.fitBounds(new google.maps.LatLngBounds(southWestCorner, northEastCorner), 10);
-    }
+  }
+
+  // Sorts placeGuides in an ascending order based on their 
+  // longitude coordinates.
+  comparePlaceGuidesOnMap(placeGuideA, placeGuideB) {
+    let positionA = placeGuideA.marker.getPosition();
+    let positionB = placeGuideB.marker.getPosition();
+    return positionA.lng()-positionB.lng();
   }
 
   updateMarkerClusters() {
