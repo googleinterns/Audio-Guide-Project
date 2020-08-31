@@ -3,44 +3,58 @@
 <head>
     <meta charset = "UTF-8">
     <title>My Portfolio</title>
+    <script src = "user.js"></script>
+    <script src = "portfolioForm.js"></script>
+    <script src = "setUpFormBlobstore.js"></script>
+    <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <script src = "./user/userAuthentication.js"></script>
     <script src = "./forms/portfolioForm.js"></script>
     <script src = "./forms/setUpFormBlobstore.js"></script>
     <script src = "./pages/index_initPage.js"></script>
     <link rel = "stylesheet" href = "style.css">
+    <script src = "./pages/menu.js"></script>
 </head>
 <body onload="setUpUserAndForm()">
-    <header> 
-        <ul>
-            <li><a href = "index.html">Home</a></li>
-            <li><a href = "discover.html">Discover</a></li>
-            <li><a href = "myPlaceGuides.html">My PlaceGuides</a></li>
-            <li><a href = "createPlaceGuide.html">Create PlaceGuide</a></li>
-        </ul>
-    </header>
-  <div id="createProfile">
-    <form method = "POST" id = "portfolioForm" enctype = "multipart/form-data">
-        <label for = "name">Name:</label><br>
-        <input type = "text" name = "name" id = "name"><br>
+    <div class = "mdc-tab-bar" role = "tablist">
+        <div class = "mdc-tab-scroller">
+            <div class = "mdc-tab-scroller__scroll-area">
+                <div class = "mdc-tab-scroller__scroll-content">
+                </div>
+            </div>
+        </div>
+    </div>
 
-        <label for = "imgKey">Upload image</label>
-        <input type = "file" name = "imgKey" id = "imgKey">
+    <div id="createProfile">
+        <form method = "POST" id = "portfolioForm" enctype = "multipart/form-data">
+            <label for = "name">Name:</label><br>
+            <input type = "text" name = "name" id = "name" pattern = "[A-Za-z\s]+" title = "Enter appropriate name!" maxlength = "20"><br>
 
-        <label for = "deleteImg"></label>
-        <input type = "checkbox" name = "deleteImg" value = "delete" id = "deleteImg">Delete previous image
+            <label for = "imgKey">Upload image</label><br>
+            <input type = "file" name = "imgKey" id = "imgKey"><br>
 
-        <label for = "selfIntroduction">Self Introduction:</label><br>
-        <textarea name = "selfIntroduction" rows = "4" cols = "50" id = "selfIntroduction"></textarea>
+            <div id = "imageDiv">
+            <br>
+            <img alt = "image preview" id = "imagePreview">
+            <br>
+            </div>
 
-        <label for = "publicPortfolio">Account Status:</label>
-        <select name = "publicPortfolio" id = "publicPortfolio">
-            <option value = "public">public</option>
-            <option value = "private">private</option>
-        </select>
+            <label for = "deleteImg">Delete Previous Image : </label><br>
+            <input type = "checkbox" name = "deleteImg" value = "delete" id = "deleteImg"><br>
 
-        <input type = "submit" value = "Submit">
-    </form>
-    <button id = "logout">Logout</button>
-  </div>
+            <label for = "selfIntroduction">Self Introduction:</label><br>
+            <textarea name = "selfIntroduction" rows = "4" cols = "50" id = "selfIntroduction"  maxlength = "200" pattern = "[A-Za-z0-9,.\s]+" title = "You can only enter letters, numbers, periods, and comas!"></textarea><br>
+
+            <label for = "publicPortfolio">Account Status:</label><br>
+            <select name = "publicPortfolio" id = "publicPortfolio">
+                <option value = "public">public</option>
+                <option value = "private">private</option>
+            </select><br>
+
+            <input type = "submit" value = "Submit">
+        </form>
+        <button id = "logout">Logout</button>
+    </div>
 </body>
 </html>
