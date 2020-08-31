@@ -22,7 +22,7 @@
  * The user is also provided a href link to log out and switch account.
  */
 function setUpUserAndForm() {
-  authenticateUser().then(userAuthenticationStatus => {
+  authenticateUser().then((userAuthenticationStatus) => {
     if (!userAuthenticationStatus.isLoggedIn) {
       location.replace(userAuthenticationStatus.loginUrl);
     } else {

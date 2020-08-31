@@ -15,7 +15,7 @@ let map;
 let placeGuideManager;
 
 function initPage() {
-  authenticateUser().then(userAuthenticationStatus => {
+  authenticateUser().then((userAuthenticationStatus) => {
     if (!userAuthenticationStatus.isLoggedIn) {
       location.replace(userAuthenticationStatus.loginUrl);
     } else {

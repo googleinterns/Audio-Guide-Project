@@ -30,15 +30,17 @@ class MapPlaceGuideDisplayer {
     placeGuidesOnMap.sort(MapPlaceGuideDisplayer.comparePlaceGuidesOnMap);
     if (placeGuidesOnMap.length > 0) {
         for (let i = 0; i < placeGuidesOnMap.length; i++) {
-            var position = placeGuidesOnMap[i].marker.getPosition();
+            let position = placeGuidesOnMap[i].marker.getPosition();
             minLat = Math.min(position.lat(), minLat);
             maxLat = Math.max(position.lat(), maxLat);
             if (i + 1 < placeGuidesOnMap.length) {
-                nextMarkerLng = placeGuidesOnMap[i+1].marker.getPosition().lng();
+                nextMarkerLng = 
+                    placeGuidesOnMap[i+1].marker.getPosition().lng();
             } else {
                 nextMarkerLng = placeGuidesOnMap[0].marker.getPosition().lng();
             }
-            if (MapPlaceGuideDisplayer.lngDistance(position.lng(), nextMarkerLng) > maxLngDifference) {
+            if (MapPlaceGuideDisplayer.lngDistance(position.lng(), nextMarkerLng) >
+                     maxLngDifference) {
                 maxLngDifference = 
                     MapPlaceGuideDisplayer.lngDistance(position.lng(),
                                                        nextMarkerLng);
