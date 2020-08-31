@@ -100,6 +100,7 @@ public class PlaceGuideServlet extends HttpServlet {
 
   private List<PlaceGuideInfo> getPlaceGuideInfos(List<PlaceGuide> placeGuides) {
     List<PlaceGuideInfo> placeGuideInfos = new ArrayList<>();
+    String userId = UserServiceFactory.getUserService().getCurrentUser().getUserId();
     for (PlaceGuide placeGuide : placeGuides) {
       placeGuideInfos.add(new PlaceGuideInfo(placeGuide, userId));
     }
