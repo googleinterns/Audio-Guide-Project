@@ -42,11 +42,13 @@ class PlaceGuideRepository {
     );
   }
 
-  static getPlaceGuideFromPlaceGuideWithCreatorPair(placeGuideWithCreatorPair) {
+  static getPlaceGuideFromPlaceGuideWithCreatorPair(placeGuideInfo) {
+    console.log("PlaceGuideInfo = ");
+    console.log(placeGuideInfo);
     var thisRepository = this;
     return new Promise(function (resolve, reject) {
-      var creator = thisRepository.getUserFromResponse(placeGuideWithCreatorPair.creator);
-      var placeGuideResponse = placeGuideWithCreatorPair.placeGuide;
+      var creator = thisRepository.getUserFromResponse(placeGuideInfo.creator);
+      var placeGuideResponse = placeGuideInfo.placeGuide;
       if (placeGuideResponse.placeId !== undefined) {
         Location.constructLocationBasedOnPlaceId(placeGuideResponse.placeId)
             .then(location => {
@@ -59,8 +61,8 @@ class PlaceGuideRepository {
                   creator,
                   placeGuideResponse.description,
                   placeGuideResponse.isPublic,
-                  placeGuideWithCreatorPair.createdByCurrentUser,
-                  placeGuideWithCreatorPair.bookmarkedByCurrentUser);
+                  placeGuideInfo.createdByCurrentUser,
+                  placeGuideInfo.bookmarkedByCurrentUser);
               resolve(placeGuide);
             });
       } else {
@@ -75,8 +77,8 @@ class PlaceGuideRepository {
             creator,
             placeGuideResponse.description,
             placeGuideResponse.isPublic,
-            placeGuideWithCreatorPair.createdByCurrentUser,
-            placeGuideWithCreatorPair.bookmarkedByCurrentUser);
+            placeGuideInfo.createdByCurrentUser,
+            placeGuideInfo.bookmarkedByCurrentUser);
         resolve(placeGuide);
       }
     });

@@ -215,6 +215,11 @@ var PlaceType = {
     icon: null,
     iconColor: 'de8a0b',
   },
+  PUBLIC_OWN: {
+    // Lighter orange icon
+    icon: null,
+    iconColor: 'f5cb42'
+  },
   PRIVATE: {
     // Yellow icon
     icon: null,
