@@ -39,13 +39,13 @@ class Geolocator {
     this._currentLocation.visible = false;
     this._geolocationControlDiv =
         this.createControlDiv(Geolocator.ENABLE_GEOLOCATION_TITLE,
-            Geolocator.DISABLED_GEOLOCATION_IMG_SRC,
+            "gps_fixed",
             Geolocator.GEOLOCATION_IMG_ID);
     this._map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(
         this._geolocationControlDiv);
     this._myLocationControlDiv =
         this.createControlDiv(Geolocator.GO_TO_MY_LOCATION_TITLE,
-            "./img/my_location.svg", Geolocator.GO_TO_MY_LOCATION_IMG_ID);
+            "gps_off", Geolocator.GO_TO_MY_LOCATION_IMG_ID);
     this._map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(
         this._myLocationControlDiv);
   }
@@ -148,16 +148,20 @@ class Geolocator {
   }
 
   /** Creates a div with the style of control elements and with the given image. */
-  createControlDiv(title, imgSrc, imgId) {
+  createControlDiv(title, iconName, iconId) {
     const controlDiv = document.createElement("div");
     controlDiv.setAttribute('class', 'control');
     controlDiv.title = title;
-    if (imgSrc != null) {
-      const controlImg = document.createElement("img");
-      controlImg.setAttribute('id', imgId);
-      controlImg.src = imgSrc;
-      controlDiv.appendChild(controlImg);
-    }
+    controlDiv.appendChild(Geolocator.createIcon(iconName, iconId));
     return controlDiv;
+  }
+
+  static createIcon(iconName, iconId) {
+    var icon = document.createElement("span");
+    icon.classList.add("mdc-tab__icon", "material-icons");
+    icon.setAttribute("aria-hidden", true);
+    icon.setAttribute("id", iconId);
+    icon.innerText = iconName
+    return icon;
   }
 }
