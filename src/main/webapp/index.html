@@ -18,29 +18,36 @@
             <li><a href = "createPlaceGuide.html">Create PlaceGuide</a></li>
         </ul>
     </header>
-  <div id="createProfile">
-    <form method = "POST" id = "portfolioForm" enctype = "multipart/form-data">
-        <label for = "name">Name:</label><br>
-        <input type = "text" name = "name" id = "name"><br>
 
-        <label for = "imgKey">Upload image</label>
-        <input type = "file" name = "imgKey" id = "imgKey">
+    <div id="createProfile">
+        <form method = "POST" id = "portfolioForm" enctype = "multipart/form-data">
+            <label for = "name">Name:</label><br>
+            <input type = "text" name = "name" id = "name" pattern = "[A-Za-z\s]+" title = "Enter appropriate name!" maxlength = "20"><br>
 
-        <label for = "deleteImg"></label>
-        <input type = "checkbox" name = "deleteImg" value = "delete" id = "deleteImg">Delete previous image
+            <label for = "imgKey">Upload image</label><br>
+            <input type = "file" name = "imgKey" id = "imgKey"><br>
 
-        <label for = "selfIntroduction">Self Introduction:</label><br>
-        <textarea name = "selfIntroduction" rows = "4" cols = "50" id = "selfIntroduction"></textarea>
+            <div id = "imageDiv">
+            <br>
+            <img alt = "image preview" id = "imagePreview">
+            <br>
+            </div>
 
-        <label for = "publicPortfolio">Account Status:</label>
-        <select name = "publicPortfolio" id = "publicPortfolio">
-            <option value = "public">public</option>
-            <option value = "private">private</option>
-        </select>
+            <label for = "deleteImg">Delete Previous Image : </label><br>
+            <input type = "checkbox" name = "deleteImg" value = "delete" id = "deleteImg"><br>
 
-        <input type = "submit" value = "Submit">
-    </form>
-    <button id = "logout">Logout</button>
-  </div>
+            <label for = "selfIntroduction">Self Introduction:</label><br>
+            <textarea name = "selfIntroduction" rows = "4" cols = "50" id = "selfIntroduction"  maxlength = "200" pattern = "[A-Za-z0-9,.\s]+" title = "You can only enter letters, numbers, periods, and comas!"></textarea><br>
+
+            <label for = "publicPortfolio">Account Status:</label><br>
+            <select name = "publicPortfolio" id = "publicPortfolio">
+                <option value = "public">public</option>
+                <option value = "private">private</option>
+            </select><br>
+
+            <input type = "submit" value = "Submit">
+        </form>
+        <button id = "logout">Logout</button>
+    </div>
 </body>
 </html>
