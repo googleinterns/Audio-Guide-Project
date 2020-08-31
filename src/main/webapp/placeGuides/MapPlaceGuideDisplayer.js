@@ -15,27 +15,32 @@ class MapPlaceGuideDisplayer {
   adjustMapToShowAll() {
     let minLat = 90;
     let maxLat = -90;
-    let minLng = 180;
-    let maxLng = -180;
+    let maxLngDifference = 0;
+    let maxLngDifferenceWestCorner = 0;
+    let nextMarkerlng;
     let placeGuidesOnMap = Object.values(this._placeGuidesOnMap);
     placeGuidesOnMap.sort(comparePlaceGuidesOnMap);
     if (placeGuidesOnMap.length > 0) {
-        for (const placeGuideId in this._placeGuidesOnMap) {
-        if (this._placeGuidesOnMap.hasOwnProperty(placeGuideId)) {
+        for (let i = 0; i < placeGuidesOnMap.length; i++) {
             var position = this._placeGuidesOnMap[placeGuideId].marker.getPosition();
             minLat = Math.min(position.lat(), minLat);
             maxLat = Math.max(position.lat(), maxLat);
-            minLng = Math.min(position.lng(), minLng);
-            maxLng = Math.max(position.lng(), maxLng);
-            noPlaceGuides = noPlaceGuides + 1;
+            if (i + 1 < placeGuidesOnMap.length) {
+                nextMarkerLng = placeGuidesOnMap[i+1].marker.getPosition().lng();
+            } else {
+                nextMarkerLng = placeGuidesOnMap[0].marker.getPosition().lng();
+            }
+            if (nextMarkerLng - pisition.lng() > maxLngDifference) {
+                maxLngDifference = nextMarkerLng - position.lng();
+                maxLngDifferenceWestCorner = position.leng();
+            }
         }
-        }
-        if (noPlaceGuides > 0) {
-            var southWestCorner = new google.maps.LatLng(minLat, minLng);
-            var northEastCorner = new google.maps.LatLng(maxLat, maxLng);
-            map.setZoom(15);
-            map.fitBounds(new google.maps.LatLngBounds(southWestCorner, northEastCorner), 10);
-        }
+        let eastCorner = maxLngDifferenceWestCorner + maxLngDifference;
+        if (eastCorner > 180) eastCorner -= 360;
+        let southWestCorner = new google.maps.LatLng(minLat, maxLngDifferenceWestCorner);
+        let northEastCorner = new google.maps.LatLng(maxLat, eastCorner);
+        map.setZoom(15);
+        map.fitBounds(new google.maps.LatLngBounds(southWestCorner, northEastCorner), 10);
     }
   }
 
