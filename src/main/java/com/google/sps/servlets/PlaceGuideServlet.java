@@ -10,7 +10,7 @@ import com.google.sps.data.RepositoryType;
 import com.google.sps.placeGuide.PlaceGuide;
 import com.google.sps.placeGuide.repository.PlaceGuideRepository;
 import com.google.sps.placeGuide.repository.PlaceGuideRepositoryFactory;
-import com.google.sps.placeGuideWithCreatorPair.PlaceGuideWithCreatorPair;
+import com.google.sps.placeGuideInfo.PlaceGuideInfo;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -97,20 +97,17 @@ public class PlaceGuideServlet extends HttpServlet {
     }
     List<PlaceGuide> placeGuides =
         getPlaceGuides(placeGuideQueryType, northEastCorner, southWestCorner);
-    List<PlaceGuideWithCreatorPair> placeGuideWithCreatorPairs =
-        getPlaceGuideWithCreatorPairs(placeGuides);
+    List<PlaceGuideInfo> placeGuideInfos = getPlaceGuideInfos(placeGuides);
     response.setContentType("application/json;");
-    response.getWriter().println(convertToJsonUsingGson(placeGuideWithCreatorPairs));
+    response.getWriter().println(convertToJsonUsingGson(placeGuideInfos));
   }
 
-  private List<PlaceGuideWithCreatorPair> getPlaceGuideWithCreatorPairs(
-      List<PlaceGuide> placeGuides) {
-    List<PlaceGuideWithCreatorPair> placeGuideWithCreatorPairs = new ArrayList<>();
+  private List<PlaceGuideInfo> getPlaceGuideInfos(List<PlaceGuide> placeGuides) {
+    List<PlaceGuideInfo> placeGuideInfos = new ArrayList<>();
     for (PlaceGuide placeGuide : placeGuides) {
-      placeGuideWithCreatorPairs.add(
-          PlaceGuideWithCreatorPair.matchPlaceGuideWithCreator(placeGuide));
+      placeGuideInfos.add(new PlaceGuideInfo(placeGuide, userId));
     }
-    return placeGuideWithCreatorPairs;
+    return placeGuideInfos;
   }
 
   private List<PlaceGuide> getPlaceGuides(
@@ -158,6 +155,7 @@ public class PlaceGuideServlet extends HttpServlet {
   }
 
   private PlaceGuide getPlaceGuideFromRequest(HttpServletRequest request) {
+    boolean newPlaceGuide = false;
     String name = request.getParameter(NAME_INPUT);
     long id;
     String idStringValue = request.getParameter(ID_INPUT);
@@ -165,6 +163,7 @@ public class PlaceGuideServlet extends HttpServlet {
       id = Long.parseLong(idStringValue);
     } else {
       id = placeGuideRepository.saveAndGeneratePlaceGuideId();
+      newPlaceGuide = true;
     }
     String audioKey = getUploadedFileBlobKey(request, AUDIO_KEY_INPUT);
     // The audioKey can be null if the user did not upload any audio file. Hence, it will
@@ -176,33 +175,35 @@ public class PlaceGuideServlet extends HttpServlet {
     float latitude = Float.parseFloat(request.getParameter(LATITUDE_INPUT));
     float longitude = Float.parseFloat(request.getParameter(LONGITUDE_INPUT));
     GeoPt coordinate = new GeoPt(latitude, longitude);
-    PlaceGuide.Builder newPlaceGuideBuilder =
+    PlaceGuide.Builder placeGuideBuilder =
         new PlaceGuide.Builder(id, name, audioKey, userId, coordinate);
 
     String publicPlaceGuideStringValue = request.getParameter(IS_PUBLIC_INPUT);
     if (publicPlaceGuideStringValue.equals(IS_PUBLIC_INPUT_VALUE)) {
-      newPlaceGuideBuilder.setPlaceGuideStatus(true);
+      placeGuideBuilder.setPlaceGuideStatus(true);
     }
     String length = request.getParameter(LENGTH_INPUT);
     if (!length.isEmpty()) {
-      newPlaceGuideBuilder.setLength(Long.parseLong(length));
+      placeGuideBuilder.setLength(Long.parseLong(length));
     }
     String placeId = request.getParameter(PLACE_ID_INPUT);
     if (!placeId.isEmpty()) {
-      newPlaceGuideBuilder.setPlaceId(placeId);
+      placeGuideBuilder.setPlaceId(placeId);
     }
     String description = request.getParameter(DESCRIPTION_INPUT);
     if (!description.isEmpty()) {
-      newPlaceGuideBuilder.setDescription(description);
+      placeGuideBuilder.setDescription(description);
     }
     String imageKey = getUploadedFileBlobKey(request, IMAGE_KEY_INPUT);
     if (imageKey != null) {
-      newPlaceGuideBuilder.setImageKey(imageKey);
+      placeGuideBuilder.setImageKey(imageKey);
     } else if (request.getParameterValues(DELETE_IMAGE_INPUT) == null) {
-      imageKey = placeGuideRepository.getPlaceGuide(id).getImageKey();
-      newPlaceGuideBuilder.setImageKey(imageKey);
+      if (!newPlaceGuide) {
+        PlaceGuide prevPlaceGuide = placeGuideRepository.getPlaceGuide(id);
+        placeGuideBuilder.setImageKey(prevPlaceGuide.getImageKey());
+      }
     }
-    return newPlaceGuideBuilder.build();
+    return placeGuideBuilder.build();
   }
 
   @Nullable
