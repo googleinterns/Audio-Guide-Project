@@ -38,9 +38,9 @@ class MapPlaceGuideDisplayer {
   addNewMarker(placeGuideId, placeGuide) {
     this._placeGuidesOnMap[placeGuideId] =
       this.constructPlaceGuideOnMapFromPlaceGuide(
-            placeGuide);
+          placeGuide);
     this._markerClusterer
-      .addMarker(this._placeGuidesOnMap[placeGuideId].marker);
+        .addMarker(this._placeGuidesOnMap[placeGuideId].marker);
   }
 
   constructPlaceGuideOnMapFromPlaceGuide(placeGuide) {
