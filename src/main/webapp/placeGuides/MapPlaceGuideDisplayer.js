@@ -6,14 +6,23 @@ class MapPlaceGuideDisplayer {
     this._placeGuidesOnMap = {};
   }
 
-  static lngDistance(lngWest, lngEast) {
-    if (lngWest < lngEast) {
-      return lngEast - lngWest;
-    } else {
-      // West points distance from IDL + east points distance to IDL;
-      // (180 - lngWest) + (180 + lngEast);
-      return 360 - lngWest + lngEast;
-    }
+  update(placeGuides) {
+    this.removePreviousPlaceGuidesFromMap(placeGuides);
+    this.addNewPlaceGuidesToMap(placeGuides);
+    this.updateMarkerClusters();
+  }
+
+  remove(placeGuideId) {
+    this._placeGuidesOnMap[placeGuideId].remove();
+    delete this._placeGuidesOnMap[placeGuideId];
+  }
+
+  highlight(placeGuideId) {
+    this._placeGuidesOnMap[placeGuideId].highlight();
+  }
+
+  unhighlight(placeGuideId) {
+    this._placeGuidesOnMap[placeGuideId].unhighlight();
   }
 
   // This function scans all the placeGuides to find the minimum map area
@@ -23,22 +32,6 @@ class MapPlaceGuideDisplayer {
   // map area.
   // For longitudes, it firs finds the maximum lane which doesn't contain any
   // placeGuides(for this purpose, placeGuides are sorted based on their
-
-  // longitude coordinates.
-  static comparePlaceGuidesOnMap(placeGuideA, placeGuideB) {
-    const positionA = placeGuideA.marker.getPosition();
-    const positionB = placeGuideB.marker.getPosition();
-    return positionA.lng() - positionB.lng();
-  }
-
-  update(placeGuides) {
-    this.removePreviousPlaceGuidesFromMap(placeGuides);
-    this.addNewPlaceGuidesToMap(placeGuides);
-    this.updateMarkerClusters();
-  }
-
-  // Sorts placeGuides in an ascending order based on their
-
   // longitude coordinate) and then complements it.
   adjustMapToShowAll() {
     let minLat = 90;
@@ -78,6 +71,24 @@ class MapPlaceGuideDisplayer {
           new google.maps.LatLngBounds(southWestCorner,
               northEastCorner),
           10);
+    }
+  }
+
+  // Sorts placeGuides in an ascending order based on their
+  // longitude coordinates.
+  static comparePlaceGuidesOnMap(placeGuideA, placeGuideB) {
+    const positionA = placeGuideA.marker.getPosition();
+    const positionB = placeGuideB.marker.getPosition();
+    return positionA.lng() - positionB.lng();
+  }
+
+  static lngDistance(lngWest, lngEast) {
+    if (lngWest < lngEast) {
+      return lngEast - lngWest;
+    } else {
+      // West points distance from IDL + east points distance to IDL;
+      // (180 - lngWest) + (180 + lngEast);
+      return 360 - lngWest + lngEast;
     }
   }
 
@@ -133,18 +144,5 @@ class MapPlaceGuideDisplayer {
         placeGuide.creator,
         placeGuide.description,
         placeType);
-  }
-
-  remove(placeGuideId) {
-    this._placeGuidesOnMap[placeGuideId].remove();
-    delete this._placeGuidesOnMap[placeGuideId];
-  }
-
-  highlight(placeGuideId) {
-    this._placeGuidesOnMap[placeGuideId].highlight();
-  }
-
-  unhighlight(placeGuideId) {
-    this._placeGuidesOnMap[placeGuideId].unhighlight();
   }
 }
