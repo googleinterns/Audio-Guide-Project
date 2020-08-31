@@ -20,11 +20,9 @@ class MapPlaceGuideDisplayer {
     let nextMarkerLng;
     let placeGuidesOnMap = Object.values(this._placeGuidesOnMap);
     placeGuidesOnMap.sort(MapPlaceGuideDisplayer.comparePlaceGuidesOnMap);
-    console.log(placeGuidesOnMap);
     if (placeGuidesOnMap.length > 0) {
         for (let i = 0; i < placeGuidesOnMap.length; i++) {
             var position = placeGuidesOnMap[i].marker.getPosition();
-            console.log("Position " + i + " lng: " + position.lng());
             minLat = Math.min(position.lat(), minLat);
             maxLat = Math.max(position.lat(), maxLat);
             if (i + 1 < placeGuidesOnMap.length) {
@@ -32,13 +30,11 @@ class MapPlaceGuideDisplayer {
             } else {
                 nextMarkerLng = placeGuidesOnMap[0].marker.getPosition().lng();
             }
-            console.log("Nextmarker lng: " + nextMarkerLng);
             if (MapPlaceGuideDisplayer.lngDistance(position.lng(), nextMarkerLng) > maxLngDifference) {
                 maxLngDifference = MapPlaceGuideDisplayer.lngDistance(position.lng(), nextMarkerLng)
                 maxLngDifferenceWestCorner = position.lng();
             }
         }
-        console.log("Max difference: " + maxLngDifferenceWestCorner + "with west corner; " + maxLngDifferenceWestCorner);
         let westLng = maxLngDifferenceWestCorner + maxLngDifference;
         if (westLng > 180) westLng -= 360;
         let eastLng = maxLngDifferenceWestCorner;
@@ -50,14 +46,11 @@ class MapPlaceGuideDisplayer {
   }
 
   static lngDistance(lngWest, lngEast) {
-      console.log("Calculating distance for: " + lngWest + " " + lngEast);
       if(lngWest < lngEast) {
-          console.log("Distance: " + (lngEast - lngWest));
           return lngEast - lngWest;
       } else {
           // West points distance from IDL + east points distance to IDL;
           // (180 - lngWest) + (180 + lngEast);
-          console.log("Distance: " + (360 - lngWest + lngEast));
           return 360 - lngWest + lngEast;
       }
   }
