@@ -11,8 +11,8 @@
  * by the currently logged in user.
  */
 
-var map;
-var placeGuideManager;
+let map;
+let placeGuideManager;
 
 function initPage() {
   authenticateUser().then(userAuthenticationStatus => {

@@ -1,5 +1,6 @@
 /**
- * This file handles user authentication and saving and updating the user's data in the database through a form.
+ * This file handles user authentication and saving and updating 
+ * the user's data in the database through a form.
  */
 
 
