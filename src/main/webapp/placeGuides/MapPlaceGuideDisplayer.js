@@ -36,11 +36,11 @@ class MapPlaceGuideDisplayer {
   }
 
   addNewMarker(placeGuideId, placeGuide) {
-      this._placeGuidesOnMap[placeGuideId] =
-        this.constructPlaceGuideOnMapFromPlaceGuide(
+    this._placeGuidesOnMap[placeGuideId] =
+      this.constructPlaceGuideOnMapFromPlaceGuide(
             placeGuide);
-      this._markerClusterer
-        .addMarker(this._placeGuidesOnMap[placeGuideId].marker);
+    this._markerClusterer
+      .addMarker(this._placeGuidesOnMap[placeGuideId].marker);
   }
 
   constructPlaceGuideOnMapFromPlaceGuide(placeGuide) {
@@ -60,7 +60,8 @@ class MapPlaceGuideDisplayer {
   }
 
   remove(placeGuideId) {
-    this._markerClusterer.removeMarker(this._placeGuidesOnMap[placeGuideId].marker)
+    this._markerClusterer.removeMarker(
+        this._placeGuidesOnMap[placeGuideId].marker);
     this._placeGuidesOnMap[placeGuideId].remove();
     delete this._placeGuidesOnMap[placeGuideId];
   }
