@@ -12,6 +12,12 @@ input[type="file"] {
     display: none;
 }
 
+.form-field-input{
+    display: block;
+    width: 400px;
+    margin: 15px auto;
+}
+
 #map {
     height: 95%; 
     margin: 0 auto; 
