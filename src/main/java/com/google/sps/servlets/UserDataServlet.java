@@ -111,8 +111,7 @@ public class UserDataServlet extends HttpServlet {
     if (!selfIntroduction.isEmpty()) {
       newUserBuilder.addSelfIntroduction(selfIntroduction);
     }
-    String publicPortfolioStringValue = request.getParameter(PUBLIC_PORTFOLIO_INPUT);
-    if (publicPortfolioStringValue.equals(PUBLIC_PORTFOLIO_INPUT_PUBLIC_VALUE)) {
+    if (request.getParameter(PUBLIC_PORTFOLIO_INPUT) != null) {
       newUserBuilder.setPublicPortfolio(true); // False by default.
     }
     String imgKey = getUploadedFileBlobKey(request, IMG_KEY_INPUT);

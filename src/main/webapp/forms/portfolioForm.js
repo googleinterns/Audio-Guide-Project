@@ -15,6 +15,7 @@ function styleInputs() {
     const deletePrevImageCheckbox = new mdc.checkbox.MDCCheckbox(document.getElementById('deletePrevImageCheckbox'));
     const deletePrevImageFormField = new mdc.formField.MDCFormField(document.getElementById('deletePrevImageFormField'));
     deletePrevImageFormField.input = deletePrevImageCheckbox;
+    const switchControl = new mdc.switchControl.MDCSwitch(document.querySelector('.mdc-switch'));
 }
 
 function activatePreviewFeature() {
@@ -30,10 +31,11 @@ function fillPortfolioFormWithUserData() {
     setFormInputValue(document.getElementById('name'), user.name);
     setFormInputValue(document.getElementById('selfIntroduction'),
         user.selfIntroduction);
+    const switchControl = new mdc.switchControl.MDCSwitch(document.querySelector('.mdc-switch'));
     if (user.publicPortfolio) {
-      document.getElementById('publicPortfolio').value = 'public';
+      switchControl.checked = true;
     } else {
-      document.getElementById('publicPortfolio').value = 'private';
+      switchControl.checked = false;
     }
     if (user.imgKey != undefined) {
       setBlobKeySrcToElement(user.imgKey, "imagePreview", true);

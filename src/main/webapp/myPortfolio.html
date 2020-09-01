@@ -3,9 +3,6 @@
 <head>
     <meta charset = "UTF-8">
     <title>My Portfolio</title>
-    <script src = "user.js"></script>
-    <script src = "portfolioForm.js"></script>
-    <script src = "setUpFormBlobstore.js"></script>
     <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
     <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -80,13 +77,22 @@
                 <span class="mdc-floating-label mdc-floating-label--float-above" id="my-label-id">Self Introduction</span>
                 <span class="mdc-line-ripple"></span>
             </label>
+
+            <label for = "publicPortfolio">Public account:</label>
+            <div class="mdc-switch">
+                <div class="mdc-switch__track"></div>
+                <div class="mdc-switch__thumb-underlay">
+                    <div class="mdc-switch__thumb"></div>
+                    <input type="checkbox" name = "publicPortfolio" id = "publicPortfolio" class="mdc-switch__native-control" role="switch" aria-checked="false">
+                </div>
+            </div>
  
-            <label for = "publicPortfolio">Account Status:</label><br>
-            <select name = "publicPortfolio" id = "publicPortfolio">
+            <!-- <label for = "publicPortfolio">Account Status:</label><br> -->
+            <!-- <select name = "publicPortfolio" id = "publicPortfolio" title = "Additional information">
                 <option value = "public">public</option>
-                <option value = "private">private</option>
+                <option value = "test">tesc</option>
             </select><br>
- 
+  -->
             <button type = "submit" class="mdc-button mdc-button--raised">
                 <div class="mdc-button__ripple"></div>
                 <span class="mdc-button__label">Submit</span>
