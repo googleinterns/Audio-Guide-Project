@@ -33,7 +33,8 @@ class MapPlaceGuideDisplayer {
     let guidesExist = false;
     for (const placeGuideId in this._placeGuidesOnMap) {
       if (this._placeGuidesOnMap.hasOwnProperty(placeGuideId)) {
-        const position = this._placeGuidesOnMap[placeGuideId].marker.getPosition();
+        const position = 
+          this._placeGuidesOnMap[placeGuideId].marker.getPosition();
         mapBounds.extend(position);
         guidesExist = true;
       }
@@ -43,7 +44,7 @@ class MapPlaceGuideDisplayer {
       // method is not guaranteed to set the highest possible
       // zoom, which is expected in our case.
       map.setZoom(MAX_ZOOM);
-      map.setCenter(mapBounds.getCenter())
+      map.setCenter(mapBounds.getCenter());
       map.fitBounds(mapBounds);
     }
   }
