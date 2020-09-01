@@ -33,7 +33,7 @@ class MapPlaceGuideDisplayer {
     let guidesExist = false;
     for (const placeGuideId in this._placeGuidesOnMap) {
       if (this._placeGuidesOnMap.hasOwnProperty(placeGuideId)) {
-        const position = 
+        const position =
           this._placeGuidesOnMap[placeGuideId].marker.getPosition();
         mapBounds.extend(position);
         guidesExist = true;
