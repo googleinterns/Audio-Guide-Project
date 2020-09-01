@@ -39,11 +39,11 @@ async function getFetchedList() {
 
 // For testing.
 function updateLocation(position, placeId, placeName) {
-  document.getElementById(
-      'placeId').setAttribute('value', placeId);
   if (placeName != null) {
     document.getElementById(
         'placeName').setAttribute('value', placeName);
+    document.getElementById(
+      'placeId').setAttribute('value', placeId);
   } else {
     document.getElementById(
         'placeName').setAttribute('value', '-');
