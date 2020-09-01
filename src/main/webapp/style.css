@@ -18,6 +18,16 @@ input[type="file"] {
     margin: 15px auto;
 }
 
+.form-card {
+  background-color: #fff;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
+  border-radius: 3px;
+  border: 0px;
+  margin: 10px;
+  padding: 30px 20px;
+  width: fit-content;
+}
+
 #map {
     height: 95%; 
     margin: 0 auto; 
