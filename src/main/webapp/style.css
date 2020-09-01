@@ -68,6 +68,10 @@ input[type="file"] {
   --mdc-theme-secondary: #80ba83;
 }
 
+.primary-text {
+    color: green;
+}
+
 .mdc-text-field--focused:not(.mdc-text-field--disabled) .mdc-floating-label {
     color: green;
 }
