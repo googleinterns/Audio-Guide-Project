@@ -47,6 +47,8 @@ function updateLocation(position, placeId, placeName) {
   } else {
     document.getElementById(
         'placeName').setAttribute('value', '-');
+    document.getElementById(
+      'placeId').setAttribute('value', "");
   }
   document.getElementById(
       'latitude').setAttribute('value', position.lat());
