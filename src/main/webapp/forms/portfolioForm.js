@@ -11,11 +11,12 @@ function setUpPortfolioForm() {
 function styleInputs() {
     const textField = new mdc.textField.MDCTextField(document.getElementById('nameInput'));
     const textArea = new mdc.textField.MDCTextField(document.getElementById('selfIntroductionInput'));
-    const submitButtonRipple = new mdc.ripple.MDCRipple(document.querySelector('.mdc-button'));
+    const submitButtonRipple = new mdc.ripple.MDCRipple(document.getElementById("submitBtn"));
+    const chooseFileButtonRipple = new mdc.ripple.MDCRipple(document.getElementById("chooseFileBtn"));
     const deletePrevImageCheckbox = new mdc.checkbox.MDCCheckbox(document.getElementById('deletePrevImageCheckbox'));
     const deletePrevImageFormField = new mdc.formField.MDCFormField(document.getElementById('deletePrevImageFormField'));
     deletePrevImageFormField.input = deletePrevImageCheckbox;
-    const switchControl = new mdc.switchControl.MDCSwitch(document.querySelector('.mdc-switch'));
+    const switchControl = new mdc.switchControl.MDCSwitch(document.getElementById("publicitySwitch"));
 }
 
 function activatePreviewFeature() {

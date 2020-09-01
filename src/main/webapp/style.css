@@ -8,6 +8,10 @@ html, body{
     height: 100%;
 }
 
+input[type="file"] {
+    display: none;
+}
+
 #map {
     height: 95%; 
     margin: 0 auto; 

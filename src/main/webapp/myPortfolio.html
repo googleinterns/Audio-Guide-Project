@@ -32,10 +32,10 @@
                 <span class="mdc-line-ripple"></span>
             </label>
 
-            <!-- <label for = "name">Name:</label><br>
-            <input type = "text" name = "name" id = "name" pattern = "[A-Za-z\s]+" title = "Enter appropriate name!" maxlength = "20"><br> -->
- 
-            <label for = "imgKey">Upload image</label><br>
+            <label for="imgKey" class="mdc-button mdc-button--outlined" id="chooseFileBtn">
+                <div class="mdc-button__ripple"></div>
+                <span class="mdc-button__label">Choose file</span>
+            </label>
             <input type = "file" name = "imgKey" id = "imgKey"><br>
  
             <div id = "imageDiv">
@@ -65,9 +65,6 @@
                 <label for="checkbox-1">Delete Previous Image:</label>
             </div>
  
-            <!-- <label for = "deleteImg">Delete Previous Image : </label><br>
-            <input type = "checkbox" name = "deleteImg" value = "delete" id = "deleteImg"><br> -->
- 
             <label id="selfIntroductionInput" class="mdc-text-field mdc-text-field--filled mdc-text-field--textarea">
                 <span class="mdc-text-field__ripple"></span>
                 <span class="mdc-text-field__resizer">
@@ -79,26 +76,18 @@
             </label>
 
             <label for = "publicPortfolio">Public account:</label>
-            <div class="mdc-switch">
+            <div id="publicitySwitch" class="mdc-switch">
                 <div class="mdc-switch__track"></div>
                 <div class="mdc-switch__thumb-underlay">
                     <div class="mdc-switch__thumb"></div>
                     <input type="checkbox" name = "publicPortfolio" id = "publicPortfolio" class="mdc-switch__native-control" role="switch" aria-checked="false">
                 </div>
             </div>
- 
-            <!-- <label for = "publicPortfolio">Account Status:</label><br> -->
-            <!-- <select name = "publicPortfolio" id = "publicPortfolio" title = "Additional information">
-                <option value = "public">public</option>
-                <option value = "test">tesc</option>
-            </select><br>
-  -->
-            <button type = "submit" class="mdc-button mdc-button--raised">
+
+            <button id="submitBtn" type = "submit" class="mdc-button mdc-button--raised">
                 <div class="mdc-button__ripple"></div>
                 <span class="mdc-button__label">Submit</span>
             </button>
-    
-            <!-- <input type = "submit" value = "Submit"> -->
         </form>
         <button id = "logout">Logout</button>
     </div>
