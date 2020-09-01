@@ -26,7 +26,8 @@ class MapPlaceGuideDisplayer {
     this._placeGuidesOnMap[placeGuideId].unhighlight();
   }
 
-  // This function set 
+  // This function sets the map bound to the minimum one
+  // which contains all the PlaceGuides.
   adjustMapToShowAll() {
     let mapBounds = new google.maps.LatLngBounds();
     let guidesExist = false;
@@ -38,12 +39,12 @@ class MapPlaceGuideDisplayer {
       }
     }
     if (guidesExist) {
-        // Unless the zoom is increased manually, the fitBounds()
-        // method is not guaranteed to set the highest possible
-        // zoom, which is expected in our case.
-        map.setZoom(MAX_ZOOM);
-        map.setCenter(mapBounds.getCenter())
-        map.fitBounds(mapBounds);
+      // Unless the zoom is increased manually, the fitBounds()
+      // method is not guaranteed to set the highest possible
+      // zoom, which is expected in our case.
+      map.setZoom(MAX_ZOOM);
+      map.setCenter(mapBounds.getCenter())
+      map.fitBounds(mapBounds);
     }
   }
 
