@@ -27,4 +27,8 @@ class LocationPicker {
       }
     });
   }
+
+  get pickedLocation() {
+    return this._chosenPlace;
+  }
 }
