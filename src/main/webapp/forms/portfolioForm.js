@@ -9,9 +9,12 @@ function setUpPortfolioForm() {
 }
 
 function styleInputs() {
-    const textField = new mdc.textField.MDCTextField(document.getElementById("nameInput"));
-    const textArea = new mdc.textField.MDCTextField(document.getElementById("selfIntroductionInput"));
-    const buttonRipple = new mdc.ripple.MDCRipple(document.querySelector('.mdc-button'));
+    const textField = new mdc.textField.MDCTextField(document.getElementById('nameInput'));
+    const textArea = new mdc.textField.MDCTextField(document.getElementById('selfIntroductionInput'));
+    const submitButtonRipple = new mdc.ripple.MDCRipple(document.querySelector('.mdc-button'));
+    const deletePrevImageCheckbox = new mdc.checkbox.MDCCheckbox(document.getElementById('deletePrevImageCheckbox'));
+    const deletePrevImageFormField = new mdc.formField.MDCFormField(document.getElementById('deletePrevImageFormField'));
+    deletePrevImageFormField.input = deletePrevImageCheckbox;
 }
 
 function activatePreviewFeature() {

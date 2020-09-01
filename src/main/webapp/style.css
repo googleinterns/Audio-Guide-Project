@@ -15,7 +15,7 @@ html, body{
 
 :root {
   --mdc-theme-primary: green;
-  --mdc-theme-secondary: lime;
+  --mdc-theme-secondary: #80ba83;
 }
 
 .mdc-text-field--focused:not(.mdc-text-field--disabled) .mdc-floating-label {
