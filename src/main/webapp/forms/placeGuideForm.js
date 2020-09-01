@@ -7,6 +7,20 @@ function setUpCreatePlaceGuideForm() {
   addBlobstoreUploadUrlToForm(
       'CREATE_PLACE_GUIDE_FORM', 'createPlaceGuideForm');
   activatePreviewFeature();
+  styleInputs();
+}
+
+function styleInputs() {
+    const nameInput = new mdc.textField.MDCTextField(document.getElementById('nameInput'));
+    const lengthInput = new mdc.textField.MDCTextField(document.getElementById('lengthInput'));
+    const descriptionInput = new mdc.textField.MDCTextField(document.getElementById('descriptionInput'));
+    // const submitButtonRipple = new mdc.ripple.MDCRipple(document.getElementById("submitBtn"));
+    const chooseAudioFileButtonRipple = new mdc.ripple.MDCRipple(document.getElementById("chooseAudioFileBtn"));
+    const chooseImageFileButtonRipple = new mdc.ripple.MDCRipple(document.getElementById("chooseImageFileBtn"));
+    const deletePrevImageCheckbox = new mdc.checkbox.MDCCheckbox(document.getElementById('deletePrevImageCheckbox'));
+    const deletePrevImageFormField = new mdc.formField.MDCFormField(document.getElementById('deletePrevImageFormField'));
+    deletePrevImageFormField.input = deletePrevImageCheckbox;
+    const publicitySwitchControl = new mdc.switchControl.MDCSwitch(document.getElementById("publicitySwitch"));
 }
 
 function activatePreviewFeature() {
@@ -58,15 +72,18 @@ function fillFormWithPlaceGuideData(placeGuide) {
   // Set required attribute to false since there must be a previous audio key
   // from the previous place guide data.
   document.getElementById('audioKey').required = false;
-
   setFormInputValue(document.getElementById('id'), placeGuide.id);
-  setFormInputValue(document.getElementById('name'), placeGuide.name);
+  setFormInputValue(
+      new mdc.textField.MDCTextField(document.getElementById('nameInput')),
+      placeGuide.name);
   setBlobKeySrcToElement(
       placeGuide.audioKey, 'audioPlayer', false);
+  const publicitySwitchControl = 
+    new mdc.switchControl.MDCSwitch(document.getElementById("publicitySwitch"));
   if (placeGuide.isPublic) {
-    document.getElementById('isPublic').value = 'public';
+    publicitySwitchControl.checked = true;
   } else {
-    document.getElementById('isPublic').value = 'private';
+    publicitySwitchControl.checked = false;
   }
   setFormInputValue(
       document.getElementById('latitude'),
@@ -78,7 +95,8 @@ function fillFormWithPlaceGuideData(placeGuide) {
       document.getElementById('length'),
       placeGuide.length);
   setFormInputValue(
-      document.getElementById('description'),
+      new mdc.textField.MDCTextField(
+          document.getElementById('descriptionInput')),
       placeGuide.description);
   if (placeGuide.imageKey != undefined) {
     setBlobKeySrcToElement(

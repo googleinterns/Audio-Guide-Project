@@ -24,49 +24,108 @@
         <form method = "POST" id = "createPlaceGuideForm" enctype = "multipart/form-data" class="form-card">
             <input type="hidden" id="id" name="id">
             <input type="hidden" id="placeId" name="placeId">
-            <br>
-            <label for = "name">Name:</label><br>
-            <input type = "text" name = "name" id = "name" required pattern = "[A-Za-z\s]+" title = "Enter appropriate name! (only contains letters and spaces)" maxlength = "20">
-            <br>
-            <label for = "audioKey">Upload audio file</label>
+
+            <label id= "nameInput" class="mdc-text-field mdc-text-field--outlined form-field-input">
+                <input type="text" class="mdc-text-field__input" aria-labelledby="my-label-id" name = "name" id = "name" pattern = "[A-Za-z\s]+" title = "Enter appropriate name!" maxlength = "20">
+                <span class="mdc-notched-outline">
+                    <span class="mdc-notched-outline__leading"></span>
+                    <span class="mdc-notched-outline__notch">
+                        <span class="mdc-floating-label" id="my-label-id">PlaceGuide's Name</span>
+                    </span>
+                    <span class="mdc-notched-outline__trailing"></span>
+                </span>
+            </label>
+
+            <label for="audioKey" class="mdc-button mdc-button--outlined form-field-input" id="chooseAudioFileBtn">
+                <div class="mdc-button__ripple"></div>
+                <span class="mdc-button__label">Upload Audio File</span>
+            </label>
             <input type = "file" name = "audioKey" id = "audioKey" required>
-            <br>
-            <audio id = "audioPlayer" controls>
+
+            <audio id = "audioPlayer" class="form-field-input" controls>
                 <source type="audio/mpeg">
             </audio>
-            <br>
-            <label for = "imageKey">Upload image</label>
+
+            <label for="imageKey" class="mdc-button mdc-button--outlined form-field-input" id="chooseImageFileBtn">
+                <div class="mdc-button__ripple"></div>
+                <span class="mdc-button__label">Upload Picture</span>
+            </label>
             <input type = "file" name = "imageKey" id = "imageKey">
+
             <div id = "imageDiv">
-            <br>
             <img alt = "image preview" id = "imagePreview">
-            <br>
             </div>
-            <label for = "deleteImage">Delete previous image</label>
-            <input type = "checkbox" name = "deleteImage" value = "delete" id = "deleteImage">
-            <br>
-            <label for = "description">Description:</label><br>
-            <textarea name = "description" rows = "4" cols = "50" id = "description" maxlength = "200" pattern = "[A-Za-z0-9,.\s]+" title = "You can only enter letters, numbers, periods, and comas!"></textarea>
-            <br>
-            <label for = "length">Amount of time needed in minute(s):</label><br>
-            <input type = "number" name = "length" id = "length" min = "0"><br>
-            <label for = "isPublic">Place Guide Status:</label>
-            <select name = "isPublic" id = "isPublic">
-                <option value = "public">public</option>
-                <option value = "private">private</option>
-            </select>
-            <br>
+
+            <div id="deletePrevImageFormField" class="mdc-form-field form-field-input">
+                <div id="deletePrevImageCheckbox" class="mdc-checkbox">
+                    <input type="checkbox"
+                        class="mdc-checkbox__native-control"
+                        name = "deleteImg" 
+                        value = "delete" 
+                        id = "deleteImg"/>
+                    <div class="mdc-checkbox__background">
+                        <svg class="mdc-checkbox__checkmark"
+                            viewBox="0 0 24 24">
+                            <path class="mdc-checkbox__checkmark-path"
+                                fill="none"
+                                d="M1.73,12.91 8.1,19.28 22.79,4.59"/>
+                        </svg>
+                        <div class="mdc-checkbox__mixedmark"></div>
+                    </div>
+                    <div class="mdc-checkbox__ripple"></div>
+                </div>
+                <label for="deleteImg">Delete Previous Image:</label>
+            </div>
+
+            <label id="descriptionInput" class="mdc-text-field mdc-text-field--outlined mdc-text-field--textarea form-field-input">
+                <span class="mdc-text-field__resizer">
+                    <textarea class="mdc-text-field__input" name = "description" rows = "4" cols = "40" id = "description" maxlength = "200" pattern = "[A-Za-z0-9,.\s]+" title = "You can only enter letters, numbers, periods, and comas!"></textarea>
+                    <span class="mdc-text-field-character-counter">0 / 200</span>
+                </span>
+                <span class="mdc-notched-outline">
+                    <span class="mdc-notched-outline__leading"></span>
+                    <span class="mdc-notched-outline__notch">
+                        <span class="mdc-floating-label" id="my-label-id">Description</span>
+                    </span>
+                    <span class="mdc-notched-outline__trailing"></span>
+                </span>
+            </label>
+
+            <label id= "lengthInput" class="mdc-text-field mdc-text-field--outlined form-field-input">
+                <input type="number" class="mdc-text-field__input" aria-labelledby="my-label-id" name = "length" id = "length" min = "0">
+                <span class="mdc-notched-outline">
+                    <span class="mdc-notched-outline__leading"></span>
+                    <span class="mdc-notched-outline__notch">
+                        <span class="mdc-floating-label" id="my-label-id">Amount of time needed in minute(s):</span>
+                    </span>
+                    <span class="mdc-notched-outline__trailing"></span>
+                </span>
+            </label>
+
+            <div id="publicitySwitch" class="mdc-switch form-field-input">
+                <div class="mdc-switch__track"></div>
+                <label for = "isPublic" class="aligned-element">Public:</label>
+                <div class="mdc-switch__thumb-underlay aligned-element">
+                    <div class="mdc-switch__thumb"></div>
+                    <input type="checkbox" name = "isPublic" id = "isPublic" class="mdc-switch__native-control" role="switch" aria-checked="false" title="If public, then the guide will be visible to others">
+                </div>
+            </div>
+
             <fieldset>
-                <legend>Chosen place information: </legend>
+                <legend>Location Of Guide: </legend>
                 <label for = "placeName">place name : </label><br>
-                <input type = "text" name = "placeName" id = "placeName" readonly><br>
+                <input type = "text" name = "placeName" id = "placeName" readonly class="mdc-text-field mdc-text-field--outlined form-field-input"><br>
                 <label for = "latitude">latitude : </label><br>
-                <input type = "text" name = "latitude" id = "latitude" required onkeypress="return false;"><br>
+                <input type = "text" name = "latitude" id = "latitude" required readonly onkeypress="return false;" class="mdc-text-field mdc-text-field--outlined form-field-input"><br>
                 <label for = "longitude">longitude : </label><br>
-                <input type = "text" name = "longitude" id = "longitude" required onkeypress="return false;"><br>
+                <input type = "text" name = "longitude" id = "longitude" required readonly onkeypress="return false;" class="mdc-text-field mdc-text-field--outlined form-field-input"><br>
                 <br>        
             </fieldset>
-            <input type = "submit" value = "Submit">
+            
+            <button id="submitBtn" type = "submit" class="mdc-button mdc-button--raised form-field-input">
+                <div class="mdc-button__ripple"></div>
+                <span class="mdc-button__label">Submit</span>
+            </button>
         </form>
 
         <!-- <button type = "button" id = "logout">Logout</button>
