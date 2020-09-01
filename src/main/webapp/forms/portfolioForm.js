@@ -9,8 +9,8 @@ function setUpPortfolioForm() {
 }
 
 function styleInputs() {
-    const textField = new mdc.textField.MDCTextField(document.getElementById('nameInput'));
-    const textArea = new mdc.textField.MDCTextField(document.getElementById('selfIntroductionInput'));
+    const nameInput = new mdc.textField.MDCTextField(document.getElementById('nameInput'));
+    const selfIntroductionInput = new mdc.textField.MDCTextField(document.getElementById('selfIntroductionInput'));
     const submitButtonRipple = new mdc.ripple.MDCRipple(document.getElementById("submitBtn"));
     const chooseFileButtonRipple = new mdc.ripple.MDCRipple(document.getElementById("chooseFileBtn"));
     const deletePrevImageCheckbox = new mdc.checkbox.MDCCheckbox(document.getElementById('deletePrevImageCheckbox'));
@@ -29,8 +29,10 @@ function activatePreviewFeature() {
  */
 function fillPortfolioFormWithUserData() {
   getUserDataFromServlet().then((user) => {
-    setFormInputValue(document.getElementById('name'), user.name);
-    setFormInputValue(document.getElementById('selfIntroduction'),
+    const nameInput = new mdc.textField.MDCTextField(document.getElementById('nameInput'));
+    const selfIntroductionInput = new mdc.textField.MDCTextField(document.getElementById('selfIntroductionInput'));
+    setFormInputValue(nameInput, user.name);
+    setFormInputValue(selfIntroductionInput,
         user.selfIntroduction);
     const switchControl = new mdc.switchControl.MDCSwitch(document.querySelector('.mdc-switch'));
     if (user.publicPortfolio) {
