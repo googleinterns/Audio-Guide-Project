@@ -26,22 +26,38 @@ class MapPlaceGuideDisplayer {
     this._placeGuidesOnMap[placeGuideId].unhighlight();
   }
 
-  // This function scans all the placeGuides to find the minimum map area
-  // which contains all of them.
+  // This function set 
   adjustMapToShowAll() {
-    const minMapAreaBounds = this.getMinMapArea();
-    console.log(minMapAreaBounds);
-    if (minMapAreaBounds.length > 0) {
-      const southWestCorner = new google.maps.LatLng(minMapAreaBounds[0],
-                                                     minMapAreaBounds[1]);
-      const northEastCorner = new google.maps.LatLng(minMapAreaBounds[2],
-                                                     minMapAreaBounds[3]);
-      map.setZoom(15);
-      map.fitBounds(
-        new google.maps.LatLngBounds(southWestCorner,
-                                     northEastCorner),
-        10);
+    let mapBounds = new google.maps.LatLngBounds();
+    let guidesExist = false;
+    for (const placeGuideId in this._placeGuidesOnMap) {
+      if (this._placeGuidesOnMap.hasOwnProperty(placeGuideId)) {
+        const position = this._placeGuidesOnMap[placeGuideId].marker.getPosition();
+        mapBounds.extend(position);
+        guidesExist = true;
+      }
     }
+    if (guidesExist) {
+        // Unless the zoom is increased manually, the fitBounds()
+        // method is not guaranteed to set the highest possible
+        // zoom, which is expected in our case.
+        map.setZoom(MAX_ZOOM);
+        map.setCenter(mapBounds.getCenter())
+        map.fitBounds(mapBounds);
+    }
+    // const minMapAreaBounds = this.getMinMapArea();
+    // console.log(minMapAreaBounds);
+    // if (minMapAreaBounds.length > 0) {
+    //   const southWestCorner = new google.maps.LatLng(minMapAreaBounds[0],
+    //                                                  minMapAreaBounds[1]);
+    //   const northEastCorner = new google.maps.LatLng(minMapAreaBounds[2],
+    //                                                  minMapAreaBounds[3]);
+    //   map.setZoom(15);
+    //   map.fitBounds(
+    //     new google.maps.LatLngBounds(southWestCorner,
+    //                                  northEastCorner),
+    //     10);
+    // }
   }
 
   // This function finds the minimum map area containing all PlaceGuides.
