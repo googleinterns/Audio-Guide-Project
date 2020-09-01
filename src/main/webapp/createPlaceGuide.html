@@ -20,8 +20,8 @@
         </div>
     </div>
 
-    <div id="createPlaceGuide">
-        <form method = "POST" id = "createPlaceGuideForm" enctype = "multipart/form-data">
+    <div id="createPlaceGuide" class="left-element">
+        <form method = "POST" id = "createPlaceGuideForm" enctype = "multipart/form-data" class="form-card">
             <input type="hidden" id="id" name="id">
             <input type="hidden" id="placeId" name="placeId">
             <br>
@@ -69,13 +69,13 @@
             <input type = "submit" value = "Submit">
         </form>
 
-        <button type = "button" id = "logout">Logout</button>
+        <!-- <button type = "button" id = "logout">Logout</button>
 
-        <button id = "testExistingPlaceGuide" onclick = "testExistingPlaceGuide()">Test Input Existing PlaceGuide</button>
+        <button id = "testExistingPlaceGuide" onclick = "testExistingPlaceGuide()">Test Input Existing PlaceGuide</button> -->
     </div>
 
     <input id = "search-box" type = "text" placeholder = "Search for a new place!"/>
-    <div id = "map"></div>
+    <div id = "map" class="right-element"></div>
 
 
     <script src = "./pages/menu.js"></script>

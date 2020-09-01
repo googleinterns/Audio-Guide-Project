@@ -4,7 +4,7 @@
     box-sizing: border-box;
 }
 
-html, body{
+html, body {
     height: 100%;
 }
 
@@ -12,24 +12,41 @@ input[type="file"] {
     display: none;
 }
 
-.form-field-input{
+.form-field-input {
     display: block;
-    width: 400px;
+    width: 80%;
     margin: 15px auto;
 }
 
+.left-element {
+    width: 30%;
+    float: left;
+}
+
+.right-element {
+    width: 70%;
+    float: right;
+}
+
+.aligned-element
+{
+    vertical-align:middle;
+}
+
 .form-card {
+  position: relative;
   background-color: #fff;
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
   border-radius: 3px;
   border: 0px;
   margin: 10px;
   padding: 30px 20px;
-  width: fit-content;
+  width: 95%;
 }
 
 #map {
-    height: 95%; 
+    position: relative;
+    height: 95%;
     margin: 0 auto; 
 }
 
