@@ -9,7 +9,9 @@ function setUpPortfolioForm() {
 }
 
 function styleInputs() {
-    const textField = new mdc.textField.MDCTextField(document.querySelector('.mdc-text-field'));
+    const textField = new mdc.textField.MDCTextField(document.getElementById("nameInput"));
+    const textArea = new mdc.textField.MDCTextField(document.getElementById("selfIntroductionInput"));
+    const buttonRipple = new mdc.ripple.MDCRipple(document.querySelector('.mdc-button'));
 }
 
 function activatePreviewFeature() {
