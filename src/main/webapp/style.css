@@ -19,8 +19,10 @@ input[type="file"] {
 }
 
 .left-element {
-    width: 30%;
-    float: left;
+  width: 30%;
+  float: left;
+  max-height: 95%;
+  overflow: auto;
 }
 
 .right-element {
