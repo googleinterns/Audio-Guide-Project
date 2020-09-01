@@ -18,6 +18,10 @@ html, body{
   --mdc-theme-secondary: lime;
 }
 
+.mdc-text-field--focused:not(.mdc-text-field--disabled) .mdc-floating-label {
+    color: green;
+}
+
 .control{
     width: 40px;
     height: 40px;

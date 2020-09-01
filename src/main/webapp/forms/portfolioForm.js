@@ -3,8 +3,13 @@
  */
 function setUpPortfolioForm() {
   addBlobstoreUploadUrlToForm("PORTFOLIO_FORM", "portfolioForm");
+  styleInputs();
   activatePreviewFeature();
   fillPortfolioFormWithUserData();
+}
+
+function styleInputs() {
+    const textField = new mdc.textField.MDCTextField(document.querySelector('.mdc-text-field'));
 }
 
 function activatePreviewFeature() {
