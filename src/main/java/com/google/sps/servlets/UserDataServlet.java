@@ -79,7 +79,7 @@ public class UserDataServlet extends HttpServlet {
       deleteBlobWithGivenKeyValue(prevUserData.getImgKey());
     }
     userRepository.saveUser(user);
-    response.sendRedirect("/index.html");
+    response.sendRedirect("/myPortfolio.html");
   }
 
   /** Returns the data of the user who is currently logged in. */
