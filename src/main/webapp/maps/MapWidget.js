@@ -1,5 +1,5 @@
 class MapWidget {
-  static SAVE_LOCATION_EVENT = "saveLocationEvent";
+  static CHOSEN_LOCATION_CHANGE_EVENT = 'chosenPositionChange';
 
   constructor() {
     var myMapOptions = {
@@ -23,8 +23,8 @@ class MapWidget {
     return this._map;
   }
 
-  get savedLocation() {
-    return this._locationSaver.savedLocation;
+  get pickedLocation() {
+    return this._locationPicker.pickedLocation;
   }
 
   addGeolocationFunctionality() {
@@ -56,10 +56,11 @@ class MapWidget {
     var searchBox = new SearchBox(
         this._map, chosenLocation, "search-box");
     searchBox.init();
-    var locationPicker = new LocationPicker(this._map, chosenLocation);
-    locationPicker.init();
-    // Save location functionality.
-    this._locationSaver = new LocationSaver(this._map, chosenLocation);
-    this._locationSaver.init();
+    this._locationPicker = new LocationPicker(this._map, chosenLocation);
+    this._locationPicker.init();
+    document.getElementById("map")
+        .addEventListener(MapWidget.CHOSEN_LOCATION_CHANGE_EVENT, function () {
+          chosenLocation.visible = true;
+        });
   }
 }

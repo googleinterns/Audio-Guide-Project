@@ -1,6 +1,5 @@
 const PLACE_ZOOM = 14;
 const MAX_ZOOM = 19;
-const CHOSEN_LOCATION_CHANGE_EVENT = 'chosenPositionChange';
 
 /**
  * This class holds a place's data and handles its representation on the map.
@@ -28,7 +27,6 @@ class Place {
     }
     this._placeType = placeType;
     this._hasInfoWindow = hasInfoWindow;
-    this._positionChangeEvent = new Event(CHOSEN_LOCATION_CHANGE_EVENT);
     this.setupRepresentationOnMap();
   }
 
@@ -209,7 +207,7 @@ class Place {
     this._infoWindow.setContent(this.getInfoWindowContent());
     if (this._triggerChosenLocationChangeEvent) {
       document.getElementById('map')
-          .dispatchEvent(this._positionChangeEvent);
+          .dispatchEvent(new Event(MapWidget.CHOSEN_LOCATION_CHANGE_EVENT));
     }
   }
 }

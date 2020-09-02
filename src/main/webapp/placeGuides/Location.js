@@ -36,7 +36,7 @@ class Location {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
           resolve(new Location(null, place));
         } else {
-          reject(new Error('Couldn\'t find the place' + placeId));
+          reject(new Error('Couldn\'t find the place ' + placeId));
         }
       });
     });

@@ -13,6 +13,42 @@ class MapPlaceGuideDisplayer {
     this.addNewPlaceGuidesToMap(placeGuides);
   }
 
+  remove(placeGuideId) {
+    this._placeGuidesOnMap[placeGuideId].remove();
+    delete this._placeGuidesOnMap[placeGuideId];
+  }
+
+  highlight(placeGuideId) {
+    this._placeGuidesOnMap[placeGuideId].highlight();
+  }
+
+  unhighlight(placeGuideId) {
+    this._placeGuidesOnMap[placeGuideId].unhighlight();
+  }
+
+  // This function sets the map bound to the minimum one
+  // which contains all the PlaceGuides.
+  adjustMapToShowAll() {
+    let mapBounds = new google.maps.LatLngBounds();
+    let guidesExist = false;
+    const placeGuideIds = Object.getOwnPropertyNames(this._placeGuidesOnMap);
+    placeGuideIds.forEach((placeGuideId) => {
+        const position =
+          this._placeGuidesOnMap[placeGuideId].marker.getPosition();
+        mapBounds.extend(position);
+        guidesExist = true;
+      }
+    );
+    if (guidesExist) {
+      // Unless the zoom is increased manually, the fitBounds()
+      // method is not guaranteed to set the highest possible
+      // zoom, which is expected in our case.
+      map.setZoom(MAX_ZOOM);
+      map.setCenter(mapBounds.getCenter());
+      map.fitBounds(mapBounds);
+    }
+  }
+
   removePreviousPlaceGuidesFromMap(placeGuides) {
     for (const placeGuideId in this._placeGuidesOnMap) {
       if (this._placeGuidesOnMap.hasOwnProperty(placeGuideId)) {
