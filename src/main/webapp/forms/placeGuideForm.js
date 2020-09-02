@@ -107,7 +107,9 @@ function fillFormWithPlaceGuideToEdit() {
     document.getElementById("placeId").value = GET["placeId"];
     document.getElementById("name").value = GET["name"];
     document.getElementById("audioPlayer").src = getBlobSrc(GET["audioKey"]);
-    document.getElementById("imagePreview").src = getBlobSrc(GET["imageKey"]);
+    if (GET["imageKey"] != "undefined") {
+      document.getElementById("imagePreview").src = getBlobSrc(GET["imageKey"]);
+    }
     document.getElementById("imagePreview").style.display = "block";
     document.getElementById("description").value = GET["description"];
     document.getElementById("length").value = GET["length"];

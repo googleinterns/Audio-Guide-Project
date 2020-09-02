@@ -52,6 +52,7 @@ class ListPlaceGuideDisplayer {
   }
 
   constructPlaceGuideOnListDivFromPlaceGuide(placeGuide) {
+    console.log(placeGuide);
     return new PlaceGuideOnList(
         placeGuide.id,
         placeGuide.location.mapsPlace.name,
