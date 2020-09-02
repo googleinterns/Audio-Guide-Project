@@ -39,6 +39,9 @@ class Place {
   }
 
   set visible(visibility) {
+    if (!visibility && this._hasInfoWindow) {
+        this.closeInfoWindow();
+    }
     this._marker.setVisible(visibility);
   }
 
