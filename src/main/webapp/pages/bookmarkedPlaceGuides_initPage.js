@@ -1,7 +1,7 @@
 /**
  * This function initialises the map and adds some functionalities to it:
- * Geolocation: to track the user's current location,
- * display it and center the map around it.
+ * Geolocation: to track the user's current location, display it and center
+ * the map around it.
  * Searching: lets the user search for places and center the map around it.
  * Display place guides: displays the place guides created
  * by the currently logged in user.
@@ -14,18 +14,16 @@ function initPage() {
     if (!userAuthenticationStatus.isLoggedIn) {
       location.replace(userAuthenticationStatus.loginUrl);
     } else {
-      const menu = new Menu(Menu.PAGE_NAMES.MY_PLACEGUIDES);
+      const menu = new Menu(Menu.PAGE_NAMES.BOOKMARKED_PLACEGUIDES);
       const mapWidget = new MapWidget();
       mapWidget.addGeolocationFunctionality();
       mapWidget.addSearchingFunctionality();
       map = mapWidget.map;
       const placeGuideRepository =
           new PlaceGuideRepository(
-              PlaceGuideRepository.QueryType.CREATED_ALL_IN_MAP_AREA);
+              PlaceGuideRepository.QueryType.BOOKMARKED);
       placeGuideManager = new PlaceGuideManager(placeGuideRepository);
-      google.maps.event.addListener(map, 'idle', function () {
-        placeGuideManager.update(map.getBounds(), map.getZoom(), false);
-      });
+      placeGuideManager.update(map.getBounds(), map.getZoom(), true);
     }
   });
 }

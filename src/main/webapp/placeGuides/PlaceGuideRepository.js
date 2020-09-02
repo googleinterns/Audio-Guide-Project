@@ -10,6 +10,7 @@ class PlaceGuideRepository {
     CREATED_ALL_IN_MAP_AREA: "CREATED_ALL_IN_MAP_AREA",
     CREATED_PUBLIC_IN_MAP_AREA: "CREATED_PUBLIC_IN_MAP_AREA",
     CREATED_PRIVATE_IN_MAP_AREA: "CREATED_PRIVATE_IN_MAP_AREA",
+    BOOKMARKED: "BOOKMARKED",
   };
 
   constructor(queryType) {
@@ -92,10 +93,17 @@ class PlaceGuideRepository {
   }
 
   updatePlaceGuides(bounds, zoom) {
-    if (PlaceGuideRepository.MIN_ZOOM <= zoom) {
+    if (PlaceGuideRepository.MIN_ZOOM <= zoom || 
+        this._queryType == PlaceGuideRepository.QueryType.BOOKMARKED) {
+      // As the number of bookmarked placeGuides will be restricted, 
+      // we are not limiting the number of 
+      // displayed PlaceGuides based on the zoom level/map area. 
+      // We display all of them at once.
       var url = new URL("/place-guide-data", document.URL);
       url.searchParams.append("placeGuideType", this._queryType);
-      url.searchParams.append("regionCorners", bounds.toUrlValue());
+      if (this._queryType != PlaceGuideRepository.QueryType.BOOKMARKED) {
+        url.searchParams.append("regionCorners", bounds.toUrlValue());
+      }
       var thisRepository = this;
       return fetch(url)
           .catch(error =>
