@@ -142,7 +142,7 @@ class PlaceGuideRepository {
     if (this._placeGuides.bookmarkedByCurrentUser) {
       url.searchParams.append("bookmarkHandlingType", "BOOKMARK");
     } else {
-      url.searchParams.append("bookmarkHandlingType", "REMOVE");
+      url.searchParams.append("bookmarkHandlingType", "UNBOOKMARK");
     }
     return fetch(url)
         .catch(error => console.log("BookmarkPlaceGuideServlet: failed to fetch: "

@@ -6,6 +6,7 @@
  */
 var map;
 var placeGuideManager;
+const availableWidth = window.innerWidth - 370;
 
 function initPage() {
   authenticateUser().then(userAuthenticationStatus => {
@@ -24,6 +25,8 @@ function initPage() {
       google.maps.event.addListener(map, 'idle', function () {
         placeGuideManager.update(map.getBounds(), map.getZoom());
       });
+
+      document.getElementById("mapDisplayer").style.width = availableWidth.toString() + "px";
     }
   });
 }

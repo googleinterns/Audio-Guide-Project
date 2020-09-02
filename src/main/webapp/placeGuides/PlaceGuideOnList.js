@@ -63,6 +63,7 @@ function appendChildren(
 }
 
 function createFoldedPlaceGuide(placeGuideProperties) {
+  const placeGuideAudioKey = placeGuideProperties.audioKey;
   const placeGuideId = placeGuideProperties.placeGuideId;
   const placeGuideName = placeGuideProperties.name;
   const placeName = placeGuideProperties.placeName;
@@ -73,7 +74,7 @@ function createFoldedPlaceGuide(placeGuideProperties) {
   if (placeName != undefined || placeName != "") {
     foldedPlaceGuideDiv.appendChild(foldedPlaceGuide_placeName(placeName));
   }
-  foldedPlaceGuideDiv.appendChild(foldedPlaceGuide_buttons(placeGuideId));
+  foldedPlaceGuideDiv.appendChild(foldedPlaceGuide_buttons(placeGuideId, placeGuideAudioKey));
   return foldedPlaceGuideDiv;
 }
 
@@ -97,12 +98,10 @@ function foldedPlaceGuide_placeName(placeName) {
   return placeNameElement;
 }
 
-function foldedPlaceGuide_buttons(placeGuideId) {
+function foldedPlaceGuide_buttons(placeGuideId, audioKey) {
   const buttonsContainer = document.createElement("div");
   buttonsContainer.classList.add("mdc-card__action-icons");
-  const playButton = getPlaceGuideButtonWithPreparedClasses();
-  playButton.setAttribute("title", "play/pause");
-  playButton.innerText = "play_arrow";
+  createAudioButton(audioKey, buttonsContainer);
   const expandButton = getPlaceGuideButtonWithPreparedClasses();
   expandButton.setAttribute("title", "expand");
   expandButton.innerText = "open_in_full";
@@ -113,7 +112,6 @@ function foldedPlaceGuide_buttons(placeGuideId) {
     placeGuideDiv.querySelectorAll(".card-placeGuide")[0].style.display = "block";
     placeGuideDiv.style.padding = "0px";
   });
-  buttonsContainer.appendChild(playButton);
   buttonsContainer.appendChild(expandButton);
   return buttonsContainer;
 }
@@ -185,7 +183,10 @@ function createCardContents() {
 }
 
 function createPlaceGuideImageElement(placeGuideImageKey) {
-  const placeGuideImage = createBlobView(placeGuideImageKey, "img");
+  var placeGuideImage = createBlobView(placeGuideImageKey, "img");
+  if (placeGuideImageKey == undefined) {
+    placeGuideImage.src = "/";
+  }
   placeGuideImage.style.width = "100%";
   placeGuideImage.style.height = "180px";
   return placeGuideImage;
@@ -207,14 +208,16 @@ function createPlaceGuideTitle(placeGuideName, creatorEmail) {
 function createPlaceGuideLengthElement(placeGuideAudioLength) {
   const placeGuideLength = document.createElement("p");
   placeGuideLength.classList.add("place-guide-length");
-  placeGuideLength.innerText = placeGuideAudioLength;
+  placeGuideLength.innerText = placeGuideAudioLength + " minutes";
   return placeGuideLength;
 }
 
 function createPlaceGuideDescriptionElement(placeGuideDescription) {
   const description = document.createElement("p");
   description.classList.add("place-guide-description");
-  description.innerText = placeGuideDescription;
+  if (placeGuideDescription != undefined) {
+    description.innerText = placeGuideDescription;
+  }
   return description;
 }
 
@@ -241,10 +244,20 @@ function createAndPopulateButtonsContainer(
 }
 
 function createAudioButton(placeGuideAudioKey, parentDiv) {
+  const audioPlayer = document.createElement("audio");
+  audioPlayer.src = getBlobSrc(placeGuideAudioKey);
   const audioButton = getPlaceGuideButtonWithPreparedClasses();
   audioButton.setAttribute("title", "play/pause audio");
   audioButton.innerText = "play_arrow";
-  audioButton.src = getBlobSrc(placeGuideAudioKey);
+  audioButton.addEventListener("click", function() {
+    if (audioButton.innerText == "play_arrow") {
+      audioPlayer.play();
+      audioButton.innerText = "pause";
+    } else {
+      audioPlayer.pause();
+      audioButton.innerText = "play_arrow";
+    }
+  });
   parentDiv.appendChild(audioButton);
 }
 
@@ -310,7 +323,7 @@ function createDeleteButton(parentDiv, placeGuideId) {
 
   deleteButton.addEventListener("click", function() {
     if (window.confirm("Click ok if you want to delete the place guide")) {
-      placeGuideManager.remove(placeGuideId);
+      placeGuideManager.removePlaceGuide(placeGuideId);
     }
   });
   parentDiv.appendChild(deleteButton);
@@ -339,11 +352,12 @@ function createBookmarkButton(placeGuideId, bookmarkedByCurrentUser, parentDiv) 
     bookmarkButton.setAttribute("title", "unbookmark place guide");
   }
   bookmarkButton.addEventListener("click", function() {
+    console.log(bookmarkButton.innerText);
     if (bookmarkButton.innerText == "bookmark_border") {
-      bookmarkButton.innerText == "bookmark";
+      bookmarkButton.innerText = "bookmark";
       bookmarkButton.setAttribute("title", "bookmark place guide");
     } else {
-      bookmarkButton.innerText == "bookmark_border";
+      bookmarkButton.innerText = "bookmark_border";
       bookmarkButton.setAttribute("title", "unbookmark place guide");
     }
     placeGuideManager.toggleBookmark(placeGuideId);

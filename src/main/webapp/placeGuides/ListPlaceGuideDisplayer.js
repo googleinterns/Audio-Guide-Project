@@ -52,7 +52,6 @@ class ListPlaceGuideDisplayer {
   }
 
   constructPlaceGuideOnListDivFromPlaceGuide(placeGuide) {
-    console.log(placeGuide);
     return new PlaceGuideOnList(
         placeGuide.id,
         placeGuide.location.mapsPlace.name,
@@ -66,8 +65,8 @@ class ListPlaceGuideDisplayer {
         placeGuide.imgKey,
         placeGuide.createdByCurrentUser,
         placeGuide.bookmarkedByCurrentUser,
-        placeGuide.location.lat,
-        placeGuide.location.lng).placeGuideOnListDiv;
+        placeGuide.location.position.lat(),
+        placeGuide.location.position.lng()).placeGuideOnListDiv;
   }
     
 }

@@ -20,17 +20,18 @@ public class BookmarkPlaceGuideServlet extends HttpServlet {
 
   private static final String PLACE_GUIDE_ID_PARAMETER = "placeGuideId";
   private static final String BOOKMARK_HANDLING_TYPE_PARAMETER = "bookmarkHandlingType";
+  private static final String CURRENT_URL_PARAMETER = "currentUrl";
 
   private final UserRepository userRepository =
       UserRepositoryFactory.getUserRepository(RepositoryType.DATASTORE);
 
   private enum BookmarkPlaceGuideQueryType {
     BOOKMARK,
-    REMOVE
+    UNBOOKMARK
   }
 
   @Override
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     long placeGuideId = Long.parseLong(request.getParameter(PLACE_GUIDE_ID_PARAMETER));
     String bookmarkHandlingType = request.getParameter(BOOKMARK_HANDLING_TYPE_PARAMETER);
     BookmarkPlaceGuideQueryType queryType =
@@ -45,7 +46,7 @@ public class BookmarkPlaceGuideServlet extends HttpServlet {
       case BOOKMARK:
         userRepository.bookmarkPlaceGuide(placeGuideId, userId);
         break;
-      case REMOVE:
+      case UNBOOKMARK:
         userRepository.removeBookmarkedPlaceGuide(placeGuideId, userId);
         break;
       default:
