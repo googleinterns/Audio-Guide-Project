@@ -65,10 +65,12 @@ class PlaceGuideOnMap {
     if (creatorName == undefined) {
       creatorName = creator.email;
     }
-    const content = '<h3>' + name + '</h3>' +
+    let content = '<h3>' + name + '</h3>' +
         '<h4> Created by: ' + creatorName + '</h4>' +
-        '<h4> Place: ' + placeName + '</h4>' +
-        '<p>' + description + '</p>';
+        '<h4> Place: ' + placeName + '</h4>';
+    if (description != undefined) {
+        content += '<p>' + description + '</p>';
+    } 
     return content;
   }
 
