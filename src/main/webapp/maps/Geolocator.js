@@ -36,7 +36,7 @@ class Geolocator {
             0,
             Geolocator.MY_LOCATION_TITLE,
             PlaceType.CURRENT_LOCATION,
-            true);
+            false);
     this._currentLocation.visible = false;
     this._geolocationControlDiv =
         this.createControlDiv(Geolocator.ENABLE_GEOLOCATION_TITLE,
@@ -52,11 +52,9 @@ class Geolocator {
   }
 
   static convertCurrentLocationToLatLng(location) {
-    var locationLatLng = {
-      lat: location.coords.latitude,
-      lng: location.coords.longitude
-    };
-    return locationLatLng;
+    return new google.maps.LatLng(
+        location.coords.latitude, 
+        location.coords.longitude);
   }
 
   // The Geolocator starts listening to and handling "turn on/off geolocation" 

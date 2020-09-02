@@ -204,7 +204,9 @@ class Place {
   }
 
   onPositionChange() {
-    this._infoWindow.setContent(this.getInfoWindowContent());
+    if (this._hasInfoWindow) {
+        this._infoWindow.setContent(this.getInfoWindowContent());
+    }
     if (this._triggerChosenLocationChangeEvent) {
       document.getElementById('map')
           .dispatchEvent(new Event(MapWidget.CHOSEN_LOCATION_CHANGE_EVENT));
