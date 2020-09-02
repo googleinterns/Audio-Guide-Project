@@ -31,14 +31,14 @@ class MapPlaceGuideDisplayer {
   adjustMapToShowAll() {
     let mapBounds = new google.maps.LatLngBounds();
     let guidesExist = false;
-    for (const placeGuideId in this._placeGuidesOnMap) {
-      if (this._placeGuidesOnMap.hasOwnProperty(placeGuideId)) {
-        const position =
-          this._placeGuidesOnMap[placeGuideId].marker.getPosition();
-        mapBounds.extend(position);
-        guidesExist = true;
-      }
-    }
+    let placeGuideIds = Object.getOwnPropertyNames(this._placeGuidesOnMap);
+    placeGuideIds.forEach ((placeGuideId) => {
+            const position =
+                this._placeGuidesOnMap[placeGuideId].marker.getPosition();
+            mapBounds.extend(position);
+            guidesExist = true;
+        }
+    );
     if (guidesExist) {
       // Unless the zoom is increased manually, the fitBounds()
       // method is not guaranteed to set the highest possible
