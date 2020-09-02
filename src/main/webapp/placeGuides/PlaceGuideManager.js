@@ -28,6 +28,10 @@ class PlaceGuideManager {
 
   removePlaceGuide(placeGuideId) {
     this._placeGuideRepository.removePlaceGuide(placeGuideId);
+    this._mapPlaceGuideDisplayer.removePlaceGuideRepresentation(placeGuideId);
+  }
+
+  removePlaceGuideRepresentation(placeGuideId) {
     this._mapPlaceGuideDisplayer.remove(placeGuideId);
     this._listPlaceGuideDisplayer.remove(placeGuideId);
   }
@@ -51,7 +55,7 @@ class PlaceGuideManager {
     this._placeGuideRepository.togglePlaceGuideBookmarkStatus(placeGuideId);
     if (this._bookmarkedPlaceGuidesPage &&
         !this._placeGuideRepository.isBookmarked(placeGuideId)) {
-        this.removePlaceGuide(placeGuideId);
+        this.removePlaceGuideRepresentation(placeGuideId);
     }
   }
 }
