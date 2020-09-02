@@ -170,3 +170,19 @@ body {
   margin-left: 350px;
   height: 100%;
 }
+
+#createPlaceGuide {
+  width: 35%;
+  height: 100%;
+  float: left;
+}
+
+#specialMapDisplayer {
+  margin-left: 35%;
+  width: 65%;
+  height: 100%;
+}
+
+#specialListPlaceGuideDisplayer {
+  width: 0px;
+}
