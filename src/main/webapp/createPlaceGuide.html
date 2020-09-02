@@ -23,6 +23,7 @@
     <div id="createPlaceGuide" class="left-element">
         <form method = "POST" id = "createPlaceGuideForm" enctype = "multipart/form-data" class="form-card">
             <h2 class="primary-text align-center">New Audio Guide</h2>
+
             <input type="hidden" id="id" name="id">
             <input type="hidden" id="placeId" name="placeId">
 
@@ -139,9 +140,9 @@
         </form>
     </div>
 
+    <div id = "listPlaceGuideDisplayer" style = "display: none; visibility: hidden; width: 0px;"></div>
     <input id = "search-box" type = "text" placeholder = "Search for a new place!"/>
     <div id = "map" class="right-element"></div>
-
 
     <script src = "./pages/menu.js"></script>
     <script src = "./maps/Geolocator.js"></script>
@@ -154,6 +155,7 @@
     <script src="https://unpkg.com/@google/markerclustererplus@4.0.1/dist/markerclustererplus.min.js"></script>
     <script src = "./maps/MapWidget.js"></script>
     <script src = "./placeGuides/Location.js"></script>
+    <script src = "./placeGuides/PlaceGuideOnList.js"></script>
     <script src = "./placeGuides/ListPlaceGuideDisplayer.js"></script>
     <script src = "./placeGuides/MapPlaceGuideDisplayer.js"></script>
     <script src = "./placeGuides/PlaceGuideOnMap.js"></script>

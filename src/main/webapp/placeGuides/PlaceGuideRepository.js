@@ -18,6 +18,10 @@ class PlaceGuideRepository {
     this._placeGuides = {};
   }
 
+  isBookmarked(placeGuideId) {
+    return this._placeGuides[placeGuideId].bookmarkedByCurrentUser;
+  }
+
   get placeGuides() {
     return this._placeGuides;
   }
@@ -107,6 +111,7 @@ class PlaceGuideRepository {
         url.searchParams.append("regionCorners", bounds.toUrlValue());
       }
       var thisRepository = this;
+      console.log(url);
       return fetch(url)
           .catch(error =>
               console.log("PlaceGuideServlet: failed to fetch: " + error))
@@ -152,7 +157,7 @@ class PlaceGuideRepository {
     if (this._placeGuides.bookmarkedByCurrentUser) {
       url.searchParams.append("bookmarkHandlingType", "BOOKMARK");
     } else {
-      url.searchParams.append("bookmarkHandlingType", "REMOVE");
+      url.searchParams.append("bookmarkHandlingType", "UNBOOKMARK");
     }
     return fetch(url)
         .catch(error => console.log("BookmarkPlaceGuideServlet: failed to fetch: "

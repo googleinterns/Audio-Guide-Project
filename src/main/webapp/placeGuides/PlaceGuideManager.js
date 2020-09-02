@@ -6,9 +6,10 @@
  * classes which are responsible for handling the events.
  */
 class PlaceGuideManager {
-  constructor(placeGuideRepository) {
+  constructor(placeGuideRepository, bookmarkedPlaceGuidesPage) {
     this._placeGuideRepository = placeGuideRepository;
     this._highlightedPlaceGuideId = null;
+    this._bookmarkedPlaceGuidesPage = bookmarkedPlaceGuidesPage;
     this._mapPlaceGuideDisplayer = new MapPlaceGuideDisplayer();
     this._listPlaceGuideDisplayer = new ListPlaceGuideDisplayer();
   }
@@ -17,7 +18,7 @@ class PlaceGuideManager {
     this._placeGuideRepository.updatePlaceGuides(bounds, zoom)
         .then((response) => {
           const placeGuides = this._placeGuideRepository.placeGuides;
-          this._mapPlaceGuideDisplayer.update(placeGuides);
+          this._listPlaceGuideDisplayer.update(placeGuides);
           this._mapPlaceGuideDisplayer.update(placeGuides);
           if (showAll) {
               this._mapPlaceGuideDisplayer.adjustMapToShowAll();
@@ -26,7 +27,7 @@ class PlaceGuideManager {
   }
 
   removePlaceGuide(placeGuideId) {
-    this._placeGuideRepository.remove(placeGuideId);
+    this._placeGuideRepository.removePlaceGuide(placeGuideId);
     this._mapPlaceGuideDisplayer.remove(placeGuideId);
     this._listPlaceGuideDisplayer.remove(placeGuideId);
   }
@@ -44,5 +45,13 @@ class PlaceGuideManager {
     this._mapPlaceGuideDisplayer.unhighlight(this._highlightedPlaceGuideId);
     this._listPlaceGuideDisplayer.unhighlight(this._highlightedPlaceGuideId);
     this._highlightedPlaceGuideId = null;
+  }
+
+  toggleBookmark(placeGuideId) {
+    this._placeGuideRepository.togglePlaceGuideBookmarkStatus(placeGuideId);
+    if (this._bookmarkedPlaceGuidesPage &&
+        !this._placeGuideRepository.isBookmarked(placeGuideId)) {
+        this.removePlaceGuide(placeGuideId);
+    }
   }
 }

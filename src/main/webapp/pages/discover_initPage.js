@@ -7,6 +7,7 @@
  */
 let map;
 let placeGuideManager;
+const availableWidth = window.innerWidth - 370;
 
 function initPage() {
   authenticateUser().then((userAuthenticationStatus) => {
@@ -21,10 +22,12 @@ function initPage() {
       const placeGuideRepository =
           new PlaceGuideRepository(
               PlaceGuideRepository.QueryType.ALL_PUBLIC_IN_MAP_AREA);
-      placeGuideManager = new PlaceGuideManager(placeGuideRepository);
+      placeGuideManager = new PlaceGuideManager(placeGuideRepository, false);
       google.maps.event.addListener(map, 'idle', function () {
         placeGuideManager.update(map.getBounds(), map.getZoom(), false);
       });
+
+      document.getElementById("mapDisplayer").style.width = availableWidth.toString() + "px";
     }
   });
 }
