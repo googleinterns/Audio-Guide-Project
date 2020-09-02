@@ -93,3 +93,62 @@ form img {
   display: none;
   width: 100%;
 }
+
+body {
+    font-family: 'Roboto';
+    margin: 0;
+    padding-top: 0.1px;
+}
+
+.my-card {
+    height: 400px;
+    width: 350px;
+}
+
+.my-place-guide-list {
+    height: 700px;
+    width: 350px;
+}
+
+.my-card-content {
+    padding-left: 16px;
+    overflow: hidden;
+}
+
+.my-place-guide-image {
+    width: 100%;
+    padding: 0;
+    overflow: hidden;
+}
+
+.place-guide-description {
+    padding-top: -20px;
+    font-family: Montserrat;
+    padding-right: 16px;
+    padding-left: 16px;
+    top: 0;
+    word-wrap: break-word;
+    text-align: justify;
+    text-justify: inter-word;
+    font-size: 12px;
+}
+
+.place-guide-title {
+    display: flex;
+    justify-content: space-between;
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+.place-guide-length {
+    font-size: 10px;
+    padding-bottom: 2px;
+    font-style: italic;
+    padding-left: 16px;
+}
+
+.list-place-guide-displayer {
+    font-family: Roboto; 
+    overflow:hidden; 
+    overflow-y:scroll;
+}

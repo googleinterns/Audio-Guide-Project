@@ -18,7 +18,7 @@ class PlaceGuideManager {
         .then((response) => {
           const placeGuides = this._placeGuideRepository.placeGuides;
           this._mapPlaceGuideDisplayer.update(placeGuides);
-          this._mapPlaceGuideDisplayer.update(placeGuides);
+          this._listPlaceGuideDisplayer.update(placeGuides);
         });
   }
 

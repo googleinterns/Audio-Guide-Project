@@ -3,74 +3,70 @@
  * the placeGuides on a scrollable list.
  */
 class ListPlaceGuideDisplayer {
-  constructor() {
-    this._placeGuidesOnList = {};
+  constructor() {    
+    this._listPlaceGuideDisplayerDiv = document.getElementById("listPlaceGuideDisplayer");
+    this._listPlaceGuideDisplayerDiv.classList.add(
+        "list-group", "my-place-guide-list", "list-place-guide-displayer");
+  }
+
+  get listPlaceGuideDisplayerDiv() {
+    return this._listPlaceGuideDisplayerDiv;
   }
 
   update(placeGuides) {
-    this.removePreviousPlaceGuidesFromList(placeGuides);
-    this.addNewPlaceGuidesToList(placeGuides);
+    this.removeAllPlaceGuidesFromList();
+    this.addPlaceGuidesToList(placeGuides);
   }
 
-  removeFromList(placeGuideId) {
-
+  removeAllPlaceGuidesFromList() {
+    while (this._listPlaceGuideDisplayerDiv.firstChild) {
+      this._listPlaceGuideDisplayerDiv.removeChild(
+          this._listPlaceGuideDisplayerDiv.lastChild);
+    };
   }
 
-  addToList(placeGuideId) {
-
-  }
-
-  removePreviousPlaceGuidesFromList(placeGuides) {
-    for (const placeGuideId in this._placeGuidesOnList) {
-      if (this._placeGuidesOnList.hasOwnProperty(placeGuideId)) {
-        if (!placeGuides.hasOwnProperty(placeGuideId)) {
-          // This placeGuide is not needed anymore.
-          this.remove(placeGuideId);
-        }
-      }
-    }
-  }
-
-  addNewPlaceGuidesToList(placeGuides) {
-    for (const placeGuideId in placeGuides) {
+  addPlaceGuidesToList(placeGuides) {
+    for (var placeGuideId in placeGuides) {
       if (placeGuides.hasOwnProperty(placeGuideId)) {
-        if (!this._placeGuidesOnList.hasOwnProperty(placeGuideId)) {
-          // new placeGuide should be constructed.
-          this._placeGuidesOnList[placeGuideId] =
-              this.
-                  constructPlaceGuideOnListFromPlaceGuide(
-                      placeGuides[placeGuideId]);
-          this.addToList(placeGuideId);
-        }
+        var constructedPlaceGuideOnListDiv = 
+            this.constructPlaceGuideOnListDivFromPlaceGuide(placeGuides[placeGuideId]);
+        this._listPlaceGuideDisplayerDiv.appendChild(constructedPlaceGuideOnListDiv);
       }
     }
   }
 
   remove(placeGuideId) {
-    // Delete from list.
-    this.removeFromList(placeGuideIde);
-    // Delete from memory.
-    delete this._placeGuidesOnList[placeGuideId];
+    const placeGuideDivId = "placeGuideOnList-" + "{" + placeGuideId + "}";
+    const placeGuideDiv = document.getElementById(placeGuideDivId);
+    if (this._listPlaceGuideDisplayerDiv.contains(placeGuideDiv)) {
+      this._listPlaceGuideDisplayerDiv.removeChild(placeGuideDiv);
+    }
+    return placeGuideDiv;
   }
 
+  // Move the highlighted place guide to top of list.
   highlight(placeGuideId) {
-
+    const placeGuideDiv = remove(placeGuideId);
+    this._listPlaceGuideDisplayerDiv.insertBefore(
+        placeGuideDiv, this._listPlaceGuideDisplayerDiv.firstChild);
   }
 
-  unhighlight(placeGuideId) {
-
+  constructPlaceGuideOnListDivFromPlaceGuide(placeGuide) {
+    return new PlaceGuideOnList(
+        placeGuide.id,
+        placeGuide.location.mapsPlace.name,
+        placeGuide.location.mapsPlace.place_id,
+        placeGuide.name,
+        placeGuide.creator,
+        placeGuide.description,
+        placeGuide.audioKey,
+        placeGuide.audioLength,
+        placeGuide.isPublic,
+        placeGuide.imgKey,
+        placeGuide.createdByCurrentUser,
+        placeGuide.bookmarkedByCurrentUser,
+        placeGuide.location.lat,
+        placeGuide.location.lng).placeGuideOnListDiv;
   }
-
-  constructPlaceGuideOnListFromPlaceGuide(placeGuide) {
-    return null;
-    // new PlaceGuideOnList(placeGuide.id,
-    //                            placeGuide.location,
-    //                            placeGuide.name,
-    //                            placeGuide.creator,
-    //                            placeGuide.description,
-    //                            placeGuide.audioKey,
-    //                            placeGuide.audioLength,
-    //                            placeGuide.imgKey,
-    //                            placeGuide.createdByCurrentUser);
-  }
+    
 }
