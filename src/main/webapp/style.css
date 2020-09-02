@@ -8,8 +8,17 @@ html, body {
     height: 100%;
 }
 
-input[type="file"] {
+.invisible-file-input {
     display: none;
+}
+
+.visible-file-input {
+    display: block;
+    height: 1px;
+    width: 1px;
+    position: relative;
+    left: 50%;
+    bottom: 3px;
 }
 
 .form-field {
