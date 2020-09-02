@@ -30,23 +30,23 @@ function initPage() {
           new PlaceGuideRepository(
               PlaceGuideRepository.QueryType.CREATED_ALL_IN_MAP_AREA);
       placeGuideManager = new PlaceGuideManager(placeGuideRepository);
-      google.maps.event.addListener(map, 'idle', function () {
+      google.maps.event.addListener(map, 'idle', function() {
         placeGuideManager.update(map.getBounds(), map.getZoom());
       });
       document.getElementById("map")
-          .addEventListener(MapWidget.SAVE_LOCATION_EVENT, function () {
-            handleSaveLocationEvent(mapWidget);
+          .addEventListener(MapWidget.CHOSEN_LOCATION_CHANGE_EVENT, function () {
+            handleChosenLocationChangeEvent(mapWidget);
           });
     }
   });
 }
 
-function handleSaveLocationEvent(mapWidget) {
-  if (mapWidget.savedLocation.place != null) {
-    updateLocation(mapWidget.savedLocation.position,
-                  mapWidget.savedLocation.place.place_id,
-                  mapWidget.savedLocation.place.name);
+function handleChosenLocationChangeEvent(mapWidget) {
+  if (mapWidget.pickedLocation.place != null) {
+    updateLocation(mapWidget.pickedLocation.position,
+                  mapWidget.pickedLocation.place.place_id,
+                  mapWidget.pickedLocation.place.name);
   } else {
-    updateLocation(mapWidget.savedLocation.position, null, null);
+    updateLocation(mapWidget.pickedLocation.position, null, null);
   }
 }
