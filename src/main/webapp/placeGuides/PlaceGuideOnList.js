@@ -165,6 +165,7 @@ function createAndPopulateCardContentsContainer(placeGuideProperties, creator) {
       createPlaceGuideLengthElement(placeGuideProperties.audioLength);
   const placeGuideDescription = 
       createPlaceGuideDescriptionElement(placeGuideProperties.description);
+
   cardContents.appendChild(placeGuideImage);
   cardContents.appendChild(placeGuideTitle);
   cardContents.appendChild(placeGuideLength);
@@ -183,9 +184,15 @@ function createCardContents() {
 }
 
 function createPlaceGuideImageElement(placeGuideImageKey) {
-  var placeGuideImage = createBlobView(placeGuideImageKey, "img");
-  if (placeGuideImageKey == undefined) {
-    placeGuideImage.src = "/";
+  var placeGuideImage;
+  if (placeGuideImageKey != undefined) {
+    placeGuideImage = createBlobView(placeGuideImageKey, "img");
+  } else {
+    placeGuideImage = document.createElement("i");
+    placeGuideImage.classList.add("material-icons", "md-48");
+    placeGuideImage.style.textAlign = "center";
+    placeGuideImage.style.paddingTop = "90px";
+    placeGuideImage.innerText = "tour";
   }
   placeGuideImage.style.width = "100%";
   placeGuideImage.style.height = "180px";
@@ -195,8 +202,9 @@ function createPlaceGuideImageElement(placeGuideImageKey) {
 function createPlaceGuideTitle(placeGuideName, creatorEmail) {
   const placeGuideTitle = document.createElement("div");
   placeGuideTitle.classList.add("place-guide-title");
-  const placeGuideNameElement = document.createElement("p");
+  const placeGuideNameElement = document.createElement("h5");
   placeGuideNameElement.innerText = placeGuideName;
+  placeGuideNameElement.style.paddingTop = "5px";
   const creatorButton = getPlaceGuideButtonWithPreparedClasses();
   creatorButton.setAttribute("title", creatorEmail);
   creatorButton.innerText = "account_circle";
@@ -239,6 +247,7 @@ function createAndPopulateButtonsContainer(
       placeGuideProperties.placeGuideId, buttonsSubContainer);
 
   buttonsContainer.appendChild(buttonsSubContainer);
+  buttonsContainer.style.marginTop = "30px";
 
   return buttonsContainer;
 }
@@ -346,18 +355,17 @@ function createEditButton(parentDiv, placeGuideProperties) {
 function createBookmarkButton(placeGuideId, bookmarkedByCurrentUser, parentDiv) {
   const bookmarkButton = getPlaceGuideButtonWithPreparedClasses();
   bookmarkButton.setAttribute("title", "bookmark place guide");
-  bookmarkButton.innerText = "bookmark";
+  bookmarkButton.innerText = "";
   if (bookmarkedByCurrentUser) {
     bookmarkButton.innerText = "bookmark_border";
     bookmarkButton.setAttribute("title", "unbookmark place guide");
   }
   bookmarkButton.addEventListener("click", function() {
-    console.log(bookmarkButton.innerText);
-    if (bookmarkButton.innerText == "bookmark_border") {
-      bookmarkButton.innerText = "bookmark";
+    if (bookmarkButton.innerText == "bookmark") {
+      bookmarkButton.innerText = "bookmark_border";
       bookmarkButton.setAttribute("title", "bookmark place guide");
     } else {
-      bookmarkButton.innerText = "bookmark_border";
+      bookmarkButton.innerText = "bookmark";
       bookmarkButton.setAttribute("title", "unbookmark place guide");
     }
     placeGuideManager.toggleBookmark(placeGuideId);
