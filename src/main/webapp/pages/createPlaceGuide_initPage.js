@@ -11,27 +11,27 @@
  * by the currently logged in user.
  */
 
-var map;
-var placeGuideManager;
+let map;
+let placeGuideManager;
 
 function initPage() {
-  authenticateUser().then(userAuthenticationStatus => {
+  authenticateUser().then((userAuthenticationStatus) => {
     if (!userAuthenticationStatus.isLoggedIn) {
       location.replace(userAuthenticationStatus.loginUrl);
     } else {
       const menu = new Menu(Menu.PAGE_NAMES.CREATE_PLACEGUIDE);
       addLinktoLogoutButton(userAuthenticationStatus.logoutUrl);
       setUpCreatePlaceGuideForm();
-      var mapWidget = new MapWidget();
+      const mapWidget = new MapWidget();
       mapWidget.addGeolocationFunctionality();
       mapWidget.addLocationChoosingAndSavingFunctionality();
       map = mapWidget.map;
-      var placeGuideRepository =
+      const placeGuideRepository =
           new PlaceGuideRepository(
               PlaceGuideRepository.QueryType.CREATED_ALL_IN_MAP_AREA);
       placeGuideManager = new PlaceGuideManager(placeGuideRepository);
-      google.maps.event.addListener(map, 'idle', function() {
-        placeGuideManager.update(map.getBounds(), map.getZoom());
+      google.maps.event.addListener(map, 'idle', function () {
+        placeGuideManager.update(map.getBounds(), map.getZoom(), false);
       });
       document.getElementById("map")
           .addEventListener(MapWidget.CHOSEN_LOCATION_CHANGE_EVENT, function () {
