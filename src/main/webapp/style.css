@@ -299,3 +299,9 @@ body {
   width: 95%;
   min-width: 250px;
 }
+
+.user-img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
