@@ -116,12 +116,10 @@ function fillFormWithPlaceGuideToEdit() {
     if (GET["description"] != "undefined") {
       document.getElementById("description").value = GET["description"]; 
     }
-    if (GET["length"] != "undefined") {
-      document.getElementById("length").value = GET["length"];
-    }
+    document.getElementById("length").value = GET["length"];
     document.getElementById("isPublic").value = GET["isPublic"];
-    if (GET["placeName"] != "undefined") {
-      document.getElementById("length").value = GET["length"];
+    if (GET["placeName"] != "null") {
+      document.getElementById("placeName").value = GET["placeName"];
     }
     document.getElementById("latitude").value = GET["latitude"];
     document.getElementById("longitude").value = GET["longitude"];

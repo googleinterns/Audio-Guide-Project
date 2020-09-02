@@ -105,6 +105,7 @@ class PlaceGuideRepository {
         url.searchParams.append("regionCorners", bounds.toUrlValue());
       }
       var thisRepository = this;
+      console.log(url);
       return fetch(url)
           .catch(error =>
               console.log("PlaceGuideServlet: failed to fetch: " + error))

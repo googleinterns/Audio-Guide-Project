@@ -6,7 +6,7 @@ class ListPlaceGuideDisplayer {
   constructor() {    
     this._listPlaceGuideDisplayerDiv = document.getElementById("listPlaceGuideDisplayer");
     this._listPlaceGuideDisplayerDiv.classList.add(
-        "list-group", "my-place-guide-list", "list-place-guide-displayer");
+        "list-group", "my-place-guide-list", "list-place-guide-displayer", "form-card");
   }
 
   get listPlaceGuideDisplayerDiv() {
@@ -52,10 +52,20 @@ class ListPlaceGuideDisplayer {
   }
 
   constructPlaceGuideOnListDivFromPlaceGuide(placeGuide) {
+    const mapsPlace = placeGuide.location.mapsPlace;
+    var placeName;
+    var placeId;
+    if (mapsPlace == null) {
+      placeName = null;
+      placeId = null;
+    } else {
+      placeName = mapsPlace.name;
+      placeId = mapsPlace.place_id;
+    }
     return new PlaceGuideOnList(
         placeGuide.id,
-        placeGuide.location.mapsPlace.name,
-        placeGuide.location.mapsPlace.place_id,
+        placeName,
+        placeId,
         placeGuide.name,
         placeGuide.creator,
         placeGuide.description,
@@ -68,5 +78,5 @@ class ListPlaceGuideDisplayer {
         placeGuide.location.position.lat(),
         placeGuide.location.position.lng()).placeGuideOnListDiv;
   }
-    
+
 }

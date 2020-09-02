@@ -71,7 +71,7 @@ function createFoldedPlaceGuide(placeGuideProperties) {
   foldedPlaceGuideDiv.style.display = "block";
   foldedPlaceGuideDiv.classList.add("folded-placeGuide");
   foldedPlaceGuideDiv.appendChild(foldedPlaceGuide_name(placeGuideName));
-  if (placeName != undefined || placeName != "") {
+  if (placeName != undefined || placeName != "" || placeName != null) {
     foldedPlaceGuideDiv.appendChild(foldedPlaceGuide_placeName(placeName));
   }
   foldedPlaceGuideDiv.appendChild(foldedPlaceGuide_buttons(placeGuideId, placeGuideAudioKey));
