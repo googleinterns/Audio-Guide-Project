@@ -110,6 +110,8 @@ function fillFormWithPlaceGuideData(placeGuide) {
     setBlobKeySrcToElement(
         placeGuide.imageKey,
         'imagePreview', true);
+    document.getElementById("no-img-icon")
+        .style.display = "none";
   }
   setFormInputValue(document.getElementById('placeName'),
       DUMMY_DATA_FOR_PLACE_NAME);
