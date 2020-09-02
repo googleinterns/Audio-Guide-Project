@@ -51,6 +51,10 @@ async function getFetchedList() {
       });
 }
 
+function enableSubmission() {
+  document.getElementById("submitBtn").disabled = false;
+}
+
 // For testing.
 function updateLocation(position, placeId, placeName) {
   document.getElementById(

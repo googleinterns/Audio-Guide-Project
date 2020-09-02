@@ -42,6 +42,7 @@ function initPage() {
 }
 
 function handleSaveLocationEvent(mapWidget) {
+  enableSubmission();
   if (mapWidget.savedLocation.place != null) {
     updateLocation(mapWidget.savedLocation.position,
                   mapWidget.savedLocation.place.place_id,
