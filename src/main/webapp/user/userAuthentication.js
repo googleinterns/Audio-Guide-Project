@@ -33,11 +33,9 @@ class QueryParams {
 
 function addLinktoLogoutButton(logoutUrl) {
   const logoutButton = document.getElementById('logout');
-  if (logoutButton != null) {
-    logoutButton.addEventListener('click', () => {
-        window.location.replace(logoutUrl);
-    });
-  }
+  logoutButton.addEventListener('click', () => {
+    window.location.replace(logoutUrl);
+  });
 }
 
 /**

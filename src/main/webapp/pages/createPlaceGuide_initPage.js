@@ -20,7 +20,6 @@ function initPage() {
       location.replace(userAuthenticationStatus.loginUrl);
     } else {
       const menu = new Menu(Menu.PAGE_NAMES.CREATE_PLACEGUIDE);
-      addLinktoLogoutButton(userAuthenticationStatus.logoutUrl);
       setUpCreatePlaceGuideForm();
       const mapWidget = new MapWidget();
       mapWidget.addGeolocationFunctionality();
