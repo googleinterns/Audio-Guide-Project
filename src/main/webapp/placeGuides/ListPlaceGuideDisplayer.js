@@ -6,7 +6,7 @@ class ListPlaceGuideDisplayer {
   constructor() {    
     this._listPlaceGuideDisplayerDiv = document.getElementById("listPlaceGuideDisplayer");
     this._listPlaceGuideDisplayerDiv.classList.add(
-        "list-group", "my-place-guide-list", "list-place-guide-displayer", "form-card");
+        "list-group", "my-place-guide-list", "list-place-guide-displayer", "list-card");
   }
 
   get listPlaceGuideDisplayerDiv() {
