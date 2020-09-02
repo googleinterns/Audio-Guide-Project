@@ -64,6 +64,8 @@ function setSrcToElementOnChangeEvent(elementId, previewId, displayBlock) {
       });
 
       reader.readAsDataURL(file);
+    } else {
+        preview.style.display = "none";
     }
   });
 }
@@ -76,4 +78,17 @@ function setBlobKeySrcToElement(blobKey, previewId, displayBlock) {
   const src = new URL("/serve-blob", document.URL);
   src.searchParams.append('blob-key', blobKey);
   preview.setAttribute("src", src);
+}
+
+function handleIconVisibilityOnFileChangeEvent(elementId, icon) {
+  const element = document.getElementById(elementId);
+  element.addEventListener("change", function() {
+    const file = this.files[0];
+
+    if (file) {
+      icon.style.display = "none";
+    } else {
+      icon.style.display = "block";
+    }
+  });
 }

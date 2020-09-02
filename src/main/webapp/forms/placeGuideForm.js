@@ -26,6 +26,8 @@ function styleInputs() {
 function activatePreviewFeature() {
   setSrcToElementOnChangeEvent(
       'imageKey', 'imagePreview', true);
+  handleIconVisibilityOnFileChangeEvent(
+      'imageKey', document.getElementById("no-img-icon"));
   setSrcToElementOnChangeEvent(
       'audioKey', 'audioPlayer', false);
 }
