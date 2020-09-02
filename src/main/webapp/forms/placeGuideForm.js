@@ -15,7 +15,7 @@ function styleInputs() {
     const nameInput = new mdc.textField.MDCTextField(document.getElementById('nameInput'));
     const lengthInput = new mdc.textField.MDCTextField(document.getElementById('lengthInput'));
     const descriptionInput = new mdc.textField.MDCTextField(document.getElementById('descriptionInput'));
-    // const submitButtonRipple = new mdc.ripple.MDCRipple(document.getElementById("submitBtn"));
+    const submitButtonRipple = new mdc.ripple.MDCRipple(document.getElementById("submitBtn"));
     const chooseAudioFileButtonRipple = new mdc.ripple.MDCRipple(document.getElementById("chooseAudioFileBtn"));
     const chooseImageFileButtonRipple = new mdc.ripple.MDCRipple(document.getElementById("chooseImageFileBtn"));
     const deletePrevImageCheckbox = new mdc.checkbox.MDCCheckbox(document.getElementById('deletePrevImageCheckbox'));
@@ -102,7 +102,7 @@ function fillFormWithPlaceGuideData(placeGuide) {
       document.getElementById('longitude'),
       placeGuide.coordinate.longitude);
   setFormInputValue(
-      document.getElementById('length'),
+      new mdc.textField.MDCTextField(document.getElementById('lengthInput')),
       placeGuide.length);
   setFormInputValue(
       new mdc.textField.MDCTextField(
@@ -115,8 +115,6 @@ function fillFormWithPlaceGuideData(placeGuide) {
     document.getElementById("no-img-icon")
         .style.display = "none";
   }
-  setFormInputValue(document.getElementById('placeName'),
-      DUMMY_DATA_FOR_PLACE_NAME);
 }
 
 /**
@@ -125,6 +123,8 @@ function fillFormWithPlaceGuideData(placeGuide) {
  */
 function fillFormWithPlaceGuideToEdit() {
   if (window.location.search != "") {
+    enableSubmission();
+    document.getElementById('audioKey').required = false;
     var GET = {};
     var queryString = decodeURI(window.location.search.replace(/^\?/, ''));
     queryString.split(/\&/).forEach(function(keyValuePair) {
@@ -133,22 +133,40 @@ function fillFormWithPlaceGuideToEdit() {
         GET[paramName] = paramValue;
     });
     document.getElementById("id").value = GET["placeGuideId"];
-    document.getElementById("placeId").value = GET["placeId"];
-    document.getElementById("name").value = GET["name"];
+    setFormInputValue(
+        document.getElementById("placeId").value,
+        GET["placeId"]);
+    setFormInputValue(
+      new mdc.textField.MDCTextField(document.getElementById('nameInput')),
+      GET["name"]);
     document.getElementById("audioPlayer").src = getBlobSrc(GET["audioKey"]);
     if (GET["imageKey"] != "undefined") {
-      document.getElementById("imagePreview").src = getBlobSrc(GET["imageKey"]);
+      document.getElementById("imagePreview").style.display = "block";
+      document.getElementById("imagePreview").src = 
+        getBlobSrc(GET["imageKey"]);
+      document.getElementById("no-img-icon")
+        .style.display = "none";
     }
-    document.getElementById("imagePreview").style.display = "block";
     if (GET["description"] != "undefined") {
-      document.getElementById("description").value = GET["description"]; 
+      setFormInputValue(
+          new mdc.textField.MDCTextField(document.getElementById('descriptionInput')),
+          GET["description"]); 
     }
-    document.getElementById("length").value = GET["length"];
-    document.getElementById("isPublic").value = GET["isPublic"];
-    if (GET["placeName"] != "null") {
-      document.getElementById("placeName").value = GET["placeName"];
+    setFormInputValue(
+      document.getElementById('latitude'),
+      GET["latitude"]);
+    setFormInputValue(
+      document.getElementById('longitude'),
+      GET["longitude"]);
+    setFormInputValue(
+      new mdc.textField.MDCTextField(document.getElementById('lengthInput')),
+      GET["audioLength"]);
+    const publicitySwitchControl = 
+    new mdc.switchControl.MDCSwitch(document.getElementById("publicitySwitch"));
+    if (GET["isPublic"] == "true") {
+        publicitySwitchControl.checked = true;
+    } else {
+        publicitySwitchControl.checked = false;
     }
-    document.getElementById("latitude").value = GET["latitude"];
-    document.getElementById("longitude").value = GET["longitude"];
   }
 }
