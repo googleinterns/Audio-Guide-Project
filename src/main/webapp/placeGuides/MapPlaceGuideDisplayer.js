@@ -31,13 +31,13 @@ class MapPlaceGuideDisplayer {
   adjustMapToShowAll() {
     let mapBounds = new google.maps.LatLngBounds();
     let guidesExist = false;
-    let placeGuideIds = Object.getOwnPropertyNames(this._placeGuidesOnMap);
-    placeGuideIds.forEach ((placeGuideId) => {
-            const position =
-                this._placeGuidesOnMap[placeGuideId].marker.getPosition();
-            mapBounds.extend(position);
-            guidesExist = true;
-        }
+    const placeGuideIds = Object.getOwnPropertyNames(this._placeGuidesOnMap);
+    placeGuideIds.forEach((placeGuideId) => {
+        const position =
+          this._placeGuidesOnMap[placeGuideId].marker.getPosition();
+        mapBounds.extend(position);
+        guidesExist = true;
+      }
     );
     if (guidesExist) {
       // Unless the zoom is increased manually, the fitBounds()
