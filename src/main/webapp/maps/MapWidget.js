@@ -3,7 +3,7 @@ class MapWidget {
 
   constructor() {
     var myMapOptions = {
-      zoom: 10,
+      zoom: 13,
       // The coordinates of the Google Office in Mountain View
       center: new google.maps.LatLng(37.419857, -122.078827), 
       mapTypeId: 'roadmap',

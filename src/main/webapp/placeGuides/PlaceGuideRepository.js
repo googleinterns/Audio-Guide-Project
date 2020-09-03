@@ -4,7 +4,7 @@
  * The data is stored in memory until the next query is sent.
  */
 class PlaceGuideRepository {
-  static MIN_ZOOM = 5;
+  static MIN_ZOOM = 10;
   static QueryType = {
     ALL_PUBLIC_IN_MAP_AREA: "ALL_PUBLIC_IN_MAP_AREA",
     CREATED_ALL_IN_MAP_AREA: "CREATED_ALL_IN_MAP_AREA",
