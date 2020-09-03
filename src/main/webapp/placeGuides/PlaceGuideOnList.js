@@ -364,9 +364,9 @@ function createEditButton(parentDiv, placeGuideProperties) {
 function createBookmarkButton(placeGuideId, bookmarkedByCurrentUser, parentDiv) {
   const bookmarkButton = getPlaceGuideButtonWithPreparedClasses();
   bookmarkButton.setAttribute("title", "bookmark place guide");
-  bookmarkButton.innerText = "";
+  bookmarkButton.innerText = "bookmark_border";
   if (bookmarkedByCurrentUser) {
-    bookmarkButton.innerText = "bookmark_border";
+    bookmarkButton.innerText = "bookmark";
     bookmarkButton.setAttribute("title", "unbookmark place guide");
   }
   bookmarkButton.addEventListener("click", function() {
