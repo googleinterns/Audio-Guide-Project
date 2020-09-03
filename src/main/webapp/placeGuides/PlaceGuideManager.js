@@ -29,7 +29,7 @@ class PlaceGuideManager {
 
   removePlaceGuide(placeGuideId) {
     this._placeGuideRepository.removePlaceGuide(placeGuideId);
-    this._mapPlaceGuideDisplayer.removePlaceGuideRepresentation(placeGuideId);
+    this.removePlaceGuideRepresentation(placeGuideId);
   }
 
   removePlaceGuideRepresentation(placeGuideId) {
