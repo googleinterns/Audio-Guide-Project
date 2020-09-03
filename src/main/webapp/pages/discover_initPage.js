@@ -15,21 +15,23 @@ function initPage() {
     if (!userAuthenticationStatus.isLoggedIn) {
       location.replace(userAuthenticationStatus.loginUrl);
     } else {
-      const menu = new Menu(Menu.PAGE_NAMES.DISCOVER);
-      const mapWidget = new MapWidget();
-      mapWidget.addGeolocationFunctionality();
-      mapWidget.addSearchingFunctionality();
-      map = mapWidget.map;
-      const placeGuideRepository =
-          new PlaceGuideRepository(
-              PlaceGuideRepository.QueryType.ALL_PUBLIC_IN_MAP_AREA);
-      placeGuideManager = 
-        new PlaceGuideManager(placeGuideRepository, false, PLACE_GUIDE_DISPLAY_TYPE, true);
-      google.maps.event.addListener(map, 'idle', function () {
-        placeGuideManager.update(map.getBounds(), map.getZoom(), false);
-      });
+      saveUserInDatabase().then(response => {
+        const menu = new Menu(Menu.PAGE_NAMES.DISCOVER);
+        const mapWidget = new MapWidget();
+        mapWidget.addGeolocationFunctionality();
+        mapWidget.addSearchingFunctionality();
+        map = mapWidget.map;
+        const placeGuideRepository =
+            new PlaceGuideRepository(
+                PlaceGuideRepository.QueryType.ALL_PUBLIC_IN_MAP_AREA);
+        placeGuideManager = 
+            new PlaceGuideManager(placeGuideRepository, false, PLACE_GUIDE_DISPLAY_TYPE, true);
+        google.maps.event.addListener(map, 'idle', function () {
+            placeGuideManager.update(map.getBounds(), map.getZoom(), false);
+        });
 
-      document.getElementById("mapDisplayer").style.width = availableWidth.toString() + "px";
+        document.getElementById("mapDisplayer").style.width = availableWidth.toString() + "px";
+      });
     }
   });
 }

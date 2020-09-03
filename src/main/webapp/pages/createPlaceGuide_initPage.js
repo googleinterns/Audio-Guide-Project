@@ -19,23 +19,25 @@ function initPage() {
     if (!userAuthenticationStatus.isLoggedIn) {
       location.replace(userAuthenticationStatus.loginUrl);
     } else {
-      const menu = new Menu(Menu.PAGE_NAMES.CREATE_PLACEGUIDE);
-      setUpCreatePlaceGuideForm();
-      const mapWidget = new MapWidget();
-      mapWidget.addGeolocationFunctionality();
-      mapWidget.addLocationChoosingAndSavingFunctionality();
-      map = mapWidget.map;
-      const placeGuideRepository =
-          new PlaceGuideRepository(
-              PlaceGuideRepository.QueryType.CREATED_ALL_IN_MAP_AREA);
-      placeGuideManager = new PlaceGuideManager(placeGuideRepository, false, null, null);
-      google.maps.event.addListener(map, 'idle', function () {
-        placeGuideManager.update(map.getBounds(), map.getZoom(), false);
+      saveUserInDatabase().then(response => {
+        const menu = new Menu(Menu.PAGE_NAMES.CREATE_PLACEGUIDE);
+        setUpCreatePlaceGuideForm();
+        const mapWidget = new MapWidget();
+        mapWidget.addGeolocationFunctionality();
+        mapWidget.addLocationChoosingAndSavingFunctionality();
+        map = mapWidget.map;
+        const placeGuideRepository =
+            new PlaceGuideRepository(
+                PlaceGuideRepository.QueryType.CREATED_ALL_IN_MAP_AREA);
+        placeGuideManager = new PlaceGuideManager(placeGuideRepository, false, null, null);
+        google.maps.event.addListener(map, 'idle', function () {
+            placeGuideManager.update(map.getBounds(), map.getZoom(), false);
+        });
+        document.getElementById("map")
+            .addEventListener(MapWidget.CHOSEN_LOCATION_CHANGE_EVENT, function () {
+                handleChosenLocationChangeEvent(mapWidget);
+            });
       });
-      document.getElementById("map")
-          .addEventListener(MapWidget.CHOSEN_LOCATION_CHANGE_EVENT, function () {
-            handleChosenLocationChangeEvent(mapWidget);
-          });
     }
   });
 }
