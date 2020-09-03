@@ -2,11 +2,15 @@
  * This class is responsible for representing
  * the placeGuides on a scrollable list.
  */
+
 class ListPlaceGuideDisplayer {
-  constructor() {    
+
+  constructor(placeGuideDisplayType) {    
     this._listPlaceGuideDisplayerDiv = document.getElementById("listPlaceGuideDisplayer");
     this._listPlaceGuideDisplayerDiv.classList.add(
         "list-group", "my-place-guide-list", "list-place-guide-displayer", "form-card");
+    this._placeGuideDisplayType = placeGuideDisplayType;
+    this._listPlaceGuideDisplayerDiv.appendChild(this.createListTitle(placeGuideDisplayType));
   }
 
   get listPlaceGuideDisplayerDiv() {
@@ -15,6 +19,7 @@ class ListPlaceGuideDisplayer {
 
   update(placeGuides) {
     this.removeAllPlaceGuidesFromList();
+    this._listPlaceGuideDisplayerDiv.appendChild(this.createListTitle(this._placeGuideDisplayType));
     this.addPlaceGuidesToList(placeGuides);
   }
 
@@ -77,6 +82,27 @@ class ListPlaceGuideDisplayer {
         placeGuide.bookmarkedByCurrentUser,
         placeGuide.location.position.lat(),
         placeGuide.location.position.lng()).placeGuideOnListDiv;
+  }
+
+  createListTitle(placeGuideDisplayType) {
+    const listTitleDiv = document.createElement("div");
+    listTitleDiv.classList.add(
+        "list-group-item", 
+        "flex-column",
+        "align-items-start");
+    listTitleDiv.style.backgroundColor = "#80ba83";
+    listTitleDiv.style.color = "white";
+    const listTitleContainer = document.createElement("div");
+    listTitleContainer.classList.add(
+        "d-flex",
+        "w-100",
+        "justify-content-between");
+    const listTitleElement = document.createElement("h5");
+    listTitleElement.classList.add("mb-1");
+    listTitleElement.innerText = placeGuideDisplayType;
+    listTitleContainer.appendChild(listTitleElement);
+    listTitleDiv.appendChild(listTitleContainer);
+    return listTitleDiv;
   }
 
 }

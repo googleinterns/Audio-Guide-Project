@@ -8,6 +8,7 @@
  */
 let map;
 let placeGuideManager;
+const PLACE_GUIDE_DISPLAY_TYPE = "Display Bookmarked Placeguides";
 
 function initPage() {
   authenticateUser().then((userAuthenticationStatus) => {
@@ -22,7 +23,7 @@ function initPage() {
       const placeGuideRepository =
           new PlaceGuideRepository(
               PlaceGuideRepository.QueryType.BOOKMARKED);
-      placeGuideManager = new PlaceGuideManager(placeGuideRepository);
+      placeGuideManager = new PlaceGuideManager(placeGuideRepository, PLACE_GUIDE_DISPLAY_TYPE);
       placeGuideManager.update(map.getBounds(), map.getZoom(), true);
     }
   });

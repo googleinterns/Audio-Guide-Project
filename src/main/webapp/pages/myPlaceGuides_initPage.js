@@ -9,6 +9,7 @@
 let map;
 let placeGuideManager;
 const availableWidth = window.innerWidth - 370;
+const PLACE_GUIDE_DISPLAY_TYPE = "Display My Placeguides";
 
 function initPage() {
   authenticateUser().then((userAuthenticationStatus) => {
@@ -23,7 +24,7 @@ function initPage() {
       const placeGuideRepository =
           new PlaceGuideRepository(
               PlaceGuideRepository.QueryType.CREATED_ALL_IN_MAP_AREA);
-      placeGuideManager = new PlaceGuideManager(placeGuideRepository);
+      placeGuideManager = new PlaceGuideManager(placeGuideRepository, PLACE_GUIDE_DISPLAY_TYPE);
       google.maps.event.addListener(map, 'idle', function () {
         placeGuideManager.update(map.getBounds(), map.getZoom(), false);
       });
