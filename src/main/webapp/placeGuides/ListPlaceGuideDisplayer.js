@@ -50,12 +50,16 @@ class ListPlaceGuideDisplayer {
     return placeGuideDiv;
   }
 
-  // Move the highlighted place guide to top of list.
+ // Move the highlighted place guide to top of list.
   highlight(placeGuideId) {
-    const placeGuideDiv = this.remove(placeGuideId);
+    const placeGuideDiv = remove(placeGuideId);
+    this._listPlaceGuideDisplayerDiv.removeChild(document.getElementById("listTitle"));
     this._listPlaceGuideDisplayerDiv.insertBefore(
         placeGuideDiv, this._listPlaceGuideDisplayerDiv.firstChild);
-    highlight(placeGuideId);
+    this._listPlaceGuideDisplayerDiv.insertBefore(
+        this.createListTitle(this._placeGuideDisplayType, this._hasSubtitle), 
+        this._listPlaceGuideDisplayerDiv.firstChild);
+    highligh(placeGuideId);
   }
 
   unhighlight(placeGuideId) {
@@ -96,6 +100,7 @@ class ListPlaceGuideDisplayer {
         "list-group-item", 
         "flex-column",
         "align-items-start");
+    listTitleDiv.setAttribute("id", "listTitle");
     listTitleDiv.style.backgroundColor = "#80ba83";
     listTitleDiv.style.color = "white";
     const listTitleContainer = document.createElement("div");
