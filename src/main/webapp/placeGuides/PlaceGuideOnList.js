@@ -204,12 +204,13 @@ function createPlaceGuideTitle(placeGuideName, creatorEmail) {
   placeGuideTitle.classList.add("place-guide-title");
   const placeGuideNameElement = document.createElement("h5");
   placeGuideNameElement.innerText = placeGuideName;
-  placeGuideNameElement.style.paddingTop = "5px";
   const creatorButton = getPlaceGuideButtonWithPreparedClasses();
   creatorButton.setAttribute("title", creatorEmail);
   creatorButton.innerText = "account_circle";
   placeGuideTitle.appendChild(placeGuideNameElement);
   placeGuideTitle.appendChild(creatorButton);
+  placeGuideTitle.style.paddingTop = "10px";
+  placeGuideTitle.style.marginTop = "10px";
   return placeGuideTitle;
 }
 

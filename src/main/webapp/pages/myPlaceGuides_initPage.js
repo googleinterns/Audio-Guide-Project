@@ -9,7 +9,7 @@
 let map;
 let placeGuideManager;
 const availableWidth = window.innerWidth - 370;
-const PLACE_GUIDE_DISPLAY_TYPE = "Display My Placeguides";
+const PLACE_GUIDE_DISPLAY_TYPE = "My Guides";
 
 function initPage() {
   authenticateUser().then((userAuthenticationStatus) => {
