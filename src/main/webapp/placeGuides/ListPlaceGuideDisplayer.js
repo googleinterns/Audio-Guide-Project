@@ -2,11 +2,16 @@
  * This class is responsible for representing
  * the placeGuides on a scrollable list.
  */
+
 class ListPlaceGuideDisplayer {
-  constructor() {    
+
+  constructor(placeGuideDisplayType, hasSubtitle) {    
     this._listPlaceGuideDisplayerDiv = document.getElementById("listPlaceGuideDisplayer");
     this._listPlaceGuideDisplayerDiv.classList.add(
         "list-group", "my-place-guide-list", "list-place-guide-displayer", "list-card");
+    this._placeGuideDisplayType = placeGuideDisplayType;
+    this._hasSubtitle = hasSubtitle;
+    this._listPlaceGuideDisplayerDiv.appendChild(this.createListTitle(placeGuideDisplayType, hasSubtitle));
   }
 
   get listPlaceGuideDisplayerDiv() {
@@ -15,6 +20,7 @@ class ListPlaceGuideDisplayer {
 
   update(placeGuides) {
     this.removeAllPlaceGuidesFromList();
+    this._listPlaceGuideDisplayerDiv.appendChild(this.createListTitle(this._placeGuideDisplayType, this._hasSubtitle));
     this.addPlaceGuidesToList(placeGuides);
   }
 
@@ -82,6 +88,29 @@ class ListPlaceGuideDisplayer {
         placeGuide.bookmarkedByCurrentUser,
         placeGuide.location.position.lat(),
         placeGuide.location.position.lng()).placeGuideOnListDiv;
+  }
+
+  createListTitle(placeGuideDisplayType, hasSubtitle) {
+    const listTitleDiv = document.createElement("div");
+    listTitleDiv.classList.add(
+        "list-group-item", 
+        "flex-column",
+        "align-items-start");
+    listTitleDiv.style.backgroundColor = "#80ba83";
+    listTitleDiv.style.color = "white";
+    const listTitleContainer = document.createElement("div");
+    const listTitleElement = document.createElement("h2");
+    listTitleElement.innerText = placeGuideDisplayType;
+    listTitleContainer.appendChild(listTitleElement);
+
+    if (hasSubtitle) {
+      console.log(hasSubtitle);
+      const listSubtitleElement = document.createElement("p");
+      listSubtitleElement.innerText = "in selected map area";
+      listTitleContainer.appendChild(listSubtitleElement);
+    }
+    listTitleDiv.appendChild(listTitleContainer);
+    return listTitleDiv;
   }
 
 }
