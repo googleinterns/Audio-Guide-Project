@@ -59,7 +59,7 @@ class ListPlaceGuideDisplayer {
     this._listPlaceGuideDisplayerDiv.insertBefore(
         this.createListTitle(this._placeGuideDisplayType, this._hasSubtitle), 
         this._listPlaceGuideDisplayerDiv.firstChild);
-    highligh(placeGuideId);
+    highlight(placeGuideId);
   }
 
   unhighlight(placeGuideId) {
