@@ -7,17 +7,28 @@ class UserRepresentation {
     return this._userRepresentationDiv;
   }
 
-  createUserDiv(user) {
+  static createUserDiv(user) {
     const userDiv = document.createElement("div");
-    const userDivClass = "userRepresentation-" + "{" + user.id() + "}";
+    userDiv.style.height = "5px";
+    userDiv.style.width = "50px";
+    const userDivClass = "userRepresentation-" + "{" + user.id + "}";
     userDiv.setAttribute("class", userDivClass);
     if (user.imgKey != undefined) {
-        userDiv.appendChild(this.createUserImg(user.imgKey));
-    }
-    if (user.name != undefined) {
-        userDiv.appendChild(this.createUserNameText(user.name));
+        if (user.name != undefined) {
+            userDiv.appendChild(
+                UserRepresentation.createUserImg(user.imgKey, user.name));
+        } else {
+            userDiv.appendChild(
+                UserRepresentation.createUserImg(user.imgKey, user.email));
+        }
     } else {
-        userDiv.appendChild(this.createUserNameText(user.email));
+        if (user.name != undefined) {
+            userDiv.appendChild(
+                UserRepresentation.createUserIcon(user.name));
+        } else {
+            userDiv.appendChild(
+                UserRepresentation.createUserIcon(user.email));
+        }
     }
     //   userDiv.addEventListener("click", function() {
     //     if (user.publicPortfolio) {
@@ -31,19 +42,24 @@ class UserRepresentation {
     return userDiv;
   }
 
-  createUserImg(imgKey) {
+  static createUserImg(imgKey, name) {
     const userImg = document.createElement("img");
-    userDiv.setAttribute("class", "user-img");
+    userImg.setAttribute("class", "user-img");
     const src = new URL("/serve-blob", document.URL);
     src.searchParams.append('blob-key', imgKey);
     userImg.setAttribute("src", src);
+    userImg.setAttribute("title", "Owner: " + name);
     return userImg;
   }
 
-  createUserNameText(name) {
-    const userText = document.createElement("p");
-    // userDiv.setAttribute("class", "user-img");
-    userText.innerHTML = name;
-    return userText;
+  static createUserIcon(name) {
+    const userIcon = document.createElement("i");
+    userIcon.classList.add("material-icons",
+      "mdc-icon-button",
+      "mdc-card__action",
+      "mdc-card__action--icon");
+    userIcon.innerText = "account_circle";
+    userIcon.setAttribute("title", "Owner: " + name);
+    return userIcon;
   }
 }

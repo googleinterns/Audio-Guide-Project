@@ -170,7 +170,7 @@ function createAndPopulateCardContentsContainer(placeGuideProperties, creator) {
   const placeGuideImage = 
       createPlaceGuideImageElement(placeGuideProperties.imageKey);
   const placeGuideTitle = 
-      createPlaceGuideTitle(placeGuideProperties.name, creator.email);
+      createPlaceGuideTitle(placeGuideProperties.name, creator);
   const placeGuideLength = 
       createPlaceGuideLengthElement(placeGuideProperties.audioLength);
   const placeGuideDescription = 
@@ -202,16 +202,14 @@ function createPlaceGuideImageElement(placeGuideImageKey) {
   return placeGuideImage;
 }
 
-function createPlaceGuideTitle(placeGuideName, creatorEmail) {
+function createPlaceGuideTitle(placeGuideName, creator) {
   const placeGuideTitle = document.createElement("div");
   placeGuideTitle.classList.add("place-guide-title");
   const placeGuideNameElement = document.createElement("p");
   placeGuideNameElement.innerText = placeGuideName;
-  const creatorButton = getPlaceGuideButtonWithPreparedClasses();
-  creatorButton.setAttribute("title", creatorEmail);
-  creatorButton.innerText = "account_circle";
+  const creatorDiv = UserRepresentation.createUserDiv(creator);
   placeGuideTitle.appendChild(placeGuideNameElement);
-  placeGuideTitle.appendChild(creatorButton);
+  placeGuideTitle.appendChild(creatorDiv);
   return placeGuideTitle;
 }
 
