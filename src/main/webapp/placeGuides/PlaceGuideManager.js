@@ -6,11 +6,11 @@
  * classes which are responsible for handling the events.
  */
 class PlaceGuideManager {
-  constructor(placeGuideRepository, placeGuideDisplayType) {
+  constructor(placeGuideRepository, placeGuideDisplayType, hasSubtitle) {
     this._placeGuideRepository = placeGuideRepository;
     this._highlightedPlaceGuideId = null;
     this._mapPlaceGuideDisplayer = new MapPlaceGuideDisplayer();
-    this._listPlaceGuideDisplayer = new ListPlaceGuideDisplayer(placeGuideDisplayType);
+    this._listPlaceGuideDisplayer = new ListPlaceGuideDisplayer(placeGuideDisplayType, hasSubtitle);
   }
 
   update(bounds, zoom, showAll) {

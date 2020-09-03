@@ -23,7 +23,7 @@ function initPage() {
       const placeGuideRepository =
           new PlaceGuideRepository(
               PlaceGuideRepository.QueryType.BOOKMARKED);
-      placeGuideManager = new PlaceGuideManager(placeGuideRepository, PLACE_GUIDE_DISPLAY_TYPE);
+      placeGuideManager = new PlaceGuideManager(placeGuideRepository, PLACE_GUIDE_DISPLAY_TYPE, false);
       placeGuideManager.update(map.getBounds(), map.getZoom(), true);
     }
   });

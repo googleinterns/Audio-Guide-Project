@@ -5,12 +5,13 @@
 
 class ListPlaceGuideDisplayer {
 
-  constructor(placeGuideDisplayType) {    
+  constructor(placeGuideDisplayType, hasSubtitle) {    
     this._listPlaceGuideDisplayerDiv = document.getElementById("listPlaceGuideDisplayer");
     this._listPlaceGuideDisplayerDiv.classList.add(
         "list-group", "my-place-guide-list", "list-place-guide-displayer", "form-card");
     this._placeGuideDisplayType = placeGuideDisplayType;
-    this._listPlaceGuideDisplayerDiv.appendChild(this.createListTitle(placeGuideDisplayType));
+    this._hasSubtitle = hasSubtitle;
+    this._listPlaceGuideDisplayerDiv.appendChild(this.createListTitle(placeGuideDisplayType, hasSubtitle));
   }
 
   get listPlaceGuideDisplayerDiv() {
@@ -19,7 +20,7 @@ class ListPlaceGuideDisplayer {
 
   update(placeGuides) {
     this.removeAllPlaceGuidesFromList();
-    this._listPlaceGuideDisplayerDiv.appendChild(this.createListTitle(this._placeGuideDisplayType));
+    this._listPlaceGuideDisplayerDiv.appendChild(this.createListTitle(this._placeGuideDisplayType, this._hasSubtitle));
     this.addPlaceGuidesToList(placeGuides);
   }
 
@@ -84,7 +85,7 @@ class ListPlaceGuideDisplayer {
         placeGuide.location.position.lng()).placeGuideOnListDiv;
   }
 
-  createListTitle(placeGuideDisplayType) {
+  createListTitle(placeGuideDisplayType, hasSubtitle) {
     const listTitleDiv = document.createElement("div");
     listTitleDiv.classList.add(
         "list-group-item", 
@@ -101,6 +102,14 @@ class ListPlaceGuideDisplayer {
     listTitleElement.classList.add("mb-1");
     listTitleElement.innerText = placeGuideDisplayType;
     listTitleContainer.appendChild(listTitleElement);
+
+    if (hasSubtitle) {
+      console.log(hasSubtitle);
+      const listSubtitleElement = document.createElement("h5");
+      listSubtitleElement.classList.add("mb-1");
+      listSubtitleElement.innerText = "in selected map area";
+      listTitleContainer.appendChild(listSubtitleElement);
+    }
     listTitleDiv.appendChild(listTitleContainer);
     return listTitleDiv;
   }

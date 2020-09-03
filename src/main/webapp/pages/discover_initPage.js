@@ -23,7 +23,7 @@ function initPage() {
       const placeGuideRepository =
           new PlaceGuideRepository(
               PlaceGuideRepository.QueryType.ALL_PUBLIC_IN_MAP_AREA);
-      placeGuideManager = new PlaceGuideManager(placeGuideRepository, PLACE_GUIDE_DISPLAY_TYPE);
+      placeGuideManager = new PlaceGuideManager(placeGuideRepository, PLACE_GUIDE_DISPLAY_TYPE, true);
       google.maps.event.addListener(map, 'idle', function () {
         placeGuideManager.update(map.getBounds(), map.getZoom(), false);
       });
