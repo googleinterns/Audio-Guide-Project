@@ -22,6 +22,71 @@ class PlaceGuideRepository {
     return this._placeGuides;
   }
 
+  updatePlaceGuides(bounds, zoom) {
+    if (PlaceGuideRepository.MIN_ZOOM <= zoom || 
+        this._queryType == PlaceGuideRepository.QueryType.BOOKMARKED) {
+      // As the number of bookmarked placeGuides will be restricted, 
+      // we are not limiting the number of 
+      // displayed PlaceGuides based on the zoom level/map area. 
+      // We display all of them at once.
+      var url = new URL("/place-guide-data", document.URL);
+      url.searchParams.append("placeGuideType", this._queryType);
+      if (this._queryType != PlaceGuideRepository.QueryType.BOOKMARKED) {
+        url.searchParams.append("regionCorners", bounds.toUrlValue());
+      }
+      var thisRepository = this;
+      return fetch(url)
+          .catch(error =>
+              console.log("PlaceGuideServlet: failed to fetch: " + error))
+          .then(response => response.json())
+          .catch(error =>
+              console.log('updatePlaceGuides: failed to convert response to JSON'
+                  + error))
+          .then(placeGuideWithCreatorPairs =>
+              PlaceGuideRepository
+                  .buildPlaceGuideDictionaryFromResponse(
+                      placeGuideWithCreatorPairs))
+          .catch(error =>
+              console.log("updatePlaceGuides: unable to build placeGuide dictionary: "
+                  + error))
+          .then(placeGuides => thisRepository._placeGuides = placeGuides);
+    } else {
+      var thisRepository = this;
+      return new Promise(function (resolve, reject) {
+        thisRepository._placeGuides = {};
+        resolve();
+      });
+    }
+  }
+
+  removePlaceGuide(placeGuideId) {
+    // Remove from in-memory dictionary.
+    delete this._placeGuides[placeGuideId];
+    // Remove from database.
+    var url = new URL("/delete-place-guide-data", document.URL);
+    url.searchParams.append('id', placeGuideId);
+    return fetch(url)
+        .catch(error => console.log("DeletePlaceGuideServlet: failed to fetch: "
+            + error));
+  }
+
+  togglePlaceGuideBookmarkStatus(placeGuideId) {
+    // Toggle in in-memory dictionary.
+    var isBookmarked = this._placeGuides.bookmarkedByCurrentUser;
+    this._placeGuides.bookmarkedByCurrentUser = !isBookmarked;
+    // Toogle in database.
+    var url = new URL("bookmark-place-guide", document.URL);
+    url.searchParams.append("placeGuideId", placeGuideId);
+    if (this._placeGuides.bookmarkedByCurrentUser) {
+      url.searchParams.append("bookmarkHandlingType", "BOOKMARK");
+    } else {
+      url.searchParams.append("bookmarkHandlingType", "REMOVE");
+    }
+    return fetch(url)
+        .catch(error => console.log("BookmarkPlaceGuideServlet: failed to fetch: "
+            + error));
+  }
+
   static buildPlaceGuideDictionaryFromResponse(placeGuideWithCreatorPairs) {
     var placeGuidesDict = {};
     var promises = [];
@@ -90,70 +155,5 @@ class PlaceGuideRepository {
         userResponse.name,
         userResponse.publicPortfolio,
         userResponse.imgKey);
-  }
-
-  updatePlaceGuides(bounds, zoom) {
-    if (PlaceGuideRepository.MIN_ZOOM <= zoom || 
-        this._queryType == PlaceGuideRepository.QueryType.BOOKMARKED) {
-      // As the number of bookmarked placeGuides will be restricted, 
-      // we are not limiting the number of 
-      // displayed PlaceGuides based on the zoom level/map area. 
-      // We display all of them at once.
-      var url = new URL("/place-guide-data", document.URL);
-      url.searchParams.append("placeGuideType", this._queryType);
-      if (this._queryType != PlaceGuideRepository.QueryType.BOOKMARKED) {
-        url.searchParams.append("regionCorners", bounds.toUrlValue());
-      }
-      var thisRepository = this;
-      return fetch(url)
-          .catch(error =>
-              console.log("PlaceGuideServlet: failed to fetch: " + error))
-          .then(response => response.json())
-          .catch(error =>
-              console.log('updatePlaceGuides: failed to convert response to JSON'
-                  + error))
-          .then(placeGuideWithCreatorPairs =>
-              PlaceGuideRepository
-                  .buildPlaceGuideDictionaryFromResponse(
-                      placeGuideWithCreatorPairs))
-          .catch(error =>
-              console.log("updatePlaceGuides: unable to build placeGuide dictionary: "
-                  + error))
-          .then(placeGuides => thisRepository._placeGuides = placeGuides);
-    } else {
-      var thisRepository = this;
-      return new Promise(function (resolve, reject) {
-        thisRepository._placeGuides = {};
-        resolve();
-      });
-    }
-  }
-
-  removePlaceGuide(placeGuideId) {
-    // Remove from in-memory dictionary.
-    delete this._placeGuides[placeGuideId];
-    // Remove from database.
-    var url = new URL("/delete-place-guide-data", document.URL);
-    url.searchParams.append('id', placeGuideId);
-    return fetch(url)
-        .catch(error => console.log("DeletePlaceGuideServlet: failed to fetch: "
-            + error));
-  }
-
-  togglePlaceGuideBookmarkStatus(placeGuideId) {
-    // Toggle in in-memory dictionary.
-    var isBookmarked = this._placeGuides.bookmarkedByCurrentUser;
-    this._placeGuides.bookmarkedByCurrentUser = !isBookmarked;
-    // Toogle in database.
-    var url = new URL("bookmark-place-guide", document.URL);
-    url.searchParams.append("placeGuideId", placeGuideId);
-    if (this._placeGuides.bookmarkedByCurrentUser) {
-      url.searchParams.append("bookmarkHandlingType", "BOOKMARK");
-    } else {
-      url.searchParams.append("bookmarkHandlingType", "REMOVE");
-    }
-    return fetch(url)
-        .catch(error => console.log("BookmarkPlaceGuideServlet: failed to fetch: "
-            + error));
   }
 }
