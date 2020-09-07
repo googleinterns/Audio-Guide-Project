@@ -44,8 +44,6 @@ class PlaceGuideRepository {
   }
 
   static getPlaceGuideFromPlaceGuideWithCreatorPair(placeGuideInfo) {
-    console.log("PlaceGuideInfo = ");
-    console.log(placeGuideInfo);
     var thisRepository = this;
     return new Promise(function (resolve, reject) {
       var creator = thisRepository.getUserFromResponse(placeGuideInfo.creator);
