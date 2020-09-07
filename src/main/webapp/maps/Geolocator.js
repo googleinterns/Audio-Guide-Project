@@ -65,10 +65,10 @@ class Geolocator {
     this.enableGoToMyLocationControl();
   }
 
-  centerMapAtCurrentLocation() {
+  static centerMapAtCurrentLocation(map) {
       navigator.geolocation.getCurrentPosition(
           position => {
-              this._map.setCenter(Geolocator.convertCurrentLocationToLatLng(position));
+              map.setCenter(Geolocator.convertCurrentLocationToLatLng(position));
           }
       );
   }
