@@ -117,7 +117,9 @@ function fillFormWithPlaceGuideData(placeGuide) {
           document.getElementById('descriptionInput')),
       placeGuide.description);
   if (placeGuide.imageKey != undefined) {
-    showImagePreview(placeGuide.imageKey);
+    setBlobKeySrcToElement(placeGuide.imageKey, "imagePreview", true);
+    document.getElementById("no-img-icon").style.display="none";
+    document.getElementById("clear-img-icon").style.display="block";
     activateRemoveImageFeature(true);
   } else {
     activateRemoveImageFeature(false);
