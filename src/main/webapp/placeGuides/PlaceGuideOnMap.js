@@ -75,13 +75,11 @@ class PlaceGuideOnMap {
 
   highlight() {
     this._highlighted = true;
-    this._marker.setAnimation(google.maps.Animation.BOUNCE);
     this.openInfoWindow();
   }
 
   unhighlight() {
     this._highlighted = false;
-    this._marker.setAnimation(null);
     this.closeInfoWindow();
   }
 
