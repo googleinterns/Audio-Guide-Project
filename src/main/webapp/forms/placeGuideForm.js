@@ -116,7 +116,11 @@ function fillFormWithPlaceGuideData(placeGuide) {
         .style.display = "none";
     document.getElementById("clear-img-icon")
         .style.display = "block";
+    activateRemoveImageFeature(true);
+  } else {
+    activateRemoveImageFeature(false);
   }
   setFormInputValue(document.getElementById('placeName'),
       DUMMY_DATA_FOR_PLACE_NAME);
 }
+

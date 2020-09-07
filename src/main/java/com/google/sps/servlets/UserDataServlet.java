@@ -40,7 +40,7 @@ public class UserDataServlet extends HttpServlet {
   public static final String PUBLIC_PORTFOLIO_INPUT = "publicPortfolio";
   public static final String PUBLIC_PORTFOLIO_INPUT_PUBLIC_VALUE = "public";
   public static final String SELF_INTRODUCTION_INPUT = "selfIntroduction";
-  public static final String IMG_KEY_INPUT = "imgKey";
+  public static final String IMG_KEY_INPUT = "imageKey";
   public static final String DELETE_IMG_INPUT = "deleteImg";
 
   private final UserRepository userRepository =

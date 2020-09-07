@@ -20,11 +20,11 @@ function styleInputs() {
 }
 
 function activatePreviewFeature() {
-  setSrcToElementOnChangeEvent("imgKey", "imagePreview", true);
+  setSrcToElementOnChangeEvent("imageKey", "imagePreview", true);
   handleIconVisibilityOnFileChangeEvent(
-      'imgKey', document.getElementById("no-img-icon"), false);
+      'imageKey', document.getElementById("no-img-icon"), false);
   handleIconVisibilityOnFileChangeEvent(
-      'imgKey', document.getElementById("clear-img-icon"), true);
+      'imageKey', document.getElementById("clear-img-icon"), true);
 }
 
 /**
@@ -50,6 +50,9 @@ function fillPortfolioFormWithUserData() {
         .style.display = "none";
       document.getElementById("clear-img-icon")
         .style.display = "block";
+      activateRemoveImageFeature(true);
+    } else {
+      activateRemoveImageFeature(false);
     }
   });
 }

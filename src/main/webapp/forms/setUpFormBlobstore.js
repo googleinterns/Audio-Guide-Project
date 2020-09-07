@@ -100,3 +100,17 @@ function handleIconVisibilityOnFileChangeEvent(elementId, icon, showWhenFilePres
     }
   });
 }
+
+function activateRemoveImageFeature(hasPreviousImage) {
+    document.getElementById("clear-img-icon").addEventListener("click", function() {
+        if (hasPreviousImage) {
+            const deletePrevImageCheckbox = new mdc.checkbox.MDCCheckbox(document.getElementById('deletePrevImageCheckbox'));
+            const deletePrevImageFormField = new mdc.formField.MDCFormField(document.getElementById('deletePrevImageFormField'));
+            deletePrevImageFormField.input = deletePrevImageCheckbox;
+            deletePrevImageCheckbox.checked = true;
+            hasPreviousImage = false;
+        }
+        document.getElementById("imagePreview").style.display="none";
+        document.getElementById("imageKey").value = "";
+    });
+}
