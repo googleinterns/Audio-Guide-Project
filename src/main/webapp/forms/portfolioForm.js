@@ -22,7 +22,9 @@ function styleInputs() {
 function activatePreviewFeature() {
   setSrcToElementOnChangeEvent("imgKey", "imagePreview", true);
   handleIconVisibilityOnFileChangeEvent(
-      'imgKey', document.getElementById("no-img-icon"));
+      'imgKey', document.getElementById("no-img-icon"), false);
+  handleIconVisibilityOnFileChangeEvent(
+      'imgKey', document.getElementById("clear-img-icon"), true);
 }
 
 /**
@@ -46,6 +48,8 @@ function fillPortfolioFormWithUserData() {
       setBlobKeySrcToElement(user.imgKey, "imagePreview", true);
       document.getElementById("no-img-icon")
         .style.display = "none";
+      document.getElementById("clear-img-icon")
+        .style.display = "block";
     }
   });
 }

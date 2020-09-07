@@ -80,15 +80,23 @@ function setBlobKeySrcToElement(blobKey, previewId, displayBlock) {
   preview.setAttribute("src", src);
 }
 
-function handleIconVisibilityOnFileChangeEvent(elementId, icon) {
+function handleIconVisibilityOnFileChangeEvent(elementId, icon, showWhenFilePresent) {
   const element = document.getElementById(elementId);
   element.addEventListener("change", function() {
     const file = this.files[0];
 
     if (file) {
-      icon.style.display = "none";
+      if (showWhenFilePresent) {
+        icon.style.display = "block";
+      } else {
+        icon.style.display = "none";
+      }
     } else {
-      icon.style.display = "block";
+      if (showWhenFilePresent) {
+        icon.style.display = "none";
+      } else {
+        icon.style.display = "block";
+      }
     }
   });
 }

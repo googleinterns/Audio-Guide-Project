@@ -27,7 +27,9 @@ function activatePreviewFeature() {
   setSrcToElementOnChangeEvent(
       'imageKey', 'imagePreview', true);
   handleIconVisibilityOnFileChangeEvent(
-      'imageKey', document.getElementById("no-img-icon"));
+      'imageKey', document.getElementById("no-img-icon"), false);
+  handleIconVisibilityOnFileChangeEvent(
+      'imageKey', document.getElementById("clear-img-icon"), true);
   setSrcToElementOnChangeEvent(
       'audioKey', 'audioPlayer', false);
 }
@@ -112,6 +114,8 @@ function fillFormWithPlaceGuideData(placeGuide) {
         'imagePreview', true);
     document.getElementById("no-img-icon")
         .style.display = "none";
+    document.getElementById("clear-img-icon")
+        .style.display = "block";
   }
   setFormInputValue(document.getElementById('placeName'),
       DUMMY_DATA_FOR_PLACE_NAME);
