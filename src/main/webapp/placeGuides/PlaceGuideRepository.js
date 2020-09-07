@@ -5,7 +5,7 @@
  */
 class PlaceGuideRepository {
   static MIN_ZOOM = 5;
-  static QueryType = {
+  static QUERY_TYPE = {
     ALL_PUBLIC_IN_MAP_AREA: "ALL_PUBLIC_IN_MAP_AREA",
     CREATED_ALL_IN_MAP_AREA: "CREATED_ALL_IN_MAP_AREA",
     CREATED_PUBLIC_IN_MAP_AREA: "CREATED_PUBLIC_IN_MAP_AREA",

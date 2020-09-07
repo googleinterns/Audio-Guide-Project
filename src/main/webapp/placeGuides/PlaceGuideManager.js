@@ -6,8 +6,31 @@
  * classes which are responsible for handling the events.
  */
 class PlaceGuideManager {
-  constructor(placeGuideRepository) {
-    this._placeGuideRepository = placeGuideRepository;
+  static PAGE = {
+    DISCOVER: {
+        query: PlaceGudieRepository.QUERTY_TYPE.ALL_PUBLIC_IN_MAP_AREA,
+        listTitle: "Discover Guides",
+        subtitle: "in selected map area"
+    },
+    MY_GUIDES: {
+        query: PlaceGudieRepository.QUERTY_TYPE.CREATED_ALL_IN_MAP_AREA,
+        listTitle: "My Guides",
+        subtitle: "in selected map area"
+    },
+    CREATE_PLACE_GUIDE: {
+        query: PlaceGudieRepository.QUERTY_TYPE.CREATED_ALL_IN_MAP_AREA,
+        listTitle: "",
+        subtitle: ""
+    },
+    BOOKMARKED_PLACEGUIDES: {
+        query: PlaceGudieRepository.QUERTY_TYPE.BOOKMARKED,
+        listTitle: "Bookmarked Guides",
+        subtitle: ""
+    }
+  };
+
+  constructor(page) {
+    this._placeGuideRepository = new PlaceGudieRepository();
     this._highlightedPlaceGuideId = null;
     this._mapPlaceGuideDisplayer = new MapPlaceGuideDisplayer();
     this._listPlaceGuideDisplayer = new ListPlaceGuideDisplayer();
