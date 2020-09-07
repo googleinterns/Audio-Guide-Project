@@ -1,9 +1,9 @@
 /**
  * This class is responsible for connecting all the placeGuide-related
  * objects: the two displayers and the repository.
- * When an event occurs, PlaceGuideManager is triggered and it
- * sends the commands to the
- * classes which are responsible for handling the events.
+ * When the map's bounds are changed, PlaceGuideManager 
+ * sends the eneded commands to all classes involved in 
+ * executing it(PlaceGudieRepository, Map- and ListPlaceGuideDisplayer).
  */
 class PlaceGuideManager {
   static PAGE = {
