@@ -25,14 +25,10 @@ function styleInputs() {
 }
 
 function activatePreviewFeature() {
-  setSrcToElementOnChangeEvent(
-      'imageKey', 'imagePreview', true);
-  handleIconVisibilityOnFileChangeEvent(
-      'imageKey', document.getElementById("no-img-icon"), false);
-  handleIconVisibilityOnFileChangeEvent(
-      'imageKey', document.getElementById("clear-img-icon"), true);
-  setSrcToElementOnChangeEvent(
-      'audioKey', 'audioPlayer', false);
+  handleFileInputChangeEvent(
+      'imageKey', showImagePreview, removeImagePreview);
+  handleFileInputChangeEvent(
+      'audioKey', setAudioPreviewSource, function(){});
 }
 
 // Just a test by fetching actual place guides' data from database 

@@ -20,11 +20,8 @@ function styleInputs() {
 }
 
 function activatePreviewFeature() {
-  setSrcToElementOnChangeEvent("imageKey", "imagePreview", true);
-  handleIconVisibilityOnFileChangeEvent(
-      'imageKey', document.getElementById("no-img-icon"), false);
-  handleIconVisibilityOnFileChangeEvent(
-      'imageKey', document.getElementById("clear-img-icon"), true);
+    handleFileInputChangeEvent(
+      'imageKey', showImagePreview, removeImagePreview);
 }
 
 /**
