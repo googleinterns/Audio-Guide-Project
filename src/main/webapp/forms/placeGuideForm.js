@@ -28,7 +28,7 @@ function activatePreviewFeature() {
   handleFileInputChangeEvent(
       'imageKey', showImagePreview, removeImagePreview);
   handleFileInputChangeEvent(
-      'audioKey', setAudioPreviewSource, function(){});
+      'audioKey', setAudioPreviewSource, removeAudioPreviewSource);
 }
 
 // Just a test by fetching actual place guides' data from database 
@@ -106,13 +106,7 @@ function fillFormWithPlaceGuideData(placeGuide) {
           document.getElementById('descriptionInput')),
       placeGuide.description);
   if (placeGuide.imageKey != undefined) {
-    setBlobKeySrcToElement(
-        placeGuide.imageKey,
-        'imagePreview', true);
-    document.getElementById("no-img-icon")
-        .style.display = "none";
-    document.getElementById("clear-img-icon")
-        .style.display = "block";
+    showImagePreview(placeGuide.imageKey);
     activateRemoveImageFeature(true);
   } else {
     activateRemoveImageFeature(false);

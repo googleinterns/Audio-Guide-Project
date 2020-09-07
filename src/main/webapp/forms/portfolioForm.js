@@ -42,11 +42,7 @@ function fillPortfolioFormWithUserData() {
       switchControl.checked = false;
     }
     if (user.imgKey != undefined) {
-      setBlobKeySrcToElement(user.imgKey, "imagePreview", true);
-      document.getElementById("no-img-icon")
-        .style.display = "none";
-      document.getElementById("clear-img-icon")
-        .style.display = "block";
+      showImagePreview(user.imgKey);
       activateRemoveImageFeature(true);
     } else {
       activateRemoveImageFeature(false);

@@ -56,3 +56,7 @@ function showImagePreview(imgSrc) {
 function setAudioPreviewSource(src) {
     document.getElementById('audioPlayer').setAttribute('src', src);
 }
+
+function removeAudioPreviewSource() {
+    document.getElementById('audioPlayer').setAttribute('src', '');
+}
