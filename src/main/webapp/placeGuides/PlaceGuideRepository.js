@@ -23,14 +23,14 @@ class PlaceGuideRepository {
 
   updatePlaceGuides(queryType, bounds, zoom) {
     if (PlaceGuideRepository.MIN_ZOOM <= zoom || 
-        queryType == PlaceGuideRepository.QueryType.BOOKMARKED) {
+        queryType == PlaceGuideRepository.QUERY_TYPE.BOOKMARKED) {
       // As the number of bookmarked placeGuides will be restricted, 
       // we are not limiting the number of 
       // displayed PlaceGuides based on the zoom level/map area. 
       // We display all of them at once.
       var url = new URL("/place-guide-data", document.URL);
       url.searchParams.append("placeGuideType", queryType);
-      if (queryType != PlaceGuideRepository.QueryType.BOOKMARKED) {
+      if (queryType != PlaceGuideRepository.QUERY_TYPE.BOOKMARKED) {
         url.searchParams.append("regionCorners", bounds.toUrlValue());
       }
       var thisRepository = this;

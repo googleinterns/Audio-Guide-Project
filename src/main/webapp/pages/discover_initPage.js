@@ -18,10 +18,7 @@ function initPage() {
       mapWidget.addGeolocationFunctionality();
       mapWidget.addSearchingFunctionality();
       map = mapWidget.map;
-      const placeGuideRepository =
-          new PlaceGuideRepository(
-              PlaceGuideRepository.QueryType.ALL_PUBLIC_IN_MAP_AREA);
-      placeGuideManager = new PlaceGuideManager(placeGuideRepository);
+      placeGuideManager = new PlaceGuideManager(PlaceGuideManager.PAGE.DISCOVER);
       google.maps.event.addListener(map, 'idle', function () {
         placeGuideManager.update(map.getBounds(), map.getZoom(), false);
       });
