@@ -89,6 +89,7 @@ class PlaceGuideRepository {
         userResponse.email,
         userResponse.name,
         userResponse.publicPortfolio,
+        userResponse.selfIntroduction,
         userResponse.imgKey);
   }
 
