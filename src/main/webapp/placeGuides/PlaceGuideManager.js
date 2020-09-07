@@ -33,18 +33,18 @@ class PlaceGuideManager {
     if (this._page != PlaceGuideManager.BOOKMARKED_PLACEGUIDES) {
       let thisManager = this;
       google.maps.event.addListener(map, 'idle', function () {
-        thisManager.update(map.getBounds(), map.getZoom(), false);
+        thisManager.update(map.getBounds(), map.getZoom());
       });
     }
   }
 
-  update(bounds, zoom, showAll) {
+  update(bounds, zoom) {
     this._placeGuideRepository.updatePlaceGuides(this._page.query, bounds, zoom)
         .then((response) => {
           const placeGuides = this._placeGuideRepository.placeGuides;
           this._mapPlaceGuideDisplayer.update(placeGuides);
           this._mapPlaceGuideDisplayer.update(placeGuides);
-          if (showAll) {
+          if (this._page === PlaceGuideManager.PAGE.BOOKMARKED_PLACEGUIDES) {
               this._mapPlaceGuideDisplayer.adjustMapToShowAll();
           }
         });
