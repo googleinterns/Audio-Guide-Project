@@ -30,7 +30,7 @@ class PlaceGuideManager {
   };
 
   constructor(page) {
-    this._placeGuideRepository = new PlaceGudieRepository();
+    this._placeGuideRepository = new PlaceGuideRepository();
     this._highlightedPlaceGuideId = null;
     this._mapPlaceGuideDisplayer = new MapPlaceGuideDisplayer();
     this._listPlaceGuideDisplayer = new ListPlaceGuideDisplayer();

@@ -13,8 +13,7 @@ class PlaceGuideRepository {
     BOOKMARKED: "BOOKMARKED",
   };
 
-  constructor(queryType) {
-    this._queryType = queryType;
+  constructor() {
     this._placeGuides = {};
   }
 
@@ -22,16 +21,16 @@ class PlaceGuideRepository {
     return this._placeGuides;
   }
 
-  updatePlaceGuides(bounds, zoom) {
+  updatePlaceGuides(queryType, bounds, zoom) {
     if (PlaceGuideRepository.MIN_ZOOM <= zoom || 
-        this._queryType == PlaceGuideRepository.QueryType.BOOKMARKED) {
+        queryType == PlaceGuideRepository.QueryType.BOOKMARKED) {
       // As the number of bookmarked placeGuides will be restricted, 
       // we are not limiting the number of 
       // displayed PlaceGuides based on the zoom level/map area. 
       // We display all of them at once.
       var url = new URL("/place-guide-data", document.URL);
-      url.searchParams.append("placeGuideType", this._queryType);
-      if (this._queryType != PlaceGuideRepository.QueryType.BOOKMARKED) {
+      url.searchParams.append("placeGuideType", queryType);
+      if (queryType != PlaceGuideRepository.QueryType.BOOKMARKED) {
         url.searchParams.append("regionCorners", bounds.toUrlValue());
       }
       var thisRepository = this;
