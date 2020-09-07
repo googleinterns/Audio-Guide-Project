@@ -65,11 +65,18 @@ class Geolocator {
     this.enableGoToMyLocationControl();
   }
 
+  /**
+   * This function tries to find the user's current location, and
+   * if it is found, it centers the map around it and sets 
+   * a higher zoom level.
+   * If the location cannot be found, nothing happens.
+   */
   static centerMapAtCurrentLocation(map) {
       navigator.geolocation.getCurrentPosition(
           position => {
               map.setZoom(10);
-              map.setCenter(Geolocator.convertCurrentLocationToLatLng(position));
+              map.setCenter(
+                  Geolocator.convertCurrentLocationToLatLng(position));
           }
       );
   }
