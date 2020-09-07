@@ -8,6 +8,9 @@ function setUpPortfolioForm() {
   fillPortfolioFormWithUserData();
 }
 
+/**
+ * This function initialises the comonents managed by the Material Design library.
+ */
 function styleInputs() {
     const nameInput = new mdc.textField.MDCTextField(document.getElementById('nameInput'));
     const selfIntroductionInput = new mdc.textField.MDCTextField(document.getElementById('selfIntroductionInput'));
@@ -19,6 +22,10 @@ function styleInputs() {
     const switchControl = new mdc.switchControl.MDCSwitch(document.getElementById("publicitySwitch"));
 }
 
+
+/**
+ * This function enables the preview of the profile picture.
+ */
 function activatePreviewFeature() {
     handleFileInputChangeEvent(
       'imageKey', showImagePreview, removeImagePreview);

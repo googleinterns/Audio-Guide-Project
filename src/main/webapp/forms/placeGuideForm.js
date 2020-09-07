@@ -11,6 +11,10 @@ function setUpCreatePlaceGuideForm() {
   styleInputs();
 }
 
+
+/**
+ * This function initialises the comonents managed by the Material Design library.
+ */
 function styleInputs() {
     const nameInput = new mdc.textField.MDCTextField(document.getElementById('nameInput'));
     const lengthInput = new mdc.textField.MDCTextField(document.getElementById('lengthInput'));
@@ -24,6 +28,10 @@ function styleInputs() {
     const publicitySwitchControl = new mdc.switchControl.MDCSwitch(document.getElementById("publicitySwitch"));
 }
 
+
+/**
+ * This function enables the preview of the picture and audio.
+ */
 function activatePreviewFeature() {
   handleFileInputChangeEvent(
       'imageKey', showImagePreview, removeImagePreview);
@@ -56,7 +64,10 @@ function enableSubmission() {
   document.getElementById("submitBtn").disabled = false;
 }
 
-// For testing.
+/**
+ * This function writes in the hidden form inputs the 
+ * data of the newly chosen location for the placeguide.
+ */
 function updateLocation(position, placeId, placeName) {
   if (placeName != null) {
     document.getElementById(

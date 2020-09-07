@@ -9,6 +9,12 @@ function setFormInputValue(input, value) {
   }
 }
 
+
+/**
+ * This function handles an event of a file input specified by the id @param fileInputName.
+ * If a new file is uploaded, @param fileUploaded function is called with the file's name as parameter.
+ * Otherwise, fileRemovedFunction is called.
+ */
 function handleFileInputChangeEvent(fileInputName, fileUploadedFunction, fileRemovedFunction) {
   const fileInput = document.getElementById(fileInputName);
   fileInput.addEventListener("change", function() {
@@ -25,6 +31,14 @@ function handleFileInputChangeEvent(fileInputName, fileUploadedFunction, fileRem
   });
 }
 
+
+/**
+ * Whenever the clear-img-icon button is clicked, the current photo is removed, 
+ * meaning that it won't be submitted
+ * (or, if the ucrrent photo is the previously saved photo, than it won't be kept)
+ * with the next submission.
+ * This change will be reflected in the preview too.
+ */
 function activateRemoveImageFeature(hasPreviousImage) {
     document.getElementById("clear-img-icon").addEventListener("click", function() {
         if (hasPreviousImage) {
