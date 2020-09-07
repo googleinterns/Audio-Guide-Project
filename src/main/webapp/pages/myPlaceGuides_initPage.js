@@ -19,7 +19,8 @@ function initPage() {
       mapWidget.addGeolocationFunctionality();
       mapWidget.addSearchingFunctionality();
       map = mapWidget.map;
-      placeGuideManager = new PlaceGuideManager(PlaceGuideManager.PAGE.MY_GUIDES, map);
+      placeGuideManager = new PlaceGuideManager(
+          PlaceGuideManager.PAGE.MY_GUIDES, map);
     }
   });
 }
