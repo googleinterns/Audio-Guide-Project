@@ -30,6 +30,7 @@ class PlaceGuideManager {
   };
 
   constructor(page) {
+    this._page = page;
     this._placeGuideRepository = new PlaceGuideRepository();
     this._highlightedPlaceGuideId = null;
     this._mapPlaceGuideDisplayer = new MapPlaceGuideDisplayer();
@@ -37,7 +38,7 @@ class PlaceGuideManager {
   }
 
   update(bounds, zoom, showAll) {
-    this._placeGuideRepository.updatePlaceGuides(bounds, zoom)
+    this._placeGuideRepository.updatePlaceGuides(this._page.query, bounds, zoom)
         .then((response) => {
           const placeGuides = this._placeGuideRepository.placeGuides;
           this._mapPlaceGuideDisplayer.update(placeGuides);
