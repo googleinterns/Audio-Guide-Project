@@ -7,6 +7,7 @@ function setUpCreatePlaceGuideForm() {
   addBlobstoreUploadUrlToForm(
       'CREATE_PLACE_GUIDE_FORM', 'createPlaceGuideForm');
   activatePreviewFeature();
+  activateRemoveImageFeature(false);
   styleInputs();
 }
 
