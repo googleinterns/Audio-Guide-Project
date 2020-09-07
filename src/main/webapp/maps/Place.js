@@ -167,7 +167,8 @@ class Place {
     }
     // ToUrlValue is favored instead of toString because it has a parameter
     // to set the precision.
-    content+= '<p>' + 'Coordinates: (' + this._position.toUrlValue(3) + ')' +'</p>';
+    content+=
+        '<p>' + 'Coordinates: (' + this._position.toUrlValue(3) + ')' +'</p>';
     return content;
   }
 

@@ -45,8 +45,10 @@ class Geolocator {
     this._map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(
         this._geolocationControlDiv);
     this._myLocationControlDiv =
-        this.createControlDiv(Geolocator.GO_TO_MY_LOCATION_TITLE,
-            Geolocator.GO_TO_MY_LOCATION_ICON, Geolocator.GO_TO_MY_LOCATION_ICON_ID);
+        this.createControlDiv(
+            Geolocator.GO_TO_MY_LOCATION_TITLE,
+            Geolocator.GO_TO_MY_LOCATION_ICON,
+            Geolocator.GO_TO_MY_LOCATION_ICON_ID);
     this._map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(
         this._myLocationControlDiv);
   }
@@ -146,7 +148,9 @@ class Geolocator {
     }
   }
 
-  /** Creates a div with the style of control elements and with the given image. */
+  /**
+   * Creates a div with the style of control elements and with the given image.
+   */
   createControlDiv(title, iconName, iconId) {
     const controlDiv = document.createElement("div");
     controlDiv.setAttribute('class', 'control');

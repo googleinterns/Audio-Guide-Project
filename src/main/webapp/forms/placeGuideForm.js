@@ -15,16 +15,25 @@ function setUpCreatePlaceGuideForm() {
  * This function initialises the comonents managed by the Material Design library.
  */
 function styleInputs() {
-    const nameInput = new mdc.textField.MDCTextField(document.getElementById('nameInput'));
-    const lengthInput = new mdc.textField.MDCTextField(document.getElementById('lengthInput'));
-    const descriptionInput = new mdc.textField.MDCTextField(document.getElementById('descriptionInput'));
-    const submitButtonRipple = new mdc.ripple.MDCRipple(document.getElementById("submitBtn"));
-    const chooseAudioFileButtonRipple = new mdc.ripple.MDCRipple(document.getElementById("chooseAudioFileBtn"));
-    const chooseImageFileButtonRipple = new mdc.ripple.MDCRipple(document.getElementById("chooseImageFileBtn"));
-    const deletePrevImageCheckbox = new mdc.checkbox.MDCCheckbox(document.getElementById('deletePrevImageCheckbox'));
-    const deletePrevImageFormField = new mdc.formField.MDCFormField(document.getElementById('deletePrevImageFormField'));
-    deletePrevImageFormField.input = deletePrevImageCheckbox;
-    const publicitySwitchControl = new mdc.switchControl.MDCSwitch(document.getElementById("publicitySwitch"));
+  const nameInput = new mdc.textField.MDCTextField(
+      document.getElementById('nameInput'));
+  const lengthInput = new mdc.textField.MDCTextField(
+      document.getElementById('lengthInput'));
+  const descriptionInput = new mdc.textField.MDCTextField(
+      document.getElementById('descriptionInput'));
+  const submitButtonRipple = new mdc.ripple.MDCRipple(
+      document.getElementById("submitBtn"));
+  const chooseAudioFileButtonRipple = new mdc.ripple.MDCRipple(
+      document.getElementById("chooseAudioFileBtn"));
+  const chooseImageFileButtonRipple = new mdc.ripple.MDCRipple(
+      document.getElementById("chooseImageFileBtn"));
+  const deletePrevImageCheckbox = new mdc.checkbox.MDCCheckbox(
+      document.getElementById('deletePrevImageCheckbox'));
+  const deletePrevImageFormField = new mdc.formField.MDCFormField(
+      document.getElementById('deletePrevImageFormField'));
+  deletePrevImageFormField.input = deletePrevImageCheckbox;
+  const publicitySwitchControl = new mdc.switchControl.MDCSwitch(
+      document.getElementById("publicitySwitch"));
 }
 
 /**
@@ -41,10 +50,11 @@ function activatePreviewFeature() {
 // to see if image and audio previewing also works with files from blobstore.
 function testExistingPlaceGuide() {
   getFetchedList().then(placeGuideCreatorPairs => {
-    if (placeGuideCreatorPairs === undefined || placeGuideCreatorPairs.length == 0) {
+    if (placeGuideCreatorPairs === undefined ||
+        placeGuideCreatorPairs.length == 0) {
       console.log("place guide does not exist yet.");
     } else {
-      fillFormWithPlaceGuideData(placeGuideCreatorPairs[0].placeGuide); 
+      fillFormWithPlaceGuideData(placeGuideCreatorPairs[0].placeGuide);
     }
   });
 }
@@ -63,20 +73,20 @@ function enableSubmission() {
 }
 
 /**
- * This function writes in the hidden form inputs the 
+ * This function writes in the hidden form inputs the
  * data of the newly chosen location for the placeguide.
  */
 function updateLocation(position, placeId, placeName) {
   if (placeName != null) {
     document.getElementById(
-      'placeName').setAttribute('value', placeName);
+        'placeName').setAttribute('value', placeName);
     document.getElementById(
-      'placeId').setAttribute('value', placeId);
+        'placeId').setAttribute('value', placeId);
   } else {
     document.getElementById(
-      'placeName').setAttribute('value', '-');
+        'placeName').setAttribute('value', '-');
     document.getElementById(
-      'placeId').setAttribute('value', '');
+        'placeId').setAttribute('value', '');
   }
   document.getElementById(
       'latitude').setAttribute('value', position.lat());
@@ -94,8 +104,8 @@ function fillFormWithPlaceGuideData(placeGuide) {
       placeGuide.name);
   setBlobKeySrcToElement(
       placeGuide.audioKey, 'audioPlayer', false);
-  const publicitySwitchControl = 
-    new mdc.switchControl.MDCSwitch(document.getElementById("publicitySwitch"));
+  const publicitySwitchControl =
+      new mdc.switchControl.MDCSwitch(document.getElementById("publicitySwitch"));
   if (placeGuide.isPublic) {
     publicitySwitchControl.checked = true;
   } else {
@@ -116,8 +126,8 @@ function fillFormWithPlaceGuideData(placeGuide) {
       placeGuide.description);
   if (placeGuide.imageKey != undefined) {
     setBlobKeySrcToElement(placeGuide.imageKey, "imagePreview", true);
-    document.getElementById("no-img-icon").style.display="none";
-    document.getElementById("clear-img-icon").style.display="block";
+    document.getElementById("no-img-icon").style.display = "none";
+    document.getElementById("clear-img-icon").style.display = "block";
     activateRemoveImageFeature(true);
   } else {
     activateRemoveImageFeature(false);
