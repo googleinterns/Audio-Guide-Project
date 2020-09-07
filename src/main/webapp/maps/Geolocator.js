@@ -72,13 +72,13 @@ class Geolocator {
    * If the location cannot be found, nothing happens.
    */
   static centerMapAtCurrentLocation(map) {
-      navigator.geolocation.getCurrentPosition(
-          position => {
-              map.setZoom(10);
-              map.setCenter(
-                  Geolocator.convertCurrentLocationToLatLng(position));
-          }
-      );
+    navigator.geolocation.getCurrentPosition(
+      position => {
+       map.setZoom(10);
+       map.setCenter(
+        Geolocator.convertCurrentLocationToLatLng(position));
+      }
+    );
   }
 
   enableGeolocationControl() {
