@@ -14,7 +14,7 @@ function styleInputs() {
     const nameInput = new mdc.textField.MDCTextField(document.getElementById('nameInput'));
     const lengthInput = new mdc.textField.MDCTextField(document.getElementById('lengthInput'));
     const descriptionInput = new mdc.textField.MDCTextField(document.getElementById('descriptionInput'));
-    // const submitButtonRipple = new mdc.ripple.MDCRipple(document.getElementById("submitBtn"));
+    const submitButtonRipple = new mdc.ripple.MDCRipple(document.getElementById("submitBtn"));
     const chooseAudioFileButtonRipple = new mdc.ripple.MDCRipple(document.getElementById("chooseAudioFileBtn"));
     const chooseImageFileButtonRipple = new mdc.ripple.MDCRipple(document.getElementById("chooseImageFileBtn"));
     const deletePrevImageCheckbox = new mdc.checkbox.MDCCheckbox(document.getElementById('deletePrevImageCheckbox'));
