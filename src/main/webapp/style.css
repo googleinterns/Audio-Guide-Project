@@ -153,10 +153,13 @@ form img {
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
   border-radius: 3px;
   border: 0px;
-  margin: 5px auto 15px auto;
   align-items: center;
   justify-content: center;
   display: flex;
+}
+
+.closer-to-upper-element-form-item {
+  margin: 5px auto 15px auto;
 }
 
 #imagePreview {
