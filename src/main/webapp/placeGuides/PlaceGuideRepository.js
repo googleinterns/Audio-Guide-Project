@@ -86,6 +86,10 @@ class PlaceGuideRepository {
             + error));
   }
 
+  isBookmarked(placeGuideId) {
+    return this._placeGuides[placeGuideId].bookmarkedByCurrentUser;
+  }
+
   static buildPlaceGuideDictionaryFromResponse(placeGuideWithCreatorPairs) {
     var placeGuidesDict = {};
     var promises = [];
