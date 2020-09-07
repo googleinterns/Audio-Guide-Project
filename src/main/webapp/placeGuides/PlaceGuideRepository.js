@@ -72,15 +72,15 @@ class PlaceGuideRepository {
 
   togglePlaceGuideBookmarkStatus(placeGuideId) {
     // Toggle in in-memory dictionary.
-    var isBookmarked = this._placeGuides.bookmarkedByCurrentUser;
-    this._placeGuides.bookmarkedByCurrentUser = !isBookmarked;
+    var isBookmarked = this._placeGuides[placeGuideId].bookmarkedByCurrentUser;
+    this._placeGuides[placeGuideId].bookmarkedByCurrentUser = !isBookmarked;
     // Toogle in database.
     var url = new URL("bookmark-place-guide", document.URL);
     url.searchParams.append("placeGuideId", placeGuideId);
-    if (this._placeGuides.bookmarkedByCurrentUser) {
-      url.searchParams.append("bookmarkHandlingType", "BOOKMARK");
-    } else {
+    if (isBookmarked) {
       url.searchParams.append("bookmarkHandlingType", "REMOVE");
+    } else {
+      url.searchParams.append("bookmarkHandlingType", "BOOKMARK");
     }
     return fetch(url)
         .catch(error => console.log("BookmarkPlaceGuideServlet: failed to fetch: "
