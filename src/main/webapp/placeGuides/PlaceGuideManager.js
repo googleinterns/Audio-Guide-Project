@@ -73,4 +73,12 @@ class PlaceGuideManager {
     this._listPlaceGuideDisplayer.unhighlight(this._highlightedPlaceGuideId);
     this._highlightedPlaceGuideId = null;
   }
+
+  toggleBookmark(placeGuideId) {
+    this._placeGuideRepository.togglePlaceGuideBookmarkStatus(placeGuideId);
+    if (this._page === PlaceGuideManager.PAGE.BOOKMARKED_PLACEGUIDES &&
+        !this._placeGuideRepository.isBookmarked(placeGuideId)) {
+        this.removePlaceGuideRepresentation(placeGuideId);
+    }
+  }
 }
