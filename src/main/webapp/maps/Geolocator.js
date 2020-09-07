@@ -65,6 +65,14 @@ class Geolocator {
     this.enableGoToMyLocationControl();
   }
 
+  centerMapAtCurrentLocation() {
+      navigator.geolocation.getCurrentPosition(
+          position => {
+              this._map.setCenter(Geolocator.convertCurrentLocationToLatLng(position));
+          }
+      );
+  }
+
   enableGeolocationControl() {
     this._geolocationControlDiv.addEventListener("click",
         event => this.onGeolocationControlEvent());
