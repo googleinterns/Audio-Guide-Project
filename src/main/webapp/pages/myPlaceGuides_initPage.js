@@ -19,10 +19,7 @@ function initPage() {
       mapWidget.addGeolocationFunctionality();
       mapWidget.addSearchingFunctionality();
       map = mapWidget.map;
-      placeGuideManager = new PlaceGuideManager(PlaceGuideManager.PAGE.MY_GUIDES);
-      google.maps.event.addListener(map, 'idle', function () {
-        placeGuideManager.update(map.getBounds(), map.getZoom(), false);
-      });
+      placeGuideManager = new PlaceGuideManager(PlaceGuideManager.PAGE.MY_GUIDES, map);
     }
   });
 }

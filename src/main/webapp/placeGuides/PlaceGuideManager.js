@@ -21,12 +21,21 @@ class PlaceGuideManager {
     }
   };
 
-  constructor(page) {
+  constructor(page, map) {
     this._page = page;
     this._placeGuideRepository = new PlaceGuideRepository();
     this._highlightedPlaceGuideId = null;
     this._mapPlaceGuideDisplayer = new MapPlaceGuideDisplayer();
     this._listPlaceGuideDisplayer = new ListPlaceGuideDisplayer();
+    this.update(map.getBounds(), 
+                map.getZoom(), 
+                this._page === PlaceGuideManager.BOOKMARKED_PLACEGUIDES);
+    if (this._page != PlaceGuideManager.BOOKMARKED_PLACEGUIDES) {
+      let thisManager = this;
+      google.maps.event.addListener(map, 'idle', function () {
+        thisManager.update(map.getBounds(), map.getZoom(), false);
+      });
+    }
   }
 
   update(bounds, zoom, showAll) {
