@@ -68,6 +68,7 @@ class Geolocator {
   static centerMapAtCurrentLocation(map) {
       navigator.geolocation.getCurrentPosition(
           position => {
+              map.setZoom(10);
               map.setCenter(Geolocator.convertCurrentLocationToLatLng(position));
           }
       );
