@@ -51,6 +51,10 @@ class PlaceGuideManager {
 
   removePlaceGuide(placeGuideId) {
     this._placeGuideRepository.remove(placeGuideId);
+    this.removePlaceGuideRepresentation(placeGuideId);
+  }
+
+  removePlaceGuideRepresentation(placeGuideId) {
     this._mapPlaceGuideDisplayer.remove(placeGuideId);
     this._listPlaceGuideDisplayer.remove(placeGuideId);
   }
