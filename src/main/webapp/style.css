@@ -172,3 +172,7 @@ form img {
     top: 0px;
     right: 5px;
 }
+
+.form-action-button {
+    width: 235px;
+}
