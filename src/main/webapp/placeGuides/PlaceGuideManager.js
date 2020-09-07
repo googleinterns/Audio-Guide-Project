@@ -9,23 +9,15 @@ class PlaceGuideManager {
   static PAGE = {
     DISCOVER: {
         query: PlaceGuideRepository.QUERY_TYPE.ALL_PUBLIC_IN_MAP_AREA,
-        listTitle: "Discover Guides",
-        subtitle: "in selected map area"
     },
     MY_GUIDES: {
         query: PlaceGuideRepository.QUERY_TYPE.CREATED_ALL_IN_MAP_AREA,
-        listTitle: "My Guides",
-        subtitle: "in selected map area"
     },
     CREATE_PLACE_GUIDE: {
         query: PlaceGuideRepository.QUERY_TYPE.CREATED_ALL_IN_MAP_AREA,
-        listTitle: "",
-        subtitle: ""
     },
     BOOKMARKED_PLACEGUIDES: {
         query: PlaceGuideRepository.QUERY_TYPE.BOOKMARKED,
-        listTitle: "Bookmarked Guides",
-        subtitle: ""
     }
   };
 
