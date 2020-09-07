@@ -21,12 +21,86 @@ class PlaceGuideRepository {
     return this._placeGuides;
   }
 
+  static buildPlaceGuideDictionaryFromResponse(placeGuideWithCreatorPairs) {
+    var placeGuidesDict = {};
+    var promises = [];
+    return new Promise(function (resolve, reject) {
+          for (var i = 0; i < placeGuideWithCreatorPairs.length; i++) {
+            promises.push(new Promise(function (resolve, reject) {
+              PlaceGuideRepository
+                  .getPlaceGuideFromPlaceGuideWithCreatorPair(
+                      placeGuideWithCreatorPairs[i])
+                  .then(placeGuide => {
+                    placeGuidesDict[placeGuide.id] = placeGuide;
+                  })
+                  .then(finished => resolve())
+            }));
+          }
+          Promise.all(promises).then(() => {
+            resolve(placeGuidesDict);
+          });
+        }
+    );
+  }
+
+  static getPlaceGuideFromPlaceGuideWithCreatorPair(placeGuideWithCreatorPair) {
+    var thisRepository = this;
+    return new Promise(function (resolve, reject) {
+      var creator = thisRepository
+          .getUserFromResponse(placeGuideWithCreatorPair.creator);
+      var placeGuideResponse = placeGuideWithCreatorPair.placeGuide;
+      if (placeGuideResponse.placeId !== undefined) {
+        Location.constructLocationBasedOnPlaceId(placeGuideResponse.placeId)
+            .then(location => {
+              var placeGuide = new PlaceGuide(placeGuideResponse.id,
+                  placeGuideResponse.name,
+                  location,
+                  placeGuideResponse.audioKey,
+                  placeGuideResponse.length,
+                  placeGuideResponse.imageKey,
+                  creator,
+                  placeGuideResponse.description,
+                  placeGuideResponse.isPublic,
+                  placeGuideWithCreatorPair.createdByCurrentUser,
+                  placeGuideWithCreatorPair.bookmarkedByCurrentUser);
+              resolve(placeGuide);
+            });
+      } else {
+        var location =
+            Location.constructLocationBasedOnCoordinates(
+                placeGuideResponse.coordinate.latitude,
+                placeGuideResponse.coordinate.longitude);
+        var placeGuide = new PlaceGuide(placeGuideResponse.id,
+            placeGuideResponse.name,
+            location,
+            placeGuideResponse.audioKey,
+            placeGuideResponse.length,
+            placeGuideResponse.imageKey,
+            creator,
+            placeGuideResponse.description,
+            placeGuideResponse.isPublic,
+            placeGuideWithCreatorPair.createdByCurrentUser,
+            placeGuideWithCreatorPair.bookmarkedByCurrentUser);
+        resolve(placeGuide);
+      }
+    });
+
+  }
+
+  static getUserFromResponse(userResponse) {
+    return new User(userResponse.id,
+        userResponse.email,
+        userResponse.name,
+        userResponse.publicPortfolio,
+        userResponse.imgKey);
+  }
+
   updatePlaceGuides(queryType, bounds, zoom) {
-    if (PlaceGuideRepository.MIN_ZOOM <= zoom || 
+    if (PlaceGuideRepository.MIN_ZOOM <= zoom ||
         queryType == PlaceGuideRepository.QUERY_TYPE.BOOKMARKED) {
-      // As the number of bookmarked placeGuides will be restricted, 
-      // we are not limiting the number of 
-      // displayed PlaceGuides based on the zoom level/map area. 
+      // As the number of bookmarked placeGuides will be restricted,
+      // we are not limiting the number of
+      // displayed PlaceGuides based on the zoom level/map area.
       // We display all of them at once.
       var url = new URL("/place-guide-data", document.URL);
       url.searchParams.append("placeGuideType", queryType);
@@ -46,7 +120,8 @@ class PlaceGuideRepository {
                   .buildPlaceGuideDictionaryFromResponse(
                       placeGuideWithCreatorPairs))
           .catch(error =>
-              console.log("updatePlaceGuides: unable to build placeGuide dictionary: "
+              console.log(
+                  "updatePlaceGuides: unable to build placeGuide dictionary: "
                   + error))
           .then(placeGuides => thisRepository._placeGuides = placeGuides);
     } else {
@@ -82,81 +157,12 @@ class PlaceGuideRepository {
       url.searchParams.append("bookmarkHandlingType", "BOOKMARK");
     }
     return fetch(url)
-        .catch(error => console.log("BookmarkPlaceGuideServlet: failed to fetch: "
-            + error));
+        .catch(error =>
+            console.log("BookmarkPlaceGuideServlet: failed to fetch: "
+                + error));
   }
 
   isBookmarked(placeGuideId) {
     return this._placeGuides[placeGuideId].bookmarkedByCurrentUser;
-  }
-
-  static buildPlaceGuideDictionaryFromResponse(placeGuideWithCreatorPairs) {
-    var placeGuidesDict = {};
-    var promises = [];
-    return new Promise(function (resolve, reject) {
-          for (var i = 0; i < placeGuideWithCreatorPairs.length; i++) {
-            promises.push(new Promise(function (resolve, reject) {
-              PlaceGuideRepository
-                  .getPlaceGuideFromPlaceGuideWithCreatorPair(placeGuideWithCreatorPairs[i])
-                  .then(placeGuide => {
-                    placeGuidesDict[placeGuide.id] = placeGuide;
-                  })
-                  .then(finished => resolve())
-            }));
-          }
-          Promise.all(promises).then(() => {
-            resolve(placeGuidesDict);
-          });
-        }
-    );
-  }
-
-  static getPlaceGuideFromPlaceGuideWithCreatorPair(placeGuideWithCreatorPair) {
-    var thisRepository = this;
-    return new Promise(function (resolve, reject) {
-      var creator = thisRepository.getUserFromResponse(placeGuideWithCreatorPair.creator);
-      var placeGuideResponse = placeGuideWithCreatorPair.placeGuide;
-      if (placeGuideResponse.placeId !== undefined) {
-        Location.constructLocationBasedOnPlaceId(placeGuideResponse.placeId)
-            .then(location => {
-              var placeGuide = new PlaceGuide(placeGuideResponse.id,
-                  placeGuideResponse.name,
-                  location,
-                  placeGuideResponse.audioKey,
-                  placeGuideResponse.length,
-                  placeGuideResponse.imageKey,
-                  creator,
-                  placeGuideResponse.description,
-                  placeGuideResponse.isPublic,
-                  placeGuideWithCreatorPair.createdByCurrentUser,
-                  placeGuideWithCreatorPair.bookmarkedByCurrentUser);
-              resolve(placeGuide);
-            });
-      } else {
-        var location = Location.constructLocationBasedOnCoordinates(placeGuideResponse.coordinate.latitude,
-            placeGuideResponse.coordinate.longitude);
-        var placeGuide = new PlaceGuide(placeGuideResponse.id,
-            placeGuideResponse.name,
-            location,
-            placeGuideResponse.audioKey,
-            placeGuideResponse.length,
-            placeGuideResponse.imageKey,
-            creator,
-            placeGuideResponse.description,
-            placeGuideResponse.isPublic,
-            placeGuideWithCreatorPair.createdByCurrentUser,
-            placeGuideWithCreatorPair.bookmarkedByCurrentUser);
-        resolve(placeGuide);
-      }
-    });
-
-  }
-
-  static getUserFromResponse(userResponse) {
-    return new User(userResponse.id,
-        userResponse.email,
-        userResponse.name,
-        userResponse.publicPortfolio,
-        userResponse.imgKey);
   }
 }

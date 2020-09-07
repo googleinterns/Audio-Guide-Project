@@ -1,23 +1,23 @@
 /**
  * This class is responsible for connecting all the placeGuide-related
  * objects: the two displayers and the repository.
- * When the map's bounds are changed, PlaceGuideManager 
- * sends the eneded commands to all classes involved in 
+ * When the map's bounds are changed, PlaceGuideManager
+ * sends the eneded commands to all classes involved in
  * executing it(PlaceGudieRepository, Map- and ListPlaceGuideDisplayer).
  */
 class PlaceGuideManager {
   static PAGE = {
     DISCOVER: {
-        query: PlaceGuideRepository.QUERY_TYPE.ALL_PUBLIC_IN_MAP_AREA,
+      query: PlaceGuideRepository.QUERY_TYPE.ALL_PUBLIC_IN_MAP_AREA,
     },
     MY_GUIDES: {
-        query: PlaceGuideRepository.QUERY_TYPE.CREATED_ALL_IN_MAP_AREA,
+      query: PlaceGuideRepository.QUERY_TYPE.CREATED_ALL_IN_MAP_AREA,
     },
     CREATE_PLACE_GUIDE: {
-        query: PlaceGuideRepository.QUERY_TYPE.CREATED_ALL_IN_MAP_AREA,
+      query: PlaceGuideRepository.QUERY_TYPE.CREATED_ALL_IN_MAP_AREA,
     },
     BOOKMARKED_PLACEGUIDES: {
-        query: PlaceGuideRepository.QUERY_TYPE.BOOKMARKED,
+      query: PlaceGuideRepository.QUERY_TYPE.BOOKMARKED,
     }
   };
 
@@ -27,9 +27,9 @@ class PlaceGuideManager {
     this._highlightedPlaceGuideId = null;
     this._mapPlaceGuideDisplayer = new MapPlaceGuideDisplayer();
     this._listPlaceGuideDisplayer = new ListPlaceGuideDisplayer();
-    this.update(map.getBounds(), 
-                map.getZoom(), 
-                this._page === PlaceGuideManager.BOOKMARKED_PLACEGUIDES);
+    this.update(map.getBounds(),
+        map.getZoom(),
+        this._page === PlaceGuideManager.BOOKMARKED_PLACEGUIDES);
     if (this._page != PlaceGuideManager.BOOKMARKED_PLACEGUIDES) {
       let thisManager = this;
       google.maps.event.addListener(map, 'idle', function () {
@@ -45,7 +45,7 @@ class PlaceGuideManager {
           this._mapPlaceGuideDisplayer.update(placeGuides);
           this._mapPlaceGuideDisplayer.update(placeGuides);
           if (this._page === PlaceGuideManager.PAGE.BOOKMARKED_PLACEGUIDES) {
-              this._mapPlaceGuideDisplayer.adjustMapToShowAll();
+            this._mapPlaceGuideDisplayer.adjustMapToShowAll();
           }
         });
   }
@@ -79,7 +79,7 @@ class PlaceGuideManager {
     this._placeGuideRepository.togglePlaceGuideBookmarkStatus(placeGuideId);
     if (this._page === PlaceGuideManager.PAGE.BOOKMARKED_PLACEGUIDES &&
         !this._placeGuideRepository.isBookmarked(placeGuideId)) {
-        this.removePlaceGuideRepresentation(placeGuideId);
+      this.removePlaceGuideRepresentation(placeGuideId);
     }
   }
 }
