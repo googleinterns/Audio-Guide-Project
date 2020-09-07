@@ -9,7 +9,6 @@ function setFormInputValue(input, value) {
   }
 }
 
-
 /**
  * This function handles an event of a file input specified by the id @param fileInputName.
  * If a new file is uploaded, @param fileUploaded function is called with the file's name as parameter.
@@ -30,7 +29,6 @@ function handleFileInputChangeEvent(fileInputName, fileUploadedFunction, fileRem
     }
   });
 }
-
 
 /**
  * Whenever the clear-img-icon button is clicked, the current photo is removed, 

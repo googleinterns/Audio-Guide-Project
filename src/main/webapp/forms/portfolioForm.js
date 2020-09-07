@@ -22,7 +22,6 @@ function styleInputs() {
     const switchControl = new mdc.switchControl.MDCSwitch(document.getElementById("publicitySwitch"));
 }
 
-
 /**
  * This function enables the preview of the profile picture.
  */

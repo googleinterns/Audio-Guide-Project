@@ -11,7 +11,6 @@ function setUpCreatePlaceGuideForm() {
   styleInputs();
 }
 
-
 /**
  * This function initialises the comonents managed by the Material Design library.
  */
@@ -27,7 +26,6 @@ function styleInputs() {
     deletePrevImageFormField.input = deletePrevImageCheckbox;
     const publicitySwitchControl = new mdc.switchControl.MDCSwitch(document.getElementById("publicitySwitch"));
 }
-
 
 /**
  * This function enables the preview of the picture and audio.
