@@ -55,8 +55,12 @@ class PlaceGuideManager {
   }
 
   removePlaceGuide(placeGuideId) {
-    this._placeGuideRepository.remove(placeGuideId);
-    this.removePlaceGuideRepresentation(placeGuideId);
+    this._placeGuideRepository.remove(placeGuideId)
+      .then((response) => {
+        if(response) {
+          this.removePlaceGuideRepresentation(placeGuideId);
+        }
+      });
   }
 
   removePlaceGuideRepresentation(placeGuideId) {
@@ -80,10 +84,14 @@ class PlaceGuideManager {
   }
 
   toggleBookmark(placeGuideId) {
-    this._placeGuideRepository.togglePlaceGuideBookmarkStatus(placeGuideId);
-    if (this._page.immediatelyRemoveUnbookmarkedGuide &&
-        !this._placeGuideRepository.isBookmarked(placeGuideId)) {
-      this.removePlaceGuideRepresentation(placeGuideId);
-    }
+    this._placeGuideRepository.togglePlaceGuideBookmarkStatus(placeGuideId)
+      .then((response) => {
+        if(response) {
+          if (this._page.immediatelyRemoveUnbookmarkedGuide &&
+             !this._placeGuideRepository.isBookmarked(placeGuideId)) {
+            this.removePlaceGuideRepresentation(placeGuideId);
+          }
+        }
+      });
   }
 }
