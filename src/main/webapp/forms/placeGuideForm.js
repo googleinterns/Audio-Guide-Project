@@ -12,7 +12,7 @@ function setUpCreatePlaceGuideForm() {
 }
 
 /**
- * This function initialises the components
+ * This function initializes the components
  * managed by the Material Design library.
  */
 function styleInputs() {
