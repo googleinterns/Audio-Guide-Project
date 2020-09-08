@@ -9,19 +9,19 @@ class PlaceGuideManager {
   static PAGE = {
     DISCOVER: {
       query: PlaceGuideRepository.QUERY_TYPE.ALL_PUBLIC_IN_MAP_AREA,
-      immediatelyRemoveUnbookmarkedGuide: false,
+      guideBookmarkStatusChanged: undefined,
     },
     MY_GUIDES: {
       query: PlaceGuideRepository.QUERY_TYPE.CREATED_ALL_IN_MAP_AREA,
-      immediatelyRemoveUnbookmarkedGuide: false,
+      guideBookmarkStatusChanged: undefined,
     },
     CREATE_PLACE_GUIDE: {
       query: PlaceGuideRepository.QUERY_TYPE.CREATED_ALL_IN_MAP_AREA,
-      immediatelyRemoveUnbookmarkedGuide: false,
+      guideBookmarkStatusChanged: undefined,
     },
     BOOKMARKED_PLACEGUIDES: {
       query: PlaceGuideRepository.QUERY_TYPE.BOOKMARKED,
-      immediatelyRemoveUnbookmarkedGuide: true,
+      guideBookmarkStatusChanged: PlaceGuideManager.removeGuideIfUnbookmarked,
     }
   };
 
@@ -87,11 +87,16 @@ class PlaceGuideManager {
     this._placeGuideRepository.togglePlaceGuideBookmarkStatus(placeGuideId)
       .then((response) => {
         if(response) {
-          if (this._page.immediatelyRemoveUnbookmarkedGuide &&
-             !this._placeGuideRepository.isBookmarked(placeGuideId)) {
-            this.removePlaceGuideRepresentation(placeGuideId);
+          if (this._page.guideBookmarkStatusChanged != undefined) {
+            this._page.guideBookmarkStatusChanged(this, placeGuideId);
           }
         }
       });
+  }
+
+  static removeGuideIfUnbookmarked(placeGuideManager, placeGuideId) {
+    if(!placeGuideManager._placeGuideRepository.isBookmarked(placeGuideId)) {
+      placeGuideManager.removePlaceGuideRepresentation(placeGuideId);
+    }
   }
 }
