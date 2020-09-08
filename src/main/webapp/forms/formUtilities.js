@@ -45,18 +45,18 @@ function handleFileInputChangeEvent(fileInputName,
 function activateRemoveImageFeature(triggerButtonId, hasPreviousImage) {
   document.getElementById(triggerButtonId)
       .addEventListener("click", function () {
-    if (hasPreviousImage) {
-      const deletePrevImageCheckbox = new mdc.checkbox.MDCCheckbox(
-          document.getElementById('deletePrevImageCheckbox'));
-      const deletePrevImageFormField = new mdc.formField.MDCFormField(
-          document.getElementById('deletePrevImageFormField'));
-      deletePrevImageFormField.input = deletePrevImageCheckbox;
-      deletePrevImageCheckbox.checked = true;
-      hasPreviousImage = false;
-    }
-    removeImagePreview();
-    document.getElementById("imageKey").value = "";
-  });
+        if (hasPreviousImage) {
+          const deletePrevImageCheckbox = new mdc.checkbox.MDCCheckbox(
+              document.getElementById('deletePrevImageCheckbox'));
+          const deletePrevImageFormField = new mdc.formField.MDCFormField(
+              document.getElementById('deletePrevImageFormField'));
+          deletePrevImageFormField.input = deletePrevImageCheckbox;
+          deletePrevImageCheckbox.checked = true;
+          hasPreviousImage = false;
+        }
+        removeImagePreview();
+        document.getElementById("imageKey").value = "";
+      });
 }
 
 function removeImagePreview() {
