@@ -9,15 +9,19 @@ class PlaceGuideManager {
   static PAGE = {
     DISCOVER: {
       query: PlaceGuideRepository.QUERY_TYPE.ALL_PUBLIC_IN_MAP_AREA,
+      immediatelyRemoveUnbookmarkedGuide: false,
     },
     MY_GUIDES: {
       query: PlaceGuideRepository.QUERY_TYPE.CREATED_ALL_IN_MAP_AREA,
+      immediatelyRemoveUnbookmarkedGuide: false,
     },
     CREATE_PLACE_GUIDE: {
       query: PlaceGuideRepository.QUERY_TYPE.CREATED_ALL_IN_MAP_AREA,
+      immediatelyRemoveUnbookmarkedGuide: false,
     },
     BOOKMARKED_PLACEGUIDES: {
       query: PlaceGuideRepository.QUERY_TYPE.BOOKMARKED,
+      immediatelyRemoveUnbookmarkedGuide: true,
     }
   };
 
@@ -77,7 +81,7 @@ class PlaceGuideManager {
 
   toggleBookmark(placeGuideId) {
     this._placeGuideRepository.togglePlaceGuideBookmarkStatus(placeGuideId);
-    if (this._page === PlaceGuideManager.PAGE.BOOKMARKED_PLACEGUIDES &&
+    if (this._page.immediatelyRemoveUnbookmarkedGuide &&
         !this._placeGuideRepository.isBookmarked(placeGuideId)) {
       this.removePlaceGuideRepresentation(placeGuideId);
     }
