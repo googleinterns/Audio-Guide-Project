@@ -52,9 +52,13 @@ class ListPlaceGuideDisplayer {
 
   // Move the highlighted place guide to top of list.
   highlight(placeGuideId) {
-    const placeGuideDiv = remove(placeGuideId);
+    const placeGuideDiv = this.remove(placeGuideId);
+    this._listPlaceGuideDisplayerDiv.removeChild(document.getElementById("listTitle"));
     this._listPlaceGuideDisplayerDiv.insertBefore(
         placeGuideDiv, this._listPlaceGuideDisplayerDiv.firstChild);
+    this._listPlaceGuideDisplayerDiv.insertBefore(
+        this.createListTitle(this._placeGuideDisplayType, this._hasSubtitle), 
+        this._listPlaceGuideDisplayerDiv.firstChild);
   }
 
   constructPlaceGuideOnListDivFromPlaceGuide(placeGuide) {
@@ -87,30 +91,22 @@ class ListPlaceGuideDisplayer {
 
   createListTitle(placeGuideDisplayType, hasSubtitle) {
     const listTitleDiv = document.createElement("div");
+    listTitleDiv.setAttribute("id", "listTitle");
     listTitleDiv.classList.add(
         "list-group-item", 
         "flex-column",
         "align-items-start");
     listTitleDiv.style.backgroundColor = "#80ba83";
     listTitleDiv.style.color = "white";
-    const listTitleContainer = document.createElement("div");
-    listTitleContainer.classList.add(
-        "d-flex",
-        "w-100",
-        "justify-content-between");
-    const listTitleElement = document.createElement("h5");
-    listTitleElement.classList.add("mb-1");
+    const listTitleElement = document.createElement("h4");
     listTitleElement.innerText = placeGuideDisplayType;
-    listTitleContainer.appendChild(listTitleElement);
+    listTitleDiv.appendChild(listTitleElement);
 
     if (hasSubtitle) {
-      console.log(hasSubtitle);
-      const listSubtitleElement = document.createElement("h5");
-      listSubtitleElement.classList.add("mb-1");
+      const listSubtitleElement = document.createElement("p");
       listSubtitleElement.innerText = "in selected map area";
-      listTitleContainer.appendChild(listSubtitleElement);
+      listTitleDiv.appendChild(listSubtitleElement);
     }
-    listTitleDiv.appendChild(listTitleContainer);
     return listTitleDiv;
   }
 
