@@ -10,8 +10,8 @@ class PlaceGuideOnMap {
         .getInfoWindow(name, position, place, creator, description);
     this._marker = PlaceGuideOnMap.getMarker(placeType, name, position);
     this._highlighted = false;
-    this.toggleHighlightOnMarkerClick();
-    this.unhighlightOnMapClick();
+    this.setupHighlightOnMarkerClick();
+    this.setupUnhighlightOnMapClick();
   }
 
   get marker() {
@@ -97,7 +97,7 @@ class PlaceGuideOnMap {
     this._marker.setMap(null);
   }
 
-  toggleHighlightOnMarkerClick() {
+  setupHighlightOnMarkerClick() {
     const thisPlaceGuideOnMap = this;
     this._marker.addListener('click', () => {
       if (thisPlaceGuideOnMap.isHighlighted()) {
@@ -108,7 +108,7 @@ class PlaceGuideOnMap {
     });
   }
 
-  unhighlightOnMapClick() {
+  setupUnhighlightOnMapClick() {
     const thisPlaceGuideOnMap = this;
     map.addListener('click', function(mapsMouseEvent) {
       if (thisPlaceGuideOnMap.isHighlighted()) {
