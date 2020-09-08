@@ -8,7 +8,6 @@
  */
 let map;
 let placeGuideManager;
-const availableWidth = window.innerWidth - 370;
 const PLACE_GUIDE_DISPLAY_TYPE = "My Guides";
 
 function initPage() {
@@ -28,7 +27,12 @@ function initPage() {
       google.maps.event.addListener(map, 'idle', function () {
         placeGuideManager.update(map.getBounds(), map.getZoom(), false);
       });
-      document.getElementById("mapDisplayer").style.width = availableWidth.toString() + "px";
+      window.addEventListener("resize", setMapWidth);
     }
   });
+}
+
+function setMapWidth() {
+  var availableWidth = window.innerWidth - 370;
+  document.getElementById("mapDisplayer").style.width = availableWidth.toString() + "px";
 }

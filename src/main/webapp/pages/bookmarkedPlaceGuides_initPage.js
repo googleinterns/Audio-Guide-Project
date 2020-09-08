@@ -25,6 +25,13 @@ function initPage() {
               PlaceGuideRepository.QueryType.BOOKMARKED);
       placeGuideManager = new PlaceGuideManager(placeGuideRepository, PLACE_GUIDE_DISPLAY_TYPE, false);
       placeGuideManager.update(map.getBounds(), map.getZoom(), true);
+
+      window.addEventListener("resize", setMapWidth);
     }
   });
+}
+
+function setMapWidth() {
+  var availableWidth = window.innerWidth - 370;
+  document.getElementById("mapDisplayer").style.width = availableWidth.toString() + "px";
 }
