@@ -1,7 +1,7 @@
-# Audio Guide Projet
+# Audio Guide Project
 
 ### Objective
-The probem that we are trying to solve with this project is the lack of personalized and easy-to-follow travel guides that are available online. To address this issue, our main goal is to provide a platform for creating and sharing audio guides with tourists, all for free. 
+The problem that we are trying to solve with this project is the lack of personalized and easy-to-follow travel guides that are available online. To address this issue, our main goal is to provide a platform for creating and sharing audio guides with tourists, all for free. 
 
 ### Overview
 The project enables users, in the status of content-creators, to create and share travel guides in audio format. 
