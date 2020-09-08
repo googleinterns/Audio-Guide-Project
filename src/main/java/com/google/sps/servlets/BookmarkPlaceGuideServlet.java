@@ -20,7 +20,6 @@ public class BookmarkPlaceGuideServlet extends HttpServlet {
 
   private static final String PLACE_GUIDE_ID_PARAMETER = "placeGuideId";
   private static final String BOOKMARK_HANDLING_TYPE_PARAMETER = "bookmarkHandlingType";
-  private static final String CURRENT_URL_PARAMETER = "currentUrl";
 
   private final UserRepository userRepository =
       UserRepositoryFactory.getUserRepository(RepositoryType.DATASTORE);
