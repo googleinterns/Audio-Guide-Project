@@ -17,6 +17,7 @@ class MapWidget {
     };
     this._map = new google.maps.Map(
         document.getElementById('map'), myMapOptions);
+    Geolocator.centerMapAtCurrentLocation(this._map);
   }
 
   get map() {
