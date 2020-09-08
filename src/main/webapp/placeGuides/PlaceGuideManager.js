@@ -31,11 +31,11 @@ class PlaceGuideManager {
     this._highlightedPlaceGuideId = null;
     this._mapPlaceGuideDisplayer = new MapPlaceGuideDisplayer();
     this._listPlaceGuideDisplayer = new ListPlaceGuideDisplayer();
-    this.refreshPlaceGuides(map.getBounds(),
-        map.getZoom(),
-        this._page === PlaceGuideManager.BOOKMARKED_PLACEGUIDES);
+    let thisManager = this;
+    google.maps.event.addListenerOnce(map, 'idle', function () {
+      thisManager.refreshPlaceGuides(map.getBounds(), map.getZoom());
+    });
     if (this._page != PlaceGuideManager.BOOKMARKED_PLACEGUIDES) {
-      let thisManager = this;
       google.maps.event.addListener(map, 'idle', function () {
         thisManager.refreshPlaceGuides(map.getBounds(), map.getZoom());
       });

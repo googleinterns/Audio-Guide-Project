@@ -177,9 +177,8 @@ public class PlaceGuideServlet extends HttpServlet {
     PlaceGuide.Builder placeGuideBuilder =
         new PlaceGuide.Builder(id, name, audioKey, userId, coordinate);
 
-    String publicPlaceGuideStringValue = request.getParameter(IS_PUBLIC_INPUT);
-    if (publicPlaceGuideStringValue.equals(IS_PUBLIC_INPUT_VALUE)) {
-      placeGuideBuilder.setPlaceGuideStatus(true);
+    if (request.getParameter(IS_PUBLIC_INPUT) != null) {
+      placeGuideBuilder.setPlaceGuideStatus(true); // False by default.
     }
     String length = request.getParameter(LENGTH_INPUT);
     if (!length.isEmpty()) {

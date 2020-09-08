@@ -46,7 +46,7 @@ public class PlaceGuideInfo {
     }
     this.bookmarkedByCurrentUser =
         currentUser.getBookmarkedPlaceGuidesIds().contains(this.placeGuide.getId());
-    this.createdByCurrentUser = this.placeGuide.getCreatorId() == currentUserId;
+    this.createdByCurrentUser = this.placeGuide.getCreatorId().equals(currentUserId);
   }
 
   public User getCreator() {

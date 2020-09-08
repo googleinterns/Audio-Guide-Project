@@ -82,7 +82,11 @@ class MapPlaceGuideDisplayer {
   constructPlaceGuideOnMapFromPlaceGuide(placeGuide) {
     let placeType;
     if (placeGuide.isPublic) {
-      placeType = PlaceType.PUBLIC;
+        if (placeGuide.createdByCurrentUser) {
+            placeType = PlaceType.PUBLIC_OWN;
+        } else {
+            placeType = PlaceType.PUBLIC;
+        }
     } else {
       placeType = PlaceType.PRIVATE;
     }

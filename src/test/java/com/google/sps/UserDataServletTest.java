@@ -105,7 +105,6 @@ public final class UserDataServletTest {
     when(request.getParameter(UserDataServlet.NAME_INPUT)).thenReturn(NAME);
     when(request.getParameter(UserDataServlet.SELF_INTRODUCTION_INPUT))
         .thenReturn(SELF_INTRODUCTION);
-    when(request.getParameter(UserDataServlet.PUBLIC_PORTFOLIO_INPUT)).thenReturn("private");
     StringWriter sw = new StringWriter();
     PrintWriter pw = new PrintWriter(sw);
     when(response.getWriter()).thenReturn(pw);
@@ -161,7 +160,6 @@ public final class UserDataServletTest {
     when(request.getParameter(UserDataServlet.NAME_INPUT)).thenReturn(NAME);
     when(request.getParameter(UserDataServlet.SELF_INTRODUCTION_INPUT))
         .thenReturn(SELF_INTRODUCTION);
-    when(request.getParameter(UserDataServlet.PUBLIC_PORTFOLIO_INPUT)).thenReturn("private");
     StringWriter sw = new StringWriter();
     PrintWriter pw = new PrintWriter(sw);
     when(response.getWriter()).thenReturn(pw);
@@ -215,7 +213,6 @@ public final class UserDataServletTest {
     when(request.getParameter(UserDataServlet.NAME_INPUT)).thenReturn(NAME);
     when(request.getParameter(UserDataServlet.SELF_INTRODUCTION_INPUT))
         .thenReturn(SELF_INTRODUCTION);
-    when(request.getParameter(UserDataServlet.PUBLIC_PORTFOLIO_INPUT)).thenReturn("private");
     StringWriter sw = new StringWriter();
     PrintWriter pw = new PrintWriter(sw);
     when(response.getWriter()).thenReturn(pw);
