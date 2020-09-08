@@ -109,20 +109,26 @@ class PlaceGuideRepository {
       }
       var thisRepository = this;
       return fetch(url)
-          .catch(error =>
-              console.log("PlaceGuideServlet: failed to fetch: " + error))
+          .catch(error => {
+            console.log("PlaceGuideServlet: failed to fetch: " + error);
+            alert("Failed to load the data of guides");
+          })
           .then(response => response.json())
-          .catch(error =>
-              console.log('updatePlaceGuides: failed to convert response to JSON'
-                  + error))
+          .catch(error => {
+            console.log('updatePlaceGuides: failed to convert response to JSON'
+                  + error);
+            alert("Failed to process the data of guides");
+          })
           .then(placeGuideWithCreatorPairs =>
               PlaceGuideRepository
                   .buildPlaceGuideDictionaryFromResponse(
                       placeGuideWithCreatorPairs))
-          .catch(error =>
-              console.log(
+          .catch(error => {
+            console.log(
                   "updatePlaceGuides: unable to build placeGuide dictionary: "
-                  + error))
+                  + error);
+            alert("Failed to process the data of guides")
+          })
           .then(placeGuides => thisRepository._placeGuides = placeGuides);
     } else {
       var thisRepository = this;
@@ -140,8 +146,11 @@ class PlaceGuideRepository {
     var url = new URL("/delete-place-guide-data", document.URL);
     url.searchParams.append('id', placeGuideId);
     return fetch(url)
-        .catch(error => console.log("DeletePlaceGuideServlet: failed to fetch: "
-            + error));
+        .catch(error => {
+          console.log("DeletePlaceGuideServlet: failed to fetch: "
+            + error);
+          alert("Failed to delete guide");
+        });
   }
 
   togglePlaceGuideBookmarkStatus(placeGuideId) {
@@ -157,9 +166,11 @@ class PlaceGuideRepository {
       url.searchParams.append("bookmarkHandlingType", "BOOKMARK");
     }
     return fetch(url)
-        .catch(error =>
-            console.log("BookmarkPlaceGuideServlet: failed to fetch: "
-                + error));
+        .catch(error => {
+          console.log("BookmarkPlaceGuideServlet: failed to fetch: "
+                + error);
+          alert("Failed to execute bookmarking/unbookmarking");
+        });
   }
 
   isBookmarked(placeGuideId) {
