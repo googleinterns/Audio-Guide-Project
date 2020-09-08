@@ -27,19 +27,19 @@ class PlaceGuideManager {
     this._highlightedPlaceGuideId = null;
     this._mapPlaceGuideDisplayer = new MapPlaceGuideDisplayer();
     this._listPlaceGuideDisplayer = new ListPlaceGuideDisplayer();
-    this.update(map.getBounds(),
+    this.refreshPlaceGuides(map.getBounds(),
         map.getZoom(),
         this._page === PlaceGuideManager.BOOKMARKED_PLACEGUIDES);
     if (this._page != PlaceGuideManager.BOOKMARKED_PLACEGUIDES) {
       let thisManager = this;
       google.maps.event.addListener(map, 'idle', function () {
-        thisManager.update(map.getBounds(), map.getZoom());
+        thisManager.refreshPlaceGuides(map.getBounds(), map.getZoom());
       });
     }
   }
 
-  update(bounds, zoom) {
-    this._placeGuideRepository.updatePlaceGuides(this._page.query, bounds, zoom)
+  refreshPlaceGuides(bounds, zoom) {
+    this._placeGuideRepository.fetchPlaceGuides(this._page.query, bounds, zoom)
         .then((response) => {
           const placeGuides = this._placeGuideRepository.placeGuides;
           this._mapPlaceGuideDisplayer.update(placeGuides);

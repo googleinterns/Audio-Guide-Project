@@ -95,7 +95,7 @@ class PlaceGuideRepository {
         userResponse.imgKey);
   }
 
-  updatePlaceGuides(queryType, bounds, zoom) {
+  fetchPlaceGuides(queryType, bounds, zoom) {
     if (PlaceGuideRepository.MIN_ZOOM <= zoom ||
         queryType == PlaceGuideRepository.QUERY_TYPE.BOOKMARKED) {
       // As the number of bookmarked placeGuides will be restricted,
