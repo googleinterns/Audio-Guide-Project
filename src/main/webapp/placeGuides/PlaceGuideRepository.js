@@ -140,37 +140,51 @@ class PlaceGuideRepository {
   }
 
   removePlaceGuide(placeGuideId) {
-    // Remove from in-memory dictionary.
-    delete this._placeGuides[placeGuideId];
-    // Remove from database.
-    var url = new URL("/delete-place-guide-data", document.URL);
-    url.searchParams.append('id', placeGuideId);
-    return fetch(url)
+    return new Promise(function (resolve, reject) {
+      // Remove from database.
+      var url = new URL("/delete-place-guide-data", document.URL);
+      url.searchParams.append('id', placeGuideId);
+      var thisRepository = this;
+      fetch(url)
         .catch(error => {
           console.log("DeletePlaceGuideServlet: failed to fetch: "
             + error);
           alert("Failed to delete guide");
+          resolve(false);
+        })
+        .then(response => {
+          // Remove from in-memory dictionary.
+          delete thisRepository._placeGuides[placeGuideId];
+          resolve(true);
         });
+    });
   }
 
   togglePlaceGuideBookmarkStatus(placeGuideId) {
-    // Toggle in in-memory dictionary.
-    const isBookmarked = this._placeGuides[placeGuideId].bookmarkedByCurrentUser;
-    this._placeGuides[placeGuideId].bookmarkedByCurrentUser = !isBookmarked;
-    // Toogle in database.
-    const url = new URL("bookmark-place-guide", document.URL);
-    url.searchParams.append("placeGuideId", placeGuideId);
-    if (isBookmarked) {
-      url.searchParams.append("bookmarkHandlingType", "REMOVE");
-    } else {
-      url.searchParams.append("bookmarkHandlingType", "BOOKMARK");
-    }
-    return fetch(url)
+    return new Promise(function (resolve, reject) {
+      const isBookmarked = this._placeGuides[placeGuideId].bookmarkedByCurrentUser;
+      // Toogle in database.
+      const url = new URL("bookmark-place-guide", document.URL);
+      url.searchParams.append("placeGuideId", placeGuideId);
+      if (isBookmarked) {
+        url.searchParams.append("bookmarkHandlingType", "REMOVE");
+      } else {
+        url.searchParams.append("bookmarkHandlingType", "BOOKMARK");
+      }
+      var thisRepository = this;
+      fetch(url)
         .catch(error => {
           console.log("BookmarkPlaceGuideServlet: failed to fetch: "
-                + error);
+            + error);
           alert("Failed to execute bookmarking/unbookmarking");
+          resolve(false);
+        })
+        .then(response => {
+          // Toggle in in-memory dictionary.
+          resolve(true);
+          thisRepository._placeGuides[placeGuideId].bookmarkedByCurrentUser = !isBookmarked;
         });
+    });
   }
 
   isBookmarked(placeGuideId) {
