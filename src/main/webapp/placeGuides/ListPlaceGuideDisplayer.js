@@ -5,13 +5,28 @@
 
 class ListPlaceGuideDisplayer {
 
-  constructor(placeGuideDisplayType, hasSubtitle) {    
+  static QUERY = {
+    "ALL_PUBLIC_IN_MAP_AREA": {
+      listTitle: "Discover Guides",
+      listSubTitle: "in selected map area"
+    },
+    "CREATED_ALL_IN_MAP_AREA": {
+      listTitle: "My Guides",
+      listSubTitle: "in selected map area"
+    },
+    "BOOKMARKED": {
+      listTitle: "Bookmarked Guides",
+      listSubTitle: ""    }
+  };
+
+  constructor(placeGuideDisplayQuery) {    
     this._listPlaceGuideDisplayerDiv = document.getElementById("listPlaceGuideDisplayer");
     this._listPlaceGuideDisplayerDiv.classList.add(
         "list-group", "my-place-guide-list", "list-place-guide-displayer", "form-card");
-    this._placeGuideDisplayType = placeGuideDisplayType;
-    this._hasSubtitle = hasSubtitle;
-    this._listPlaceGuideDisplayerDiv.appendChild(this.createListTitle(placeGuideDisplayType, hasSubtitle));
+    this._placeGuideDisplayQuery = placeGuideDisplayQuery;
+    this._listPlaceGuideDisplayerDiv.appendChild(
+        this.createListTitle(
+            ListPlaceGuideDisplayer.QUERY[placeGuideDisplayQuery]));
   }
 
   get listPlaceGuideDisplayerDiv() {
@@ -20,7 +35,9 @@ class ListPlaceGuideDisplayer {
 
   update(placeGuides) {
     this.removeAllPlaceGuidesFromList();
-    this._listPlaceGuideDisplayerDiv.appendChild(this.createListTitle(this._placeGuideDisplayType, this._hasSubtitle));
+    this._listPlaceGuideDisplayerDiv.appendChild(
+        this.createListTitle(
+            ListPlaceGuideDisplayer.QUERY[this._placeGuideDisplayQuery]));
     this.addPlaceGuidesToList(placeGuides);
   }
 
@@ -57,7 +74,8 @@ class ListPlaceGuideDisplayer {
     this._listPlaceGuideDisplayerDiv.insertBefore(
         placeGuideDiv, this._listPlaceGuideDisplayerDiv.firstChild);
     this._listPlaceGuideDisplayerDiv.insertBefore(
-        this.createListTitle(this._placeGuideDisplayType, this._hasSubtitle), 
+        this.createListTitle(
+            ListPlaceGuideDisplayer.QUERY[this._placeGuideDisplayQuery]), 
         this._listPlaceGuideDisplayerDiv.firstChild);
   }
 
@@ -89,7 +107,7 @@ class ListPlaceGuideDisplayer {
         placeGuide.location.position.lng()).placeGuideOnListDiv;
   }
 
-  createListTitle(placeGuideDisplayType, hasSubtitle) {
+  createListTitle(placeGuideDisplayQuery) {
     const listTitleDiv = document.createElement("div");
     listTitleDiv.setAttribute("id", "listTitle");
     listTitleDiv.classList.add(
@@ -99,14 +117,12 @@ class ListPlaceGuideDisplayer {
     listTitleDiv.style.backgroundColor = "#80ba83";
     listTitleDiv.style.color = "white";
     const listTitleElement = document.createElement("h4");
-    listTitleElement.innerText = placeGuideDisplayType;
+    listTitleElement.innerText = placeGuideDisplayQuery.listTitle;
     listTitleDiv.appendChild(listTitleElement);
 
-    if (hasSubtitle) {
-      const listSubtitleElement = document.createElement("p");
-      listSubtitleElement.innerText = "in selected map area";
-      listTitleDiv.appendChild(listSubtitleElement);
-    }
+    const listSubtitleElement = document.createElement("p");
+    listSubtitleElement.innerText = "in selected map area";
+    listTitleDiv.appendChild(placeGuideDisplayQuery.listSubTitle);
     return listTitleDiv;
   }
 

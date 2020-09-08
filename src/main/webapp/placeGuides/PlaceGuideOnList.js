@@ -55,9 +55,9 @@ class PlaceGuideOnList {
 
   appendChildren(
       placeGuideDiv, placeGuideProperties, creator, createdByCurrentUser, bookmarkedByCurrentUser) {
-    placeGuideDiv.appendChild(createFoldedPlaceGuide(placeGuideProperties));
+    placeGuideDiv.appendChild(this.createFoldedPlaceGuide(placeGuideProperties));
     placeGuideDiv.appendChild(
-        createCardPlaceGuide(
+        this.createCardPlaceGuide(
             placeGuideProperties, creator, createdByCurrentUser, bookmarkedByCurrentUser));
   }
 
@@ -69,11 +69,11 @@ class PlaceGuideOnList {
     const foldedPlaceGuideDiv = document.createElement("div");
     foldedPlaceGuideDiv.style.display = "block";
     foldedPlaceGuideDiv.classList.add("folded-placeGuide");
-    foldedPlaceGuideDiv.appendChild(foldedPlaceGuide_name(placeGuideName));
+    foldedPlaceGuideDiv.appendChild(this.foldedPlaceGuide_name(placeGuideName));
     if (placeName != undefined || placeName != "" || placeName != null) {
-      foldedPlaceGuideDiv.appendChild(foldedPlaceGuide_placeName(placeName));
+      foldedPlaceGuideDiv.appendChild(this.foldedPlaceGuide_placeName(placeName));
     }
-    foldedPlaceGuideDiv.appendChild(foldedPlaceGuide_buttons(placeGuideId, placeGuideAudioKey));
+    foldedPlaceGuideDiv.appendChild(this.foldedPlaceGuide_buttons(placeGuideId, placeGuideAudioKey));
     return foldedPlaceGuideDiv;
   }
 
@@ -113,8 +113,8 @@ class PlaceGuideOnList {
   foldedPlaceGuide_buttons(placeGuideId, audioKey) {
     const buttonsContainer = document.createElement("div");
     buttonsContainer.classList.add("mdc-card__action-icons");
-    createAudioButton(audioKey, buttonsContainer);
-    const expandButton = getPlaceGuideButtonWithPreparedClasses();
+    this.createAudioButton(audioKey, buttonsContainer);
+    const expandButton = this.getPlaceGuideButtonWithPreparedClasses();
     expandButton.setAttribute("title", "expand");
     expandButton.innerText = "open_in_full";
     expandButton.addEventListener("click", function() {
@@ -130,14 +130,14 @@ class PlaceGuideOnList {
   
   createCardPlaceGuide(
       placeGuideProperties, creator, createdByCurrentUser, bookmarkedByCurrentUser) {
-    const cardPlaceGuideDiv = createCardPlaceGuideDiv();
-    const cardDiv = createCardDiv();
+    const cardPlaceGuideDiv = this.createCardPlaceGuideDiv();
+    const cardDiv = this.createCardDiv();
   
     const cardContentsContainer = 
-        createAndPopulateCardContentsContainer(placeGuideProperties, creator);
+        this.createAndPopulateCardContentsContainer(placeGuideProperties, creator);
   
     const buttonsContainer = 
-        createAndPopulateButtonsContainer(
+        this.createAndPopulateButtonsContainer(
             placeGuideProperties, creator, createdByCurrentUser, bookmarkedByCurrentUser);
   
     cardDiv.appendChild(cardContentsContainer);
@@ -167,16 +167,16 @@ class PlaceGuideOnList {
         "mdc-card__media",
         "mdc-card__media--square");
   
-    const cardContents = createCardContents();
+    const cardContents = this.createCardContents();
   
     const placeGuideImage = 
-        createPlaceGuideImageElement(placeGuideProperties.imageKey);
+        this.createPlaceGuideImageElement(placeGuideProperties.imageKey);
     const placeGuideTitle = 
-        createPlaceGuideTitle(placeGuideProperties.name, creator.email);
+        this.createPlaceGuideTitle(placeGuideProperties.name, creator.email);
     const placeGuideLength = 
-        createPlaceGuideLengthElement(placeGuideProperties.audioLength);
+        this.createPlaceGuideLengthElement(placeGuideProperties.audioLength);
     const placeGuideDescription = 
-        createPlaceGuideDescriptionElement(placeGuideProperties.description);
+        this.createPlaceGuideDescriptionElement(placeGuideProperties.description);
   
     cardContents.appendChild(placeGuideImage);
     cardContents.appendChild(placeGuideTitle);
@@ -198,7 +198,7 @@ class PlaceGuideOnList {
   createPlaceGuideImageElement(placeGuideImageKey) {
     var placeGuideImage;
     if (placeGuideImageKey != undefined) {
-      placeGuideImage = createBlobView(placeGuideImageKey, "img");
+      placeGuideImage = this.createBlobView(placeGuideImageKey, "img");
     } else {
       placeGuideImage = document.createElement("i");
       placeGuideImage.classList.add("material-icons", "md-48");
@@ -216,7 +216,7 @@ class PlaceGuideOnList {
     placeGuideTitle.classList.add("place-guide-title");
     const placeGuideNameElement = document.createElement("h5");
     placeGuideNameElement.innerText = placeGuideName;
-    const creatorButton = getPlaceGuideButtonWithPreparedClasses();
+    const creatorButton = this.getPlaceGuideButtonWithPreparedClasses();
     creatorButton.setAttribute("title", creatorEmail);
     creatorButton.innerText = "account_circle";
     placeGuideTitle.appendChild(placeGuideNameElement);
@@ -247,16 +247,16 @@ class PlaceGuideOnList {
     const buttonsContainer = document.createElement("div");
     buttonsContainer.classList.add("mdc-card__actions");
   
-    const buttonsSubContainer = createAndPopulateButtonsSubContainer();
+    const buttonsSubContainer = this.createAndPopulateButtonsSubContainer();
     
-    createButtonsIfUserIsCreator(
+    this.createButtonsIfUserIsCreator(
         createdByCurrentUser, buttonsSubContainer, placeGuideProperties);
   
-    createAudioButton(placeGuideProperties.audioKey, buttonsSubContainer);
-    createDownloadButton(placeGuideProperties.audioKey, buttonsSubContainer);
-    createBookmarkButton(
+    this.createAudioButton(placeGuideProperties.audioKey, buttonsSubContainer);
+    this.createDownloadButton(placeGuideProperties.audioKey, buttonsSubContainer);
+    this.createBookmarkButton(
         placeGuideProperties.placeGuideId, bookmarkedByCurrentUser, buttonsSubContainer);
-    createBackToListButton(
+    this.createBackToListButton(
         placeGuideProperties.placeGuideId, buttonsSubContainer);
   
     buttonsContainer.appendChild(buttonsSubContainer);
@@ -267,8 +267,8 @@ class PlaceGuideOnList {
   
   createAudioButton(placeGuideAudioKey, parentDiv) {
     const audioPlayer = document.createElement("audio");
-    audioPlayer.src = getBlobSrc(placeGuideAudioKey);
-    const audioButton = getPlaceGuideButtonWithPreparedClasses();
+    audioPlayer.src = this.getBlobSrc(placeGuideAudioKey);
+    const audioButton = this.getPlaceGuideButtonWithPreparedClasses();
     audioButton.setAttribute("title", "play/pause audio");
     audioButton.innerText = "play_arrow";
     audioButton.addEventListener("click", function() {
@@ -308,7 +308,7 @@ class PlaceGuideOnList {
   
   createBlobView(blobKey, elementType) {
     const element = document.createElement(elementType);
-    const src = getBlobSrc(blobKey);
+    const src = this.getBlobSrc(blobKey);
     element.setAttribute("src", src);
     return element;
   }
@@ -329,14 +329,14 @@ class PlaceGuideOnList {
   
   createButtonsIfUserIsCreator(createdByCurrentUser, parentDiv, placeGuideProperties) {
     if (createdByCurrentUser) {
-      createDeleteButton(parentDiv, placeGuideProperties.placeGuideId);
-      createEditButton(parentDiv, placeGuideProperties);
+      this.createDeleteButton(parentDiv, placeGuideProperties.placeGuideId);
+      this.createEditButton(parentDiv, placeGuideProperties);
     }
   }
   
   createDeleteButton(parentDiv, placeGuideId) {
   
-    const deleteButton = getPlaceGuideButtonWithPreparedClasses();
+    const deleteButton = this.getPlaceGuideButtonWithPreparedClasses();
     deleteButton.setAttribute("title", "delete place guide");
     deleteButton.innerText = "delete";
   
@@ -350,7 +350,7 @@ class PlaceGuideOnList {
   
   createEditButton(parentDiv, placeGuideProperties) {
   
-    const editButton = getPlaceGuideButtonWithPreparedClasses();
+    const editButton = this.getPlaceGuideButtonWithPreparedClasses();
     editButton.setAttribute("title", "edit place guide");
     editButton.innerText = "edit";
   
@@ -363,7 +363,7 @@ class PlaceGuideOnList {
   }
   
   createBookmarkButton(placeGuideId, bookmarkedByCurrentUser, parentDiv) {
-    const bookmarkButton = getPlaceGuideButtonWithPreparedClasses();
+    const bookmarkButton = this.getPlaceGuideButtonWithPreparedClasses();
     bookmarkButton.setAttribute("title", "bookmark place guide");
     bookmarkButton.innerText = "bookmark_border";
     if (bookmarkedByCurrentUser) {
@@ -384,17 +384,17 @@ class PlaceGuideOnList {
   }
   
   createDownloadButton(audioKey, parentDiv) {
-    const downloadButton = getPlaceGuideButtonWithPreparedClasses();
+    const downloadButton = this.getPlaceGuideButtonWithPreparedClasses();
     downloadButton.setAttribute("title", "download audio");
     downloadButton.innerText = "get_app";
     downloadButton.addEventListener("click", function() {
-      window.location.href = getBlobSrc(audioKey);
+      window.location.href = this.getBlobSrc(audioKey);
     });
     parentDiv.appendChild(downloadButton);
   }
   
   createBackToListButton(placeGuideId, parentDiv) {
-    const backToListButton = getPlaceGuideButtonWithPreparedClasses();
+    const backToListButton = this.getPlaceGuideButtonWithPreparedClasses();
     backToListButton.setAttribute("title", "back to list");
     backToListButton.innerText = "reorder";
     backToListButton.addEventListener("click", function() {

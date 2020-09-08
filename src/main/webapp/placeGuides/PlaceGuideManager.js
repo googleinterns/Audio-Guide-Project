@@ -46,6 +46,6 @@ class PlaceGuideManager {
   }
 
   toggleBookmark(placeGuideId) {
-    this._placeGuideRepository.togglePlaceGuideBookmarkStatus(placeGuideId);
+    this._placeGuideRepository.togglePlaceGuideBookmarkStatus(placeGuideId);z
   }
 }
