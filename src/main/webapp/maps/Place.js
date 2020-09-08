@@ -161,14 +161,14 @@ class Place {
   }
 
   getInfoWindowContent() {
-    let content = '<h3>' + this._name + '</h3>';
+    let content = `<h3> ${this._name} </h3>`;
     if (this._mapsPlace != null) {
-        content += '<h4> Place: ' + this._mapsPlace.name + '</h4>';
+        content += `<h4> Place: ${this._mapsPlace.name} </h4>`;
     }
     // ToUrlValue is favored instead of toString because it has a parameter
     // to set the precision.
     content+=
-        '<p>' + 'Coordinates: (' + this._position.toUrlValue(3) + ')' +'</p>';
+        `<p>Coordinates: (${this._position.toUrlValue(3)})</p>`;
     return content;
   }
 
