@@ -84,8 +84,7 @@ class MapPlaceGuideDisplayer {
     if (placeGuide.isPublic) {
         if (placeGuide.createdByCurrentUser) {
             placeType = PlaceType.PUBLIC_OWN;
-        }
-        else {
+        } else {
             placeType = PlaceType.PUBLIC;
         }
     } else {

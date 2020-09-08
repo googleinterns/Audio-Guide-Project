@@ -66,10 +66,10 @@ class PlaceGuideOnMap {
       creatorName = creator.email;
     }
     let content = `<h3>${name}</h3>
-        <h4> Created by: ${creatorName}</h4>
-        <h4> Place: ${placeName}</h4>`;
+      <h4> Created by: ${creatorName}</h4>
+      <h4> Place: ${placeName}</h4>`;
     if (description != undefined) {
-        content += `<p>${description}</p>`;
+      content += `<p>${description}</p>`;
     } 
     return content;
   }
