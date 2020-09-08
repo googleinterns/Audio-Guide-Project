@@ -47,8 +47,8 @@ function fillPortfolioFormWithUserData() {
         document.getElementById('nameInput'));
     const selfIntroductionInput = new mdc.textField.MDCTextField(
         document.getElementById('selfIntroductionInput'));
-    setFormInputValue(nameInput, user.name);
-    setFormInputValue(selfIntroductionInput,
+    setFormInputValueOrEmpty(nameInput, user.name);
+    setFormInputValueOrEmpty(selfIntroductionInput,
         user.selfIntroduction);
     const switchControl = new mdc.switchControl.MDCSwitch(
         document.querySelector('.mdc-switch'));

@@ -98,8 +98,8 @@ function fillFormWithPlaceGuideData(placeGuide) {
   // Set required attribute to false since there must be a previous audio key
   // from the previous place guide data.
   document.getElementById('audioKey').required = false;
-  setFormInputValue(document.getElementById('id'), placeGuide.id);
-  setFormInputValue(
+  setFormInputValueOrEmpty(document.getElementById('id'), placeGuide.id);
+  setFormInputValueOrEmpty(
       new mdc.textField.MDCTextField(document.getElementById('nameInput')),
       placeGuide.name);
   setBlobKeySrcToElement(
@@ -111,16 +111,16 @@ function fillFormWithPlaceGuideData(placeGuide) {
   } else {
     publicitySwitchControl.checked = false;
   }
-  setFormInputValue(
+  setFormInputValueOrEmpty(
       document.getElementById('latitude'),
       placeGuide.coordinate.latitude);
-  setFormInputValue(
+  setFormInputValueOrEmpty(
       document.getElementById('longitude'),
       placeGuide.coordinate.longitude);
-  setFormInputValue(
+  setFormInputValueOrEmpty(
       document.getElementById('length'),
       placeGuide.length);
-  setFormInputValue(
+  setFormInputValueOrEmpty(
       new mdc.textField.MDCTextField(
           document.getElementById('descriptionInput')),
       placeGuide.description);
@@ -132,7 +132,7 @@ function fillFormWithPlaceGuideData(placeGuide) {
   } else {
     activateRemoveImageFeature(false);
   }
-  setFormInputValue(document.getElementById('placeName'),
+  setFormInputValueOrEmpty(document.getElementById('placeName'),
       DUMMY_DATA_FOR_PLACE_NAME);
 }
 

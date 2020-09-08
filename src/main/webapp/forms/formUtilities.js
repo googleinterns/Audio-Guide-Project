@@ -1,7 +1,7 @@
 /**
  * Sets one form input's value to the given value.
  */
-function setFormInputValue(input, value) {
+function setFormInputValueOrEmpty(input, value) {
   if (value === undefined) {
     input.value = '';
   } else {
