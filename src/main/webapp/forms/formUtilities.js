@@ -42,8 +42,8 @@ function handleFileInputChangeEvent(fileInputName,
  * with the next submission.
  * This change will be reflected in the preview too.
  */
-function activateRemoveImageFeature(hasPreviousImage) {
-  document.getElementById("clear-img-icon")
+function activateRemoveImageFeature(triggerButtonId, hasPreviousImage) {
+  document.getElementById(triggerButtonId)
       .addEventListener("click", function () {
     if (hasPreviousImage) {
       const deletePrevImageCheckbox = new mdc.checkbox.MDCCheckbox(

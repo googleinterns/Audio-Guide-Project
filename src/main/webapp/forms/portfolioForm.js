@@ -61,9 +61,9 @@ function fillPortfolioFormWithUserData() {
       setBlobKeySrcToElement(user.imgKey, "imagePreview", true);
       document.getElementById("no-img-icon").style.display = "none";
       document.getElementById("clear-img-icon").style.display = "block";
-      activateRemoveImageFeature(true);
+      activateRemoveImageFeature("clear-img-icon", true);
     } else {
-      activateRemoveImageFeature(false);
+      activateRemoveImageFeature("clear-img-icon", false);
     }
   });
 }
