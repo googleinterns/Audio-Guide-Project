@@ -62,10 +62,12 @@ class PlaceGuideOnMap {
     if (creatorName == undefined) {
       creatorName = creator.email;
     }
-    const content = '<h3>' + name + '</h3>' +
-        '<h4> Created by: ' + creatorName + '</h4>' +
-        '<h4> Place: ' + placeName + '</h4>' +
-        '<p>' + description + '</p>';
+    let content = `<h3>${name}</h3>
+      <h4> Created by: ${creatorName}</h4>
+      <h4> Place: ${placeName}</h4>`;
+    if (description != undefined) {
+      content += `<p>${description}</p>`;
+    }
     return content;
   }
 
@@ -101,7 +103,7 @@ class PlaceGuideOnMap {
     const thisPlaceGuideOnMap = this;
     this._marker.addListener('click', () => {
       if (thisPlaceGuideOnMap.isHighlighted()) {
-        placeGuideManager.unhighlightPlaceGuide(thisPlaceGuideOnMap.id);
+        placeGuideManager.unhighlightPlaceGuide();
       } else {
         placeGuideManager.highlightPlaceGuide(thisPlaceGuideOnMap.id);
       }
@@ -110,7 +112,7 @@ class PlaceGuideOnMap {
 
   setupUnhighlightOnMapClick() {
     const thisPlaceGuideOnMap = this;
-    map.addListener('click', function(mapsMouseEvent) {
+    map.addListener('click', function (mapsMouseEvent) {
       if (thisPlaceGuideOnMap.isHighlighted()) {
         placeGuideManager.unhighlightPlaceGuide();
       }
