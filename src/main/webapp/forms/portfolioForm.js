@@ -9,7 +9,7 @@ function setUpPortfolioForm() {
 }
 
 /**
- * This function initialises the comonents managed by the Material Design library.
+ * This function initialises the components managed by the Material Design library.
  */
 function styleInputs() {
   const nameInput = new mdc.textField.MDCTextField(
