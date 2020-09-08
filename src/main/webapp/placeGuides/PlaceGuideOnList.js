@@ -29,6 +29,14 @@ class PlaceGuideOnList {
     return this._placeGuideOnListDiv;
   }
 
+  static highlight(placeGuideId) {
+    expand(placeGuideId);
+  }
+
+  static unhighlight(placeGuideId) {
+    close(placeGuideId)
+  }
+
   createPlaceGuideOnListDiv(
       placeGuideProperties, 
       creator, 
@@ -118,14 +126,18 @@ class PlaceGuideOnList {
     expandButton.setAttribute("title", "expand");
     expandButton.innerText = "open_in_full";
     expandButton.addEventListener("click", function() {
+      this.expand(placeGuideId);
+    });
+    buttonsContainer.appendChild(expandButton);
+    return buttonsContainer;
+  }
+
+  expand(placeGuideId) {
       const divId = "placeGuideOnList-" + "{" + placeGuideId + "}";
       const placeGuideDiv = document.getElementById(divId);
       placeGuideDiv.querySelectorAll(".folded-placeGuide")[0].style.display = "none";
       placeGuideDiv.querySelectorAll(".card-placeGuide")[0].style.display = "block";
       placeGuideDiv.style.padding = "0px";
-    });
-    buttonsContainer.appendChild(expandButton);
-    return buttonsContainer;
   }
   
   createCardPlaceGuide(
@@ -398,13 +410,17 @@ class PlaceGuideOnList {
     backToListButton.setAttribute("title", "back to list");
     backToListButton.innerText = "reorder";
     backToListButton.addEventListener("click", function() {
+      this.close(placeGuideId);
+    });
+  
+    parentDiv.appendChild(backToListButton);
+  }
+
+  close(placeGuideId) {
       const divId = "placeGuideOnList-" + "{" + placeGuideId + "}";
       const placeGuideDiv = document.getElementById(divId);
       placeGuideDiv.querySelectorAll(".folded-placeGuide")[0].style.display = "block";
       placeGuideDiv.querySelectorAll(".card-placeGuide")[0].style.display = "none";
       placeGuideDiv.style.removeProperty("padding");
-    });
-  
-    parentDiv.appendChild(backToListButton);
-  }
+  }  
 }

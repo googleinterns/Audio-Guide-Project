@@ -67,16 +67,20 @@ class ListPlaceGuideDisplayer {
     return placeGuideDiv;
   }
 
-  // Move the highlighted place guide to top of list.
+   // Move the highlighted place guide to top of list.
   highlight(placeGuideId) {
     const placeGuideDiv = this.remove(placeGuideId);
     this._listPlaceGuideDisplayerDiv.removeChild(document.getElementById("listTitle"));
     this._listPlaceGuideDisplayerDiv.insertBefore(
         placeGuideDiv, this._listPlaceGuideDisplayerDiv.firstChild);
     this._listPlaceGuideDisplayerDiv.insertBefore(
-        this.createListTitle(
-            ListPlaceGuideDisplayer.QUERY[this._placeGuideDisplayQuery]), 
+        this.createListTitle(this._placeGuideDisplayType, this._hasSubtitle), 
         this._listPlaceGuideDisplayerDiv.firstChild);
+    PlaceGuideOnList.highlight(placeGuideId);
+  }
+
+  unhighlight(placeGuideId) {
+    PlaceGuideOnList.unhighlight(placeGuideId);
   }
 
   constructPlaceGuideOnListDivFromPlaceGuide(placeGuide) {
@@ -107,7 +111,7 @@ class ListPlaceGuideDisplayer {
         placeGuide.location.position.lng()).placeGuideOnListDiv;
   }
 
-  createListTitle(placeGuideDisplayQuery) {
+  createListTitle(placeGuideDisplayHeading) {
     const listTitleDiv = document.createElement("div");
     listTitleDiv.setAttribute("id", "listTitle");
     listTitleDiv.classList.add(
@@ -117,12 +121,12 @@ class ListPlaceGuideDisplayer {
     listTitleDiv.style.backgroundColor = "#80ba83";
     listTitleDiv.style.color = "white";
     const listTitleElement = document.createElement("h4");
-    listTitleElement.innerText = placeGuideDisplayQuery.listTitle;
+    listTitleElement.innerText = placeGuideDisplayHeading.listTitle;
     listTitleDiv.appendChild(listTitleElement);
 
     const listSubtitleElement = document.createElement("p");
     listSubtitleElement.innerText = "in selected map area";
-    listTitleDiv.appendChild(placeGuideDisplayQuery.listSubTitle);
+    listTitleDiv.appendChild(placeGuideDisplayHeading.listSubTitle);
     return listTitleDiv;
   }
 
