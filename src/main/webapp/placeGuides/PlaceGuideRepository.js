@@ -146,10 +146,10 @@ class PlaceGuideRepository {
 
   togglePlaceGuideBookmarkStatus(placeGuideId) {
     // Toggle in in-memory dictionary.
-    var isBookmarked = this._placeGuides[placeGuideId].bookmarkedByCurrentUser;
+    const isBookmarked = this._placeGuides[placeGuideId].bookmarkedByCurrentUser;
     this._placeGuides[placeGuideId].bookmarkedByCurrentUser = !isBookmarked;
     // Toogle in database.
-    var url = new URL("bookmark-place-guide", document.URL);
+    const url = new URL("bookmark-place-guide", document.URL);
     url.searchParams.append("placeGuideId", placeGuideId);
     if (isBookmarked) {
       url.searchParams.append("bookmarkHandlingType", "REMOVE");
