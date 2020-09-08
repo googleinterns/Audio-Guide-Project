@@ -19,16 +19,10 @@ function initPage() {
       mapWidget.addGeolocationFunctionality();
       mapWidget.addSearchingFunctionality();
       map = mapWidget.map;
-      const placeGuideRepository =
-          new PlaceGuideRepository(
-              PlaceGuideRepository.QueryType.ALL_PUBLIC_IN_MAP_AREA);
-      placeGuideManager = new PlaceGuideManager(placeGuideRepository, PLACE_GUIDE_DISPLAY_TYPE, true);
-      google.maps.event.addListener(map, 'idle', function () {
-        placeGuideManager.update(map.getBounds(), map.getZoom(), false);
-      });
+      placeGuideManager = new PlaceGuideManager(
+          PlaceGuideManager.PAGE.DISCOVER, map);
       setMapWidth();
-      window.addEventListener("resize", setMapWidth);
-    }
+      window.addEventListener("resize", setMapWidth);    }
   });
 }
 

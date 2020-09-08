@@ -2,56 +2,42 @@
 <html>
 <head>
     <meta charset = "UTF-8">
-    <title>My Portfolio</title>
+    <title>Discover</title>
+    <script src = "./maps/api_key.js"></script>
+    <script id = "maps-api" async defer></script>
     <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
     <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <script src = "./user/userAuthentication.js"></script>
-    <script src = "./forms/portfolioForm.js"></script>
-    <script src = "./forms/setUpFormBlobstore.js"></script>
-    <script src = "./pages/index_initPage.js"></script>
     <link rel = "stylesheet" href = "style.css">
-    <script src = "./pages/menu.js"></script>
 </head>
-<body onload="setUpUserAndForm()">
-    <div class = "mdc-tab-bar" role = "tablist">
-        <div class = "mdc-tab-scroller">
-            <div class = "mdc-tab-scroller__scroll-area">
-                <div class = "mdc-tab-scroller__scroll-content">
+<body onload = "setApiKeyAndMapsCallback()">
+    <div class="mdc-tab-bar" role="tablist">
+        <div class="mdc-tab-scroller">
+            <div class="mdc-tab-scroller__scroll-area">
+                <div class="mdc-tab-scroller__scroll-content">
                 </div>
             </div>
         </div>
     </div>
 
-    <div id="createProfile">
-        <form method = "POST" id = "portfolioForm" enctype = "multipart/form-data">
-            <label for = "name">Name:</label><br>
-            <input type = "text" name = "name" id = "name" pattern = "[A-Za-z\s]+" title = "Enter appropriate name!" maxlength = "20"><br>
+    <input id = "search-box" type = "text" placeholder = "Search for a new place!"/>
+    <div id = "map"></div>
 
-            <label for = "imgKey">Upload image</label><br>
-            <input type = "file" name = "imgKey" id = "imgKey"><br>
-
-            <div id = "imageDiv">
-            <br>
-            <img alt = "image preview" id = "imagePreview">
-            <br>
-            </div>
-
-            <label for = "deleteImg">Delete Previous Image : </label><br>
-            <input type = "checkbox" name = "deleteImg" value = "delete" id = "deleteImg"><br>
-
-            <label for = "selfIntroduction">Self Introduction:</label><br>
-            <textarea name = "selfIntroduction" rows = "4" cols = "50" id = "selfIntroduction"  maxlength = "200" pattern = "[A-Za-z0-9,.\s]+" title = "You can only enter letters, numbers, periods, and comas!"></textarea><br>
-
-            <label for = "publicPortfolio">Account Status:</label><br>
-            <select name = "publicPortfolio" id = "publicPortfolio">
-                <option value = "public">public</option>
-                <option value = "private">private</option>
-            </select><br>
-
-            <input type = "submit" value = "Submit">
-        </form>
-        <button id = "logout">Logout</button>
-    </div>
+    <script src = "./pages/menu.js"></script>
+    <script src = "./user/userAuthentication.js"></script>
+    <script src = "./maps/Geolocator.js"></script>
+    <script src = "./maps/Searchbox.js"></script>
+    <script src = "./maps/Place.js"></script>
+    <script src="https://unpkg.com/@google/markerclustererplus@4.0.1/dist/markerclustererplus.min.js"></script>
+    <script src = "./maps/MapWidget.js"></script>
+    <script src = "./placeGuides/Location.js"></script>
+    <script src = "./placeGuides/ListPlaceGuideDisplayer.js"></script>
+    <script src = "./placeGuides/MapPlaceGuideDisplayer.js"></script>
+    <script src = "./placeGuides/PlaceGuideOnMap.js"></script>
+    <script src = "./placeGuides/PlaceGuideRepository.js"></script>
+    <script src = "./placeGuides/PlaceGuideManager.js"></script>
+    <script src = "./placeGuides/PlaceGuide.js"></script>
+    <script src = "./user/User.js"></script>
+    <script src = "./pages/discover_initPage.js"></script>
 </body>
 </html>

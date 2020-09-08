@@ -20,14 +20,10 @@ function initPage() {
       mapWidget.addGeolocationFunctionality();
       mapWidget.addSearchingFunctionality();
       map = mapWidget.map;
-      const placeGuideRepository =
-          new PlaceGuideRepository(
-              PlaceGuideRepository.QueryType.BOOKMARKED);
-      placeGuideManager = new PlaceGuideManager(placeGuideRepository, PLACE_GUIDE_DISPLAY_TYPE, false);
-      placeGuideManager.update(map.getBounds(), map.getZoom(), true);
+      placeGuideManager = new PlaceGuideManager(
+          PlaceGuideManager.PAGE.BOOKMARKED_PLACEGUIDES, map);
       setMapWidth();
-      window.addEventListener("resize", setMapWidth);
-    }
+      window.addEventListener("resize", setMapWidth);    }
   });
 }
 
