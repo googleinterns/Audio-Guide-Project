@@ -2,7 +2,7 @@
  * This class is responsible for connecting all the placeGuide-related
  * objects: the two displayers and the repository.
  * When the map's bounds are changed, PlaceGuideManager
- * sends the eneded commands to all classes involved in
+ * sends the needed commands to all classes involved in
  * executing it(PlaceGudieRepository, Map- and ListPlaceGuideDisplayer).
  */
 class PlaceGuideManager {
