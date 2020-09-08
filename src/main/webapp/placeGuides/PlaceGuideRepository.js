@@ -4,7 +4,7 @@
  * The data is stored in memory until the next query is sent.
  */
 class PlaceGuideRepository {
-  static MIN_ZOOM = 5;
+  static MIN_ZOOM = 8;
   static QueryType = {
     ALL_PUBLIC_IN_MAP_AREA: "ALL_PUBLIC_IN_MAP_AREA",
     CREATED_ALL_IN_MAP_AREA: "CREATED_ALL_IN_MAP_AREA",
@@ -43,11 +43,11 @@ class PlaceGuideRepository {
     );
   }
 
-  static getPlaceGuideFromPlaceGuideWithCreatorPair(placeGuideWithCreatorPair) {
+  static getPlaceGuideFromPlaceGuideWithCreatorPair(placeGuideInfo) {
     var thisRepository = this;
     return new Promise(function (resolve, reject) {
-      var creator = thisRepository.getUserFromResponse(placeGuideWithCreatorPair.creator);
-      var placeGuideResponse = placeGuideWithCreatorPair.placeGuide;
+      var creator = thisRepository.getUserFromResponse(placeGuideInfo.creator);
+      var placeGuideResponse = placeGuideInfo.placeGuide;
       if (placeGuideResponse.placeId !== undefined) {
         Location.constructLocationBasedOnPlaceId(placeGuideResponse.placeId)
             .then(location => {
@@ -60,8 +60,8 @@ class PlaceGuideRepository {
                   creator,
                   placeGuideResponse.description,
                   placeGuideResponse.isPublic,
-                  placeGuideWithCreatorPair.createdByCurrentUser,
-                  placeGuideWithCreatorPair.bookmarkedByCurrentUser);
+                  placeGuideInfo.createdByCurrentUser,
+                  placeGuideInfo.bookmarkedByCurrentUser);
               resolve(placeGuide);
             });
       } else {
@@ -76,8 +76,8 @@ class PlaceGuideRepository {
             creator,
             placeGuideResponse.description,
             placeGuideResponse.isPublic,
-            placeGuideWithCreatorPair.createdByCurrentUser,
-            placeGuideWithCreatorPair.bookmarkedByCurrentUser);
+            placeGuideInfo.createdByCurrentUser,
+            placeGuideInfo.bookmarkedByCurrentUser);
         resolve(placeGuide);
       }
     });
@@ -89,6 +89,7 @@ class PlaceGuideRepository {
         userResponse.email,
         userResponse.name,
         userResponse.publicPortfolio,
+        userResponse.selfIntroduction,
         userResponse.imgKey);
   }
 

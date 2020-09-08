@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset = "UTF-8">
+    <title>My Portfolio</title>
+    <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <script src = "./user/userAuthentication.js"></script>
+    <script src = "./forms/portfolioForm.js"></script>
+    <script src = "./forms/setUpFormBlobstore.js"></script>
+    <script src = "./forms/formUtilities.js"></script>
+    <script src = "./pages/myPortfolio_initPage.js"></script>
+    <link rel = "stylesheet" href = "style.css">
+    <script src = "./pages/menu.js"></script>
+</head>
+<body onload="setUpUserAndForm()">
+    <div class = "mdc-tab-bar" role = "tablist">
+        <div class = "mdc-tab-scroller">
+            <div class = "mdc-tab-scroller__scroll-area">
+                <div class = "mdc-tab-scroller__scroll-content">
+                </div>
+            </div>
+        </div>
+    </div>
+ 
+    <div class="align-center">
+        <div id="createProfile" style="max-width: 400px; margin: 20px auto">
+            <form method = "POST" id = "portfolioForm" enctype = "multipart/form-data" class="form-card">
+                <h2 class="primary-text align-center">Your Portfolio</h2>
+
+                <label id= "nameInput" class="mdc-text-field mdc-text-field--outlined form-field">
+                    <input type="text" class="mdc-text-field__input" aria-labelledby="my-label-id" name = "name" id = "name" pattern = "[A-Za-z\s]+" title = "Enter appropriate name!" maxlength = "20">
+                    <span class="mdc-notched-outline">
+                        <span class="mdc-notched-outline__leading"></span>
+                        <span class="mdc-notched-outline__notch">
+                            <span class="mdc-floating-label" id="my-label-id">Your Name</span>
+                        </span>
+                        <span class="mdc-notched-outline__trailing"></span>
+                    </span>
+                </label>
+
+                <label id="selfIntroductionInput" class="mdc-text-field mdc-text-field--outlined mdc-text-field--textarea form-field">
+                    <span class="mdc-text-field__resizer">
+                        <textarea class="mdc-text-field__input" name = "selfIntroduction" rows = "4" cols = "40" id = "selfIntroduction"  maxlength = "100" pattern = "[A-Za-z0-9,.':-\s]+" title = "You can only enter letters, numbers, periods, and comas!"></textarea>
+                        <span class="mdc-text-field-character-counter">0 / 100</span>
+                    </span>
+                    <span class="mdc-notched-outline">
+                        <span class="mdc-notched-outline__leading"></span>
+                        <span class="mdc-notched-outline__notch">
+                            <span class="mdc-floating-label" id="my-label-id">Self Introduction</span>
+                        </span>
+                        <span class="mdc-notched-outline__trailing"></span>
+                    </span>
+                </label>
+
+                <div class="align-center">
+                    <label for="imageKey" class="mdc-button mdc-button--outlined form-action-button" id="chooseFileBtn">
+                        <div class="mdc-button__ripple"></div>
+                        <span class="mdc-button__label">Choose Profile Picture</span>
+                    </label>
+                    <input type = "file" class="invisible-file-input" name = "imageKey" id = "imageKey">
+                </div>
+    
+                <div id = "imageDiv" class="form-field closer-to-upper-element-form-item">
+                    <i id="no-img-icon" class="mdc-tab__icon material-icons md-48" aria-hidden="true">no_photography</i>
+                    <button id="clear-img-icon" type="button" class="clear-img-button mdc-icon-button material-icons" style="display:none">clear</button>
+                    <img alt = "image preview" id = "imagePreview">
+                </div>
+                
+                <div class="align-center" style="display: none;">
+                    <div id="deletePrevImageFormField" class="mdc-form-field">
+                        <div id="deletePrevImageCheckbox" class="mdc-checkbox">
+                            <input type="checkbox"
+                                class="mdc-checkbox__native-control"
+                                name = "deleteImg" 
+                                value = "delete" 
+                                id = "deleteImg"/>
+                            <div class="mdc-checkbox__background">
+                                <svg class="mdc-checkbox__checkmark"
+                                    viewBox="0 0 24 24">
+                                    <path class="mdc-checkbox__checkmark-path"
+                                        fill="none"
+                                        d="M1.73,12.91 8.1,19.28 22.79,4.59"/>
+                                </svg>
+                                <div class="mdc-checkbox__mixedmark"></div>
+                            </div>
+                            <div class="mdc-checkbox__ripple"></div>
+                        </div>
+                        <label for="deleteImg">Delete Previous Image</label>
+                    </div>
+                </div>
+
+                <div class="align-center">
+                    <div id="publicitySwitch" class="mdc-switch">
+                        <div class="mdc-switch__track"></div>
+                        <div class="mdc-switch__thumb-underlay aligned-element">
+                            <div class="mdc-switch__thumb"></div>
+                            <input type="checkbox" name = "publicPortfolio" id = "publicPortfolio" class="mdc-switch__native-control" role="switch" aria-checked="false" title="If public, then your profile will be visible to others">
+                        </div>
+                    </div>
+                    <label for = "publicPortfolio" class="aligned-element">Public Account</label>
+                </div>
+
+                <button id="submitBtn" type = "submit" class="mdc-button mdc-button--raised form-field">
+                    <div class="mdc-button__ripple"></div>
+                    <span class="mdc-button__label">Submit</span>
+                </button>
+            </form>
+            <button id="logout" type = "submit" class="mdc-button mdc-button--outlined form-field">
+                <div class="mdc-button__ripple"></div>
+                <span class="mdc-button__label">Logout</span>
+            </button>
+        </div>
+    </div>
+</body>
+</html>
+
