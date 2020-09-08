@@ -27,6 +27,7 @@ function initPage() {
       google.maps.event.addListener(map, 'idle', function () {
         placeGuideManager.update(map.getBounds(), map.getZoom(), false);
       });
+      setMapWidth();
       window.addEventListener("resize", setMapWidth);
     }
   });
