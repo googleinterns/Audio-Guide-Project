@@ -39,24 +39,40 @@ class ListPlaceGuideDisplayer {
   }
 
   update(placeGuides) {
-    const placeGuideIdsToBeRemoved = [];
-    this._listPlaceGuideDisplayerDiv.childNodes.forEach(function(placeGuide) {
-      if (!placeGuides.hasOwnProperty(ListPlaceGuideDisplayer.extractIdFromDivId(placeGuide.id))) {
-        placeGuideIdsToBeRemoved.push(placeGuide.id);
-      } else {
-        delete placeGuides[ListPlaceGuideDisplayer.extractIdFromDivId(placeGuide.id)];
-      }
-    });
-
-    // for (var index = 0;index < placeGuideIdsToBeRemoved.length;index++) {
-    //   this.remove(placeGuideIdsToBeRemoved[index]);
+    // console.log(this._listPlaceGuideDisplayerDiv.children);
+    var placeGuidesCopy = {};
+    Object.assign(placeGuidesCopy, placeGuides);
+    // console.log(placeGuidesCopy);
+    // for (var placeGuideDiv = this._listPlaceGuideDisplayerDiv.firstChild.nextSibling; 
+    //     placeGuideDiv !== null; 
+    //     placeGuideDiv = placeGuideDiv.nextSibling) {
+    //   console.log("iterate");
+    //   if (!placeGuidesCopy.hasOwnProperty(this.extractIdFromDivId(placeGuideDiv.id))) {
+    //     console.log("delete placeGuide box");
+    //     this._listPlaceGuideDisplayerDiv.removeChild(document.getElementById(placeGuideDiv.id));
+    //   } else {
+    //     delete placeGuidesCopy[this.extractIdFromDivId(placeGuideDiv.id)];
+    //   }
     // }
-    // this.addPlaceGuidesToList(placeGuides);
-    console.log(placeGuideIdsToBeRemoved);
-    console.log(placeGuides);
+    // console.log(placeGuidesCopy);
+    var placeGuideDiv = 
+        this._listPlaceGuideDisplayerDiv.firstChild.nextSibling;
+    while (placeGuideDiv != null) {
+      if (!placeGuidesCopy.hasOwnProperty(this.extractIdFromDivId(placeGuideDiv.id))) {
+        var placeGuideDivToBeRemoved = placeGuideDiv;
+        placeGuideDiv = placeGuideDiv.nextSibling;
+        this._listPlaceGuideDisplayerDiv.removeChild(document.getElementById(placeGuideDivToBeRemoved.id));
+      } else {
+        delete placeGuidesCopy[this.extractIdFromDivId(placeGuideDiv.id)];
+        placeGuideDiv = placeGuideDiv.nextSibling;
+      }
+    }
+
+    this.addPlaceGuidesToList(placeGuidesCopy);
+
   }
 
-  static extractIdFromDivId(placeGuideDivId) {
+  extractIdFromDivId(placeGuideDivId) {
     return Number(placeGuideDivId.slice(18, placeGuideDivId.length - 1));
   }
 
