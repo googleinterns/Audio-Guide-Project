@@ -32,7 +32,6 @@ class PlaceGuideManager {
     this._mapPlaceGuideDisplayer = new MapPlaceGuideDisplayer();
     this._listPlaceGuideDisplayer = new ListPlaceGuideDisplayer();
     let thisManager = this;
-    this._removeGuide = true;
     google.maps.event.addListenerOnce(map, 'idle', function () {
       thisManager.refreshPlaceGuides(map.getBounds(), map.getZoom());
     });
@@ -44,7 +43,6 @@ class PlaceGuideManager {
   }
 
   refreshPlaceGuides(bounds, zoom) {
-    const thisManager = this;
     this._placeGuideRepository.fetchPlaceGuides(this._page.query, bounds, zoom)
         .then((response) => {
           const placeGuides = this._placeGuideRepository.placeGuides;
