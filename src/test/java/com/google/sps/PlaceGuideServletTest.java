@@ -24,7 +24,9 @@ import com.google.appengine.tools.development.testing.LocalBlobstoreServiceTestC
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.google.sps.placeGuide.PlaceGuide;
+import com.google.sps.placeGuide.repository.impl.DatastorePlaceGuideRepository;
 import com.google.sps.user.User;
+import com.google.sps.user.repository.impl.DatastoreUserRepository;
 import java.util.*;
 import java.util.Collections;
 import java.util.HashMap;
@@ -43,6 +45,7 @@ public final class PlaceGuideServletTest {
   private BlobstoreService blobstoreService;
   private BlobInfoFactory blobInfoFactory;
   private LocalServiceTestHelper helper;
+  private DatastoreService datastore;
 
   // Creator C data.
   private static final String ID_USER_C = "idUserC";
@@ -172,6 +175,55 @@ public final class PlaceGuideServletTest {
           .setImageKey(IMAGE_KEY)
           .build();
 
+  private void saveTestPlaceGuidesEntities(List<PlaceGuide> placeGuides) {
+    for (PlaceGuide placeGuide : placeGuides) {
+      datastore.put(getEntityFromPlaceGuide(placeGuide));
+    }
+  }
+
+  private Entity getEntityFromPlaceGuide(PlaceGuide placeGuide) {
+    Entity placeGuideEntity =
+        new Entity(DatastorePlaceGuideRepository.ENTITY_KIND, placeGuide.getId());
+    placeGuideEntity.setProperty(DatastorePlaceGuideRepository.NAME_PROPERTY, placeGuide.getName());
+    placeGuideEntity.setProperty(
+        DatastorePlaceGuideRepository.AUDIO_KEY_PROPERTY, placeGuide.getAudioKey());
+    placeGuideEntity.setProperty(
+        DatastorePlaceGuideRepository.CREATOR_ID_PROPERTY, placeGuide.getCreatorId());
+    placeGuideEntity.setProperty(
+        DatastorePlaceGuideRepository.IS_PUBLIC_PROPERTY, placeGuide.isPublic());
+    placeGuideEntity.setProperty(
+        DatastorePlaceGuideRepository.PLACE_ID_PROPERTY, placeGuide.getPlaceId());
+    placeGuideEntity.setProperty(
+        DatastorePlaceGuideRepository.COORDINATE_PROPERTY, placeGuide.getCoordinate());
+    placeGuideEntity.setProperty(
+        DatastorePlaceGuideRepository.DESCRIPTION_PROPERTY, placeGuide.getDescription());
+    placeGuideEntity.setProperty(
+        DatastorePlaceGuideRepository.LENGTH_PROPERTY, placeGuide.getLength());
+    placeGuideEntity.setProperty(
+        DatastorePlaceGuideRepository.IMAGE_KEY_PROPERTY, placeGuide.getImageKey());
+    return placeGuideEntity;
+  }
+
+  private void saveUser(User user) {
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    datastore.put(getUserEntity(user));
+  }
+
+  private Entity getUserEntity(User user) {
+    Entity userEntity = new Entity(DatastoreUserRepository.ENTITY_KIND, user.getId());
+    userEntity.setProperty(DatastoreUserRepository.NAME_PROPERTY, user.getName());
+    userEntity.setProperty(DatastoreUserRepository.EMAIL_PROPERTY, user.getEmail());
+    userEntity.setProperty(
+        DatastoreUserRepository.BOOKMARKED_PLACE_GUIDES_IDS_PROPERTY,
+        user.getBookmarkedPlaceGuidesIds());
+    userEntity.setProperty(
+        DatastoreUserRepository.PUBLIC_PORTFOLIO_PROPERTY, user.portfolioIsPublic());
+    userEntity.setProperty(
+        DatastoreUserRepository.SELF_INTRODUCTION_PROPERTY, user.getSelfIntroduction());
+    userEntity.setProperty(DatastoreUserRepository.IMG_KEY_PROPERTY, user.getImgKey());
+    return userEntity;
+  }
+
   @Before
   public void setup() {
     // Set the userdata that the Userservice will return.
@@ -186,6 +238,7 @@ public final class PlaceGuideServletTest {
             .setEnvEmail(EMAIL_USER_C)
             .setEnvAttributes(attributeToValue);
     helper.setUp();
+    datastore = DatastoreServiceFactory.getDatastoreService();
 
     request = mock(HttpServletRequest.class);
     response = mock(HttpServletResponse.class);
