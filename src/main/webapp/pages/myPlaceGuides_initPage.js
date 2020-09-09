@@ -8,7 +8,7 @@
  */
 let map;
 let placeGuideManager;
-const PLACE_GUIDE_DISPLAY_TYPE = "My Guides";
+const PLACE_GUIDE_DISPLAY_TYPE = 'My Guides';
 
 function initPage() {
   authenticateUser().then((userAuthenticationStatus) => {
@@ -23,11 +23,12 @@ function initPage() {
       placeGuideManager = new PlaceGuideManager(
           PlaceGuideManager.PAGE.MY_GUIDES, map);
       setMapWidth();
-      window.addEventListener("resize", setMapWidth);    }
+      window.addEventListener('resize', setMapWidth);
+    }
   });
 }
 
 function setMapWidth() {
-  var availableWidth = window.innerWidth - 370;
-  document.getElementById("mapDisplayer").style.width = availableWidth.toString() + "px";
+  const availableWidth = window.innerWidth - 370;
+  document.getElementById('mapDisplayer').style.width = availableWidth.toString() + 'px';
 }

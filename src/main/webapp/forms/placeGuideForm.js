@@ -8,7 +8,7 @@ function setUpCreatePlaceGuideForm() {
       'CREATE_PLACE_GUIDE_FORM', 'createPlaceGuideForm');
   activatePreviewFeature();
   fillFormWithPlaceGuideToEdit();
-  activateRemoveImageFeature("clear-img-icon", false);
+  activateRemoveImageFeature('clear-img-icon', false);
   styleInputs();
 }
 
@@ -24,18 +24,18 @@ function styleInputs() {
   const descriptionInput = new mdc.textField.MDCTextField(
       document.getElementById('descriptionInput'));
   const submitButtonRipple = new mdc.ripple.MDCRipple(
-      document.getElementById("submitBtn"));
+      document.getElementById('submitBtn'));
   const chooseAudioFileButtonRipple = new mdc.ripple.MDCRipple(
-      document.getElementById("chooseAudioFileBtn"));
+      document.getElementById('chooseAudioFileBtn'));
   const chooseImageFileButtonRipple = new mdc.ripple.MDCRipple(
-      document.getElementById("chooseImageFileBtn"));
+      document.getElementById('chooseImageFileBtn'));
   const deletePrevImageCheckbox = new mdc.checkbox.MDCCheckbox(
       document.getElementById('deletePrevImageCheckbox'));
   const deletePrevImageFormField = new mdc.formField.MDCFormField(
       document.getElementById('deletePrevImageFormField'));
   deletePrevImageFormField.input = deletePrevImageCheckbox;
   const publicitySwitchControl = new mdc.switchControl.MDCSwitch(
-      document.getElementById("publicitySwitch"));
+      document.getElementById('publicitySwitch'));
 }
 
 /**
@@ -48,13 +48,13 @@ function activatePreviewFeature() {
       'audioKey', setAudioPreviewSource, removeAudioPreviewSource);
 }
 
-// Just a test by fetching actual place guides' data from database 
+// Just a test by fetching actual place guides' data from database
 // to see if image and audio previewing also works with files from blobstore.
 function testExistingPlaceGuide() {
-  getFetchedList().then(placeGuideCreatorPairs => {
+  getFetchedList().then((placeGuideCreatorPairs) => {
     if (placeGuideCreatorPairs === undefined ||
         placeGuideCreatorPairs.length == 0) {
-      console.log("place guide does not exist yet.");
+      console.log('place guide does not exist yet.');
     } else {
       fillFormWithPlaceGuideData(placeGuideCreatorPairs[0].placeGuide);
     }
@@ -71,7 +71,7 @@ async function getFetchedList() {
 }
 
 function enableSubmission() {
-  document.getElementById("submitBtn").disabled = false;
+  document.getElementById('submitBtn').disabled = false;
 }
 
 /**
@@ -107,7 +107,7 @@ function fillFormWithPlaceGuideData(placeGuide) {
   setBlobKeySrcToElement(
       placeGuide.audioKey, 'audioPlayer', false);
   const publicitySwitchControl =
-      new mdc.switchControl.MDCSwitch(document.getElementById("publicitySwitch"));
+      new mdc.switchControl.MDCSwitch(document.getElementById('publicitySwitch'));
   if (placeGuide.isPublic) {
     publicitySwitchControl.checked = true;
   } else {
@@ -127,9 +127,9 @@ function fillFormWithPlaceGuideData(placeGuide) {
           document.getElementById('descriptionInput')),
       placeGuide.description);
   if (placeGuide.imageKey != undefined) {
-    setBlobKeySrcToElement(placeGuide.imageKey, "imagePreview", true);
-    document.getElementById("no-img-icon").style.display = "none";
-    document.getElementById("clear-img-icon").style.display = "block";
+    setBlobKeySrcToElement(placeGuide.imageKey, 'imagePreview', true);
+    document.getElementById('no-img-icon').style.display = 'none';
+    document.getElementById('clear-img-icon').style.display = 'block';
     activateRemoveImageFeature(true);
   } else {
     activateRemoveImageFeature(false);
@@ -139,35 +139,35 @@ function fillFormWithPlaceGuideData(placeGuide) {
 }
 
 /**
- * Will fill the form if query string exists. Query string exists only when user wants 
+ * Will fill the form if query string exists. Query string exists only when user wants
  * to edit a place guide.
  */
 function fillFormWithPlaceGuideToEdit() {
-  if (window.location.search != "") {
-    var GET = {};
-    var queryString = decodeURI(window.location.search.replace(/^\?/, ''));
+  if (window.location.search != '') {
+    const GET = {};
+    const queryString = decodeURI(window.location.search.replace(/^\?/, ''));
     queryString.split(/\&/).forEach(function(keyValuePair) {
-        var paramName = keyValuePair.replace(/=.*$/, "");
-        var paramValue = keyValuePair.replace(/^[^=]*\=/, "");
-        GET[paramName] = paramValue;
+      const paramName = keyValuePair.replace(/=.*$/, '');
+      const paramValue = keyValuePair.replace(/^[^=]*\=/, '');
+      GET[paramName] = paramValue;
     });
-    document.getElementById("id").value = GET["placeGuideId"];
-    document.getElementById("placeId").value = GET["placeId"];
-    document.getElementById("name").value = GET["name"];
-    document.getElementById("audioPlayer").src = getBlobSrc(GET["audioKey"]);
-    if (GET["imageKey"] != "undefined") {
-      document.getElementById("imagePreview").src = getBlobSrc(GET["imageKey"]);
+    document.getElementById('id').value = GET['placeGuideId'];
+    document.getElementById('placeId').value = GET['placeId'];
+    document.getElementById('name').value = GET['name'];
+    document.getElementById('audioPlayer').src = getBlobSrc(GET['audioKey']);
+    if (GET['imageKey'] != 'undefined') {
+      document.getElementById('imagePreview').src = getBlobSrc(GET['imageKey']);
     }
-    document.getElementById("imagePreview").style.display = "block";
-    if (GET["description"] != "undefined") {
-      document.getElementById("description").value = GET["description"]; 
+    document.getElementById('imagePreview').style.display = 'block';
+    if (GET['description'] != 'undefined') {
+      document.getElementById('description').value = GET['description'];
     }
-    document.getElementById("length").value = GET["length"];
-    document.getElementById("isPublic").value = GET["isPublic"];
-    if (GET["placeName"] != "null") {
-      document.getElementById("placeName").value = GET["placeName"];
+    document.getElementById('length').value = GET['length'];
+    document.getElementById('isPublic').value = GET['isPublic'];
+    if (GET['placeName'] != 'null') {
+      document.getElementById('placeName').value = GET['placeName'];
     }
-    document.getElementById("latitude").value = GET["latitude"];
-    document.getElementById("longitude").value = GET["longitude"];
+    document.getElementById('latitude').value = GET['latitude'];
+    document.getElementById('longitude').value = GET['longitude'];
   }
 }

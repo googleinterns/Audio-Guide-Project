@@ -1,9 +1,8 @@
 class PlaceGuideOnList {
   constructor(
-      placeGuideId, placeName, placeId, name, creator, description, 
-      audioKey, audioLength, isPublic, imageKey, createdByCurrentUser, 
+      placeGuideId, placeName, placeId, name, creator, description,
+      audioKey, audioLength, isPublic, imageKey, createdByCurrentUser,
       bookmarkedByCurrentUser, latitude, longitude) {
-
     this._placeGuideProperties = {
       placeGuideId: placeGuideId,
       placeName: placeName,
@@ -15,11 +14,11 @@ class PlaceGuideOnList {
       audioLength: audioLength,
       isPublic: isPublic,
       latitude: latitude,
-      longitude: longitude
-    }
+      longitude: longitude,
+    };
 
     this._placeGuideOnListDiv = this.createPlaceGuideOnListDiv(
-        this._placeGuideProperties, 
+        this._placeGuideProperties,
         creator,
         createdByCurrentUser,
         bookmarkedByCurrentUser);
@@ -34,13 +33,13 @@ class PlaceGuideOnList {
   }
 
   static unhighlight(placeGuideId) {
-    close(placeGuideId)
+    close(placeGuideId);
   }
 
   createPlaceGuideOnListDiv(
-      placeGuideProperties, 
-      creator, 
-      createdByCurrentUser, 
+      placeGuideProperties,
+      creator,
+      createdByCurrentUser,
       bookmarkedByCurrentUser) {
     const placeGuideDiv = this.initiatePlaceGuideOnListDiv(
         placeGuideProperties.placeGuideId);
@@ -50,14 +49,14 @@ class PlaceGuideOnList {
   }
 
   initiatePlaceGuideOnListDiv(placeGuideId) {
-    const placeGuideDiv = document.createElement("div");
-    const divId = "placeGuideOnList-" + "{" + placeGuideId + "}";
+    const placeGuideDiv = document.createElement('div');
+    const divId = 'placeGuideOnList-' + '{' + placeGuideId + '}';
     placeGuideDiv.setAttribute('id', divId);
     placeGuideDiv.classList.add(
-        "list-group-item", 
-        "list-group-item-action",
-        "flex-column",
-        "align-items-start");
+        'list-group-item',
+        'list-group-item-action',
+        'flex-column',
+        'align-items-start');
     return placeGuideDiv;
   }
 
@@ -74,11 +73,11 @@ class PlaceGuideOnList {
     const placeGuideId = placeGuideProperties.placeGuideId;
     const placeGuideName = placeGuideProperties.name;
     const placeName = placeGuideProperties.placeName;
-    const foldedPlaceGuideDiv = document.createElement("div");
-    foldedPlaceGuideDiv.style.display = "block";
-    foldedPlaceGuideDiv.classList.add("folded-placeGuide");
+    const foldedPlaceGuideDiv = document.createElement('div');
+    foldedPlaceGuideDiv.style.display = 'block';
+    foldedPlaceGuideDiv.classList.add('folded-placeGuide');
     foldedPlaceGuideDiv.appendChild(this.foldedPlaceGuide_name(placeGuideName));
-    if (placeName != undefined || placeName != "" || placeName != null) {
+    if (placeName != undefined || placeName != '' || placeName != null) {
       foldedPlaceGuideDiv.appendChild(this.foldedPlaceGuide_placeName(placeName));
     }
     foldedPlaceGuideDiv.appendChild(this.foldedPlaceGuide_buttons(placeGuideId, placeGuideAudioKey));
@@ -86,46 +85,46 @@ class PlaceGuideOnList {
   }
 
   foldedPlaceGuide_name(placeGuideName) {
-    const placeGuideNameContainer = document.createElement("div");
+    const placeGuideNameContainer = document.createElement('div');
     placeGuideNameContainer.classList.add(
-        "d-flex",
-        "w-100",
-        "justify-content-between");
-    const placeGuideNameElement = document.createElement("h5");
-    placeGuideNameElement.classList.add("mb-1");
+        'd-flex',
+        'w-100',
+        'justify-content-between');
+    const placeGuideNameElement = document.createElement('h5');
+    placeGuideNameElement.classList.add('mb-1');
     placeGuideNameElement.innerText = placeGuideName;
     placeGuideNameContainer.appendChild(placeGuideNameElement);
     return placeGuideNameContainer;
   }
 
   foldedPlaceGuide_name(placeGuideName) {
-    const placeGuideNameContainer = document.createElement("div");
+    const placeGuideNameContainer = document.createElement('div');
     placeGuideNameContainer.classList.add(
-        "d-flex",
-        "w-100",
-        "justify-content-between");
-    const placeGuideNameElement = document.createElement("h5");
-    placeGuideNameElement.classList.add("mb-1");
+        'd-flex',
+        'w-100',
+        'justify-content-between');
+    const placeGuideNameElement = document.createElement('h5');
+    placeGuideNameElement.classList.add('mb-1');
     placeGuideNameElement.innerText = placeGuideName;
     placeGuideNameContainer.appendChild(placeGuideNameElement);
     return placeGuideNameContainer;
   }
 
   foldedPlaceGuide_placeName(placeName) {
-    const placeNameElement = document.createElement("p");
-    placeNameElement.classList.add("mb-1");
+    const placeNameElement = document.createElement('p');
+    placeNameElement.classList.add('mb-1');
     placeNameElement.innerText = placeName;
     return placeNameElement;
   }
-  
+
   foldedPlaceGuide_buttons(placeGuideId, audioKey) {
-    const buttonsContainer = document.createElement("div");
-    buttonsContainer.classList.add("mdc-card__action-icons");
+    const buttonsContainer = document.createElement('div');
+    buttonsContainer.classList.add('mdc-card__action-icons');
     this.createAudioButton(audioKey, buttonsContainer);
     const expandButton = this.getPlaceGuideButtonWithPreparedClasses();
-    expandButton.setAttribute("title", "expand");
-    expandButton.innerText = "open_in_full";
-    expandButton.addEventListener("click", function() {
+    expandButton.setAttribute('title', 'expand');
+    expandButton.innerText = 'open_in_full';
+    expandButton.addEventListener('click', function() {
       PlaceGuideOnList.expand(placeGuideId);
     });
     buttonsContainer.appendChild(expandButton);
@@ -133,63 +132,63 @@ class PlaceGuideOnList {
   }
 
   static expand(placeGuideId) {
-      const divId = "placeGuideOnList-" + "{" + placeGuideId + "}";
-      const placeGuideDiv = document.getElementById(divId);
-      placeGuideDiv.querySelectorAll(".folded-placeGuide")[0].style.display = "none";
-      placeGuideDiv.querySelectorAll(".card-placeGuide")[0].style.display = "block";
-      placeGuideDiv.style.padding = "0px";
+    const divId = 'placeGuideOnList-' + '{' + placeGuideId + '}';
+    const placeGuideDiv = document.getElementById(divId);
+    placeGuideDiv.querySelectorAll('.folded-placeGuide')[0].style.display = 'none';
+    placeGuideDiv.querySelectorAll('.card-placeGuide')[0].style.display = 'block';
+    placeGuideDiv.style.padding = '0px';
   }
-  
+
   createCardPlaceGuide(
       placeGuideProperties, creator, createdByCurrentUser, bookmarkedByCurrentUser) {
     const cardPlaceGuideDiv = this.createCardPlaceGuideDiv();
     const cardDiv = this.createCardDiv();
-  
-    const cardContentsContainer = 
+
+    const cardContentsContainer =
         this.createAndPopulateCardContentsContainer(placeGuideProperties, creator);
-  
-    const buttonsContainer = 
+
+    const buttonsContainer =
         this.createAndPopulateButtonsContainer(
             placeGuideProperties, creator, createdByCurrentUser, bookmarkedByCurrentUser);
-  
+
     cardDiv.appendChild(cardContentsContainer);
     cardDiv.appendChild(buttonsContainer);
     cardPlaceGuideDiv.appendChild(cardDiv);
     return cardPlaceGuideDiv;
   }
-  
+
   createCardPlaceGuideDiv() {
-    const cardPlaceGuideDiv = document.createElement("div");
-    cardPlaceGuideDiv.classList.add("card-placeGuide");
-    cardPlaceGuideDiv.style.display = "none";
+    const cardPlaceGuideDiv = document.createElement('div');
+    cardPlaceGuideDiv.classList.add('card-placeGuide');
+    cardPlaceGuideDiv.style.display = 'none';
     return cardPlaceGuideDiv;
   }
-  
+
   createCardDiv() {
-    const cardDiv = document.createElement("div");
+    const cardDiv = document.createElement('div');
     cardDiv.classList.add(
-        "mdc-card",
-        "my-card");
+        'mdc-card',
+        'my-card');
     return cardDiv;
   }
-  
+
   createAndPopulateCardContentsContainer(placeGuideProperties, creator) {
-    const cardContentsContainer = document.createElement("div");
+    const cardContentsContainer = document.createElement('div');
     cardContentsContainer.classList.add(
-        "mdc-card__media",
-        "mdc-card__media--square");
-  
+        'mdc-card__media',
+        'mdc-card__media--square');
+
     const cardContents = this.createCardContents();
-  
-    const placeGuideImage = 
+
+    const placeGuideImage =
         this.createPlaceGuideImageElement(placeGuideProperties.imageKey);
-    const placeGuideTitle = 
+    const placeGuideTitle =
         this.createPlaceGuideTitle(placeGuideProperties.name, creator.email);
-    const placeGuideLength = 
+    const placeGuideLength =
         this.createPlaceGuideLengthElement(placeGuideProperties.audioLength);
-    const placeGuideDescription = 
+    const placeGuideDescription =
         this.createPlaceGuideDescriptionElement(placeGuideProperties.description);
-  
+
     cardContents.appendChild(placeGuideImage);
     cardContents.appendChild(placeGuideTitle);
     cardContents.appendChild(placeGuideLength);
@@ -197,230 +196,230 @@ class PlaceGuideOnList {
     cardContentsContainer.appendChild(cardContents);
     return cardContentsContainer;
   }
-  
+
   createCardContents() {
-    const cardContents = document.createElement("div");
+    const cardContents = document.createElement('div');
     cardContents.classList.add(
-        "mdc-card__media-content",
-        "my-place-guide-image");
-    cardContents.style.overflow = "hidden";
+        'mdc-card__media-content',
+        'my-place-guide-image');
+    cardContents.style.overflow = 'hidden';
     return cardContents;
   }
-  
+
   createPlaceGuideImageElement(placeGuideImageKey) {
-    var placeGuideImage;
+    let placeGuideImage;
     if (placeGuideImageKey != undefined) {
-      placeGuideImage = this.createBlobView(placeGuideImageKey, "img");
+      placeGuideImage = this.createBlobView(placeGuideImageKey, 'img');
     } else {
-      placeGuideImage = document.createElement("i");
-      placeGuideImage.classList.add("material-icons", "md-48");
-      placeGuideImage.style.textAlign = "center";
-      placeGuideImage.style.paddingTop = "90px";
-      placeGuideImage.innerText = "tour";
+      placeGuideImage = document.createElement('i');
+      placeGuideImage.classList.add('material-icons', 'md-48');
+      placeGuideImage.style.textAlign = 'center';
+      placeGuideImage.style.paddingTop = '90px';
+      placeGuideImage.innerText = 'tour';
     }
-    placeGuideImage.style.width = "100%";
-    placeGuideImage.style.height = "180px";
+    placeGuideImage.style.width = '100%';
+    placeGuideImage.style.height = '180px';
     return placeGuideImage;
   }
-  
+
   createPlaceGuideTitle(placeGuideName, creatorEmail) {
-    const placeGuideTitle = document.createElement("div");
-    placeGuideTitle.classList.add("place-guide-title");
-    const placeGuideNameElement = document.createElement("h5");
+    const placeGuideTitle = document.createElement('div');
+    placeGuideTitle.classList.add('place-guide-title');
+    const placeGuideNameElement = document.createElement('h5');
     placeGuideNameElement.innerText = placeGuideName;
     const creatorButton = this.getPlaceGuideButtonWithPreparedClasses();
-    creatorButton.setAttribute("title", creatorEmail);
-    creatorButton.innerText = "account_circle";
+    creatorButton.setAttribute('title', creatorEmail);
+    creatorButton.innerText = 'account_circle';
     placeGuideTitle.appendChild(placeGuideNameElement);
     placeGuideTitle.appendChild(creatorButton);
-    placeGuideTitle.style.paddingTop = "10px";
-    placeGuideTitle.style.marginTop = "10px";
+    placeGuideTitle.style.paddingTop = '10px';
+    placeGuideTitle.style.marginTop = '10px';
     return placeGuideTitle;
   }
-  
+
   createPlaceGuideLengthElement(placeGuideAudioLength) {
-    const placeGuideLength = document.createElement("p");
-    placeGuideLength.classList.add("place-guide-length");
-    placeGuideLength.innerText = placeGuideAudioLength + " minutes";
+    const placeGuideLength = document.createElement('p');
+    placeGuideLength.classList.add('place-guide-length');
+    placeGuideLength.innerText = placeGuideAudioLength + ' minutes';
     return placeGuideLength;
   }
-  
+
   createPlaceGuideDescriptionElement(placeGuideDescription) {
-    const description = document.createElement("p");
-    description.classList.add("place-guide-description");
+    const description = document.createElement('p');
+    description.classList.add('place-guide-description');
     if (placeGuideDescription != undefined) {
       description.innerText = placeGuideDescription;
     }
     return description;
   }
-  
+
   createAndPopulateButtonsContainer(
       placeGuideProperties, creator, createdByCurrentUser, bookmarkedByCurrentUser) {
-    const buttonsContainer = document.createElement("div");
-    buttonsContainer.classList.add("mdc-card__actions");
-  
+    const buttonsContainer = document.createElement('div');
+    buttonsContainer.classList.add('mdc-card__actions');
+
     const buttonsSubContainer = this.createAndPopulateButtonsSubContainer();
-    
+
     this.createButtonsIfUserIsCreator(
         createdByCurrentUser, buttonsSubContainer, placeGuideProperties);
-  
+
     this.createAudioButton(placeGuideProperties.audioKey, buttonsSubContainer);
     this.createDownloadButton(placeGuideProperties.audioKey, buttonsSubContainer);
     this.createBookmarkButton(
         placeGuideProperties.placeGuideId, bookmarkedByCurrentUser, buttonsSubContainer);
     this.createBackToListButton(
         placeGuideProperties.placeGuideId, buttonsSubContainer);
-  
+
     buttonsContainer.appendChild(buttonsSubContainer);
-    buttonsContainer.style.marginTop = "30px";
-  
+    buttonsContainer.style.marginTop = '30px';
+
     return buttonsContainer;
   }
-  
+
   createAudioButton(placeGuideAudioKey, parentDiv) {
-    const audioPlayer = document.createElement("audio");
+    const audioPlayer = document.createElement('audio');
     audioPlayer.src = PlaceGuideOnList.getBlobSrc(placeGuideAudioKey);
     const audioButton = this.getPlaceGuideButtonWithPreparedClasses();
-    audioButton.setAttribute("title", "play/pause audio");
-    audioButton.innerText = "play_arrow";
-    audioButton.addEventListener("click", function() {
-      if (audioButton.innerText == "play_arrow") {
+    audioButton.setAttribute('title', 'play/pause audio');
+    audioButton.innerText = 'play_arrow';
+    audioButton.addEventListener('click', function() {
+      if (audioButton.innerText == 'play_arrow') {
         audioPlayer.play();
-        audioButton.innerText = "pause";
+        audioButton.innerText = 'pause';
       } else {
         audioPlayer.pause();
-        audioButton.innerText = "play_arrow";
+        audioButton.innerText = 'play_arrow';
       }
     });
     parentDiv.appendChild(audioButton);
   }
-  
+
   createAndPopulateButtonsSubContainer() {
-    const buttonsSubContainer = document.createElement("div");
-    buttonsSubContainer.classList.add("mdc-card__action-icons");
+    const buttonsSubContainer = document.createElement('div');
+    buttonsSubContainer.classList.add('mdc-card__action-icons');
     return buttonsSubContainer;
   }
-  
+
   getPlaceGuideButtonWithPreparedClasses() {
-    const button = document.createElement("button");
+    const button = document.createElement('button');
     button.classList.add(
-        "material-icons",
-        "mdc-icon-button",
-        "mdc-card__action",
-        "mdc-card__action--icon", 
-        "specialButton");
+        'material-icons',
+        'mdc-icon-button',
+        'mdc-card__action',
+        'mdc-card__action--icon',
+        'specialButton');
     return button;
   }
-  
+
   highlightOnInfoBoxClick(placeGuideDiv, placeGuideId) {
     placeGuideDiv.addEventListener('click', function() {
       highlightOnInfoBoxClick(placeGuideId);
     });
   }
-  
+
   createBlobView(blobKey, elementType) {
     const element = document.createElement(elementType);
     const src = PlaceGuideOnList.getBlobSrc(blobKey);
-    element.setAttribute("src", src);
+    element.setAttribute('src', src);
     return element;
   }
-  
+
   static getBlobSrc(blobKey) {
-    const src = new URL("/serve-blob", document.URL);
+    const src = new URL('/serve-blob', document.URL);
     src.searchParams.append('blob-key', blobKey);
     return src;
   }
-  
+
   static generateQueryString(placeGuideProperties) {
-    var esc = encodeURIComponent;
-    var query = Object.keys(placeGuideProperties)
-        .map(function(k) {return esc(k) + '=' + esc(placeGuideProperties[k]);})
+    const esc = encodeURIComponent;
+    const query = Object.keys(placeGuideProperties)
+        .map(function(k) {
+          return esc(k) + '=' + esc(placeGuideProperties[k]);
+        })
         .join('&');
     return query;
   }
-  
+
   createButtonsIfUserIsCreator(createdByCurrentUser, parentDiv, placeGuideProperties) {
     if (createdByCurrentUser) {
       this.createDeleteButton(parentDiv, placeGuideProperties.placeGuideId);
       this.createEditButton(parentDiv, placeGuideProperties);
     }
   }
-  
+
   createDeleteButton(parentDiv, placeGuideId) {
-  
     const deleteButton = this.getPlaceGuideButtonWithPreparedClasses();
-    deleteButton.setAttribute("title", "delete place guide");
-    deleteButton.innerText = "delete";
-  
-    deleteButton.addEventListener("click", function() {
-      if (window.confirm("Click ok if you want to delete the place guide")) {
+    deleteButton.setAttribute('title', 'delete place guide');
+    deleteButton.innerText = 'delete';
+
+    deleteButton.addEventListener('click', function() {
+      if (window.confirm('Click ok if you want to delete the place guide')) {
         placeGuideManager.removePlaceGuide(placeGuideId);
       }
     });
     parentDiv.appendChild(deleteButton);
   }
-  
+
   createEditButton(parentDiv, placeGuideProperties) {
-  
     const editButton = this.getPlaceGuideButtonWithPreparedClasses();
-    editButton.setAttribute("title", "edit place guide");
-    editButton.innerText = "edit";
-  
-    editButton.addEventListener("click", function() {
+    editButton.setAttribute('title', 'edit place guide');
+    editButton.innerText = 'edit';
+
+    editButton.addEventListener('click', function() {
       const queryString = PlaceGuideOnList.generateQueryString(placeGuideProperties);
-      const url = "./createPlaceGuide.html?" + queryString;
+      const url = './createPlaceGuide.html?' + queryString;
       window.location = url;
     });
     parentDiv.appendChild(editButton);
   }
-  
+
   createBookmarkButton(placeGuideId, bookmarkedByCurrentUser, parentDiv) {
     const bookmarkButton = this.getPlaceGuideButtonWithPreparedClasses();
-    bookmarkButton.setAttribute("title", "bookmark place guide");
-    bookmarkButton.innerText = "bookmark_border";
+    bookmarkButton.setAttribute('title', 'bookmark place guide');
+    bookmarkButton.innerText = 'bookmark_border';
     if (bookmarkedByCurrentUser) {
-      bookmarkButton.innerText = "bookmark";
-      bookmarkButton.setAttribute("title", "unbookmark place guide");
+      bookmarkButton.innerText = 'bookmark';
+      bookmarkButton.setAttribute('title', 'unbookmark place guide');
     }
-    bookmarkButton.addEventListener("click", function() {
-      if (bookmarkButton.innerText == "bookmark") {
-        bookmarkButton.innerText = "bookmark_border";
-        bookmarkButton.setAttribute("title", "bookmark place guide");
+    bookmarkButton.addEventListener('click', function() {
+      if (bookmarkButton.innerText == 'bookmark') {
+        bookmarkButton.innerText = 'bookmark_border';
+        bookmarkButton.setAttribute('title', 'bookmark place guide');
       } else {
-        bookmarkButton.innerText = "bookmark";
-        bookmarkButton.setAttribute("title", "unbookmark place guide");
+        bookmarkButton.innerText = 'bookmark';
+        bookmarkButton.setAttribute('title', 'unbookmark place guide');
       }
       placeGuideManager.toggleBookmark(placeGuideId);
     });
     parentDiv.appendChild(bookmarkButton);
   }
-  
+
   createDownloadButton(audioKey, parentDiv) {
     const downloadButton = this.getPlaceGuideButtonWithPreparedClasses();
-    downloadButton.setAttribute("title", "download audio");
-    downloadButton.innerText = "get_app";
-    downloadButton.addEventListener("click", function() {
+    downloadButton.setAttribute('title', 'download audio');
+    downloadButton.innerText = 'get_app';
+    downloadButton.addEventListener('click', function() {
       window.location.href = PlaceGuideOnList.getBlobSrc(audioKey);
     });
     parentDiv.appendChild(downloadButton);
   }
-  
+
   createBackToListButton(placeGuideId, parentDiv) {
     const backToListButton = this.getPlaceGuideButtonWithPreparedClasses();
-    backToListButton.setAttribute("title", "back to list");
-    backToListButton.innerText = "reorder";
-    backToListButton.addEventListener("click", function() {
+    backToListButton.setAttribute('title', 'back to list');
+    backToListButton.innerText = 'reorder';
+    backToListButton.addEventListener('click', function() {
       PlaceGuideOnList.close(placeGuideId);
     });
-  
+
     parentDiv.appendChild(backToListButton);
   }
 
   static close(placeGuideId) {
-      const divId = "placeGuideOnList-" + "{" + placeGuideId + "}";
-      const placeGuideDiv = document.getElementById(divId);
-      placeGuideDiv.querySelectorAll(".folded-placeGuide")[0].style.display = "block";
-      placeGuideDiv.querySelectorAll(".card-placeGuide")[0].style.display = "none";
-      placeGuideDiv.style.removeProperty("padding");
-  }  
+    const divId = 'placeGuideOnList-' + '{' + placeGuideId + '}';
+    const placeGuideDiv = document.getElementById(divId);
+    placeGuideDiv.querySelectorAll('.folded-placeGuide')[0].style.display = 'block';
+    placeGuideDiv.querySelectorAll('.card-placeGuide')[0].style.display = 'none';
+    placeGuideDiv.style.removeProperty('padding');
+  }
 }
