@@ -48,7 +48,7 @@ class ListPlaceGuideDisplayer {
 
   remove(placeGuideId) {
     // Delete from list.
-    this.removeFromList(placeGuideIde);
+    this.removeFromList(placeGuideId);
     // Delete from memory.
     delete this._placeGuidesOnList[placeGuideId];
   }
