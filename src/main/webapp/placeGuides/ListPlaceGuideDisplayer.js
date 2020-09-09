@@ -69,12 +69,17 @@ class ListPlaceGuideDisplayer {
   }
 
   remove(placeGuideId) {
-    const placeGuideDivId = "placeGuideOnList-" + "{" + placeGuideId + "}";
+    const placeGuideOnListDivId = 
+        ListPlaceGuideDisplayer.getPlaceGuideOnListDivId(placeGuideId);
     const placeGuideDiv = document.getElementById(placeGuideDivId);
     if (this._listPlaceGuideDisplayerDiv.contains(placeGuideDiv)) {
       this._listPlaceGuideDisplayerDiv.removeChild(placeGuideDiv);
     }
     return placeGuideDiv;
+  }
+
+  static getPlaceGuideOnListDivId(placeGuideId) {
+    return "placeGuideOnList-" + "{" + placeGuideId + "}";
   }
 
    // Move the highlighted place guide to top of list.
