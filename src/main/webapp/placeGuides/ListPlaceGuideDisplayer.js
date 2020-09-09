@@ -39,10 +39,13 @@ class ListPlaceGuideDisplayer {
   }
 
   update(placeGuides) {
-    this.removeAllPlaceGuidesFromList();
-    this._listPlaceGuideDisplayerDiv.appendChild(
-        this.createListTitle(
-            ListPlaceGuideDisplayer.PAGE[this._page.name]));
+    this._listPlaceGuideDisplayerDiv.childNodes.forEach(function(placeGuide) {
+      if (!placeGuides.hasOwnProperty(placeGuide.id)) {
+        this.remove(placeGuide.id);
+      } else {
+        delete placeGuides[placeGuide.id];
+      }
+    });
     this.addPlaceGuidesToList(placeGuides);
   }
 
