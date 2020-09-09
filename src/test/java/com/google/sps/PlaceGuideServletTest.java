@@ -93,7 +93,7 @@ public final class PlaceGuideServletTest {
           .addImgKey(IMG_KEY_USER_D)
           .build();
 
-  // General placeguide data
+  // General placeguide data(used for all placeguides).
   private static final String NAME = "name";
   private static final String AUDIO_KEY = "audioKey";
   private static final String PLACE_ID = "placeId";
@@ -102,8 +102,8 @@ public final class PlaceGuideServletTest {
   private static final String DESCRIPTION = "description";
   private static final String IMAGE_KEY = "imageKey";
 
-  // PlaceGuides' parameters used for map-related queries, with a region not crossing the IDL.
-  // PlaceGudies of user C.
+  // PlaceGuides' parameters used for map-related queries.
+  // PlaceGuides of user C.
   private static final long C_INNER_PUBLIC_ID = 56789;
   private static final long C_INNER_PRIVATE_ID = 98765;
   private static final long C_OUTER_PUBLIC_ID = 67890;
@@ -113,7 +113,7 @@ public final class PlaceGuideServletTest {
   private static final GeoPt C_INNER_PRIVATE_COORDINATE = new GeoPt((float) -14, (float) 14);
   private static final GeoPt C_OUTER_PUBLIC_COORDINATE = new GeoPt((float) 5, (float) -20);
   private static final GeoPt C_OUTER_PRIVATE_COORDINATE = new GeoPt((float) -30, (float) -5);
-  // PlaceGudies of user D.
+  // PlaceGuides of user D.
   private static final long D_INNER_PUBLIC_ID = 567890;
   private static final long D_INNER_PRIVATE_ID = 987650;
   private static final long D_OUTER_PUBLIC_ID = 678900;
@@ -252,6 +252,10 @@ public final class PlaceGuideServletTest {
     return userEntity;
   }
 
+  /**
+   * This string is passed as an http request parameter. The format is the same as for
+   * LatLngBound.tourlValue() from the Maps Javascript API.
+   */
   private String getRegionCornersString(GeoPt southWestCorner, GeoPt northEastCorner) {
     return String.format(
         "%f,%f,%f,%f",
@@ -261,6 +265,7 @@ public final class PlaceGuideServletTest {
         northEastCorner.getLongitude());
   }
 
+  /** It sets the values of the request parameters. */
   private void setupDoGetMockRequest(
       PlaceGuideQueryType queryType, GeoPt southWestCorner, GeoPt northEastCorner)
       throws IOException {
@@ -280,7 +285,7 @@ public final class PlaceGuideServletTest {
         && a.isBookmarkedByCurrentUser() == b.isBookmarkedByCurrentUser();
   }
 
-  // Find out if the 2 lists of placeguides are equal.
+  // Find out if the 2 lists of placeguideinfos are equal.
   private boolean compare(List<PlaceGuideInfo> a, List<PlaceGuideInfo> b) {
     List<PlaceGuideInfo> b_copy = new ArrayList<>(b);
     if (a.size() != b_copy.size()) {

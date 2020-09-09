@@ -34,6 +34,7 @@ public class PlaceGuideInfo {
   private static final UserRepository userRepository =
       UserRepositoryFactory.getUserRepository(RepositoryType.DATASTORE);;
 
+  /** For production. */
   public PlaceGuideInfo(PlaceGuide placeGuide, String currentUserId) {
     this.placeGuide = placeGuide;
     this.creator = userRepository.getUser(this.placeGuide.getCreatorId());
@@ -49,6 +50,7 @@ public class PlaceGuideInfo {
     this.createdByCurrentUser = this.placeGuide.getCreatorId().equals(currentUserId);
   }
 
+  /** For testing. */
   public PlaceGuideInfo(
       PlaceGuide placeGuide,
       User creator,
