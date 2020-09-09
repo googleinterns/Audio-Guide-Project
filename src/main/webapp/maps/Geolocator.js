@@ -14,13 +14,14 @@ class Geolocator {
   static UNKNOWN_ERROR_MSG = "An unknown error occurred while geolocating.";
   static LOCATION_NOT_FOUND_MSG = "Your location couldn't be found yet.";
 
-  static GEOLOCATION_IMG_ID = "enableGeolocationIcon";
-  static ENABLE_GEOLOCATION_TITLE = "Enable geolocation";
-  static DISABLED_GEOLOCATION_IMG_SRC = "./img/geolocation.svg";
-  static DISABLE_GEOLOCATION_TITLE = "Disable geolocation";
-  static ENABLE_GEOLOCATION_IMG_SRC = "./img/geolocation_active.svg";
+  static GEOLOCATION_ICON_ID = "enableGeolocationIcon";
+  static ENABLED_GEOLOCATION_TITLE = "Disable geolocation";
+  static ENABLED_GEOLOCATION_ICON = "gps_fixed";
+  static DISABLED_GEOLOCATION_TITLE = "Enable geolocation";
+  static DISABLED_GEOLOCATION_ICON = "gps_off";
 
-  static GO_TO_MY_LOCATION_IMG_ID = "goToMyLocationIcon";
+  static GO_TO_MY_LOCATION_ICON_ID = "goToMyLocationIcon";
+  static GO_TO_MY_LOCATION_ICON = "center_focus_strong";
   static GO_TO_MY_LOCATION_TITLE = "Go to my location";
   static MY_LOCATION_TITLE = "My current location";
 
@@ -35,27 +36,27 @@ class Geolocator {
             0,
             Geolocator.MY_LOCATION_TITLE,
             PlaceType.CURRENT_LOCATION,
-            true);
+            false);
     this._currentLocation.visible = false;
     this._geolocationControlDiv =
         this.createControlDiv(Geolocator.ENABLE_GEOLOCATION_TITLE,
-            Geolocator.DISABLED_GEOLOCATION_IMG_SRC,
-            Geolocator.GEOLOCATION_IMG_ID);
+            Geolocator.DISABLED_GEOLOCATION_ICON,
+            Geolocator.GEOLOCATION_ICON_ID);
     this._map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(
         this._geolocationControlDiv);
     this._myLocationControlDiv =
-        this.createControlDiv(Geolocator.GO_TO_MY_LOCATION_TITLE,
-            "./img/my_location.svg", Geolocator.GO_TO_MY_LOCATION_IMG_ID);
+        this.createControlDiv(
+            Geolocator.GO_TO_MY_LOCATION_TITLE,
+            Geolocator.GO_TO_MY_LOCATION_ICON,
+            Geolocator.GO_TO_MY_LOCATION_ICON_ID);
     this._map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(
         this._myLocationControlDiv);
   }
 
   static convertCurrentLocationToLatLng(location) {
-    var locationLatLng = {
-      lat: location.coords.latitude,
-      lng: location.coords.longitude
-    };
-    return locationLatLng;
+    return new google.maps.LatLng(
+        location.coords.latitude, 
+        location.coords.longitude);
   }
 
   // The Geolocator starts listening to and handling "turn on/off geolocation" 
@@ -63,6 +64,22 @@ class Geolocator {
   init() {
     this.enableGeolocationControl();
     this.enableGoToMyLocationControl();
+  }
+
+  /**
+   * This function tries to find the user's current location, and
+   * if it is found, it centers the map around it and sets 
+   * a higher zoom level.
+   * If the location cannot be found, nothing happens.
+   */
+  static centerMapAtCurrentLocation(map) {
+    navigator.geolocation.getCurrentPosition(
+      position => {
+       map.setZoom(10);
+       map.setCenter(
+        Geolocator.convertCurrentLocationToLatLng(position));
+      }
+    );
   }
 
   enableGeolocationControl() {
@@ -78,12 +95,12 @@ class Geolocator {
     }
   }
 
-  enableLocationTracking(img) {
+  enableLocationTracking() {
     if (navigator.geolocation) {
       this._trackLocation = true;
-      var img = document.getElementById(Geolocator.GEOLOCATION_IMG_ID);
-      this._geolocationControlDiv.title = Geolocator.DISABLE_GEOLOCATION_TITLE;
-      img.src = Geolocator.ENABLE_GEOLOCATION_IMG_SRC;
+      var icon = document.getElementById(Geolocator.GEOLOCATION_ICON_ID);
+      this._geolocationControlDiv.title = Geolocator.ENABLED_GEOLOCATION_TITLE;
+      icon.innerText = Geolocator.ENABLED_GEOLOCATION_ICON;
       this._watchPositionId = navigator.geolocation.watchPosition(
           position => {
             this._foundLocation = true;
@@ -102,14 +119,14 @@ class Geolocator {
     }
   }
 
-  disableLocationTracking(geolocationControlDiv, img) {
+  disableLocationTracking() {
     this._trackLocation = false;
     this._foundLocation = false;
     navigator.geolocation.clearWatch(this._watchPositionId);
     this._currentLocation.visible = false;
-    var img = document.getElementById(Geolocator.GEOLOCATION_IMG_ID);
-    img.src = Geolocator.DISABLED_GEOLOCATION_IMG_SRC;
-    this._geolocationControlDiv.title = Geolocator.ENABLE_GEOLOCATION_TITLE;
+    var icon = document.getElementById(Geolocator.GEOLOCATION_ICON_ID);
+    icon.innerText = Geolocator.DISABLED_GEOLOCATION_ICON;
+    this._geolocationControlDiv.title = Geolocator.DISABLED_GEOLOCATION_TITLE;
   }
 
   enableGoToMyLocationControl() {
@@ -147,17 +164,23 @@ class Geolocator {
     }
   }
 
-  /** Creates a div with the style of control elements and with the given image. */
-  createControlDiv(title, imgSrc, imgId) {
+  /**
+   * Creates a div with the style of control elements and with the given image.
+   */
+  createControlDiv(title, iconName, iconId) {
     const controlDiv = document.createElement("div");
     controlDiv.setAttribute('class', 'control');
     controlDiv.title = title;
-    if (imgSrc != null) {
-      const controlImg = document.createElement("img");
-      controlImg.setAttribute('id', imgId);
-      controlImg.src = imgSrc;
-      controlDiv.appendChild(controlImg);
-    }
+    controlDiv.appendChild(Geolocator.createIcon(iconName, iconId));
     return controlDiv;
+  }
+
+  static createIcon(iconName, iconId) {
+    var icon = document.createElement("i");
+    icon.classList.add("mdc-tab__icon", "material-icons");
+    icon.setAttribute("aria-hidden", true);
+    icon.setAttribute("id", iconId);
+    icon.innerText = iconName;
+    return icon;
   }
 }

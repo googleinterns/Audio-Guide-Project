@@ -4,18 +4,85 @@
     box-sizing: border-box;
 }
 
-html, body{
+html, body {
     height: 100%;
 }
 
+.invisible-file-input {
+    display: none;
+}
+
+.visible-file-input {
+    display: block;
+    height: 1px;
+    width: 1px;
+    position: relative;
+    left: 50%;
+    bottom: 3px;
+}
+
+.form-field {
+    display: block;
+    width: 80%;
+    margin: 15px auto;
+}
+
+.left-element {
+  width: 30%;
+  float: left;
+  max-height: 95%;
+  overflow: auto;
+}
+
+.right-element {
+    width: 70%;
+    float: right;
+}
+
+.align-center {
+    text-align: center;
+}
+
+.position-align-center {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+}
+
+.aligned-element
+{
+    vertical-align:middle;
+}
+
+.form-card {
+  position: relative;
+  background-color: #fff;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
+  border-radius: 3px;
+  border: 0px;
+  margin: 10px;
+  padding: 30px 20px;
+  width: 95%;
+  min-width: 250px;
+}
+
 #map {
-    height: 95%; 
+    position: relative;
+    height: 95%;
     margin: 0 auto; 
 }
 
 :root {
   --mdc-theme-primary: green;
-  --mdc-theme-secondary: lime;
+  --mdc-theme-secondary: #80ba83;
+}
+
+.primary-text {
+    color: green;
+}
+
+.mdc-text-field--focused:not(.mdc-text-field--disabled) .mdc-floating-label {
+    color: green;
 }
 
 .control{
@@ -30,7 +97,7 @@ html, body{
     text-align: center;
 }
 
-.control img{
+.control i{
     position: absolute;
     left: 50%;
     top: 50%;
@@ -79,17 +146,33 @@ form img {
 }
 
 #imageDiv {
-  width: 300px;
+  width: 80%;
   min-height: 100px;
-  border: 2px solid #dddddd;
-  display: flex;
+  position: relative;
+  background-color: #fff;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
+  border-radius: 3px;
+  border: 0px;
   align-items: center;
   justify-content: center;
-  font-weight: bold;
-  color: #cccccc;
+  display: flex;
+}
+
+.closer-to-upper-element-form-item {
+  margin: 5px auto 15px auto;
 }
 
 #imagePreview {
   display: none;
   width: 100%;
+}
+
+.clear-img-button {
+    position: absolute;
+    top: 0px;
+    right: 5px;
+}
+
+.form-action-button {
+    width: 235px;
 }

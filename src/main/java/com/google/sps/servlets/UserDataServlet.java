@@ -40,7 +40,7 @@ public class UserDataServlet extends HttpServlet {
   public static final String PUBLIC_PORTFOLIO_INPUT = "publicPortfolio";
   public static final String PUBLIC_PORTFOLIO_INPUT_PUBLIC_VALUE = "public";
   public static final String SELF_INTRODUCTION_INPUT = "selfIntroduction";
-  public static final String IMG_KEY_INPUT = "imgKey";
+  public static final String IMG_KEY_INPUT = "imageKey";
   public static final String DELETE_IMG_INPUT = "deleteImg";
 
   private final UserRepository userRepository =
@@ -79,7 +79,7 @@ public class UserDataServlet extends HttpServlet {
       deleteBlobWithGivenKeyValue(prevUserData.getImgKey());
     }
     userRepository.saveUser(user);
-    response.sendRedirect("/index.html");
+    response.sendRedirect("/myPortfolio.html");
   }
 
   /** Returns the data of the user who is currently logged in. */
@@ -111,8 +111,7 @@ public class UserDataServlet extends HttpServlet {
     if (!selfIntroduction.isEmpty()) {
       newUserBuilder.addSelfIntroduction(selfIntroduction);
     }
-    String publicPortfolioStringValue = request.getParameter(PUBLIC_PORTFOLIO_INPUT);
-    if (publicPortfolioStringValue.equals(PUBLIC_PORTFOLIO_INPUT_PUBLIC_VALUE)) {
+    if (request.getParameter(PUBLIC_PORTFOLIO_INPUT) != null) {
       newUserBuilder.setPublicPortfolio(true); // False by default.
     }
     String imgKey = getUploadedFileBlobKey(request, IMG_KEY_INPUT);

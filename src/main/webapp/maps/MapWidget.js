@@ -3,8 +3,9 @@ class MapWidget {
 
   constructor() {
     var myMapOptions = {
-      zoom: 2,
-      center: new google.maps.LatLng(0, 0),
+      zoom: 13,
+      // The coordinates of the Google Office in Mountain View
+      center: new google.maps.LatLng(37.419857, -122.078827), 
       mapTypeId: 'roadmap',
       restriction: {
         // Set bounds for map so that the user can't pan out.
@@ -16,6 +17,7 @@ class MapWidget {
     };
     this._map = new google.maps.Map(
         document.getElementById('map'), myMapOptions);
+    Geolocator.centerMapAtCurrentLocation(this._map);
   }
 
   get map() {

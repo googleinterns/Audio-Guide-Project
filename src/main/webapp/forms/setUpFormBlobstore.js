@@ -36,38 +36,6 @@ function setFormActionUrl(uploadUrl, formId) {
   form.action = uploadUrl;
 }
 
-/**
- * Sets one form input's value to the given value.
- */
-function setFormInputValue(input, value) {
-  if (value === undefined) {
-    input.value = '';
-  } else {
-    input.value = value;
-  }
-}
-
-function setSrcToElementOnChangeEvent(elementId, previewId, displayBlock) {
-  const element = document.getElementById(elementId);
-  const preview = document.getElementById(previewId);
-  element.addEventListener("change", function() {
-    const file = this.files[0];
-
-    if (file) {
-      const reader = new FileReader();
-      if (displayBlock) {
-        preview.style.display = "block"; 
-      }
-
-      reader.addEventListener("load", function() {
-        preview.setAttribute("src", this.result);
-      });
-
-      reader.readAsDataURL(file);
-    }
-  });
-}
-
 function setBlobKeySrcToElement(blobKey, previewId, displayBlock) {
   const preview = document.getElementById(previewId);
   if (displayBlock) {
