@@ -140,11 +140,11 @@ class PlaceGuideRepository {
   }
 
   removePlaceGuide(placeGuideId) {
+    const thisRepository = this;
     return new Promise(function (resolve, reject) {
       // Remove from database.
-      var url = new URL("/delete-place-guide-data", document.URL);
+      const url = new URL("/delete-place-guide-data", document.URL);
       url.searchParams.append('id', placeGuideId);
-      var thisRepository = this;
       fetch(url)
         .catch(error => {
           console.log("DeletePlaceGuideServlet: failed to fetch: "
@@ -161,8 +161,9 @@ class PlaceGuideRepository {
   }
 
   togglePlaceGuideBookmarkStatus(placeGuideId) {
+    const thisRepository = this;
     return new Promise(function (resolve, reject) {
-      const isBookmarked = this._placeGuides[placeGuideId].bookmarkedByCurrentUser;
+      const isBookmarked = thisRepository._placeGuides[placeGuideId].bookmarkedByCurrentUser;
       // Toogle in database.
       const url = new URL("bookmark-place-guide", document.URL);
       url.searchParams.append("placeGuideId", placeGuideId);
@@ -171,7 +172,6 @@ class PlaceGuideRepository {
       } else {
         url.searchParams.append("bookmarkHandlingType", "BOOKMARK");
       }
-      var thisRepository = this;
       fetch(url)
         .catch(error => {
           console.log("BookmarkPlaceGuideServlet: failed to fetch: "

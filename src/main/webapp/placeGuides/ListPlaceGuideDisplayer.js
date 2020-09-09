@@ -48,10 +48,12 @@ class ListPlaceGuideDisplayer {
       }
     });
 
-    for (var index = 0;index < placeGuideIdsToBeRemoved.length;index++) {
-      this.remove(placeGuideIdsToBeRemoved[index]);
-    }
-    this.addPlaceGuidesToList(placeGuides);
+    // for (var index = 0;index < placeGuideIdsToBeRemoved.length;index++) {
+    //   this.remove(placeGuideIdsToBeRemoved[index]);
+    // }
+    // this.addPlaceGuidesToList(placeGuides);
+    console.log(placeGuideIdsToBeRemoved);
+    console.log(placeGuides);
   }
 
   static extractIdFromDivId(placeGuideDivId) {
