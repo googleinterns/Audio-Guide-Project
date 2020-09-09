@@ -357,6 +357,7 @@ public final class PlaceGuideServletTest {
             testOuterPrivatePlaceGuideD,
             testOuterPublicPlaceGuideD);
     saveTestPlaceGuidesEntities(testPlaceGuidesList);
+
     setupDoGetMockRequest(
         PlaceGuideQueryType.ALL_PUBLIC_IN_MAP_AREA, SOUTH_WEST_CORNER, NORTH_EAST_CORNER);
     PlaceGuideServlet placeGuideServlet = new PlaceGuideServlet(blobstoreService, blobInfoFactory);
@@ -373,62 +374,90 @@ public final class PlaceGuideServletTest {
     assertTrue(compare(expected, result));
   }
 
-  //   @Test
-  //   public void getCreatedPlaceGuidesInMapArea_noExistingPlaceGuides_emptyResult() {
-  //     List<PlaceGuide> result =
-  //         placeGuideRepository.getCreatedPlaceGuidesInMapArea(
-  //             OTHER_USER_ID, NORTH_EAST_CORNER, SOUTH_WEST_CORNER);
-  //     assertTrue(result.isEmpty());
-  //   }
+  @Test
+  public void getCreatedPlaceGuidesInMapArea_noExistingPlaceGuides_emptyResult()
+      throws IOException {
+    setupDoGetMockRequest(
+        PlaceGuideQueryType.CREATED_ALL_IN_MAP_AREA, SOUTH_WEST_CORNER, NORTH_EAST_CORNER);
+    PlaceGuideServlet placeGuideServlet = new PlaceGuideServlet(blobstoreService, blobInfoFactory);
+    placeGuideServlet.doGet(request, response);
 
-  //   @Test
-  //   public void getCreatedPlaceGuidesInMapArea_userDoesntOwnAnyPlaceGuides_emptyResult() {
-  //     List<PlaceGuide> testPlaceGuidesList =
-  //         Arrays.asList(
-  //             testInnerPrivatePlaceGuideC,
-  //             testInnerPublicPlaceGuideC,
-  //             testOuterPrivatePlaceGuideC,
-  //             testOuterPublicPlaceGuideC,
-  //             testInnerPrivatePlaceGuideD,
-  //             testInnerPublicPlaceGuideD,
-  //             testOuterPrivatePlaceGuideD,
-  //             testOuterPublicPlaceGuideD);
-  //     saveTestPlaceGuidesEntities(testPlaceGuidesList);
-  //     List<PlaceGuide> result =
-  //         placeGuideRepository.getCreatedPlaceGuidesInMapArea(
-  //             OTHER_USER_ID, NORTH_EAST_CORNER, SOUTH_WEST_CORNER);
-  //     assertTrue(result.isEmpty());
-  //   }
+    pw.flush();
+    Gson gson = new Gson();
+    List<PlaceGuideInfo> result =
+        Arrays.asList(new GsonBuilder().create().fromJson(sw.toString(), PlaceGuideInfo[].class));
+    List<PlaceGuideInfo> expected = Collections.emptyList();
+    assertTrue(compare(expected, result));
+  }
 
-  //   @Test
-  //   public void
-  // getCreatedPlaceGuidesInMapArea_userOwnsPlaceGuides_resultHasInnerPlaceGuidesOfUser() {
-  //     List<PlaceGuide> testPlaceGuidesList =
-  //         Arrays.asList(
-  //             testInnerPrivatePlaceGuideC,
-  //             testInnerPublicPlaceGuideC,
-  //             testOuterPrivatePlaceGuideC,
-  //             testOuterPublicPlaceGuideC,
-  //             testInnerPrivatePlaceGuideD,
-  //             testInnerPublicPlaceGuideD,
-  //             testOuterPrivatePlaceGuideD,
-  //             testOuterPublicPlaceGuideD);
-  //     saveTestPlaceGuidesEntities(testPlaceGuidesList);
-  //     List<PlaceGuide> result =
-  //         placeGuideRepository.getCreatedPlaceGuidesInMapArea(
-  //             CREATOR_C_ID, NORTH_EAST_CORNER, SOUTH_WEST_CORNER);
-  //     List<PlaceGuide> expected =
-  //         Arrays.asList(testInnerPublicPlaceGuideC, testInnerPrivatePlaceGuideC);
-  //     assertTrue(compare(expected, result));
-  //   }
+  @Test
+  public void getCreatedPlaceGuidesInMapArea_userDoesntOwnAnyPlaceGuides_emptyResult()
+      throws IOException {
+    saveUser(userC);
+    saveUser(userD);
+    List<PlaceGuide> testPlaceGuidesList =
+        Arrays.asList(
+            testOuterPrivatePlaceGuideC,
+            testOuterPublicPlaceGuideC,
+            testInnerPrivatePlaceGuideD,
+            testInnerPublicPlaceGuideD,
+            testOuterPrivatePlaceGuideD,
+            testOuterPublicPlaceGuideD);
+    saveTestPlaceGuidesEntities(testPlaceGuidesList);
 
-  //   @Test
-  //   public void getCreatedPublicPlaceGuidesInMapArea_noExistingPlaceGuides_emptyResult() {
-  //     List<PlaceGuide> result =
-  //         placeGuideRepository.getCreatedPublicPlaceGuidesInMapArea(
-  //             OTHER_USER_ID, NORTH_EAST_CORNER, SOUTH_WEST_CORNER);
-  //     assertTrue(result.isEmpty());
-  //   }
+    setupDoGetMockRequest(
+        PlaceGuideQueryType.CREATED_ALL_IN_MAP_AREA, SOUTH_WEST_CORNER, NORTH_EAST_CORNER);
+    PlaceGuideServlet placeGuideServlet = new PlaceGuideServlet(blobstoreService, blobInfoFactory);
+    placeGuideServlet.doGet(request, response);
+
+    pw.flush();
+    Gson gson = new Gson();
+    List<PlaceGuideInfo> result =
+        Arrays.asList(new GsonBuilder().create().fromJson(sw.toString(), PlaceGuideInfo[].class));
+    List<PlaceGuideInfo> expected = Arrays.asList();
+    assertTrue(compare(expected, result));
+  }
+
+  @Test
+  public void getCreatedPlaceGuidesInMapArea_userOwnsPlaceGuides_resultHasInnerPlaceGuidesOfUser()
+      throws IOException {
+    saveUser(userC);
+    saveUser(userD);
+    List<PlaceGuide> testPlaceGuidesList =
+        Arrays.asList(
+            testInnerPrivatePlaceGuideC,
+            testInnerPublicPlaceGuideC,
+            testOuterPrivatePlaceGuideC,
+            testOuterPublicPlaceGuideC,
+            testInnerPrivatePlaceGuideD,
+            testInnerPublicPlaceGuideD,
+            testOuterPrivatePlaceGuideD,
+            testOuterPublicPlaceGuideD);
+    saveTestPlaceGuidesEntities(testPlaceGuidesList);
+
+    setupDoGetMockRequest(
+        PlaceGuideQueryType.CREATED_ALL_IN_MAP_AREA, SOUTH_WEST_CORNER, NORTH_EAST_CORNER);
+    PlaceGuideServlet placeGuideServlet = new PlaceGuideServlet(blobstoreService, blobInfoFactory);
+    placeGuideServlet.doGet(request, response);
+
+    pw.flush();
+    Gson gson = new Gson();
+    List<PlaceGuideInfo> result =
+        Arrays.asList(new GsonBuilder().create().fromJson(sw.toString(), PlaceGuideInfo[].class));
+    List<PlaceGuideInfo> expected =
+        Arrays.asList(
+            new PlaceGuideInfo(testInnerPublicPlaceGuideC, userC, true, false),
+            new PlaceGuideInfo(testInnerPrivatePlaceGuideC, userC, true, false));
+    assertTrue(compare(expected, result));
+  }
+
+  // @Test
+  // public void getCreatedPublicPlaceGuidesInMapArea_noExistingPlaceGuides_emptyResult() {
+  //   List<PlaceGuide> result =
+  //       placeGuideRepository.getCreatedPublicPlaceGuidesInMapArea(
+  //           OTHER_USER_ID, NORTH_EAST_CORNER, SOUTH_WEST_CORNER);
+  //   assertTrue(result.isEmpty());
+  // }
 
   //   @Test
   //   public void getCreatedPublicPlaceGuidesInMapArea_userDoesntOwnAnyPlaceGuides_emptyResult() {
