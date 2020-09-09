@@ -2,6 +2,7 @@ package com.google.sps.servlets;
 
 import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.google.gson.Gson;
 import com.google.sps.data.RepositoryType;
 import com.google.sps.user.User;
 import com.google.sps.user.repository.UserRepository;
@@ -36,7 +37,9 @@ public class BookmarkPlaceGuideServlet extends HttpServlet {
     String bookmarkHandlingType = request.getParameter(BOOKMARK_HANDLING_TYPE_PARAMETER);
     BookmarkPlaceGuideQueryType queryType =
         BookmarkPlaceGuideQueryType.valueOf(bookmarkHandlingType);
-    togglePlaceGuideBookmark(queryType, placeGuideId);
+    boolean actionSucceded = togglePlaceGuideBookmark(queryType, placeGuideId);
+    response.setContentType("application/json;");
+    response.getWriter().println(convertToJsonUsingGson(Boolean.valueOf(actionSucceded)));
   }
 
   /**
@@ -68,5 +71,11 @@ public class BookmarkPlaceGuideServlet extends HttpServlet {
       default:
         throw new IllegalStateException("Bookmark handling type does not exist!");
     }
+  }
+
+  private String convertToJsonUsingGson(Object o) {
+    Gson gson = new Gson();
+    String json = gson.toJson(o);
+    return json;
   }
 }
