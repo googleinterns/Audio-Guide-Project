@@ -3,6 +3,7 @@ package com.google.sps.servlets;
 import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.sps.data.RepositoryType;
+import com.google.sps.user.User;
 import com.google.sps.user.repository.UserRepository;
 import com.google.sps.user.repository.UserRepositoryFactory;
 import java.io.IOException;
@@ -38,16 +39,25 @@ public class BookmarkPlaceGuideServlet extends HttpServlet {
     togglePlaceGuideBookmark(queryType, placeGuideId);
   }
 
-  private void togglePlaceGuideBookmark(
+  private boolean togglePlaceGuideBookmark(
       BookmarkPlaceGuideQueryType bookmarkPlaceGuideQueryType, long placeGuideId) {
     String userId = UserServiceFactory.getUserService().getCurrentUser().getUserId();
     switch (bookmarkPlaceGuideQueryType) {
       case BOOKMARK:
-        userRepository.bookmarkPlaceGuide(placeGuideId, userId);
-        break;
+        User user = userRepository.getUser(userId);
+        if (user == null) {
+          throw new IllegalStateException("The current user does not exist in the database!");
+        } else {
+          if (user.canBookmarkAnotherPlaceGuide()) {
+            userRepository.bookmarkPlaceGuide(placeGuideId, userId);
+            return true;
+          } else {
+            return false;
+          }
+        }
       case REMOVE:
         userRepository.removeBookmarkedPlaceGuide(placeGuideId, userId);
-        break;
+        return true;
       default:
         throw new IllegalStateException("Bookmark handling type does not exist!");
     }
