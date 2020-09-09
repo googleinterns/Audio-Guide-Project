@@ -35,7 +35,23 @@ public final class PlaceGuideServletTest {
   private BlobInfoFactory blobInfoFactory;
 
   @Before
-  public void setup() {}
+  public void setup() {
+    // Set the userdata that the Userservice will return.
+    attributeToValue.put("com.google.appengine.api.users.UserService.user_id_key", (Object) ID);
+    helper =
+        new LocalServiceTestHelper(
+                new LocalDatastoreServiceTestConfig(), new LocalBlobstoreServiceTestConfig())
+            .setEnvIsLoggedIn(true)
+            .setEnvAuthDomain("localhost")
+            .setEnvEmail(EMAIL)
+            .setEnvAttributes(attributeToValue);
+    helper.setUp();
+
+    request = mock(HttpServletRequest.class);
+    response = mock(HttpServletResponse.class);
+    blobstoreService = mock(BlobstoreService.class);
+    blobInfoFactory = mock(BlobInfoFactory.class);
+  }
 
   @After
   public void tearDown() {
