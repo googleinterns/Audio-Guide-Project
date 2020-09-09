@@ -15,11 +15,20 @@
 package com.google.sps;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
 
 import com.google.appengine.api.blobstore.BlobInfoFactory;
 import com.google.appengine.api.blobstore.BlobstoreService;
 import com.google.appengine.api.datastore.*;
+import com.google.appengine.tools.development.testing.LocalBlobstoreServiceTestConfig;
+import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
+import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
+import com.google.sps.placeGuide.PlaceGuide;
+import com.google.sps.user.User;
 import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.junit.After;
@@ -33,17 +42,148 @@ public final class PlaceGuideServletTest {
   private HttpServletResponse response;
   private BlobstoreService blobstoreService;
   private BlobInfoFactory blobInfoFactory;
+  private LocalServiceTestHelper helper;
+
+  // Creator C data.
+  private static final String ID_USER_C = "idUserC";
+  private static final String EMAIL_USER_C = "emailUserC";
+  private static final String NAME_USER_C = "nameUserC";
+  private static final boolean PUBLIC_PORTFOLIO_USER_C = true;
+  private static final String SELF_INTRODUCTION_USER_C = "selfIntroductionUserC";
+  private static final String IMG_KEY_USER_C = "imgKeyUserC";
+
+  private final User toSaveUser =
+      new User.Builder(ID_USER_C, EMAIL_USER_C)
+          .setBookmarkedPlaceGuidesIds(Collections.emptySet())
+          .setName(NAME_USER_C)
+          .setPublicPortfolio(true)
+          .addSelfIntroduction(SELF_INTRODUCTION_USER_C)
+          .addImgKey(IMG_KEY_USER_C)
+          .build();
+
+  // General placeguide data
+  private static final String NAME = "name";
+  private static final String AUDIO_KEY = "audioKey";
+  private static final String PLACE_ID = "placeId";
+  private static final boolean IS_PUBLIC = true;
+  private static final long LENGTH = new Long(60);
+  private static final String DESCRIPTION = "description";
+  private static final String IMAGE_KEY = "imageKey";
+
+  // PlaceGuides' parameters used for map-related queries, with a region not crossing the IDL.
+  // PlaceGudies of user C.
+  private static final long C_INNER_PUBLIC_ID = 56789;
+  private static final long C_INNER_PRIVATE_ID = 98765;
+  private static final long C_OUTER_PUBLIC_ID = 67890;
+  private static final long C_OUTER_PRIVATE_ID = 9876;
+  private static final String CREATOR_C_ID = "creatorC_Id";
+  private static final GeoPt C_INNER_PUBLIC_COORDINATE = new GeoPt((float) 10, (float) -5);
+  private static final GeoPt C_INNER_PRIVATE_COORDINATE = new GeoPt((float) -14, (float) 14);
+  private static final GeoPt C_OUTER_PUBLIC_COORDINATE = new GeoPt((float) 5, (float) -20);
+  private static final GeoPt C_OUTER_PRIVATE_COORDINATE = new GeoPt((float) -30, (float) -5);
+  // PlaceGudies of user D.
+  private static final long D_INNER_PUBLIC_ID = 567890;
+  private static final long D_INNER_PRIVATE_ID = 987650;
+  private static final long D_OUTER_PUBLIC_ID = 678900;
+  private static final long D_OUTER_PRIVATE_ID = 98760;
+  private static final String CREATOR_D_ID = "creatorD_Id";
+  private static final GeoPt D_INNER_PUBLIC_COORDINATE = new GeoPt((float) 10, (float) 5);
+  private static final GeoPt D_INNER_PRIVATE_COORDINATE = new GeoPt((float) -14, (float) 14);
+  private static final GeoPt D_OUTER_PUBLIC_COORDINATE = new GeoPt((float) 60, (float) 10);
+  private static final GeoPt D_OUTER_PRIVATE_COORDINATE = new GeoPt((float) -10, (float) -45);
+  // Corners of the rectangle for the queried map area.
+  // This is a map area which doesn't cross the IDL.
+  private static final GeoPt NORTH_EAST_CORNER = new GeoPt((float) 15, (float) 15);
+  private static final GeoPt SOUTH_WEST_CORNER = new GeoPt((float) -15, (float) -15);
+
+  private final PlaceGuide testInnerPublicPlaceGuideC =
+      new PlaceGuide.Builder(
+              C_INNER_PUBLIC_ID, NAME, AUDIO_KEY, CREATOR_C_ID, C_INNER_PUBLIC_COORDINATE)
+          .setPlaceId(PLACE_ID)
+          .setPlaceGuideStatus(IS_PUBLIC)
+          .setLength(LENGTH)
+          .setDescription(DESCRIPTION)
+          .setImageKey(IMAGE_KEY)
+          .build();
+
+  private final PlaceGuide testInnerPrivatePlaceGuideC =
+      new PlaceGuide.Builder(
+              C_INNER_PRIVATE_ID, NAME, AUDIO_KEY, CREATOR_C_ID, C_INNER_PRIVATE_COORDINATE)
+          .setPlaceId(PLACE_ID)
+          .setLength(LENGTH)
+          .setDescription(DESCRIPTION)
+          .setImageKey(IMAGE_KEY)
+          .build();
+
+  private final PlaceGuide testOuterPublicPlaceGuideC =
+      new PlaceGuide.Builder(
+              C_OUTER_PUBLIC_ID, NAME, AUDIO_KEY, CREATOR_C_ID, C_OUTER_PUBLIC_COORDINATE)
+          .setPlaceId(PLACE_ID)
+          .setPlaceGuideStatus(IS_PUBLIC)
+          .setLength(LENGTH)
+          .setDescription(DESCRIPTION)
+          .setImageKey(IMAGE_KEY)
+          .build();
+
+  private final PlaceGuide testOuterPrivatePlaceGuideC =
+      new PlaceGuide.Builder(
+              C_OUTER_PRIVATE_ID, NAME, AUDIO_KEY, CREATOR_C_ID, C_OUTER_PUBLIC_COORDINATE)
+          .setPlaceId(PLACE_ID)
+          .setLength(LENGTH)
+          .setDescription(DESCRIPTION)
+          .setImageKey(IMAGE_KEY)
+          .build();
+
+  private final PlaceGuide testInnerPublicPlaceGuideD =
+      new PlaceGuide.Builder(
+              D_INNER_PUBLIC_ID, NAME, AUDIO_KEY, CREATOR_D_ID, D_INNER_PUBLIC_COORDINATE)
+          .setPlaceId(PLACE_ID)
+          .setPlaceGuideStatus(IS_PUBLIC)
+          .setLength(LENGTH)
+          .setDescription(DESCRIPTION)
+          .setImageKey(IMAGE_KEY)
+          .build();
+
+  private final PlaceGuide testInnerPrivatePlaceGuideD =
+      new PlaceGuide.Builder(
+              D_INNER_PRIVATE_ID, NAME, AUDIO_KEY, CREATOR_D_ID, D_INNER_PRIVATE_COORDINATE)
+          .setPlaceId(PLACE_ID)
+          .setLength(LENGTH)
+          .setDescription(DESCRIPTION)
+          .setImageKey(IMAGE_KEY)
+          .build();
+
+  private final PlaceGuide testOuterPublicPlaceGuideD =
+      new PlaceGuide.Builder(
+              D_OUTER_PUBLIC_ID, NAME, AUDIO_KEY, CREATOR_D_ID, D_OUTER_PUBLIC_COORDINATE)
+          .setPlaceId(PLACE_ID)
+          .setPlaceGuideStatus(IS_PUBLIC)
+          .setLength(LENGTH)
+          .setDescription(DESCRIPTION)
+          .setImageKey(IMAGE_KEY)
+          .build();
+
+  private final PlaceGuide testOuterPrivatePlaceGuideD =
+      new PlaceGuide.Builder(
+              D_OUTER_PRIVATE_ID, NAME, AUDIO_KEY, CREATOR_D_ID, D_OUTER_PUBLIC_COORDINATE)
+          .setPlaceId(PLACE_ID)
+          .setLength(LENGTH)
+          .setDescription(DESCRIPTION)
+          .setImageKey(IMAGE_KEY)
+          .build();
 
   @Before
   public void setup() {
     // Set the userdata that the Userservice will return.
-    attributeToValue.put("com.google.appengine.api.users.UserService.user_id_key", (Object) ID);
+    Map<String, Object> attributeToValue = new HashMap<>();
+    attributeToValue.put(
+        "com.google.appengine.api.users.UserService.user_id_key", (Object) CREATOR_C_ID);
     helper =
         new LocalServiceTestHelper(
                 new LocalDatastoreServiceTestConfig(), new LocalBlobstoreServiceTestConfig())
             .setEnvIsLoggedIn(true)
             .setEnvAuthDomain("localhost")
-            .setEnvEmail(EMAIL)
+            .setEnvEmail(EMAIL_USER_C)
             .setEnvAttributes(attributeToValue);
     helper.setUp();
 
