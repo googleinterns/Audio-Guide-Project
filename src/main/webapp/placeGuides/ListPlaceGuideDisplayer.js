@@ -39,14 +39,22 @@ class ListPlaceGuideDisplayer {
   }
 
   update(placeGuides) {
+    const placeGuideIdsToBeRemoved = [];
     this._listPlaceGuideDisplayerDiv.childNodes.forEach(function(placeGuide) {
-      if (!placeGuides.hasOwnProperty(placeGuide.id)) {
-        this.remove(placeGuide.id);
+      if (!placeGuides.hasOwnProperty(ListPlaceGuideDisplayer.extractIdFromDivId(placeGuide.id))) {
+        placeGuideIdsToBeRemoved.push(placeGuide.id);
       } else {
-        delete placeGuides[placeGuide.id];
+        delete placeGuides[ListPlaceGuideDisplayer.extractIdFromDivId(placeGuide.id)];
       }
     });
+    for (var index = 0;index < placeGuideIdsToBeRemoved.length;index++) {
+      this.remove(placeGuideIdsToBeRemoved[index]);
+    }
     this.addPlaceGuidesToList(placeGuides);
+  }
+
+  static extractIdFromDivId(placeGuideDivId) {
+    return Number(placeGuideDivId.slice(18, placeGuideDivId.length - 1));
   }
 
   removeAllPlaceGuidesFromList() {
@@ -71,7 +79,7 @@ class ListPlaceGuideDisplayer {
   remove(placeGuideId) {
     const placeGuideOnListDivId = 
         ListPlaceGuideDisplayer.getPlaceGuideOnListDivId(placeGuideId);
-    const placeGuideDiv = document.getElementById(placeGuideDivId);
+    const placeGuideDiv = document.getElementById(placeGuideOnListDivId);
     if (this._listPlaceGuideDisplayerDiv.contains(placeGuideDiv)) {
       this._listPlaceGuideDisplayerDiv.removeChild(placeGuideDiv);
     }
@@ -84,7 +92,8 @@ class ListPlaceGuideDisplayer {
 
    // Move the highlighted place guide to top of list.
   highlight(placeGuideId) {
-    const placeGuideDiv = this.remove(placeGuideId);
+    const placeGuideDiv = 
+        this.remove(placeGuideId);
     this.insertDivAfterTitle(placeGuideDiv);
     PlaceGuideOnList.highlight(placeGuideId);
   }
@@ -141,8 +150,8 @@ class ListPlaceGuideDisplayer {
     listTitleDiv.appendChild(listTitleElement);
 
     const listSubtitleElement = document.createElement("p");
-    listSubtitleElement.innerText = "in selected map area";
-    listTitleDiv.appendChild(placeGuideDisplayHeading.listSubTitle);
+    listSubtitleElement.innerText = placeGuideDisplayHeading.listSubTitle;
+    listTitleDiv.appendChild(listSubtitleElement);
     return listTitleDiv;
   }
 

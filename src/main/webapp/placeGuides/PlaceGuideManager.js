@@ -59,7 +59,7 @@ class PlaceGuideManager {
   }
 
   removePlaceGuide(placeGuideId) {
-    this._placeGuideRepository.remove(placeGuideId)
+    this._placeGuideRepository.removePlaceGuide(placeGuideId)
       .then((response) => {
         if(response) {
           this.removePlaceGuideRepresentation(placeGuideId);
