@@ -46,7 +46,18 @@ public class PlaceGuideInfo {
     }
     this.bookmarkedByCurrentUser =
         currentUser.getBookmarkedPlaceGuidesIds().contains(this.placeGuide.getId());
-    this.createdByCurrentUser = this.placeGuide.getCreatorId() == currentUserId;
+    this.createdByCurrentUser = this.placeGuide.getCreatorId().equals(currentUserId);
+  }
+
+  public PlaceGuideInfo(
+      PlaceGuide placeGuide,
+      User creator,
+      boolean createdByCurrentUser,
+      boolean bookmarkedByCurrentUser) {
+    this.placeGuide = placeGuide;
+    this.creator = creator;
+    this.createdByCurrentUser = createdByCurrentUser;
+    this.bookmarkedByCurrentUser = bookmarkedByCurrentUser;
   }
 
   public User getCreator() {
