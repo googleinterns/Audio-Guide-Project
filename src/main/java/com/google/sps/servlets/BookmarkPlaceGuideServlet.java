@@ -39,6 +39,13 @@ public class BookmarkPlaceGuideServlet extends HttpServlet {
     togglePlaceGuideBookmark(queryType, placeGuideId);
   }
 
+  /**
+   * This functions handles the bookmarking/unbookmarking of the placeguide with id = @param
+   * placeGuideId by the cuurent user. If the user unbookmarked a placeguide, it will for sure
+   * succeed. if the user bookmarked a placeguide, then the operation will succeed only if the user
+   * didn't reach the limit for the maximum number of bookmarked placeguides before. The function
+   * returns true if the operation succeded, and false otherwise.
+   */
   private boolean togglePlaceGuideBookmark(
       BookmarkPlaceGuideQueryType bookmarkPlaceGuideQueryType, long placeGuideId) {
     String userId = UserServiceFactory.getUserService().getCurrentUser().getUserId();
