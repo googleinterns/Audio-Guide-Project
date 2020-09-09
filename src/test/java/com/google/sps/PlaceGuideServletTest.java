@@ -24,9 +24,12 @@ import com.google.appengine.api.datastore.*;
 import com.google.appengine.tools.development.testing.LocalBlobstoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.sps.data.PlaceGuideQueryType;
 import com.google.sps.placeGuide.PlaceGuide;
 import com.google.sps.placeGuide.repository.impl.DatastorePlaceGuideRepository;
+import com.google.sps.placeGuideInfo.PlaceGuideInfo;
 import com.google.sps.servlets.PlaceGuideServlet;
 import com.google.sps.user.User;
 import com.google.sps.user.repository.impl.DatastoreUserRepository;
@@ -53,6 +56,8 @@ public final class PlaceGuideServletTest {
   private BlobInfoFactory blobInfoFactory;
   private LocalServiceTestHelper helper;
   private DatastoreService datastore;
+  private StringWriter sw;
+  private PrintWriter pw;
 
   // Creator C data.
   private static final String ID_USER_C = "idUserC";
@@ -62,13 +67,30 @@ public final class PlaceGuideServletTest {
   private static final String SELF_INTRODUCTION_USER_C = "selfIntroductionUserC";
   private static final String IMG_KEY_USER_C = "imgKeyUserC";
 
-  private final User toSaveUser =
+  private final User userC =
       new User.Builder(ID_USER_C, EMAIL_USER_C)
           .setBookmarkedPlaceGuidesIds(Collections.emptySet())
           .setName(NAME_USER_C)
           .setPublicPortfolio(true)
           .addSelfIntroduction(SELF_INTRODUCTION_USER_C)
           .addImgKey(IMG_KEY_USER_C)
+          .build();
+
+  // Creator D data.
+  private static final String ID_USER_D = "idUserD";
+  private static final String EMAIL_USER_D = "emailUserD";
+  private static final String NAME_USER_D = "nameUserD";
+  private static final boolean PUBLIC_PORTFOLIO_USER_D = true;
+  private static final String SELF_INTRODUCTION_USER_D = "selfIntroductionUserD";
+  private static final String IMG_KEY_USER_D = "imgKeyUserD";
+
+  private final User userD =
+      new User.Builder(ID_USER_D, EMAIL_USER_D)
+          .setBookmarkedPlaceGuidesIds(Collections.emptySet())
+          .setName(NAME_USER_D)
+          .setPublicPortfolio(true)
+          .addSelfIntroduction(SELF_INTRODUCTION_USER_D)
+          .addImgKey(IMG_KEY_USER_D)
           .build();
 
   // General placeguide data
@@ -86,7 +108,7 @@ public final class PlaceGuideServletTest {
   private static final long C_INNER_PRIVATE_ID = 98765;
   private static final long C_OUTER_PUBLIC_ID = 67890;
   private static final long C_OUTER_PRIVATE_ID = 9876;
-  private static final String CREATOR_C_ID = "creatorC_Id";
+  private static final String CREATOR_C_ID = ID_USER_C;
   private static final GeoPt C_INNER_PUBLIC_COORDINATE = new GeoPt((float) 10, (float) -5);
   private static final GeoPt C_INNER_PRIVATE_COORDINATE = new GeoPt((float) -14, (float) 14);
   private static final GeoPt C_OUTER_PUBLIC_COORDINATE = new GeoPt((float) 5, (float) -20);
@@ -96,7 +118,7 @@ public final class PlaceGuideServletTest {
   private static final long D_INNER_PRIVATE_ID = 987650;
   private static final long D_OUTER_PUBLIC_ID = 678900;
   private static final long D_OUTER_PRIVATE_ID = 98760;
-  private static final String CREATOR_D_ID = "creatorD_Id";
+  private static final String CREATOR_D_ID = ID_USER_D;
   private static final GeoPt D_INNER_PUBLIC_COORDINATE = new GeoPt((float) 10, (float) 5);
   private static final GeoPt D_INNER_PRIVATE_COORDINATE = new GeoPt((float) -14, (float) 14);
   private static final GeoPt D_OUTER_PUBLIC_COORDINATE = new GeoPt((float) 60, (float) 10);
@@ -212,7 +234,6 @@ public final class PlaceGuideServletTest {
   }
 
   private void saveUser(User user) {
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(getUserEntity(user));
   }
 
@@ -247,9 +268,40 @@ public final class PlaceGuideServletTest {
         .thenReturn(queryType.toString());
     when(request.getParameter(PlaceGuideServlet.REGION_CORNERS_PARAMETER))
         .thenReturn(getRegionCornersString(southWestCorner, northEastCorner));
-    StringWriter sw = new StringWriter();
-    PrintWriter pw = new PrintWriter(sw);
+    sw = new StringWriter();
+    pw = new PrintWriter(sw);
     when(response.getWriter()).thenReturn(pw);
+  }
+
+  private boolean placeGuideInfoEquals(PlaceGuideInfo a, PlaceGuideInfo b) {
+    return a.getPlaceGuide().getId() == b.getPlaceGuide().getId()
+        && a.getCreator().equals(b.getCreator())
+        && a.isCreatedByCurrentUser() == b.isCreatedByCurrentUser()
+        && a.isBookmarkedByCurrentUser() == b.isBookmarkedByCurrentUser();
+  }
+
+  // Find out if the 2 lists of placeguides are equal.
+  private boolean compare(List<PlaceGuideInfo> a, List<PlaceGuideInfo> b) {
+    List<PlaceGuideInfo> b_copy = new ArrayList<>(b);
+    if (a.size() != b_copy.size()) {
+      return false;
+    }
+    for (PlaceGuideInfo a_pg_info : a) {
+      boolean hasEqual = false;
+      int index_b_copy = 0;
+      while (index_b_copy < b_copy.size()) {
+        if (placeGuideInfoEquals(a_pg_info, b_copy.get(index_b_copy))) {
+          hasEqual = true;
+          b_copy.remove(index_b_copy);
+          break;
+        }
+        index_b_copy++;
+      }
+      if (!hasEqual) {
+        return false;
+      }
+    }
+    return true;
   }
 
   @Before
@@ -257,7 +309,7 @@ public final class PlaceGuideServletTest {
     // Set the userdata that the Userservice will return.
     Map<String, Object> attributeToValue = new HashMap<>();
     attributeToValue.put(
-        "com.google.appengine.api.users.UserService.user_id_key", (Object) CREATOR_C_ID);
+        "com.google.appengine.api.users.UserService.user_id_key", (Object) ID_USER_C);
     helper =
         new LocalServiceTestHelper(
                 new LocalDatastoreServiceTestConfig(), new LocalBlobstoreServiceTestConfig())
@@ -275,10 +327,25 @@ public final class PlaceGuideServletTest {
   }
 
   @Test
-  public void doGet_ALL_PUBLIC_IN_MAP_AREA_noExistingPlaceGuides_emptyResult() {}
+  public void doGet_ALL_PUBLIC_IN_MAP_AREA_noExistingPlaceGuides_emptyResult() throws IOException {
+    setupDoGetMockRequest(
+        PlaceGuideQueryType.ALL_PUBLIC_IN_MAP_AREA, SOUTH_WEST_CORNER, NORTH_EAST_CORNER);
+    PlaceGuideServlet placeGuideServlet = new PlaceGuideServlet(blobstoreService, blobInfoFactory);
+    placeGuideServlet.doGet(request, response);
+
+    pw.flush();
+    Gson gson = new Gson();
+    List<PlaceGuideInfo> result =
+        Arrays.asList(new GsonBuilder().create().fromJson(sw.toString(), PlaceGuideInfo[].class));
+    List<PlaceGuideInfo> expected = Collections.emptyList();
+    assertTrue(compare(expected, result));
+  }
 
   @Test
-  public void doGet_ALL_PUBLIC_IN_MAP_AREA_placeGuidesExist_resultHasInnerPublicPlaceGuides() {
+  public void doGet_ALL_PUBLIC_IN_MAP_AREA_placeGuidesExist_resultHasInnerPublicPlaceGuides()
+      throws IOException {
+    saveUser(userC);
+    saveUser(userD);
     List<PlaceGuide> testPlaceGuidesList =
         Arrays.asList(
             testInnerPrivatePlaceGuideC,
@@ -290,12 +357,20 @@ public final class PlaceGuideServletTest {
             testOuterPrivatePlaceGuideD,
             testOuterPublicPlaceGuideD);
     saveTestPlaceGuidesEntities(testPlaceGuidesList);
-    // List<PlaceGuide> result =
-    //     placeGuideRepository.getAllPublicPlaceGuidesInMapArea(
-    //         NORTH_EAST_CORNER, SOUTH_WEST_CORNER);
-    // List<PlaceGuide> expected =
-    //     Arrays.asList(testInnerPublicPlaceGuideC, testInnerPublicPlaceGuideD);
-    // assertTrue(compare(expected, result));
+    setupDoGetMockRequest(
+        PlaceGuideQueryType.ALL_PUBLIC_IN_MAP_AREA, SOUTH_WEST_CORNER, NORTH_EAST_CORNER);
+    PlaceGuideServlet placeGuideServlet = new PlaceGuideServlet(blobstoreService, blobInfoFactory);
+    placeGuideServlet.doGet(request, response);
+
+    pw.flush();
+    Gson gson = new Gson();
+    List<PlaceGuideInfo> result =
+        Arrays.asList(new GsonBuilder().create().fromJson(sw.toString(), PlaceGuideInfo[].class));
+    List<PlaceGuideInfo> expected =
+        Arrays.asList(
+            new PlaceGuideInfo(testInnerPublicPlaceGuideC, userC, true, false),
+            new PlaceGuideInfo(testInnerPublicPlaceGuideD, userD, false, false));
+    assertTrue(compare(expected, result));
   }
 
   //   @Test
