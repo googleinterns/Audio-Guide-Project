@@ -85,14 +85,14 @@ class ListPlaceGuideDisplayer {
    // Move the highlighted place guide to top of list.
   highlight(placeGuideId) {
     const placeGuideDiv = this.remove(placeGuideId);
-    this._listPlaceGuideDisplayerDiv.removeChild(
-        document.getElementById("listTitle"));
-    this._listPlaceGuideDisplayerDiv.insertBefore(
-        placeGuideDiv, this._listPlaceGuideDisplayerDiv.firstChild);
-    this._listPlaceGuideDisplayerDiv.insertBefore(
-        this.createListTitle(ListPlaceGuideDisplayer.PAGE[this.page.name]), 
-        this._listPlaceGuideDisplayerDiv.firstChild);
+    this.insertDivAfterTitle(placeGuideDiv);
     PlaceGuideOnList.highlight(placeGuideId);
+  }
+
+  insertDivAfterTitle(placeGuideDiv) {
+    this._listPlaceGuideDisplayerDiv.insertBefore(
+        placeGuideDiv, 
+        this._listPlaceGuideDisplayerDiv.firstChild.nextSibling);
   }
 
   unhighlight(placeGuideId) {
