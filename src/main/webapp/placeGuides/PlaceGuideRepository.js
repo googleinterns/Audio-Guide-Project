@@ -140,11 +140,11 @@ class PlaceGuideRepository {
   }
 
   removePlaceGuide(placeGuideId) {
+    const thisRepository = this;
     return new Promise(function (resolve, reject) {
       // Remove from database.
-      var url = new URL("/delete-place-guide-data", document.URL);
+      const url = new URL("/delete-place-guide-data", document.URL);
       url.searchParams.append('id', placeGuideId);
-      var thisRepository = this;
       fetch(url)
         .catch(error => {
           console.log("DeletePlaceGuideServlet: failed to fetch: "
