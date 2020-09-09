@@ -47,6 +47,7 @@ class ListPlaceGuideDisplayer {
         delete placeGuides[ListPlaceGuideDisplayer.extractIdFromDivId(placeGuide.id)];
       }
     });
+
     for (var index = 0;index < placeGuideIdsToBeRemoved.length;index++) {
       this.remove(placeGuideIdsToBeRemoved[index]);
     }
