@@ -25,13 +25,8 @@ function initPage() {
       mapWidget.addGeolocationFunctionality();
       mapWidget.addLocationChoosingAndSavingFunctionality();
       map = mapWidget.map;
-      const placeGuideRepository =
-          new PlaceGuideRepository(
-              PlaceGuideRepository.QueryType.CREATED_ALL_IN_MAP_AREA);
-      placeGuideManager = new PlaceGuideManager(placeGuideRepository);
-      google.maps.event.addListener(map, 'idle', function () {
-        placeGuideManager.update(map.getBounds(), map.getZoom(), false);
-      });
+      placeGuideManager = new PlaceGuideManager(
+          PlaceGuideManager.PAGE.CREATE_PLACE_GUIDE, map);
       document.getElementById("map")
           .addEventListener(MapWidget.CHOSEN_LOCATION_CHANGE_EVENT, function () {
             handleChosenLocationChangeEvent(mapWidget);
