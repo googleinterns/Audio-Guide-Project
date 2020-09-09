@@ -161,8 +161,9 @@ class PlaceGuideRepository {
   }
 
   togglePlaceGuideBookmarkStatus(placeGuideId) {
+    const thisRepository = this;
     return new Promise(function (resolve, reject) {
-      const isBookmarked = this._placeGuides[placeGuideId].bookmarkedByCurrentUser;
+      const isBookmarked = thisRepository._placeGuides[placeGuideId].bookmarkedByCurrentUser;
       // Toogle in database.
       const url = new URL("bookmark-place-guide", document.URL);
       url.searchParams.append("placeGuideId", placeGuideId);
@@ -171,7 +172,6 @@ class PlaceGuideRepository {
       } else {
         url.searchParams.append("bookmarkHandlingType", "BOOKMARK");
       }
-      var thisRepository = this;
       fetch(url)
         .catch(error => {
           console.log("BookmarkPlaceGuideServlet: failed to fetch: "
