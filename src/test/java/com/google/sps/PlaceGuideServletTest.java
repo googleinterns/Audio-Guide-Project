@@ -16,6 +16,7 @@ package com.google.sps;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import com.google.appengine.api.blobstore.BlobInfoFactory;
 import com.google.appengine.api.blobstore.BlobstoreService;
@@ -23,10 +24,15 @@ import com.google.appengine.api.datastore.*;
 import com.google.appengine.tools.development.testing.LocalBlobstoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
+import com.google.sps.data.PlaceGuideQueryType;
 import com.google.sps.placeGuide.PlaceGuide;
 import com.google.sps.placeGuide.repository.impl.DatastorePlaceGuideRepository;
+import com.google.sps.servlets.PlaceGuideServlet;
 import com.google.sps.user.User;
 import com.google.sps.user.repository.impl.DatastoreUserRepository;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.*;
 import java.util.Collections;
 import java.util.HashMap;
@@ -35,6 +41,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
@@ -224,6 +231,27 @@ public final class PlaceGuideServletTest {
     return userEntity;
   }
 
+  private String getRegionCornersString(GeoPt southWestCorner, GeoPt northEastCorner) {
+    return String.format(
+        "%f,%f,%f,%f",
+        southWestCorner.getLatitude(),
+        southWestCorner.getLongitude(),
+        northEastCorner.getLatitude(),
+        northEastCorner.getLongitude());
+  }
+
+  private void setupDoGetMockRequest(
+      PlaceGuideQueryType queryType, GeoPt southWestCorner, GeoPt northEastCorner)
+      throws IOException {
+    when(request.getParameter(PlaceGuideServlet.PLACE_GUIDE_QUERY_TYPE_PARAMETER))
+        .thenReturn(queryType.toString());
+    when(request.getParameter(PlaceGuideServlet.REGION_CORNERS_PARAMETER))
+        .thenReturn(getRegionCornersString(southWestCorner, northEastCorner));
+    StringWriter sw = new StringWriter();
+    PrintWriter pw = new PrintWriter(sw);
+    when(response.getWriter()).thenReturn(pw);
+  }
+
   @Before
   public void setup() {
     // Set the userdata that the Userservice will return.
@@ -245,6 +273,370 @@ public final class PlaceGuideServletTest {
     blobstoreService = mock(BlobstoreService.class);
     blobInfoFactory = mock(BlobInfoFactory.class);
   }
+
+  @Test
+  public void doGet_ALL_PUBLIC_IN_MAP_AREA_noExistingPlaceGuides_emptyResult() {}
+
+  @Test
+  public void doGet_ALL_PUBLIC_IN_MAP_AREA_placeGuidesExist_resultHasInnerPublicPlaceGuides() {
+    List<PlaceGuide> testPlaceGuidesList =
+        Arrays.asList(
+            testInnerPrivatePlaceGuideC,
+            testInnerPublicPlaceGuideC,
+            testOuterPrivatePlaceGuideC,
+            testOuterPublicPlaceGuideC,
+            testInnerPrivatePlaceGuideD,
+            testInnerPublicPlaceGuideD,
+            testOuterPrivatePlaceGuideD,
+            testOuterPublicPlaceGuideD);
+    saveTestPlaceGuidesEntities(testPlaceGuidesList);
+    // List<PlaceGuide> result =
+    //     placeGuideRepository.getAllPublicPlaceGuidesInMapArea(
+    //         NORTH_EAST_CORNER, SOUTH_WEST_CORNER);
+    // List<PlaceGuide> expected =
+    //     Arrays.asList(testInnerPublicPlaceGuideC, testInnerPublicPlaceGuideD);
+    // assertTrue(compare(expected, result));
+  }
+
+  //   @Test
+  //   public void getCreatedPlaceGuidesInMapArea_noExistingPlaceGuides_emptyResult() {
+  //     List<PlaceGuide> result =
+  //         placeGuideRepository.getCreatedPlaceGuidesInMapArea(
+  //             OTHER_USER_ID, NORTH_EAST_CORNER, SOUTH_WEST_CORNER);
+  //     assertTrue(result.isEmpty());
+  //   }
+
+  //   @Test
+  //   public void getCreatedPlaceGuidesInMapArea_userDoesntOwnAnyPlaceGuides_emptyResult() {
+  //     List<PlaceGuide> testPlaceGuidesList =
+  //         Arrays.asList(
+  //             testInnerPrivatePlaceGuideC,
+  //             testInnerPublicPlaceGuideC,
+  //             testOuterPrivatePlaceGuideC,
+  //             testOuterPublicPlaceGuideC,
+  //             testInnerPrivatePlaceGuideD,
+  //             testInnerPublicPlaceGuideD,
+  //             testOuterPrivatePlaceGuideD,
+  //             testOuterPublicPlaceGuideD);
+  //     saveTestPlaceGuidesEntities(testPlaceGuidesList);
+  //     List<PlaceGuide> result =
+  //         placeGuideRepository.getCreatedPlaceGuidesInMapArea(
+  //             OTHER_USER_ID, NORTH_EAST_CORNER, SOUTH_WEST_CORNER);
+  //     assertTrue(result.isEmpty());
+  //   }
+
+  //   @Test
+  //   public void
+  // getCreatedPlaceGuidesInMapArea_userOwnsPlaceGuides_resultHasInnerPlaceGuidesOfUser() {
+  //     List<PlaceGuide> testPlaceGuidesList =
+  //         Arrays.asList(
+  //             testInnerPrivatePlaceGuideC,
+  //             testInnerPublicPlaceGuideC,
+  //             testOuterPrivatePlaceGuideC,
+  //             testOuterPublicPlaceGuideC,
+  //             testInnerPrivatePlaceGuideD,
+  //             testInnerPublicPlaceGuideD,
+  //             testOuterPrivatePlaceGuideD,
+  //             testOuterPublicPlaceGuideD);
+  //     saveTestPlaceGuidesEntities(testPlaceGuidesList);
+  //     List<PlaceGuide> result =
+  //         placeGuideRepository.getCreatedPlaceGuidesInMapArea(
+  //             CREATOR_C_ID, NORTH_EAST_CORNER, SOUTH_WEST_CORNER);
+  //     List<PlaceGuide> expected =
+  //         Arrays.asList(testInnerPublicPlaceGuideC, testInnerPrivatePlaceGuideC);
+  //     assertTrue(compare(expected, result));
+  //   }
+
+  //   @Test
+  //   public void getCreatedPublicPlaceGuidesInMapArea_noExistingPlaceGuides_emptyResult() {
+  //     List<PlaceGuide> result =
+  //         placeGuideRepository.getCreatedPublicPlaceGuidesInMapArea(
+  //             OTHER_USER_ID, NORTH_EAST_CORNER, SOUTH_WEST_CORNER);
+  //     assertTrue(result.isEmpty());
+  //   }
+
+  //   @Test
+  //   public void getCreatedPublicPlaceGuidesInMapArea_userDoesntOwnAnyPlaceGuides_emptyResult() {
+  //     List<PlaceGuide> testPlaceGuidesList =
+  //         Arrays.asList(
+  //             testInnerPrivatePlaceGuideC,
+  //             testInnerPublicPlaceGuideC,
+  //             testOuterPrivatePlaceGuideC,
+  //             testOuterPublicPlaceGuideC,
+  //             testInnerPrivatePlaceGuideD,
+  //             testInnerPublicPlaceGuideD,
+  //             testOuterPrivatePlaceGuideD,
+  //             testOuterPublicPlaceGuideD);
+  //     saveTestPlaceGuidesEntities(testPlaceGuidesList);
+  //     List<PlaceGuide> result =
+  //         placeGuideRepository.getCreatedPublicPlaceGuidesInMapArea(
+  //             OTHER_USER_ID, NORTH_EAST_CORNER, SOUTH_WEST_CORNER);
+  //     assertTrue(result.isEmpty());
+  //   }
+
+  //   @Test
+  //   public void
+  //
+  // getCreatedPublicPlaceGuidesInMapArea_userOwnsPlaceGuides_resultHasInnerPublicPlaceGuidesOfUser() {
+  //     List<PlaceGuide> testPlaceGuidesList =
+  //         Arrays.asList(
+  //             testInnerPrivatePlaceGuideC,
+  //             testInnerPublicPlaceGuideC,
+  //             testOuterPrivatePlaceGuideC,
+  //             testOuterPublicPlaceGuideC,
+  //             testInnerPrivatePlaceGuideD,
+  //             testInnerPublicPlaceGuideD,
+  //             testOuterPrivatePlaceGuideD,
+  //             testOuterPublicPlaceGuideD);
+  //     saveTestPlaceGuidesEntities(testPlaceGuidesList);
+  //     List<PlaceGuide> result =
+  //         placeGuideRepository.getCreatedPublicPlaceGuidesInMapArea(
+  //             CREATOR_C_ID, NORTH_EAST_CORNER, SOUTH_WEST_CORNER);
+  //     List<PlaceGuide> expected = Arrays.asList(testInnerPublicPlaceGuideC);
+  //     assertTrue(compare(expected, result));
+  //   }
+
+  //   @Test
+  //   public void getCreatedPrivatePlaceGuidesInMapArea_noExistingPlaceGuides_emptyResult() {
+  //     List<PlaceGuide> result =
+  //         placeGuideRepository.getCreatedPrivatePlaceGuidesInMapArea(
+  //             OTHER_USER_ID, NORTH_EAST_CORNER, SOUTH_WEST_CORNER);
+  //     assertTrue(result.isEmpty());
+  //   }
+
+  //   @Test
+  //   public void getCreatedPrivatePlaceGuidesInMapArea_userDoesntOwnAnyPlaceGuides_emptyResult() {
+  //     List<PlaceGuide> testPlaceGuidesList =
+  //         Arrays.asList(
+  //             testInnerPrivatePlaceGuideC,
+  //             testInnerPublicPlaceGuideC,
+  //             testOuterPrivatePlaceGuideC,
+  //             testOuterPublicPlaceGuideC,
+  //             testInnerPrivatePlaceGuideD,
+  //             testInnerPublicPlaceGuideD,
+  //             testOuterPrivatePlaceGuideD,
+  //             testOuterPublicPlaceGuideD);
+  //     saveTestPlaceGuidesEntities(testPlaceGuidesList);
+  //     List<PlaceGuide> result =
+  //         placeGuideRepository.getCreatedPrivatePlaceGuidesInMapArea(
+  //             OTHER_USER_ID, NORTH_EAST_CORNER, SOUTH_WEST_CORNER);
+  //     assertTrue(result.isEmpty());
+  //   }
+
+  //   @Test
+  //   public void
+  //
+  // getCreatedPrivatePlaceGuidesInMapArea_userOwnsPlaceGuides_resultHasInnerPublicPlaceGuidesOfUser() {
+  //     List<PlaceGuide> testPlaceGuidesList =
+  //         Arrays.asList(
+  //             testInnerPrivatePlaceGuideC,
+  //             testInnerPublicPlaceGuideC,
+  //             testOuterPrivatePlaceGuideC,
+  //             testOuterPublicPlaceGuideC,
+  //             testInnerPrivatePlaceGuideD,
+  //             testInnerPublicPlaceGuideD,
+  //             testOuterPrivatePlaceGuideD,
+  //             testOuterPublicPlaceGuideD);
+  //     saveTestPlaceGuidesEntities(testPlaceGuidesList);
+  //     List<PlaceGuide> result =
+  //         placeGuideRepository.getCreatedPrivatePlaceGuidesInMapArea(
+  //             CREATOR_C_ID, NORTH_EAST_CORNER, SOUTH_WEST_CORNER);
+  //     List<PlaceGuide> expected = Arrays.asList(testInnerPrivatePlaceGuideC);
+  //     assertTrue(compare(expected, result));
+  //   }
+
+  //   @Test
+  //   public void getAllPublicPlaceGuidesInMapArea_noExistingPlaceGuides_areaWithIDL_emptyResult()
+  // {
+  //     List<PlaceGuide> result =
+  //         placeGuideRepository.getAllPublicPlaceGuidesInMapArea(
+  //             NORTH_EAST_CORNER_WITH_IDL, SOUTH_WEST_CORNER_WITH_IDL);
+  //     assertTrue(result.isEmpty());
+  //   }
+
+  //   @Test
+  //   public void
+  //
+  // getAllPublicPlaceGuidesInMapArea_placeGuidesExist_areaWithIDL_resultHasInnerPublicPlaceGuides()
+  // {
+  //     List<PlaceGuide> testPlaceGuidesList =
+  //         Arrays.asList(
+  //             testInnerPrivatePlaceGuideE,
+  //             testInnerPublicPlaceGuideE,
+  //             testOuterPrivatePlaceGuideE,
+  //             testOuterPublicPlaceGuideE,
+  //             testInnerPrivatePlaceGuideF,
+  //             testInnerPublicPlaceGuideF,
+  //             testOuterPrivatePlaceGuideF,
+  //             testOuterPublicPlaceGuideF);
+  //     saveTestPlaceGuidesEntities(testPlaceGuidesList);
+  //     List<PlaceGuide> result =
+  //         placeGuideRepository.getAllPublicPlaceGuidesInMapArea(
+  //             NORTH_EAST_CORNER_WITH_IDL, SOUTH_WEST_CORNER_WITH_IDL);
+  //     List<PlaceGuide> expected =
+  //         Arrays.asList(testInnerPublicPlaceGuideE, testInnerPublicPlaceGuideF);
+  //     System.out.println("!!!Result is:");
+  //     for (PlaceGuide placeGuide : result) {
+  //       System.out.println(
+  //           placeGuide.getId() + " with coordinates: " + placeGuide.getCoordinate().toString());
+  //     }
+  //     assertTrue(compare(expected, result));
+  //   }
+
+  //   @Test
+  //   public void getCreatedPlaceGuidesInMapArea_noExistingPlaceGuides_areaWithIDL_emptyResult() {
+  //     List<PlaceGuide> result =
+  //         placeGuideRepository.getCreatedPlaceGuidesInMapArea(
+  //             OTHER_USER_ID, NORTH_EAST_CORNER_WITH_IDL, SOUTH_WEST_CORNER_WITH_IDL);
+  //     assertTrue(result.isEmpty());
+  //   }
+
+  //   @Test
+  //   public void
+  // getCreatedPlaceGuidesInMapArea_userDoesntOwnAnyPlaceGuides_areaWithIDL_emptyResult() {
+  //     List<PlaceGuide> testPlaceGuidesList =
+  //         Arrays.asList(
+  //             testInnerPrivatePlaceGuideE,
+  //             testInnerPublicPlaceGuideE,
+  //             testOuterPrivatePlaceGuideE,
+  //             testOuterPublicPlaceGuideE,
+  //             testInnerPrivatePlaceGuideF,
+  //             testInnerPublicPlaceGuideF,
+  //             testOuterPrivatePlaceGuideF,
+  //             testOuterPublicPlaceGuideF);
+  //     saveTestPlaceGuidesEntities(testPlaceGuidesList);
+  //     List<PlaceGuide> result =
+  //         placeGuideRepository.getCreatedPlaceGuidesInMapArea(
+  //             OTHER_USER_ID, NORTH_EAST_CORNER_WITH_IDL, SOUTH_WEST_CORNER_WITH_IDL);
+  //     assertTrue(result.isEmpty());
+  //   }
+
+  //   @Test
+  //   public void
+  //
+  // getCreatedPlaceGuidesInMapArea_userOwnsPlaceGuides_areaWithIDL_resultHasInnerPlaceGuidesOfUser() {
+  //     List<PlaceGuide> testPlaceGuidesList =
+  //         Arrays.asList(
+  //             testInnerPrivatePlaceGuideE,
+  //             testInnerPublicPlaceGuideE,
+  //             testOuterPrivatePlaceGuideE,
+  //             testOuterPublicPlaceGuideE,
+  //             testInnerPrivatePlaceGuideF,
+  //             testInnerPublicPlaceGuideF,
+  //             testOuterPrivatePlaceGuideF,
+  //             testOuterPublicPlaceGuideF);
+  //     saveTestPlaceGuidesEntities(testPlaceGuidesList);
+  //     List<PlaceGuide> result =
+  //         placeGuideRepository.getCreatedPlaceGuidesInMapArea(
+  //             CREATOR_E_ID, NORTH_EAST_CORNER_WITH_IDL, SOUTH_WEST_CORNER_WITH_IDL);
+  //     List<PlaceGuide> expected =
+  //         Arrays.asList(testInnerPublicPlaceGuideE, testInnerPrivatePlaceGuideE);
+  //     assertTrue(compare(expected, result));
+  //   }
+
+  //   @Test
+  //   public void
+  // getCreatedPublicPlaceGuidesInMapArea_noExistingPlaceGuides_areaWithIDL_emptyResult() {
+  //     List<PlaceGuide> result =
+  //         placeGuideRepository.getCreatedPublicPlaceGuidesInMapArea(
+  //             OTHER_USER_ID, NORTH_EAST_CORNER_WITH_IDL, SOUTH_WEST_CORNER_WITH_IDL);
+  //     assertTrue(result.isEmpty());
+  //   }
+
+  //   @Test
+  //   public void
+  //
+  // getCreatedPublicPlaceGuidesInMapArea_userDoesntOwnAnyPlaceGuides_areaWithIDL_emptyResult() {
+  //     List<PlaceGuide> testPlaceGuidesList =
+  //         Arrays.asList(
+  //             testInnerPrivatePlaceGuideE,
+  //             testInnerPublicPlaceGuideE,
+  //             testOuterPrivatePlaceGuideE,
+  //             testOuterPublicPlaceGuideE,
+  //             testInnerPrivatePlaceGuideF,
+  //             testInnerPublicPlaceGuideF,
+  //             testOuterPrivatePlaceGuideF,
+  //             testOuterPublicPlaceGuideF);
+  //     saveTestPlaceGuidesEntities(testPlaceGuidesList);
+  //     List<PlaceGuide> result =
+  //         placeGuideRepository.getCreatedPublicPlaceGuidesInMapArea(
+  //             OTHER_USER_ID, NORTH_EAST_CORNER_WITH_IDL, SOUTH_WEST_CORNER_WITH_IDL);
+  //     assertTrue(result.isEmpty());
+  //   }
+
+  //   @Test
+  //   public void
+  //
+  // getCreatedPublicPlaceGuidesInMapArea_userOwnsPlaceGuides_areaWithIDL_resultHasInnerPublicPlaceGuidesOfUser() {
+  //     List<PlaceGuide> testPlaceGuidesList =
+  //         Arrays.asList(
+  //             testInnerPrivatePlaceGuideE,
+  //             testInnerPublicPlaceGuideE,
+  //             testOuterPrivatePlaceGuideE,
+  //             testOuterPublicPlaceGuideE,
+  //             testInnerPrivatePlaceGuideF,
+  //             testInnerPublicPlaceGuideF,
+  //             testOuterPrivatePlaceGuideF,
+  //             testOuterPublicPlaceGuideF);
+  //     saveTestPlaceGuidesEntities(testPlaceGuidesList);
+  //     List<PlaceGuide> result =
+  //         placeGuideRepository.getCreatedPublicPlaceGuidesInMapArea(
+  //             CREATOR_E_ID, NORTH_EAST_CORNER_WITH_IDL, SOUTH_WEST_CORNER_WITH_IDL);
+  //     List<PlaceGuide> expected = Arrays.asList(testInnerPublicPlaceGuideE);
+  //     assertTrue(compare(expected, result));
+  //   }
+
+  //   @Test
+  //   public void
+  //       getCreatedPrivatePlaceGuidesInMapArea_noExistingPlaceGuides_areaWithIDL_emptyResult() {
+  //     List<PlaceGuide> result =
+  //         placeGuideRepository.getCreatedPrivatePlaceGuidesInMapArea(
+  //             OTHER_USER_ID, NORTH_EAST_CORNER_WITH_IDL, SOUTH_WEST_CORNER_WITH_IDL);
+  //     assertTrue(result.isEmpty());
+  //   }
+
+  //   @Test
+  //   public void
+  //
+  // getCreatedPrivatePlaceGuidesInMapArea_userDoesntOwnAnyPlaceGuides_areaWithIDL_emptyResult() {
+  //     List<PlaceGuide> testPlaceGuidesList =
+  //         Arrays.asList(
+  //             testInnerPrivatePlaceGuideE,
+  //             testInnerPublicPlaceGuideE,
+  //             testOuterPrivatePlaceGuideE,
+  //             testOuterPublicPlaceGuideE,
+  //             testInnerPrivatePlaceGuideF,
+  //             testInnerPublicPlaceGuideF,
+  //             testOuterPrivatePlaceGuideF,
+  //             testOuterPublicPlaceGuideF);
+  //     saveTestPlaceGuidesEntities(testPlaceGuidesList);
+  //     List<PlaceGuide> result =
+  //         placeGuideRepository.getCreatedPrivatePlaceGuidesInMapArea(
+  //             OTHER_USER_ID, NORTH_EAST_CORNER_WITH_IDL, SOUTH_WEST_CORNER_WITH_IDL);
+  //     assertTrue(result.isEmpty());
+  //   }
+
+  //   @Test
+  //   public void
+  //
+  // getCreatedPrivatePlaceGuidesInMapArea_userOwnsPlaceGuides_areaWithIDL_resultHasInnerPublicPlaceGuidesOfUser() {
+  //     List<PlaceGuide> testPlaceGuidesList =
+  //         Arrays.asList(
+  //             testInnerPrivatePlaceGuideE,
+  //             testInnerPublicPlaceGuideE,
+  //             testOuterPrivatePlaceGuideE,
+  //             testOuterPublicPlaceGuideE,
+  //             testInnerPrivatePlaceGuideF,
+  //             testInnerPublicPlaceGuideF,
+  //             testOuterPrivatePlaceGuideF,
+  //             testOuterPublicPlaceGuideF);
+  //     saveTestPlaceGuidesEntities(testPlaceGuidesList);
+  //     List<PlaceGuide> result =
+  //         placeGuideRepository.getCreatedPrivatePlaceGuidesInMapArea(
+  //             CREATOR_E_ID, NORTH_EAST_CORNER_WITH_IDL, SOUTH_WEST_CORNER_WITH_IDL);
+  //     List<PlaceGuide> expected = Arrays.asList(testInnerPrivatePlaceGuideE);
+  //     assertTrue(compare(expected, result));
+  //   }
 
   @After
   public void tearDown() {
