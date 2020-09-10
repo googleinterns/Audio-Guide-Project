@@ -14,9 +14,9 @@ class PlaceGuideRepository {
   };
 
   static BOOKMARK_ACTION_RESULT_TYPE = {
-      SUCCESS = {},
-      NOT_ALLOWED = {},
-      SERVER_FAILURE = {},
+      SUCCESS: {},
+      NOT_ALLOWED: {},
+      SERVER_FAILURE: {},
   }
 
   constructor() {
@@ -182,7 +182,6 @@ class PlaceGuideRepository {
         .catch(error => {
           console.log("BookmarkPlaceGuideServlet: failed to fetch: "
             + error);
-          alert("Failed to execute bookmarking/unbookmarking");
           resolve(PlaceGuideRepository.BOOKMARK_ACTION_RESULT_TYPE.SERVER_FAILURE);
         })
         .then(response => response.json())

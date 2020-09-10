@@ -6,6 +6,7 @@
  * executing it(PlaceGudieRepository, Map- and ListPlaceGuideDisplayer).
  */
 class PlaceGuideManager {
+  static MAX_NO_BOOKMARKED_GUIDES = 25;
   static PAGE = {
     DISCOVER: {
       query: PlaceGuideRepository.QUERY_TYPE.ALL_PUBLIC_IN_MAP_AREA,
@@ -86,10 +87,14 @@ class PlaceGuideManager {
   toggleBookmark(placeGuideId) {
     this._placeGuideRepository.togglePlaceGuideBookmarkStatus(placeGuideId)
       .then((response) => {
-        if(response) {
-          if (this._page.guideBookmarkStatusChanged != undefined) {
+        if(response == PlaceGuideRepository.BOOKMARK_ACTION_RESULT_TYPE.SUCCESS) {
+          if (this._page.onGuideBookmarkStatusChanged != undefined) {
             this._page.onGuideBookmarkStatusChanged(this, placeGuideId);
           }
+        } else if(response == PlaceGuideRepository.BOOKMARK_ACTION_RESULT_TYPE.SUCCESS) {
+          alert(`You can't bookmark more than ${MAX_NO_BOOKMARKED_GUIDES} gudies. Please unbookmark some of them before bookmarking a new one`);
+        } else {
+          alert("Failed to execute bookmarking/unbookmarking");
         }
       });
   }
