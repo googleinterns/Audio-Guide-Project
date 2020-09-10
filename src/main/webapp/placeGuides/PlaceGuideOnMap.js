@@ -135,7 +135,7 @@ class PlaceGuideOnMap {
 
   closeInfoWindowOnMapClick() {
     const thisPlaceGuideOnMap = this;
-    map.addListener('click', function (mapsMouseEvent) {
+    map.addListener('click', function(mapsMouseEvent) {
       if (!thisPlaceGuideOnMap._infoWindowClosed) {
         thisPlaceGuideOnMap.closeInfoWindow();
       }
@@ -144,7 +144,7 @@ class PlaceGuideOnMap {
 
   unhighlightOnMapClick() {
     const thisPlaceGuideOnMap = this;
-    map.addListener('click', function (mapsMouseEvent) {
+    map.addListener('click', function(mapsMouseEvent) {
       if (thisPlaceGuideOnMap.isHighlighted()) {
         placeGuideManager.unhighlightPlaceGuide();
       }
