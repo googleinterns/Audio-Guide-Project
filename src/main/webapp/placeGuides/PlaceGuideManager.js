@@ -29,7 +29,7 @@ class PlaceGuideManager {
     }
   };
 
-  constructor(page, map) {
+  constructor(page, map, portfolioUserId) {
     this._page = page;
     this._placeGuideRepository = new PlaceGuideRepository();
     this._highlightedPlaceGuideId = null;
@@ -37,17 +37,17 @@ class PlaceGuideManager {
     this._listPlaceGuideDisplayer = new ListPlaceGuideDisplayer();
     let thisManager = this;
     google.maps.event.addListenerOnce(map, 'idle', function () {
-      thisManager.refreshPlaceGuides(map.getBounds(), map.getZoom());
+      thisManager.refreshPlaceGuides(map.getBounds(), map.getZoom(), portfolioUserId);
     });
     if (this._page != PlaceGuideManager.BOOKMARKED_PLACEGUIDES) {
       google.maps.event.addListener(map, 'idle', function () {
-        thisManager.refreshPlaceGuides(map.getBounds(), map.getZoom());
+        thisManager.refreshPlaceGuides(map.getBounds(), map.getZoom(), portfolioUserId);
       });
     }
   }
 
-  refreshPlaceGuides(bounds, zoom) {
-    this._placeGuideRepository.fetchPlaceGuides(this._page.query, bounds, zoom)
+  refreshPlaceGuides(bounds, zoom, portfolioUserId) {
+    this._placeGuideRepository.fetchPlaceGuides(this._page.query, bounds, zoom, portfolioUserId)
         .then((response) => {
           const placeGuides = this._placeGuideRepository.placeGuides;
           this._mapPlaceGuideDisplayer.update(placeGuides);
