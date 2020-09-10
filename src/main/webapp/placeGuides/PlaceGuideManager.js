@@ -83,6 +83,7 @@ class PlaceGuideManager {
 
   unhighlightPlaceGuide() {
     this._mapPlaceGuideDisplayer.unhighlight(this._highlightedPlaceGuideId);
+    this._listPlaceGuideDisplayer.unhighlight(this._highlightedPlaceGuideId);
     this._highlightedPlaceGuideId = null;
   }
 

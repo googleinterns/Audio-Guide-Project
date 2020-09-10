@@ -43,22 +43,8 @@ class ListPlaceGuideDisplayer {
   }
 
   update(placeGuides) {
-    // console.log(this._listPlaceGuideDisplayerDiv.children);
     var placeGuidesCopy = {};
     Object.assign(placeGuidesCopy, placeGuides);
-    // console.log(placeGuidesCopy);
-    // for (var placeGuideDiv = this._listPlaceGuideDisplayerDiv.firstChild.nextSibling; 
-    //     placeGuideDiv !== null; 
-    //     placeGuideDiv = placeGuideDiv.nextSibling) {
-    //   console.log("iterate");
-    //   if (!placeGuidesCopy.hasOwnProperty(this.extractIdFromDivId(placeGuideDiv.id))) {
-    //     console.log("delete placeGuide box");
-    //     this._listPlaceGuideDisplayerDiv.removeChild(document.getElementById(placeGuideDiv.id));
-    //   } else {
-    //     delete placeGuidesCopy[this.extractIdFromDivId(placeGuideDiv.id)];
-    //   }
-    // }
-    // console.log(placeGuidesCopy);
     var placeGuideDiv = 
         this._listPlaceGuideDisplayerDiv.firstChild.nextSibling;
     while (placeGuideDiv != null) {
@@ -71,9 +57,7 @@ class ListPlaceGuideDisplayer {
         placeGuideDiv = placeGuideDiv.nextSibling;
       }
     }
-
     this.addPlaceGuidesToList(placeGuidesCopy);
-
   }
 
   extractIdFromDivId(placeGuideDivId) {
@@ -115,7 +99,6 @@ class ListPlaceGuideDisplayer {
 
  // Move the highlighted place guide to top of list.
   highlight(placeGuideId) {
-    console.log(placeGuideId);
     const placeGuideDiv = this.remove(placeGuideId);
     this.insertDivAfterTitle(placeGuideDiv);
     PlaceGuideOnList.highlight(placeGuideId);
