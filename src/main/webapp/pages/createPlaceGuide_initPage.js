@@ -19,18 +19,20 @@ function initPage() {
     if (!userAuthenticationStatus.isLoggedIn) {
       location.replace(userAuthenticationStatus.loginUrl);
     } else {
-      const menu = new Menu(Menu.PAGE_NAMES.CREATE_PLACEGUIDE);
-      setUpCreatePlaceGuideForm();
-      const mapWidget = new MapWidget();
-      mapWidget.addGeolocationFunctionality();
-      mapWidget.addLocationChoosingAndSavingFunctionality();
-      map = mapWidget.map;
-      placeGuideManager = new PlaceGuideManager(
-          PlaceGuideManager.PAGE.CREATE_PLACE_GUIDE, map);
-      document.getElementById("map")
-          .addEventListener(MapWidget.CHOSEN_LOCATION_CHANGE_EVENT, function () {
-            handleChosenLocationChangeEvent(mapWidget);
-          });
+      saveUserInDatabase().then(response => {
+        const menu = new Menu(Menu.PAGE_NAMES.CREATE_PLACEGUIDE);
+        setUpCreatePlaceGuideForm();
+        const mapWidget = new MapWidget();
+        mapWidget.addGeolocationFunctionality();
+        mapWidget.addLocationChoosingAndSavingFunctionality();
+        map = mapWidget.map;
+        placeGuideManager = new PlaceGuideManager(
+            PlaceGuideManager.PAGE.CREATE_PLACE_GUIDE, map);
+        document.getElementById("map")
+            .addEventListener(MapWidget.CHOSEN_LOCATION_CHANGE_EVENT, function () {
+                handleChosenLocationChangeEvent(mapWidget);
+            });
+      });
     }
   });
 }

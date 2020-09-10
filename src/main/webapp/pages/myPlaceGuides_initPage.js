@@ -14,13 +14,15 @@ function initPage() {
     if (!userAuthenticationStatus.isLoggedIn) {
       location.replace(userAuthenticationStatus.loginUrl);
     } else {
-      const menu = new Menu(Menu.PAGE_NAMES.MY_PLACEGUIDES);
-      const mapWidget = new MapWidget();
-      mapWidget.addGeolocationFunctionality();
-      mapWidget.addSearchingFunctionality();
-      map = mapWidget.map;
-      placeGuideManager = new PlaceGuideManager(
-          PlaceGuideManager.PAGE.MY_GUIDES, map);
+      saveUserInDatabase().then(response => {
+        const menu = new Menu(Menu.PAGE_NAMES.MY_PLACEGUIDES);
+        const mapWidget = new MapWidget();
+        mapWidget.addGeolocationFunctionality();
+        mapWidget.addSearchingFunctionality();
+        map = mapWidget.map;
+        placeGuideManager = new PlaceGuideManager(
+            PlaceGuideManager.PAGE.MY_GUIDES, map);
+      });
     }
   });
 }
