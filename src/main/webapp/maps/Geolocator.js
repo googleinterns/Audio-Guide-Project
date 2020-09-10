@@ -78,7 +78,9 @@ class Geolocator {
        map.setZoom(10);
        map.setCenter(
         Geolocator.convertCurrentLocationToLatLng(position));
-      }
+      },
+      error => {},
+      {timeout:1000}
     );
   }
 
@@ -111,7 +113,7 @@ class Geolocator {
           error => {
             this._foundLocation = false;
             this._currentLocation.visible = false;
-            showError(error);
+            this.showError(error);
           }
       );
     } else {
