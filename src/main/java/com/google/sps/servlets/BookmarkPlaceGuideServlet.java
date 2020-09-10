@@ -31,6 +31,12 @@ public class BookmarkPlaceGuideServlet extends HttpServlet {
     REMOVE
   }
 
+  /**
+   * Performs the bookmarking/unbookmarking if it's allowed. If it was succesfully executed, the
+   * servlet returns true. Otherwise it returns false. Remark that an operation is not allowed if
+   * the user wants to bookmark a placeguide whereas they have already reached the maximum number of
+   * bookmarked placeguides.
+   */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     long placeGuideId = Long.parseLong(request.getParameter(PLACE_GUIDE_ID_PARAMETER));
@@ -47,7 +53,7 @@ public class BookmarkPlaceGuideServlet extends HttpServlet {
    * placeGuideId by the cuurent user. If the user unbookmarked a placeguide, it will for sure
    * succeed. if the user bookmarked a placeguide, then the operation will succeed only if the user
    * didn't reach the limit for the maximum number of bookmarked placeguides before. The function
-   * returns true if the operation succeded, and false otherwise.
+   * returns true if the operation succeeded, and false otherwise.
    */
   private boolean togglePlaceGuideBookmark(
       BookmarkPlaceGuideQueryType bookmarkPlaceGuideQueryType, long placeGuideId) {
