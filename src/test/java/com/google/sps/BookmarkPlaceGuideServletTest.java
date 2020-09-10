@@ -54,6 +54,7 @@ public final class BookmarkPlaceGuideServletTest {
   // Users data.
   private static final String ID_A = "useridA";
   private static final String ID_B = "useridB";
+  private static final String ID_C = "useridC";
   private static final String EMAIL = "user@gmail.com";
   private static final Set<Long> EMPTY_BOOKMARKED_PLACE_GUIDES_IDS = null;
   private static final Set<Long> BOOKMARKED_PLACE_GUIDES_IDS_A =
@@ -68,6 +69,12 @@ public final class BookmarkPlaceGuideServletTest {
               (long) 9, (long) 10, (long) 11, (long) 12, (long) 13, (long) 14, (long) 15, (long) 16,
               (long) 17, (long) 18, (long) 19, (long) 20, (long) 21, (long) 22, (long) 23,
               (long) 24, (long) 25));
+  private static final Set<Long> BOOKMARKED_PLACE_GUIDES_IDS_C =
+      new HashSet<>(
+          Arrays.asList(
+              (long) 1, (long) 2, (long) 3, (long) 4, (long) 5, (long) 6, (long) 7, (long) 8,
+              (long) 9, (long) 10, (long) 11, (long) 12, (long) 13, (long) 14, (long) 15,
+              (long) 26));
   private static final String NAME = "username";
   private static final String SELF_INTRODUCTION = "I am the user";
   private static final String IMG_KEY = "/img.com";
@@ -84,6 +91,15 @@ public final class BookmarkPlaceGuideServletTest {
   private final User userB =
       new User.Builder(ID_B, EMAIL)
           .setBookmarkedPlaceGuidesIds(BOOKMARKED_PLACE_GUIDES_IDS_B)
+          .setName(NAME)
+          .setPublicPortfolio(true)
+          .addSelfIntroduction(SELF_INTRODUCTION)
+          .addImgKey(IMG_KEY)
+          .build();
+
+  private final User userC =
+      new User.Builder(ID_C, EMAIL)
+          .setBookmarkedPlaceGuidesIds(BOOKMARKED_PLACE_GUIDES_IDS_C)
           .setName(NAME)
           .setPublicPortfolio(true)
           .addSelfIntroduction(SELF_INTRODUCTION)
@@ -263,6 +279,26 @@ public final class BookmarkPlaceGuideServletTest {
     Boolean successfulBookmark = gson.fromJson(sw.toString(), Boolean.class);
     assertFalse(successfulBookmark);
     assertFalse(userHasBookmarkedThePlaceGuide(ID_B, toBookmarkGuide.getId()));
+  }
+
+  @Test
+  public void doPost_unbookmark_succesfulUnbookmarking()
+      throws IOException, EntityNotFoundException {
+    attributeToValue.clear();
+    attributeToValue.put("com.google.appengine.api.users.UserService.user_id_key", (Object) ID_C);
+    helper.setEnvAttributes(attributeToValue);
+    helper.setUp();
+    saveUser(userC);
+    savePlaceGuide(toBookmarkGuide);
+    System.out.println("!!!B can bookmark another guide: " + userB.canBookmarkAnotherPlaceGuide());
+    setupRequestandResponse("Unbookmark", toBookmarkGuide.getId());
+    BookmarkPlaceGuideServlet boookmarkPlaceGuideServlet = new BookmarkPlaceGuideServlet();
+    boookmarkPlaceGuideServlet.doPost(request, response);
+    pw.flush();
+    Gson gson = new Gson();
+    Boolean successfulUnbookmark = gson.fromJson(sw.toString(), Boolean.class);
+    assertTrue(successfulUnbookmark);
+    assertFalse(userHasBookmarkedThePlaceGuide(ID_C, toBookmarkGuide.getId()));
   }
 
   @After
