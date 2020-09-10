@@ -16,15 +16,28 @@ package com.google.sps;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import com.google.appengine.api.datastore.*;
+import com.google.appengine.tools.development.testing.LocalBlobstoreServiceTestConfig;
+import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
+import com.google.gson.Gson;
+import com.google.sps.placeGuide.PlaceGuide;
+import com.google.sps.placeGuide.repository.impl.DatastorePlaceGuideRepository;
+import com.google.sps.servlets.BookmarkPlaceGuideServlet;
 import com.google.sps.user.User;
+import com.google.sps.user.repository.impl.DatastoreUserRepository;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.jetbrains.annotations.Nullable;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
@@ -35,7 +48,10 @@ public final class BookmarkPlaceGuideServletTest {
 
   private HttpServletRequest request;
   private HttpServletResponse response;
+  private StringWriter sw;
+  private PrintWriter pw;
 
+  // Users data.
   private static final String ID_A = "useridA";
   private static final String ID_B = "useridB";
   private static final String EMAIL = "user@gmail.com";
@@ -73,10 +89,158 @@ public final class BookmarkPlaceGuideServletTest {
           .addImgKey(IMG_KEY)
           .build();
 
+  // PlaceGuides data
+  private static final long PLACEGUIDE_ID = 21;
+  private static final String PLACEGUIDE_NAME = "name";
+  private static final String AUDIO_KEY = "audioKey";
+  private static final String PLACE_ID = "placeId";
+  private static final GeoPt COORDINATE = new GeoPt((float) 3.14, (float) 2.56);
+  private static final boolean IS_PUBLIC = true;
+  private static final long LENGTH = 60L;
+  private static final String DESCRIPTION = "description";
+  private static final String IMAGE_KEY = "imageKey";
+
+  private final PlaceGuide toBookmarkGuide =
+      new PlaceGuide.Builder(PLACEGUIDE_ID, PLACEGUIDE_NAME, AUDIO_KEY, ID_A, COORDINATE)
+          .setPlaceId(PLACE_ID)
+          .setPlaceGuideStatus(IS_PUBLIC)
+          .setLength(LENGTH)
+          .setDescription(DESCRIPTION)
+          .setImageKey(IMAGE_KEY)
+          .build();
+
+  private void saveUser(User user) {
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    datastore.put(getUserEntity(user));
+  }
+
+  private Entity getUserEntity(User user) {
+    Entity userEntity = new Entity(DatastoreUserRepository.ENTITY_KIND, user.getId());
+    userEntity.setProperty(DatastoreUserRepository.NAME_PROPERTY, user.getName());
+    userEntity.setProperty(DatastoreUserRepository.EMAIL_PROPERTY, user.getEmail());
+    userEntity.setProperty(
+        DatastoreUserRepository.BOOKMARKED_PLACE_GUIDES_IDS_PROPERTY,
+        user.getBookmarkedPlaceGuidesIds());
+    userEntity.setProperty(
+        DatastoreUserRepository.PUBLIC_PORTFOLIO_PROPERTY, user.portfolioIsPublic());
+    userEntity.setProperty(
+        DatastoreUserRepository.SELF_INTRODUCTION_PROPERTY, user.getSelfIntroduction());
+    userEntity.setProperty(DatastoreUserRepository.IMG_KEY_PROPERTY, user.getImgKey());
+    return userEntity;
+  }
+
+  private void savePlaceGuide(PlaceGuide placeGuide) {
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    datastore.put(getPlaceGuideEntity(placeGuide));
+  }
+
+  private Entity getPlaceGuideEntity(PlaceGuide placeGuide) {
+    Entity placeGuideEntity =
+        new Entity(DatastorePlaceGuideRepository.ENTITY_KIND, placeGuide.getId());
+    placeGuideEntity.setProperty(DatastorePlaceGuideRepository.NAME_PROPERTY, placeGuide.getName());
+    placeGuideEntity.setProperty(
+        DatastorePlaceGuideRepository.AUDIO_KEY_PROPERTY, placeGuide.getAudioKey());
+    placeGuideEntity.setProperty(
+        DatastorePlaceGuideRepository.CREATOR_ID_PROPERTY, placeGuide.getCreatorId());
+    placeGuideEntity.setProperty(
+        DatastorePlaceGuideRepository.IS_PUBLIC_PROPERTY, placeGuide.isPublic());
+    placeGuideEntity.setProperty(
+        DatastorePlaceGuideRepository.PLACE_ID_PROPERTY, placeGuide.getPlaceId());
+    placeGuideEntity.setProperty(
+        DatastorePlaceGuideRepository.COORDINATE_PROPERTY, placeGuide.getCoordinate());
+    placeGuideEntity.setProperty(
+        DatastorePlaceGuideRepository.DESCRIPTION_PROPERTY, placeGuide.getDescription());
+    placeGuideEntity.setProperty(
+        DatastorePlaceGuideRepository.LENGTH_PROPERTY, placeGuide.getLength());
+    placeGuideEntity.setProperty(
+        DatastorePlaceGuideRepository.IMAGE_KEY_PROPERTY, placeGuide.getImageKey());
+    return placeGuideEntity;
+  }
+
   @Before
   public void setup() {
+    attributeToValue.put("com.google.appengine.api.users.UserService.user_id_key", (Object) ID_A);
+    helper =
+        new LocalServiceTestHelper(
+                new LocalDatastoreServiceTestConfig(), new LocalBlobstoreServiceTestConfig())
+            .setEnvIsLoggedIn(true)
+            .setEnvAuthDomain("localhost")
+            .setEnvEmail(EMAIL)
+            .setEnvAttributes(attributeToValue);
+    helper.setUp();
+
     request = mock(HttpServletRequest.class);
     response = mock(HttpServletResponse.class);
+  }
+
+  private void setupRequestandResponse(String requstType, long toBookmarkGuideId)
+      throws IOException {
+    when(request.getParameter(BookmarkPlaceGuideServlet.BOOKMARK_HANDLING_TYPE_PARAMETER))
+        .thenReturn("BOOKMARK");
+    when(request.getParameter(BookmarkPlaceGuideServlet.PLACE_GUIDE_ID_PARAMETER))
+        .thenReturn(String.valueOf(toBookmarkGuideId));
+    sw = new StringWriter();
+    pw = new PrintWriter(sw);
+    when(response.getWriter()).thenReturn(pw);
+  }
+
+  private boolean userHasBookmarkedThePlaceGuide(String userId, long placeGuideId)
+      throws EntityNotFoundException {
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    Key userKey = KeyFactory.createKey(DatastoreUserRepository.ENTITY_KIND, userId);
+    try {
+      User user = getUserFromUserEntity(datastore.get(userKey));
+      return user.getBookmarkedPlaceGuidesIds().contains(placeGuideId);
+    } catch (EntityNotFoundException e) {
+      throw new EntityNotFoundException(userKey);
+    }
+  }
+
+  @Nullable
+  private User getUserFromUserEntity(Entity userEntity) {
+    if (userEntity == null) {
+      return null;
+    }
+    String id = (String) userEntity.getKey().getName();
+    String name = (String) userEntity.getProperty(DatastoreUserRepository.NAME_PROPERTY);
+    String email = (String) userEntity.getProperty(DatastoreUserRepository.EMAIL_PROPERTY);
+    List<Long> bookmarkedPlaceGuidesIdsList =
+        (ArrayList)
+            userEntity.getProperty(DatastoreUserRepository.BOOKMARKED_PLACE_GUIDES_IDS_PROPERTY);
+    Set<Long> bookmarkedPlaceGuidesIds;
+    if (bookmarkedPlaceGuidesIdsList == null) {
+      bookmarkedPlaceGuidesIds = new HashSet<>();
+    } else {
+      bookmarkedPlaceGuidesIds = new HashSet<>(bookmarkedPlaceGuidesIdsList);
+    }
+    Boolean publicPortfolio =
+        (Boolean) userEntity.getProperty(DatastoreUserRepository.PUBLIC_PORTFOLIO_PROPERTY);
+    String selfIntroduction =
+        (String) userEntity.getProperty(DatastoreUserRepository.SELF_INTRODUCTION_PROPERTY);
+    String imgKey = (String) userEntity.getProperty(DatastoreUserRepository.IMG_KEY_PROPERTY);
+    User.Builder newUserBuilder =
+        new User.Builder(id, email)
+            .setBookmarkedPlaceGuidesIds(bookmarkedPlaceGuidesIds)
+            .setName(name)
+            .addSelfIntroduction(selfIntroduction)
+            .setPublicPortfolio(publicPortfolio)
+            .addImgKey(imgKey);
+    return newUserBuilder.build();
+  }
+
+  @Test
+  public void doPost_bookmark_bookmarkingLimitNotExceeded_succesfulBookmarking()
+      throws IOException, EntityNotFoundException {
+    saveUser(userA);
+    savePlaceGuide(toBookmarkGuide);
+    setupRequestandResponse("Bookmark", toBookmarkGuide.getId());
+    BookmarkPlaceGuideServlet boookmarkPlaceGuideServlet = new BookmarkPlaceGuideServlet();
+    boookmarkPlaceGuideServlet.doPost(request, response);
+    pw.flush();
+    Gson gson = new Gson();
+    Boolean successfulBookmark = gson.fromJson(sw.toString(), Boolean.class);
+    assertTrue(successfulBookmark);
+    assertTrue(userHasBookmarkedThePlaceGuide(ID_A, toBookmarkGuide.getId()));
   }
 
   @After
