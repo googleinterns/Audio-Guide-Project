@@ -61,15 +61,6 @@ function testExistingPlaceGuide() {
   });
 }
 
-// For testing.
-async function getFetchedList() {
-  return fetch(
-      '/place-guide-data?placeGuideType=ALL_PUBLIC', {method: 'GET'})
-      .then((response) => {
-        return response.json();
-      });
-}
-
 function enableSubmission() {
   document.getElementById('submitBtn').disabled = false;
 }
@@ -94,48 +85,6 @@ function updateLocation(position, placeId, placeName) {
       'latitude').setAttribute('value', position.lat());
   document.getElementById(
       'longitude').setAttribute('value', position.lng());
-}
-
-function fillFormWithPlaceGuideData(placeGuide) {
-  // Set required attribute to false since there must be a previous audio key
-  // from the previous place guide data.
-  document.getElementById('audioKey').required = false;
-  setFormInputValueOrEmpty(document.getElementById('id'), placeGuide.id);
-  setFormInputValueOrEmpty(
-      new mdc.textField.MDCTextField(document.getElementById('nameInput')),
-      placeGuide.name);
-  setBlobKeySrcToElement(
-      placeGuide.audioKey, 'audioPlayer', false);
-  const publicitySwitchControl =
-      new mdc.switchControl.MDCSwitch(document.getElementById('publicitySwitch'));
-  if (placeGuide.isPublic) {
-    publicitySwitchControl.checked = true;
-  } else {
-    publicitySwitchControl.checked = false;
-  }
-  setFormInputValueOrEmpty(
-      document.getElementById('latitude'),
-      placeGuide.coordinate.latitude);
-  setFormInputValueOrEmpty(
-      document.getElementById('longitude'),
-      placeGuide.coordinate.longitude);
-  setFormInputValueOrEmpty(
-      document.getElementById('length'),
-      placeGuide.length);
-  setFormInputValueOrEmpty(
-      new mdc.textField.MDCTextField(
-          document.getElementById('descriptionInput')),
-      placeGuide.description);
-  if (placeGuide.imageKey != undefined) {
-    setBlobKeySrcToElement(placeGuide.imageKey, 'imagePreview', true);
-    document.getElementById('no-img-icon').style.display = 'none';
-    document.getElementById('clear-img-icon').style.display = 'block';
-    activateRemoveImageFeature(true);
-  } else {
-    activateRemoveImageFeature(false);
-  }
-  setFormInputValueOrEmpty(document.getElementById('placeName'),
-      DUMMY_DATA_FOR_PLACE_NAME);
 }
 
 /**
