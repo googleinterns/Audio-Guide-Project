@@ -184,15 +184,15 @@ public class PlaceGuideServlet extends HttpServlet {
     if (!description.isEmpty()) {
       placeGuideBuilder.setDescription(description);
     }
-    String imageKey = getUploadedFileBlobKey(request, IMAGE_KEY_INPUT);
-    if (imageKey != null) {
-      placeGuideBuilder.setImageKey(imageKey);
-    } else if (request.getParameterValues(DELETE_IMAGE_INPUT) == null) {
-      if (!newPlaceGuide) {
-        PlaceGuide prevPlaceGuide = placeGuideRepository.getPlaceGuide(id);
-        placeGuideBuilder.setImageKey(prevPlaceGuide.getImageKey());
-      }
-    }
+    // String imageKey = getUploadedFileBlobKey(request, IMAGE_KEY_INPUT);
+    // if (imageKey != null) {
+    //   placeGuideBuilder.setImageKey(imageKey);
+    // } else if (request.getParameterValues(DELETE_IMAGE_INPUT) == null) {
+    //   if (!newPlaceGuide) {
+    //     PlaceGuide prevPlaceGuide = placeGuideRepository.getPlaceGuide(id);
+    //     placeGuideBuilder.setImageKey(prevPlaceGuide.getImageKey());
+    //   }
+    // }
     return placeGuideBuilder.build();
   }
 
