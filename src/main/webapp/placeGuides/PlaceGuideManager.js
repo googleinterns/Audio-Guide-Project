@@ -9,19 +9,19 @@ class PlaceGuideManager {
   static PAGE = {
     DISCOVER: {
       query: PlaceGuideRepository.QUERY_TYPE.ALL_PUBLIC_IN_MAP_AREA,
-      guideBookmarkStatusChanged: undefined,
+      onGuideBookmarkStatusChanged: undefined,
     },
     MY_GUIDES: {
       query: PlaceGuideRepository.QUERY_TYPE.CREATED_ALL_IN_MAP_AREA,
-      guideBookmarkStatusChanged: undefined,
+      onGuideBookmarkStatusChanged: undefined,
     },
     CREATE_PLACE_GUIDE: {
       query: PlaceGuideRepository.QUERY_TYPE.CREATED_ALL_IN_MAP_AREA,
-      guideBookmarkStatusChanged: undefined,
+      onGuideBookmarkStatusChanged: undefined,
     },
     BOOKMARKED_PLACEGUIDES: {
       query: PlaceGuideRepository.QUERY_TYPE.BOOKMARKED,
-      guideBookmarkStatusChanged: PlaceGuideManager.removeGuideIfUnbookmarked,
+      onGuideBookmarkStatusChanged: PlaceGuideManager.removeGuideIfUnbookmarked,
     }
   };
 
@@ -88,7 +88,7 @@ class PlaceGuideManager {
       .then((response) => {
         if(response) {
           if (this._page.guideBookmarkStatusChanged != undefined) {
-            this._page.guideBookmarkStatusChanged(this, placeGuideId);
+            this._page.onGuideBookmarkStatusChanged(this, placeGuideId);
           }
         }
       });
