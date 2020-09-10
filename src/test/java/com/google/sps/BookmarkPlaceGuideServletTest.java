@@ -86,7 +86,6 @@ public final class BookmarkPlaceGuideServletTest {
     setupCurrentUserIdInHelper(ID_B);
     saveUser(userB);
     savePlaceGuide(toBookmarkGuide);
-    System.out.println("!!!B can bookmark another guide: " + userB.canBookmarkAnotherPlaceGuide());
     setupRequestandResponse("Bookmark", toBookmarkGuide.getId());
     BookmarkPlaceGuideServlet boookmarkPlaceGuideServlet = new BookmarkPlaceGuideServlet();
     boookmarkPlaceGuideServlet.doGet(request, response);
@@ -103,7 +102,6 @@ public final class BookmarkPlaceGuideServletTest {
     setupCurrentUserIdInHelper(ID_C);
     saveUser(userC);
     savePlaceGuide(toBookmarkGuide);
-    System.out.println("!!!B can bookmark another guide: " + userB.canBookmarkAnotherPlaceGuide());
     setupRequestandResponse("Unbookmark", toBookmarkGuide.getId());
     BookmarkPlaceGuideServlet boookmarkPlaceGuideServlet = new BookmarkPlaceGuideServlet();
     boookmarkPlaceGuideServlet.doGet(request, response);
