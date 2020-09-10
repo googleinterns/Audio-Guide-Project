@@ -32,6 +32,7 @@ public enum PlaceGuideQueryType {
 
   PlaceGuideQueryType(boolean requiresCoordinates, boolean requiresUserIdFromRequest) {
     this.requiresCoordinates = requiresCoordinates;
+    this.requiresUserIdFromRequest = requiresUserIdFromRequest;
   }
 
   public boolean requiresCoordinates() {

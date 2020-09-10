@@ -97,7 +97,7 @@ public class PlaceGuideServlet extends HttpServlet {
       creatorId = request.getParameter(CREATOR_ID_PARAMETER);
     }
     List<PlaceGuide> placeGuides =
-        getPlaceGuides(placeGuideQueryType, northEastCorner, southWestCorner);
+        getPlaceGuides(placeGuideQueryType, northEastCorner, southWestCorner, creatorId);
     List<PlaceGuideInfo> placeGuideInfos = getPlaceGuideInfos(placeGuides);
     response.setContentType("application/json;");
     response.getWriter().println(convertToJsonUsingGson(placeGuideInfos));
@@ -105,32 +105,35 @@ public class PlaceGuideServlet extends HttpServlet {
 
   private List<PlaceGuideInfo> getPlaceGuideInfos(List<PlaceGuide> placeGuides) {
     List<PlaceGuideInfo> placeGuideInfos = new ArrayList<>();
-    String userId = UserServiceFactory.getUserService().getCurrentUser().getUserId();
+    String currentUserId = UserServiceFactory.getUserService().getCurrentUser().getUserId();
     for (PlaceGuide placeGuide : placeGuides) {
-      placeGuideInfos.add(new PlaceGuideInfo(placeGuide, userId));
+      placeGuideInfos.add(new PlaceGuideInfo(placeGuide, currentUserId));
     }
     return placeGuideInfos;
   }
 
   private List<PlaceGuide> getPlaceGuides(
-      PlaceGuideQueryType placeGuideQueryType, GeoPt northEastCorner, GeoPt southWestCorner) {
+      PlaceGuideQueryType placeGuideQueryType,
+      GeoPt northEastCorner,
+      GeoPt southWestCorner,
+      String creatorId) {
     List<PlaceGuide> placeGuides;
-    String userId = UserServiceFactory.getUserService().getCurrentUser().getUserId();
+    String currentUserId = UserServiceFactory.getUserService().getCurrentUser().getUserId();
     switch (placeGuideQueryType) {
       case ALL_PUBLIC:
         placeGuides = placeGuideRepository.getAllPublicPlaceGuides();
         break;
       case CREATED_ALL:
-        placeGuides = placeGuideRepository.getCreatedPlaceGuides(userId);
+        placeGuides = placeGuideRepository.getCreatedPlaceGuides(currentUserId);
         break;
       case CREATED_PUBLIC:
-        placeGuides = placeGuideRepository.getCreatedPublicPlaceGuides(userId);
+        placeGuides = placeGuideRepository.getCreatedPublicPlaceGuides(currentUserId);
         break;
       case CREATED_PRIVATE:
-        placeGuides = placeGuideRepository.getCreatedPrivatePlaceGuides(userId);
+        placeGuides = placeGuideRepository.getCreatedPrivatePlaceGuides(currentUserId);
         break;
       case BOOKMARKED:
-        placeGuides = placeGuideRepository.getBookmarkedPlaceGuides(userId);
+        placeGuides = placeGuideRepository.getBookmarkedPlaceGuides(currentUserId);
         break;
       case ALL_PUBLIC_IN_MAP_AREA:
         placeGuides =
@@ -139,17 +142,22 @@ public class PlaceGuideServlet extends HttpServlet {
       case CREATED_ALL_IN_MAP_AREA:
         placeGuides =
             placeGuideRepository.getCreatedPlaceGuidesInMapArea(
-                userId, northEastCorner, southWestCorner);
+                currentUserId, northEastCorner, southWestCorner);
         break;
       case CREATED_PUBLIC_IN_MAP_AREA:
         placeGuides =
             placeGuideRepository.getCreatedPublicPlaceGuidesInMapArea(
-                userId, northEastCorner, southWestCorner);
+                currentUserId, northEastCorner, southWestCorner);
         break;
       case CREATED_PRIVATE_IN_MAP_AREA:
         placeGuides =
             placeGuideRepository.getCreatedPrivatePlaceGuidesInMapArea(
-                userId, northEastCorner, southWestCorner);
+                currentUserId, northEastCorner, southWestCorner);
+        break;
+      case CREATED_BY_GIVEN_USER_PUBLIC_IN_MAP_AREA:
+        placeGuides =
+            placeGuideRepository.getCreatedPublicPlaceGuidesInMapArea(
+                creatorId, northEastCorner, southWestCorner);
         break;
       default:
         throw new IllegalStateException("Place Guide type does not exist!");
@@ -175,12 +183,12 @@ public class PlaceGuideServlet extends HttpServlet {
       audioKey = placeGuideRepository.getPlaceGuide(id).getAudioKey();
     }
 
-    String userId = UserServiceFactory.getUserService().getCurrentUser().getUserId();
+    String currentUserId = UserServiceFactory.getUserService().getCurrentUser().getUserId();
     float latitude = Float.parseFloat(request.getParameter(LATITUDE_INPUT));
     float longitude = Float.parseFloat(request.getParameter(LONGITUDE_INPUT));
     GeoPt coordinate = new GeoPt(latitude, longitude);
     PlaceGuide.Builder placeGuideBuilder =
-        new PlaceGuide.Builder(id, name, audioKey, userId, coordinate);
+        new PlaceGuide.Builder(id, name, audioKey, currentUserId, coordinate);
 
     if (request.getParameter(IS_PUBLIC_INPUT) != null) {
       placeGuideBuilder.setPlaceGuideStatus(true); // False by default.
