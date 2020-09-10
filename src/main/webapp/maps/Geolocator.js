@@ -68,7 +68,8 @@ class Geolocator {
 
   /**
    * This function tries to find the user's current location, and
-   * if it is found, it centers the map around it and sets 
+   * if it is found within 1 second,
+   * it centers the map around it and sets 
    * a higher zoom level.
    * If the location cannot be found, nothing happens.
    */
