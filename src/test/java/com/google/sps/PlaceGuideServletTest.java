@@ -608,6 +608,225 @@ public final class PlaceGuideServletTest {
     assertTrue(compare(expected, result));
   }
 
+  @Test
+  public void doGet_getAllPublicPlaceGuides_placeGuideExists_returnPlaceGuides()
+      throws IOException {
+    saveUser(userC);
+    List<PlaceGuide> testPlaceGuidesList =
+        Arrays.asList(
+            testInnerPrivatePlaceGuideC,
+            testInnerPublicPlaceGuideC,
+            testOuterPrivatePlaceGuideC,
+            testOuterPublicPlaceGuideC);
+    saveTestPlaceGuidesEntities(testPlaceGuidesList);
+    when(request.getParameter(PlaceGuideServlet.PLACE_GUIDE_QUERY_TYPE_PARAMETER))
+        .thenReturn(PlaceGuideQueryType.ALL_PUBLIC.toString());
+    sw = new StringWriter();
+    pw = new PrintWriter(sw);
+    when(response.getWriter()).thenReturn(pw);
+    PlaceGuideServlet placeGuideServlet = new PlaceGuideServlet(blobstoreService, blobInfoFactory);
+    placeGuideServlet.doGet(request, response);
+    pw.flush();
+    Gson gson = new Gson();
+    List<PlaceGuideInfo> result =
+        Arrays.asList(new GsonBuilder().create().fromJson(sw.toString(), PlaceGuideInfo[].class));
+    List<PlaceGuideInfo> expected =
+        Arrays.asList(
+            new PlaceGuideInfo(testInnerPublicPlaceGuideC, userC, true, false),
+            new PlaceGuideInfo(testOuterPublicPlaceGuideC, userC, true, false));
+    assertTrue(compare(expected, result));
+  }
+
+  @Test
+  public void doGet_getAllPublicPlaceGuides_placeGuideDoesntExists_resultIsEmpty()
+      throws IOException {
+    when(request.getParameter(PlaceGuideServlet.PLACE_GUIDE_QUERY_TYPE_PARAMETER))
+        .thenReturn(PlaceGuideQueryType.ALL_PUBLIC.toString());
+    sw = new StringWriter();
+    pw = new PrintWriter(sw);
+    when(response.getWriter()).thenReturn(pw);
+    PlaceGuideServlet placeGuideServlet = new PlaceGuideServlet(blobstoreService, blobInfoFactory);
+    placeGuideServlet.doGet(request, response);
+    pw.flush();
+    Gson gson = new Gson();
+    List<PlaceGuideInfo> result =
+        Arrays.asList(new GsonBuilder().create().fromJson(sw.toString(), PlaceGuideInfo[].class));
+    List<PlaceGuideInfo> expected = Collections.emptyList();
+    assertTrue(compare(expected, result));
+  }
+
+  @Test
+  public void doGet_getCreatedPlaceGuides_UserDoesntOwnAnyPlaceGuides_resultIsEmpty()
+      throws IOException {
+    saveUser(userC);
+    List<PlaceGuide> testPlaceGuidesList =
+        Arrays.asList(testOuterPublicPlaceGuideD, testInnerPublicPlaceGuideD);
+    saveTestPlaceGuidesEntities(testPlaceGuidesList);
+    when(request.getParameter(PlaceGuideServlet.PLACE_GUIDE_QUERY_TYPE_PARAMETER))
+        .thenReturn(PlaceGuideQueryType.CREATED_ALL.toString());
+    sw = new StringWriter();
+    pw = new PrintWriter(sw);
+    when(response.getWriter()).thenReturn(pw);
+    PlaceGuideServlet placeGuideServlet = new PlaceGuideServlet(blobstoreService, blobInfoFactory);
+    placeGuideServlet.doGet(request, response);
+    pw.flush();
+    Gson gson = new Gson();
+    List<PlaceGuideInfo> result =
+        Arrays.asList(new GsonBuilder().create().fromJson(sw.toString(), PlaceGuideInfo[].class));
+    List<PlaceGuideInfo> expected = Collections.emptyList();
+    assertTrue(compare(expected, result));
+  }
+
+  @Test
+  public void doGet_getCreatedPlaceGuides_UserOwnsPublicAndPrivate_resultContainsPlaceGuide()
+      throws IOException {
+    saveUser(userC);
+    List<PlaceGuide> testPlaceGuidesList =
+        Arrays.asList(
+            testInnerPublicPlaceGuideC, testOuterPrivatePlaceGuideC, testOuterPublicPlaceGuideD);
+    saveTestPlaceGuidesEntities(testPlaceGuidesList);
+    when(request.getParameter(PlaceGuideServlet.PLACE_GUIDE_QUERY_TYPE_PARAMETER))
+        .thenReturn(PlaceGuideQueryType.CREATED_ALL.toString());
+    sw = new StringWriter();
+    pw = new PrintWriter(sw);
+    when(response.getWriter()).thenReturn(pw);
+    PlaceGuideServlet placeGuideServlet = new PlaceGuideServlet(blobstoreService, blobInfoFactory);
+    placeGuideServlet.doGet(request, response);
+    pw.flush();
+    Gson gson = new Gson();
+    List<PlaceGuideInfo> result =
+        Arrays.asList(new GsonBuilder().create().fromJson(sw.toString(), PlaceGuideInfo[].class));
+    List<PlaceGuideInfo> expected =
+        Arrays.asList(
+            new PlaceGuideInfo(testInnerPublicPlaceGuideC, userC, true, false),
+            new PlaceGuideInfo(testOuterPrivatePlaceGuideC, userC, true, false));
+    assertTrue(compare(expected, result));
+  }
+
+  @Test
+  public void doGet_getCreatedPlaceGuides_placeGuideDoesntExist_resultIsEmpty() throws IOException {
+    when(request.getParameter(PlaceGuideServlet.PLACE_GUIDE_QUERY_TYPE_PARAMETER))
+        .thenReturn(PlaceGuideQueryType.CREATED_ALL.toString());
+    sw = new StringWriter();
+    pw = new PrintWriter(sw);
+    when(response.getWriter()).thenReturn(pw);
+    PlaceGuideServlet placeGuideServlet = new PlaceGuideServlet(blobstoreService, blobInfoFactory);
+    placeGuideServlet.doGet(request, response);
+    pw.flush();
+    Gson gson = new Gson();
+    List<PlaceGuideInfo> result =
+        Arrays.asList(new GsonBuilder().create().fromJson(sw.toString(), PlaceGuideInfo[].class));
+    List<PlaceGuideInfo> expected = Collections.emptyList();
+    assertTrue(compare(expected, result));
+  }
+
+  @Test
+  public void doGet_getCreatedPublicPlaceGuides_placeGuideDoesntExist_resultIsEmpty()
+      throws IOException {
+    when(request.getParameter(PlaceGuideServlet.PLACE_GUIDE_QUERY_TYPE_PARAMETER))
+        .thenReturn(PlaceGuideQueryType.CREATED_PUBLIC.toString());
+    sw = new StringWriter();
+    pw = new PrintWriter(sw);
+    when(response.getWriter()).thenReturn(pw);
+    PlaceGuideServlet placeGuideServlet = new PlaceGuideServlet(blobstoreService, blobInfoFactory);
+    placeGuideServlet.doGet(request, response);
+    pw.flush();
+    Gson gson = new Gson();
+    List<PlaceGuideInfo> result =
+        Arrays.asList(new GsonBuilder().create().fromJson(sw.toString(), PlaceGuideInfo[].class));
+    List<PlaceGuideInfo> expected = Collections.emptyList();
+    assertTrue(compare(expected, result));
+  }
+
+  @Test
+  public void doGet_getCreatedPublicPlaceGuides_UserHasPublicPlaceGuide_resultHasPlaceGuide()
+      throws IOException {
+    saveUser(userC);
+    List<PlaceGuide> testPlaceGuidesList =
+        Arrays.asList(
+            testInnerPublicPlaceGuideC, testOuterPublicPlaceGuideD, testOuterPrivatePlaceGuideC);
+    saveTestPlaceGuidesEntities(testPlaceGuidesList);
+    when(request.getParameter(PlaceGuideServlet.PLACE_GUIDE_QUERY_TYPE_PARAMETER))
+        .thenReturn(PlaceGuideQueryType.CREATED_PUBLIC.toString());
+    sw = new StringWriter();
+    pw = new PrintWriter(sw);
+    when(response.getWriter()).thenReturn(pw);
+    PlaceGuideServlet placeGuideServlet = new PlaceGuideServlet(blobstoreService, blobInfoFactory);
+    placeGuideServlet.doGet(request, response);
+    pw.flush();
+    Gson gson = new Gson();
+    List<PlaceGuideInfo> result =
+        Arrays.asList(new GsonBuilder().create().fromJson(sw.toString(), PlaceGuideInfo[].class));
+    List<PlaceGuideInfo> expected =
+        Arrays.asList(new PlaceGuideInfo(testInnerPublicPlaceGuideC, userC, true, false));
+    assertTrue(compare(expected, result));
+  }
+
+  @Test
+  public void doGet_getCreatedPrivatePlaceGuides_placeGuideDoesntExist_resultIsEmpty()
+      throws IOException {
+    when(request.getParameter(PlaceGuideServlet.PLACE_GUIDE_QUERY_TYPE_PARAMETER))
+        .thenReturn(PlaceGuideQueryType.CREATED_PRIVATE.toString());
+    sw = new StringWriter();
+    pw = new PrintWriter(sw);
+    when(response.getWriter()).thenReturn(pw);
+    PlaceGuideServlet placeGuideServlet = new PlaceGuideServlet(blobstoreService, blobInfoFactory);
+    placeGuideServlet.doGet(request, response);
+    pw.flush();
+    Gson gson = new Gson();
+    List<PlaceGuideInfo> result =
+        Arrays.asList(new GsonBuilder().create().fromJson(sw.toString(), PlaceGuideInfo[].class));
+    List<PlaceGuideInfo> expected = Collections.emptyList();
+    assertTrue(compare(expected, result));
+  }
+
+  @Test
+  public void doGet_getCreatedPrivatePlaceGuides_userDoesntOwnAnyPrivatePlaceGuides_resultIsEmpty()
+      throws IOException {
+    saveUser(userC);
+    List<PlaceGuide> testPlaceGuidesList =
+        Arrays.asList(
+            testInnerPublicPlaceGuideC, testOuterPublicPlaceGuideD, testOuterPublicPlaceGuideC);
+    saveTestPlaceGuidesEntities(testPlaceGuidesList);
+    when(request.getParameter(PlaceGuideServlet.PLACE_GUIDE_QUERY_TYPE_PARAMETER))
+        .thenReturn(PlaceGuideQueryType.CREATED_PRIVATE.toString());
+    sw = new StringWriter();
+    pw = new PrintWriter(sw);
+    when(response.getWriter()).thenReturn(pw);
+    PlaceGuideServlet placeGuideServlet = new PlaceGuideServlet(blobstoreService, blobInfoFactory);
+    placeGuideServlet.doGet(request, response);
+    pw.flush();
+    Gson gson = new Gson();
+    List<PlaceGuideInfo> result =
+        Arrays.asList(new GsonBuilder().create().fromJson(sw.toString(), PlaceGuideInfo[].class));
+    List<PlaceGuideInfo> expected = Collections.emptyList();
+    assertTrue(compare(expected, result));
+  }
+
+  @Test
+  public void doGet_getCreatedPrivatePlaceGuides_UserHasPrivatePlaceGuide_resultHasPlaceGuide()
+      throws IOException {
+    saveUser(userC);
+    List<PlaceGuide> testPlaceGuidesList =
+        Arrays.asList(
+            testInnerPublicPlaceGuideC, testOuterPublicPlaceGuideD, testOuterPrivatePlaceGuideC);
+    saveTestPlaceGuidesEntities(testPlaceGuidesList);
+    when(request.getParameter(PlaceGuideServlet.PLACE_GUIDE_QUERY_TYPE_PARAMETER))
+        .thenReturn(PlaceGuideQueryType.CREATED_PRIVATE.toString());
+    sw = new StringWriter();
+    pw = new PrintWriter(sw);
+    when(response.getWriter()).thenReturn(pw);
+    PlaceGuideServlet placeGuideServlet = new PlaceGuideServlet(blobstoreService, blobInfoFactory);
+    placeGuideServlet.doGet(request, response);
+    pw.flush();
+    Gson gson = new Gson();
+    List<PlaceGuideInfo> result =
+        Arrays.asList(new GsonBuilder().create().fromJson(sw.toString(), PlaceGuideInfo[].class));
+    List<PlaceGuideInfo> expected =
+        Arrays.asList(new PlaceGuideInfo(testOuterPrivatePlaceGuideC, userC, true, false));
+    assertTrue(compare(expected, result));
+  }
+
   @After
   public void tearDown() {
     helper.tearDown();
