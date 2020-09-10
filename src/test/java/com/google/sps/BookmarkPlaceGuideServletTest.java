@@ -66,7 +66,8 @@ public final class BookmarkPlaceGuideServletTest {
           Arrays.asList(
               (long) 1, (long) 2, (long) 3, (long) 4, (long) 5, (long) 6, (long) 7, (long) 8,
               (long) 9, (long) 10, (long) 11, (long) 12, (long) 13, (long) 14, (long) 15, (long) 16,
-              (long) 17, (long) 18, (long) 19, (long) 20));
+              (long) 17, (long) 18, (long) 19, (long) 20, (long) 21, (long) 22, (long) 23,
+              (long) 24, (long) 25));
   private static final String NAME = "username";
   private static final String SELF_INTRODUCTION = "I am the user";
   private static final String IMG_KEY = "/img.com";
@@ -90,7 +91,7 @@ public final class BookmarkPlaceGuideServletTest {
           .build();
 
   // PlaceGuides data
-  private static final long PLACEGUIDE_ID = 21;
+  private static final long PLACEGUIDE_ID = 26;
   private static final String PLACEGUIDE_NAME = "name";
   private static final String AUDIO_KEY = "audioKey";
   private static final String PLACE_ID = "placeId";
@@ -245,18 +246,23 @@ public final class BookmarkPlaceGuideServletTest {
   }
 
   @Test
-  public void doPost_bookmark_bookmarkingLimitExceeded_succesfulBookmarking()
+  public void doPost_bookmark_bookmarkingLimitExceeded_unsuccesfulBookmarking()
       throws IOException, EntityNotFoundException {
-    // saveUser(userB);
-    // savePlaceGuide(toBookmarkGuide);
-    // setupRequestandResponse("Bookmark", toBookmarkGuide.getId());
-    // BookmarkPlaceGuideServlet boookmarkPlaceGuideServlet = new BookmarkPlaceGuideServlet();
-    // boookmarkPlaceGuideServlet.doPost(request, response);
-    // pw.flush();
-    // Gson gson = new Gson();
-    // Boolean successfulBookmark = gson.fromJson(sw.toString(), Boolean.class);
-    // assertFalse(successfulBookmark);
-    // assertFalse(userHasBookmarkedThePlaceGuide(ID_B, toBookmarkGuide.getId()));
+    attributeToValue.clear();
+    attributeToValue.put("com.google.appengine.api.users.UserService.user_id_key", (Object) ID_B);
+    helper.setEnvAttributes(attributeToValue);
+    helper.setUp();
+    saveUser(userB);
+    savePlaceGuide(toBookmarkGuide);
+    System.out.println("!!!B can bookmark another guide: " + userB.canBookmarkAnotherPlaceGuide());
+    setupRequestandResponse("Bookmark", toBookmarkGuide.getId());
+    BookmarkPlaceGuideServlet boookmarkPlaceGuideServlet = new BookmarkPlaceGuideServlet();
+    boookmarkPlaceGuideServlet.doPost(request, response);
+    pw.flush();
+    Gson gson = new Gson();
+    Boolean successfulBookmark = gson.fromJson(sw.toString(), Boolean.class);
+    assertFalse(successfulBookmark);
+    assertFalse(userHasBookmarkedThePlaceGuide(ID_B, toBookmarkGuide.getId()));
   }
 
   @After
