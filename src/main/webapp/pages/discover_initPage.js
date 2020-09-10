@@ -13,7 +13,7 @@ function initPage() {
     if (!userAuthenticationStatus.isLoggedIn) {
       location.replace(userAuthenticationStatus.loginUrl);
     } else {
-      saveUserInDatabase().then(response => {
+      saveUserInDatabase().then((response) => {
         const menu = new Menu(Menu.PAGE_NAMES.DISCOVER);
         const mapWidget = new MapWidget();
         mapWidget.addGeolocationFunctionality();

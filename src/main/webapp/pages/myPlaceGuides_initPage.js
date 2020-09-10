@@ -14,7 +14,7 @@ function initPage() {
     if (!userAuthenticationStatus.isLoggedIn) {
       location.replace(userAuthenticationStatus.loginUrl);
     } else {
-      saveUserInDatabase().then(response => {
+      saveUserInDatabase().then((response) => {
         const menu = new Menu(Menu.PAGE_NAMES.MY_PLACEGUIDES);
         const mapWidget = new MapWidget();
         mapWidget.addGeolocationFunctionality();
