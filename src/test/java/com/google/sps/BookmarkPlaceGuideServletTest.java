@@ -51,6 +51,81 @@ public final class BookmarkPlaceGuideServletTest {
   private StringWriter sw;
   private PrintWriter pw;
 
+  @Before
+  public void setup() {
+    helper =
+        new LocalServiceTestHelper(
+                new LocalDatastoreServiceTestConfig(), new LocalBlobstoreServiceTestConfig())
+            .setEnvIsLoggedIn(true)
+            .setEnvAuthDomain("localhost")
+            .setEnvEmail(EMAIL);
+
+    request = mock(HttpServletRequest.class);
+    response = mock(HttpServletResponse.class);
+  }
+
+  @Test
+  public void doPost_bookmark_bookmarkingLimitNotExceeded_succesfulBookmarking()
+      throws IOException, EntityNotFoundException {
+    setupCurrentUserIdInHelper(ID_A);
+    saveUser(userA);
+    savePlaceGuide(toBookmarkGuide);
+    setupRequestandResponse("Bookmark", toBookmarkGuide.getId());
+    BookmarkPlaceGuideServlet boookmarkPlaceGuideServlet = new BookmarkPlaceGuideServlet();
+    boookmarkPlaceGuideServlet.doPost(request, response);
+    pw.flush();
+    Gson gson = new Gson();
+    Boolean successfulBookmark = gson.fromJson(sw.toString(), Boolean.class);
+    assertTrue(successfulBookmark);
+    assertTrue(userHasBookmarkedThePlaceGuide(ID_A, toBookmarkGuide.getId()));
+  }
+
+  @Test
+  public void doPost_bookmark_bookmarkingLimitExceeded_unsuccesfulBookmarking()
+      throws IOException, EntityNotFoundException {
+    setupCurrentUserIdInHelper(ID_B);
+    saveUser(userB);
+    savePlaceGuide(toBookmarkGuide);
+    System.out.println("!!!B can bookmark another guide: " + userB.canBookmarkAnotherPlaceGuide());
+    setupRequestandResponse("Bookmark", toBookmarkGuide.getId());
+    BookmarkPlaceGuideServlet boookmarkPlaceGuideServlet = new BookmarkPlaceGuideServlet();
+    boookmarkPlaceGuideServlet.doPost(request, response);
+    pw.flush();
+    Gson gson = new Gson();
+    Boolean successfulBookmark = gson.fromJson(sw.toString(), Boolean.class);
+    assertFalse(successfulBookmark);
+    assertFalse(userHasBookmarkedThePlaceGuide(ID_B, toBookmarkGuide.getId()));
+  }
+
+  @Test
+  public void doPost_unbookmark_succesfulUnbookmarking()
+      throws IOException, EntityNotFoundException {
+    setupCurrentUserIdInHelper(ID_C);
+    saveUser(userC);
+    savePlaceGuide(toBookmarkGuide);
+    System.out.println("!!!B can bookmark another guide: " + userB.canBookmarkAnotherPlaceGuide());
+    setupRequestandResponse("Unbookmark", toBookmarkGuide.getId());
+    BookmarkPlaceGuideServlet boookmarkPlaceGuideServlet = new BookmarkPlaceGuideServlet();
+    boookmarkPlaceGuideServlet.doPost(request, response);
+    pw.flush();
+    Gson gson = new Gson();
+    Boolean successfulUnbookmark = gson.fromJson(sw.toString(), Boolean.class);
+    assertTrue(successfulUnbookmark);
+    assertFalse(userHasBookmarkedThePlaceGuide(ID_C, toBookmarkGuide.getId()));
+  }
+
+  @After
+  public void tearDown() {
+    helper.tearDown();
+  }
+
+  private void setupCurrentUserIdInHelper(String userId) {
+    attributeToValue.clear();
+    attributeToValue.put("com.google.appengine.api.users.UserService.user_id_key", (Object) userId);
+    helper.setEnvAttributes(attributeToValue);
+    helper.setUp();
+  }
+
   // Users data.
   private static final String ID_A = "useridA";
   private static final String ID_B = "useridB";
@@ -174,19 +249,6 @@ public final class BookmarkPlaceGuideServletTest {
     return placeGuideEntity;
   }
 
-  @Before
-  public void setup() {
-    helper =
-        new LocalServiceTestHelper(
-                new LocalDatastoreServiceTestConfig(), new LocalBlobstoreServiceTestConfig())
-            .setEnvIsLoggedIn(true)
-            .setEnvAuthDomain("localhost")
-            .setEnvEmail(EMAIL);
-
-    request = mock(HttpServletRequest.class);
-    response = mock(HttpServletResponse.class);
-  }
-
   private void setupRequestandResponse(String requstType, long toBookmarkGuideId)
       throws IOException {
     when(request.getParameter(BookmarkPlaceGuideServlet.BOOKMARK_HANDLING_TYPE_PARAMETER))
@@ -240,69 +302,5 @@ public final class BookmarkPlaceGuideServletTest {
             .setPublicPortfolio(publicPortfolio)
             .addImgKey(imgKey);
     return newUserBuilder.build();
-  }
-
-  @Test
-  public void doPost_bookmark_bookmarkingLimitNotExceeded_succesfulBookmarking()
-      throws IOException, EntityNotFoundException {
-    attributeToValue.clear();
-    attributeToValue.put("com.google.appengine.api.users.UserService.user_id_key", (Object) ID_A);
-    helper.setEnvAttributes(attributeToValue);
-    helper.setUp();
-    saveUser(userA);
-    savePlaceGuide(toBookmarkGuide);
-    setupRequestandResponse("Bookmark", toBookmarkGuide.getId());
-    BookmarkPlaceGuideServlet boookmarkPlaceGuideServlet = new BookmarkPlaceGuideServlet();
-    boookmarkPlaceGuideServlet.doPost(request, response);
-    pw.flush();
-    Gson gson = new Gson();
-    Boolean successfulBookmark = gson.fromJson(sw.toString(), Boolean.class);
-    assertTrue(successfulBookmark);
-    assertTrue(userHasBookmarkedThePlaceGuide(ID_A, toBookmarkGuide.getId()));
-  }
-
-  @Test
-  public void doPost_bookmark_bookmarkingLimitExceeded_unsuccesfulBookmarking()
-      throws IOException, EntityNotFoundException {
-    attributeToValue.clear();
-    attributeToValue.put("com.google.appengine.api.users.UserService.user_id_key", (Object) ID_B);
-    helper.setEnvAttributes(attributeToValue);
-    helper.setUp();
-    saveUser(userB);
-    savePlaceGuide(toBookmarkGuide);
-    System.out.println("!!!B can bookmark another guide: " + userB.canBookmarkAnotherPlaceGuide());
-    setupRequestandResponse("Bookmark", toBookmarkGuide.getId());
-    BookmarkPlaceGuideServlet boookmarkPlaceGuideServlet = new BookmarkPlaceGuideServlet();
-    boookmarkPlaceGuideServlet.doPost(request, response);
-    pw.flush();
-    Gson gson = new Gson();
-    Boolean successfulBookmark = gson.fromJson(sw.toString(), Boolean.class);
-    assertFalse(successfulBookmark);
-    assertFalse(userHasBookmarkedThePlaceGuide(ID_B, toBookmarkGuide.getId()));
-  }
-
-  @Test
-  public void doPost_unbookmark_succesfulUnbookmarking()
-      throws IOException, EntityNotFoundException {
-    attributeToValue.clear();
-    attributeToValue.put("com.google.appengine.api.users.UserService.user_id_key", (Object) ID_C);
-    helper.setEnvAttributes(attributeToValue);
-    helper.setUp();
-    saveUser(userC);
-    savePlaceGuide(toBookmarkGuide);
-    System.out.println("!!!B can bookmark another guide: " + userB.canBookmarkAnotherPlaceGuide());
-    setupRequestandResponse("Unbookmark", toBookmarkGuide.getId());
-    BookmarkPlaceGuideServlet boookmarkPlaceGuideServlet = new BookmarkPlaceGuideServlet();
-    boookmarkPlaceGuideServlet.doPost(request, response);
-    pw.flush();
-    Gson gson = new Gson();
-    Boolean successfulUnbookmark = gson.fromJson(sw.toString(), Boolean.class);
-    assertTrue(successfulUnbookmark);
-    assertFalse(userHasBookmarkedThePlaceGuide(ID_C, toBookmarkGuide.getId()));
-  }
-
-  @After
-  public void tearDown() {
-    helper.tearDown();
   }
 }
