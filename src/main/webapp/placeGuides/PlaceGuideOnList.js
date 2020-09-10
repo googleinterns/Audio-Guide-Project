@@ -29,11 +29,11 @@ class PlaceGuideOnList {
   }
 
   static highlight(placeGuideId) {
-    expand(placeGuideId);
+    PlaceGuideOnList.expand(placeGuideId);
   }
 
   static unhighlight(placeGuideId) {
-    close(placeGuideId);
+    PlaceGuideOnList.close(placeGuideId);
   }
 
   createPlaceGuideOnListDiv(
@@ -216,6 +216,7 @@ class PlaceGuideOnList {
       placeGuideImage.style.textAlign = 'center';
       placeGuideImage.style.paddingTop = '90px';
       placeGuideImage.innerText = 'tour';
+      console.log("doesnt have image");
     }
     placeGuideImage.style.width = '100%';
     placeGuideImage.style.height = '180px';

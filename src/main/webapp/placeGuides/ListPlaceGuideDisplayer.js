@@ -14,6 +14,10 @@ class ListPlaceGuideDisplayer {
       listTitle: "My Guides",
       listSubTitle: "in selected map area"
     },
+    "CREATE_PLACE_GUIDE": {
+      listTitle: "Create Place Guide",
+      listSubTitle: ""
+    },
     "BOOKMARKED_PLACEGUIDES": {
       listTitle: "Bookmarked Guides",
       listSubTitle: ""
@@ -109,10 +113,10 @@ class ListPlaceGuideDisplayer {
     return "placeGuideOnList-" + "{" + placeGuideId + "}";
   }
 
-   // Move the highlighted place guide to top of list.
+ // Move the highlighted place guide to top of list.
   highlight(placeGuideId) {
-    const placeGuideDiv = 
-        this.remove(placeGuideId);
+    console.log(placeGuideId);
+    const placeGuideDiv = this.remove(placeGuideId);
     this.insertDivAfterTitle(placeGuideDiv);
     PlaceGuideOnList.highlight(placeGuideId);
   }
