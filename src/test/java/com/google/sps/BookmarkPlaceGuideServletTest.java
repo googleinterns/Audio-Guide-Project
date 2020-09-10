@@ -65,14 +65,14 @@ public final class BookmarkPlaceGuideServletTest {
   }
 
   @Test
-  public void doPost_bookmark_bookmarkingLimitNotExceeded_succesfulBookmarking()
+  public void doGet_bookmark_bookmarkingLimitNotExceeded_succesfulBookmarking()
       throws IOException, EntityNotFoundException {
     setupCurrentUserIdInHelper(ID_A);
     saveUser(userA);
     savePlaceGuide(toBookmarkGuide);
     setupRequestandResponse("Bookmark", toBookmarkGuide.getId());
     BookmarkPlaceGuideServlet boookmarkPlaceGuideServlet = new BookmarkPlaceGuideServlet();
-    boookmarkPlaceGuideServlet.doPost(request, response);
+    boookmarkPlaceGuideServlet.doGet(request, response);
     pw.flush();
     Gson gson = new Gson();
     Boolean successfulBookmark = gson.fromJson(sw.toString(), Boolean.class);
@@ -81,7 +81,7 @@ public final class BookmarkPlaceGuideServletTest {
   }
 
   @Test
-  public void doPost_bookmark_bookmarkingLimitExceeded_unsuccesfulBookmarking()
+  public void doGet_bookmark_bookmarkingLimitExceeded_unsuccesfulBookmarking()
       throws IOException, EntityNotFoundException {
     setupCurrentUserIdInHelper(ID_B);
     saveUser(userB);
@@ -89,7 +89,7 @@ public final class BookmarkPlaceGuideServletTest {
     System.out.println("!!!B can bookmark another guide: " + userB.canBookmarkAnotherPlaceGuide());
     setupRequestandResponse("Bookmark", toBookmarkGuide.getId());
     BookmarkPlaceGuideServlet boookmarkPlaceGuideServlet = new BookmarkPlaceGuideServlet();
-    boookmarkPlaceGuideServlet.doPost(request, response);
+    boookmarkPlaceGuideServlet.doGet(request, response);
     pw.flush();
     Gson gson = new Gson();
     Boolean successfulBookmark = gson.fromJson(sw.toString(), Boolean.class);
@@ -98,7 +98,7 @@ public final class BookmarkPlaceGuideServletTest {
   }
 
   @Test
-  public void doPost_unbookmark_succesfulUnbookmarking()
+  public void doGet_unbookmark_succesfulUnbookmarking()
       throws IOException, EntityNotFoundException {
     setupCurrentUserIdInHelper(ID_C);
     saveUser(userC);
@@ -106,7 +106,7 @@ public final class BookmarkPlaceGuideServletTest {
     System.out.println("!!!B can bookmark another guide: " + userB.canBookmarkAnotherPlaceGuide());
     setupRequestandResponse("Unbookmark", toBookmarkGuide.getId());
     BookmarkPlaceGuideServlet boookmarkPlaceGuideServlet = new BookmarkPlaceGuideServlet();
-    boookmarkPlaceGuideServlet.doPost(request, response);
+    boookmarkPlaceGuideServlet.doGet(request, response);
     pw.flush();
     Gson gson = new Gson();
     Boolean successfulUnbookmark = gson.fromJson(sw.toString(), Boolean.class);
