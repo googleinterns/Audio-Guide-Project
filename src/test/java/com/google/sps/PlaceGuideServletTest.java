@@ -611,54 +611,6 @@ public final class PlaceGuideServletTest {
     }
   }
 
-  //   @Test
-  //   public void
-  // doPost_userExistsWithFilledBookmarkedPlaceGuides_returnsFilledBookmarkedPlaceGuides()
-  //       throws IOException, ServletException {
-
-  //     // Mock request and response.
-  //     when(request.getParameter(UserDataServlet.NAME_INPUT)).thenReturn(NAME);
-  //     when(request.getParameter(UserDataServlet.SELF_INTRODUCTION_INPUT))
-  //         .thenReturn(SELF_INTRODUCTION);
-  //     StringWriter sw = new StringWriter();
-  //     PrintWriter pw = new PrintWriter(sw);
-  //     when(response.getWriter()).thenReturn(pw);
-
-  //     // Mock blobstoreService and blobInfoFactory.
-  //     Map<String, List<BlobKey>> blobs = new HashMap<>();
-  //     BlobKey blobKey = new BlobKey(IMG_KEY);
-  //     blobs.put(UserDataServlet.IMG_KEY_INPUT, Arrays.asList(blobKey));
-  //     when(blobstoreService.getUploads(request)).thenReturn(blobs);
-  //     BlobInfo blobInfo = new BlobInfo(blobKey, "img", new Date(), "file.img", 1);
-  //     when(blobInfoFactory.loadBlobInfo(blobKey)).thenReturn(blobInfo);
-
-  //     // Save the currenly logged in user's data.
-  //     userDataServlet = new UserDataServlet(blobstoreService, blobInfoFactory);
-  //     userDataServlet.doPost(request, response);
-
-  //     // Get the currently logged in user's previously saved data.
-  //     Key userKey = KeyFactory.createKey(DatastoreUserRepository.ENTITY_KIND, ID);
-  //     try {
-  //       Entity userEntity = datastore.get(userKey);
-  //       assertEquals(NAME, userEntity.getProperty(DatastoreUserRepository.NAME_PROPERTY));
-  //       assertEquals(EMAIL, userEntity.getProperty(DatastoreUserRepository.EMAIL_PROPERTY));
-  //       List<Long> resultList =
-  //           (ArrayList)
-  //
-  // userEntity.getProperty(DatastoreUserRepository.BOOKMARKED_PLACE_GUIDES_IDS_PROPERTY);
-  //       Set<Long> resultSet = new HashSet<>(resultList);
-  //       assertEquals(BOOKMARKED_PLACE_GUIDES_IDS, resultSet);
-  //       assertEquals(
-  //           SELF_INTRODUCTION,
-  //           userEntity.getProperty(DatastoreUserRepository.SELF_INTRODUCTION_PROPERTY));
-  //       assertEquals(
-  //           false, userEntity.getProperty(DatastoreUserRepository.PUBLIC_PORTFOLIO_PROPERTY));
-  //       assertEquals(IMG_KEY, userEntity.getProperty(DatastoreUserRepository.IMG_KEY_PROPERTY));
-  //     } catch (EntityNotFoundException e) {
-  //       fail("Entity not found: " + e);
-  //     }
-  //   }
-
   @After
   public void tearDown() {
     helper.tearDown();
