@@ -159,15 +159,12 @@ public final class BookmarkPlaceGuideServletTest {
 
   @Before
   public void setup() {
-    attributeToValue.put("com.google.appengine.api.users.UserService.user_id_key", (Object) ID_A);
     helper =
         new LocalServiceTestHelper(
                 new LocalDatastoreServiceTestConfig(), new LocalBlobstoreServiceTestConfig())
             .setEnvIsLoggedIn(true)
             .setEnvAuthDomain("localhost")
-            .setEnvEmail(EMAIL)
-            .setEnvAttributes(attributeToValue);
-    helper.setUp();
+            .setEnvEmail(EMAIL);
 
     request = mock(HttpServletRequest.class);
     response = mock(HttpServletResponse.class);
@@ -231,6 +228,10 @@ public final class BookmarkPlaceGuideServletTest {
   @Test
   public void doPost_bookmark_bookmarkingLimitNotExceeded_succesfulBookmarking()
       throws IOException, EntityNotFoundException {
+    attributeToValue.clear();
+    attributeToValue.put("com.google.appengine.api.users.UserService.user_id_key", (Object) ID_A);
+    helper.setEnvAttributes(attributeToValue);
+    helper.setUp();
     saveUser(userA);
     savePlaceGuide(toBookmarkGuide);
     setupRequestandResponse("Bookmark", toBookmarkGuide.getId());
@@ -241,6 +242,21 @@ public final class BookmarkPlaceGuideServletTest {
     Boolean successfulBookmark = gson.fromJson(sw.toString(), Boolean.class);
     assertTrue(successfulBookmark);
     assertTrue(userHasBookmarkedThePlaceGuide(ID_A, toBookmarkGuide.getId()));
+  }
+
+  @Test
+  public void doPost_bookmark_bookmarkingLimitExceeded_succesfulBookmarking()
+      throws IOException, EntityNotFoundException {
+    // saveUser(userB);
+    // savePlaceGuide(toBookmarkGuide);
+    // setupRequestandResponse("Bookmark", toBookmarkGuide.getId());
+    // BookmarkPlaceGuideServlet boookmarkPlaceGuideServlet = new BookmarkPlaceGuideServlet();
+    // boookmarkPlaceGuideServlet.doPost(request, response);
+    // pw.flush();
+    // Gson gson = new Gson();
+    // Boolean successfulBookmark = gson.fromJson(sw.toString(), Boolean.class);
+    // assertFalse(successfulBookmark);
+    // assertFalse(userHasBookmarkedThePlaceGuide(ID_B, toBookmarkGuide.getId()));
   }
 
   @After
