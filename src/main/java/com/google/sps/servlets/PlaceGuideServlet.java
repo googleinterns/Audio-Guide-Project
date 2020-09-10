@@ -61,6 +61,7 @@ public class PlaceGuideServlet extends HttpServlet {
   public static final String DELETE_IMAGE_INPUT = "deleteImage";
   public static final String PLACE_GUIDE_QUERY_TYPE_PARAMETER = "placeGuideType";
   public static final String REGION_CORNERS_PARAMETER = "regionCorners";
+  public static final String CREATOR_ID_PARAMETER = "creatorId";
 
   private final PlaceGuideRepository placeGuideRepository =
       PlaceGuideRepositoryFactory.getPlaceGuideRepository(RepositoryType.DATASTORE);
@@ -81,6 +82,7 @@ public class PlaceGuideServlet extends HttpServlet {
         PlaceGuideQueryType.valueOf(placeGuideQueryTypeString);
     GeoPt northEastCorner = null;
     GeoPt southWestCorner = null;
+    String creatorId = null;
     if (placeGuideQueryType.requiresCoordinates()) {
       String regionCornersString = request.getParameter(REGION_CORNERS_PARAMETER);
       // On the client-side, the LatLngBound class's toUrlValue function will generate a string with
@@ -90,6 +92,9 @@ public class PlaceGuideServlet extends HttpServlet {
           new GeoPt(Float.parseFloat(cornerCoordinates[0]), Float.parseFloat(cornerCoordinates[1]));
       northEastCorner =
           new GeoPt(Float.parseFloat(cornerCoordinates[2]), Float.parseFloat(cornerCoordinates[3]));
+    }
+    if (placeGuideQueryType.requiresCoordinates()) {
+      creatorId = request.getParameter(CREATOR_ID_PARAMETER);
     }
     List<PlaceGuide> placeGuides =
         getPlaceGuides(placeGuideQueryType, northEastCorner, southWestCorner);
