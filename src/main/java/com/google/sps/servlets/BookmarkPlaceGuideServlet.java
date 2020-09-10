@@ -20,8 +20,8 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/bookmark-place-guide")
 public class BookmarkPlaceGuideServlet extends HttpServlet {
 
-  private static final String PLACE_GUIDE_ID_PARAMETER = "placeGuideId";
-  private static final String BOOKMARK_HANDLING_TYPE_PARAMETER = "bookmarkHandlingType";
+  public static final String PLACE_GUIDE_ID_PARAMETER = "placeGuideId";
+  public static final String BOOKMARK_HANDLING_TYPE_PARAMETER = "bookmarkHandlingType";
 
   private final UserRepository userRepository =
       UserRepositoryFactory.getUserRepository(RepositoryType.DATASTORE);
