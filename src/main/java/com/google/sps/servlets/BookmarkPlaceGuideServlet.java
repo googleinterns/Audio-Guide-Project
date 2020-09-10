@@ -32,7 +32,7 @@ public class BookmarkPlaceGuideServlet extends HttpServlet {
   }
 
   /**
-   * Performs the bookmarking/unbookmarking if it's allowed. If it was succesfully executed, the
+   * Performs the bookmarking/unbookmarking if it's allowed. If it was successfully executed, the
    * servlet returns true. Otherwise it returns false. Remark that an operation is not allowed if
    * the user wants to bookmark a placeguide whereas they have already reached the maximum number of
    * bookmarked placeguides.
