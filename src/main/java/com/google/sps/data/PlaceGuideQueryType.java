@@ -16,23 +16,29 @@ package com.google.sps.data;
 
 /** Specifies the possible form types of queries for PlaceGuides. */
 public enum PlaceGuideQueryType {
-  ALL_PUBLIC(false),
-  CREATED_ALL(false),
-  CREATED_PUBLIC(false),
-  CREATED_PRIVATE(false),
-  BOOKMARKED(false),
-  ALL_PUBLIC_IN_MAP_AREA(true),
-  CREATED_ALL_IN_MAP_AREA(true),
-  CREATED_PUBLIC_IN_MAP_AREA(true),
-  CREATED_PRIVATE_IN_MAP_AREA(true);
+  ALL_PUBLIC(false, false),
+  CREATED_ALL(false, false),
+  CREATED_PUBLIC(false, false),
+  CREATED_PRIVATE(false, false),
+  BOOKMARKED(false, false),
+  ALL_PUBLIC_IN_MAP_AREA(true, false),
+  CREATED_ALL_IN_MAP_AREA(true, false),
+  CREATED_PUBLIC_IN_MAP_AREA(true, false),
+  CREATED_PRIVATE_IN_MAP_AREA(true, false),
+  CREATED_BY_GIVEN_USER_PUBLIC_IN_MAP_AREA(true, true);
 
   private final boolean requiresCoordinates;
+  private final boolean requiresUserIdFromRequest;
 
-  PlaceGuideQueryType(boolean requiresCoordinates) {
+  PlaceGuideQueryType(boolean requiresCoordinates, boolean requiresUserIdFromRequest) {
     this.requiresCoordinates = requiresCoordinates;
   }
 
   public boolean requiresCoordinates() {
     return this.requiresCoordinates;
+  }
+
+  public boolean requiresUserIdFromRequest() {
+    return this.requiresUserIdFromRequest;
   }
 }
