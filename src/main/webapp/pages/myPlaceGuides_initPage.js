@@ -8,7 +8,6 @@
  */
 let map;
 let placeGuideManager;
-const PLACE_GUIDE_DISPLAY_TYPE = 'My Guides';
 
 function initPage() {
   authenticateUser().then((userAuthenticationStatus) => {
