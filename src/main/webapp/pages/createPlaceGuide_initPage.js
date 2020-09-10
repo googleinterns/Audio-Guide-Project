@@ -25,10 +25,15 @@ function initPage() {
       mapWidget.addGeolocationFunctionality();
       mapWidget.addLocationChoosingAndSavingFunctionality();
       map = mapWidget.map;
-      placeGuideManager = new PlaceGuideManager(
-          PlaceGuideManager.PAGE.CREATE_PLACE_GUIDE, map);
-      document.getElementById('map')
-          .addEventListener(MapWidget.CHOSEN_LOCATION_CHANGE_EVENT, function() {
+      const placeGuideRepository =
+          new PlaceGuideRepository(
+              PlaceGuideRepository.QueryType.CREATED_ALL_IN_MAP_AREA);
+      placeGuideManager = new PlaceGuideManager(placeGuideRepository, false);
+      google.maps.event.addListener(map, 'idle', function () {
+        placeGuideManager.update(map.getBounds(), map.getZoom(), false);
+      });
+      document.getElementById("map")
+          .addEventListener(MapWidget.CHOSEN_LOCATION_CHANGE_EVENT, function () {
             handleChosenLocationChangeEvent(mapWidget);
           });
     }
@@ -39,8 +44,8 @@ function handleChosenLocationChangeEvent(mapWidget) {
   enableSubmission();
   if (mapWidget.pickedLocation.place != null) {
     updateLocation(mapWidget.pickedLocation.position,
-        mapWidget.pickedLocation.place.place_id,
-        mapWidget.pickedLocation.place.name);
+                  mapWidget.pickedLocation.place.place_id,
+                  mapWidget.pickedLocation.place.name);
   } else {
     updateLocation(mapWidget.pickedLocation.position, null, null);
   }
