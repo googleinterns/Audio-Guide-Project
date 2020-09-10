@@ -22,6 +22,10 @@ class PlaceGuideManager {
     BOOKMARKED_PLACEGUIDES: {
       query: PlaceGuideRepository.QUERY_TYPE.BOOKMARKED,
       guideBookmarkStatusChanged: PlaceGuideManager.removeGuideIfUnbookmarked,
+    },
+    USERS_PORTFOLIO: {
+      query: PlaceGuideRepository.CREATED_BY_GIVEN_USER_PUBLIC_IN_MAP_AREA,
+      guideBookmarkStatusChanged: undefined,
     }
   };
 
