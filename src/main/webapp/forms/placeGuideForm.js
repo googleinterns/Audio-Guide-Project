@@ -1,3 +1,5 @@
+const DUMMY_DATA_FOR_PLACE_NAME = 'placeName';
+
 /**
  * Handles setting up the create place guide form whenever the page is loaded.
  */
@@ -5,38 +7,55 @@ function setUpCreatePlaceGuideForm() {
   addBlobstoreUploadUrlToForm(
       'CREATE_PLACE_GUIDE_FORM', 'createPlaceGuideForm');
   activatePreviewFeature();
+  activateRemoveImageFeature("clear-img-icon", false);
   styleInputs();
   fillFormWithPlaceGuideToEdit();
 }
 
+/**
+ * This function initializes the components
+ * managed by the Material Design library.
+ */
 function styleInputs() {
-  const nameInput = new mdc.textField.MDCTextField(document.getElementById('nameInput'));
-  const lengthInput = new mdc.textField.MDCTextField(document.getElementById('lengthInput'));
-  const descriptionInput = new mdc.textField.MDCTextField(document.getElementById('descriptionInput'));
-  const submitButtonRipple = new mdc.ripple.MDCRipple(document.getElementById('submitBtn'));
-  const chooseAudioFileButtonRipple = new mdc.ripple.MDCRipple(document.getElementById('chooseAudioFileBtn'));
-  const chooseImageFileButtonRipple = new mdc.ripple.MDCRipple(document.getElementById('chooseImageFileBtn'));
-  const deletePrevImageCheckbox = new mdc.checkbox.MDCCheckbox(document.getElementById('deletePrevImageCheckbox'));
-  const deletePrevImageFormField = new mdc.formField.MDCFormField(document.getElementById('deletePrevImageFormField'));
+  const nameInput = new mdc.textField.MDCTextField(
+      document.getElementById('nameInput'));
+  const lengthInput = new mdc.textField.MDCTextField(
+      document.getElementById('lengthInput'));
+  const descriptionInput = new mdc.textField.MDCTextField(
+      document.getElementById('descriptionInput'));
+  const submitButtonRipple = new mdc.ripple.MDCRipple(
+      document.getElementById("submitBtn"));
+  const chooseAudioFileButtonRipple = new mdc.ripple.MDCRipple(
+      document.getElementById("chooseAudioFileBtn"));
+  const chooseImageFileButtonRipple = new mdc.ripple.MDCRipple(
+      document.getElementById("chooseImageFileBtn"));
+  const deletePrevImageCheckbox = new mdc.checkbox.MDCCheckbox(
+      document.getElementById('deletePrevImageCheckbox'));
+  const deletePrevImageFormField = new mdc.formField.MDCFormField(
+      document.getElementById('deletePrevImageFormField'));
   deletePrevImageFormField.input = deletePrevImageCheckbox;
-  const publicitySwitchControl = new mdc.switchControl.MDCSwitch(document.getElementById('publicitySwitch'));
+  const publicitySwitchControl = new mdc.switchControl.MDCSwitch(
+      document.getElementById("publicitySwitch"));
 }
 
-
+/**
+ * This function enables the preview of the picture and audio.
+ */
 function activatePreviewFeature() {
-  setSrcToElementOnChangeEvent(
-      'imageKey', 'imagePreview', true);
-  handleIconVisibilityOnFileChangeEvent(
-      'imageKey', document.getElementById('no-img-icon'));
-  setSrcToElementOnChangeEvent(
-      'audioKey', 'audioPlayer', false);
+  handleFileInputChangeEvent(
+      'imageKey', showImagePreview, removeImagePreview);
+  handleFileInputChangeEvent(
+      'audioKey', setAudioPreviewSource, removeAudioPreviewSource);
 }
 
 function enableSubmission() {
-  document.getElementById('submitBtn').disabled = false;
+  document.getElementById("submitBtn").disabled = false;
 }
 
-// For testing.
+/**
+ * This function writes in the hidden form inputs the
+ * data of the newly chosen location for the placeguide.
+ */
 function updateLocation(position, placeId, placeName) {
   if (placeName != null) {
     document.getElementById(
@@ -59,39 +78,42 @@ function fillFormWithPlaceGuideData(placeGuide) {
   // Set required attribute to false since there must be a previous audio key
   // from the previous place guide data.
   document.getElementById('audioKey').required = false;
-  setFormInputValue(document.getElementById('id'), placeGuide.id);
-  setFormInputValue(
+  setFormInputValueOrEmpty(document.getElementById('id'), placeGuide.id);
+  setFormInputValueOrEmpty(
       new mdc.textField.MDCTextField(document.getElementById('nameInput')),
       placeGuide.name);
   setBlobKeySrcToElement(
       placeGuide.audioKey, 'audioPlayer', false);
   const publicitySwitchControl =
-    new mdc.switchControl.MDCSwitch(document.getElementById('publicitySwitch'));
+      new mdc.switchControl.MDCSwitch(document.getElementById("publicitySwitch"));
   if (placeGuide.isPublic) {
     publicitySwitchControl.checked = true;
   } else {
     publicitySwitchControl.checked = false;
   }
-  setFormInputValue(
+  setFormInputValueOrEmpty(
       document.getElementById('latitude'),
       placeGuide.coordinate.latitude);
-  setFormInputValue(
+  setFormInputValueOrEmpty(
       document.getElementById('longitude'),
       placeGuide.coordinate.longitude);
-  setFormInputValue(
-      new mdc.textField.MDCTextField(document.getElementById('lengthInput')),
+  setFormInputValueOrEmpty(
+      document.getElementById('length'),
       placeGuide.length);
-  setFormInputValue(
+  setFormInputValueOrEmpty(
       new mdc.textField.MDCTextField(
           document.getElementById('descriptionInput')),
       placeGuide.description);
   if (placeGuide.imageKey != undefined) {
-    setBlobKeySrcToElement(
-        placeGuide.imageKey,
-        'imagePreview', true);
-    document.getElementById('no-img-icon')
-        .style.display = 'none';
+    setBlobKeySrcToElement(placeGuide.imageKey, "imagePreview", true);
+    document.getElementById("no-img-icon").style.display = "none";
+    document.getElementById("clear-img-icon").style.display = "block";
+    activateRemoveImageFeature(true);
+  } else {
+    activateRemoveImageFeature(false);
   }
+  setFormInputValueOrEmpty(document.getElementById('placeName'),
+      DUMMY_DATA_FOR_PLACE_NAME);
 }
 
 /**

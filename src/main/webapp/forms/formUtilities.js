@@ -17,14 +17,14 @@ function setFormInputValueOrEmpty(input, value) {
  * Otherwise, fileRemovedFunction is called.
  */
 function handleFileInputChangeEvent(fileInputName,
-    fileUploadedFunction,
-    fileRemovedFunction) {
+                                    fileUploadedFunction,
+                                    fileRemovedFunction) {
   const fileInput = document.getElementById(fileInputName);
-  fileInput.addEventListener('change', function() {
+  fileInput.addEventListener("change", function () {
     const file = this.files[0];
     if (file) {
       const reader = new FileReader();
-      reader.addEventListener('load', function() {
+      reader.addEventListener("load", function () {
         fileUploadedFunction(this.result);
       });
       reader.readAsDataURL(file);
@@ -44,7 +44,7 @@ function handleFileInputChangeEvent(fileInputName,
  */
 function activateRemoveImageFeature(triggerButtonId, hasPreviousImage) {
   document.getElementById(triggerButtonId)
-      .addEventListener('click', function() {
+      .addEventListener("click", function () {
         if (hasPreviousImage) {
           const deletePrevImageCheckbox = new mdc.checkbox.MDCCheckbox(
               document.getElementById('deletePrevImageCheckbox'));
@@ -55,22 +55,22 @@ function activateRemoveImageFeature(triggerButtonId, hasPreviousImage) {
           hasPreviousImage = false;
         }
         removeImagePreview();
-        document.getElementById('imageKey').value = '';
+        document.getElementById("imageKey").value = "";
       });
 }
 
 function removeImagePreview() {
-  document.getElementById('imagePreview').style.display = 'none';
-  document.getElementById('no-img-icon').style.display = 'block';
-  document.getElementById('clear-img-icon').style.display = 'none';
+  document.getElementById("imagePreview").style.display = "none";
+  document.getElementById("no-img-icon").style.display = "block";
+  document.getElementById("clear-img-icon").style.display = "none";
 }
 
 function showImagePreview(imgSrc) {
-  const previewElement = document.getElementById('imagePreview');
-  previewElement.setAttribute('src', imgSrc);
-  previewElement.style.display = 'block';
-  document.getElementById('no-img-icon').style.display = 'none';
-  document.getElementById('clear-img-icon').style.display = 'block';
+  let previewElement = document.getElementById("imagePreview");
+  previewElement.setAttribute("src", imgSrc);
+  previewElement.style.display = "block";
+  document.getElementById("no-img-icon").style.display = "none";
+  document.getElementById("clear-img-icon").style.display = "block";
 }
 
 function setAudioPreviewSource(src) {
