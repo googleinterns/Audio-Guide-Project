@@ -3,7 +3,7 @@ class UserRepresentation {
     this._userRepresentationDiv = this.createUserDiv(user);
   }
 
-  get userRepresentationDiv() {
+  get div() {
     return this._userRepresentationDiv;
   }
 
@@ -30,15 +30,15 @@ class UserRepresentation {
             UserRepresentation.createUserIcon(user.email));
       }
     }
-    //   userDiv.addEventListener("click", function() {
-    //     if (user.publicPortfolio) {
-    //       var url = new URL("/portfolio.html", document.URL);
-    //       url.searchParams.append('user', user)
-    //       window.location = url;
-    //     } else {
-    //       alert("The creator of this place guide does not have a private place guide!");
-    //     }
-    //   });
+    userDiv.addEventListener("click", function() {
+      if (user.publicPortfolio) {
+        const queryString = user.queryString;
+        const url = './usersPortfolio.html?' + queryString;
+        window.location = url;
+      } else {
+        alert("The creator of this place guide does not have a private place guide!");
+      }
+    });
     return userDiv;
   }
 
