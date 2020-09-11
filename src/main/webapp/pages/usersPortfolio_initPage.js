@@ -19,7 +19,7 @@ function initPage() {
       mapWidget.addGeolocationFunctionality();
       mapWidget.addSearchingFunctionality();
       map = mapWidget.map;
-      const creatorId = "";
+      const creatorId = "167176955777861719774";
       placeGuideManager = new PlaceGuideManager(
           PlaceGuideManager.PAGE.USERS_PORTFOLIO, map, creatorId);
     }

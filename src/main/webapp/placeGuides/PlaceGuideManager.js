@@ -24,7 +24,7 @@ class PlaceGuideManager {
       guideBookmarkStatusChanged: PlaceGuideManager.removeGuideIfUnbookmarked,
     },
     USERS_PORTFOLIO: {
-      query: PlaceGuideRepository.CREATED_BY_GIVEN_USER_PUBLIC_IN_MAP_AREA,
+      query: PlaceGuideRepository.QUERY_TYPE.CREATED_BY_GIVEN_USER_PUBLIC_IN_MAP_AREA,
       guideBookmarkStatusChanged: undefined,
     }
   };
