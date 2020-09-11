@@ -1,5 +1,3 @@
-const DUMMY_DATA_FOR_PLACE_NAME = 'placeName';
-
 /**
  * Handles setting up the create place guide form whenever the page is loaded.
  */
@@ -32,27 +30,6 @@ function activatePreviewFeature() {
       'imageKey', document.getElementById("no-img-icon"));
   setSrcToElementOnChangeEvent(
       'audioKey', 'audioPlayer', false);
-}
-
-// Just a test by fetching actual place guides' data from database 
-// to see if image and audio previewing also works with files from blobstore.
-function testExistingPlaceGuide() {
-  getFetchedList().then(placeGuideCreatorPairs => {
-    if (placeGuideCreatorPairs === undefined || placeGuideCreatorPairs.length == 0) {
-      console.log("place guide does not exist yet.");
-    } else {
-      fillFormWithPlaceGuideData(placeGuideCreatorPairs[0].placeGuide); 
-    }
-  });
-}
-
-// For testing.
-async function getFetchedList() {
-  return fetch(
-      '/place-guide-data?placeGuideType=ALL_PUBLIC', {method: 'GET'})
-      .then((response) => {
-        return response.json();
-      });
 }
 
 function enableSubmission() {
