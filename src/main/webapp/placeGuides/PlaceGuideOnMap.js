@@ -10,11 +10,8 @@ class PlaceGuideOnMap {
         .getInfoWindow(name, position, place, creator, description);
     this._marker = PlaceGuideOnMap.getMarker(placeType, name, position);
     this._highlighted = false;
-    this.closeInfoWindowOnMapClick();
-    this.toggleInfoWindowOnMarkerClick();
-    this.highlightOnMarkerDoubleClick();
-    this.unhighlightOnMapClick();
-    this.unhighlightOnMarkerClick();
+    this.setupHighlightOnMarkerClick();
+    this.setupUnhighlightOnMapClick();
   }
 
   get marker() {
@@ -80,13 +77,11 @@ class PlaceGuideOnMap {
 
   highlight() {
     this._highlighted = true;
-    this._marker.setAnimation(google.maps.Animation.BOUNCE);
     this.openInfoWindow();
   }
 
   unhighlight() {
     this._highlighted = false;
-    this._marker.setAnimation(null);
     this.closeInfoWindow();
   }
 
@@ -104,50 +99,22 @@ class PlaceGuideOnMap {
     this._marker.setMap(null);
   }
 
-  highlightOnMarkerDoubleClick() {
+  setupHighlightOnMarkerClick() {
     const thisPlaceGuideOnMap = this;
-    this._marker.addListener('dblclick', () => {
-      if (!thisPlaceGuideOnMap.isHighlighted()) {
+    this._marker.addListener('click', () => {
+      if (thisPlaceGuideOnMap.isHighlighted()) {
+        placeGuideManager.unhighlightPlaceGuide();
+      } else {
         placeGuideManager.highlightPlaceGuide(thisPlaceGuideOnMap.id);
       }
     });
   }
 
-  toggleInfoWindowOnMarkerClick() {
+  setupUnhighlightOnMapClick() {
     const thisPlaceGuideOnMap = this;
-    this._marker.addListener('click', () => {
-      if (thisPlaceGuideOnMap._infoWindowClosed) {
-        thisPlaceGuideOnMap.openInfoWindow();
-      } else {
-        thisPlaceGuideOnMap.closeInfoWindow();
-      }
-    });
-  }
-
-  unhighlightOnMarkerClick() {
-    const thisPlaceGuideOnMap = this;
-    this._marker.addListener('click', () => {
+    map.addListener('click', function (mapsMouseEvent) {
       if (thisPlaceGuideOnMap.isHighlighted()) {
         placeGuideManager.unhighlightPlaceGuide();
       }
     });
   }
-
-  closeInfoWindowOnMapClick() {
-    const thisPlaceGuideOnMap = this;
-    map.addListener('click', function(mapsMouseEvent) {
-      if (!thisPlaceGuideOnMap._infoWindowClosed) {
-        thisPlaceGuideOnMap.closeInfoWindow();
-      }
-    });
-  }
-
-  unhighlightOnMapClick() {
-    const thisPlaceGuideOnMap = this;
-    map.addListener('click', function(mapsMouseEvent) {
-      if (thisPlaceGuideOnMap.isHighlighted()) {
-        placeGuideManager.unhighlightPlaceGuide();
-      }
-    });
-  }
-}
