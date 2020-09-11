@@ -25,9 +25,6 @@ function initPage() {
       mapWidget.addGeolocationFunctionality();
       mapWidget.addLocationChoosingAndSavingFunctionality();
       map = mapWidget.map;
-      const placeGuideRepository =
-          new PlaceGuideRepository(
-              PlaceGuideRepository.QUERY_TYPE.CREATED_ALL_IN_MAP_AREA);
       placeGuideManager = new PlaceGuideManager(PlaceGuideManager.PAGE.CREATE_PLACE_GUIDE, map);
       google.maps.event.addListener(map, 'idle', function() {
         placeGuideManager.refreshPlaceGuides(map.getBounds(), map.getZoom(), false);
