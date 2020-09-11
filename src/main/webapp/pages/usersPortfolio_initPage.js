@@ -20,8 +20,24 @@ function initPage() {
       mapWidget.addSearchingFunctionality();
       map = mapWidget.map;
       const creatorId = "167176955777861719774";
+      const user = new User("167176955777861719774", "email@yahoo.com", "boriName", true, "I am Bori", undefined);
+      fillPortfolioDiv(user);
       placeGuideManager = new PlaceGuideManager(
           PlaceGuideManager.PAGE.USERS_PORTFOLIO, map, creatorId);
     }
   });
 }
+
+function fillPortfolioDiv(user) {
+  if (user.imgKey != undefined) {
+    setBlobKeyBackgroundToElement(user.imgKey, document.getElementById("portfolioImg"));
+  }
+  if (user.name != undefined) {
+    document.getElementById("portfolioName").innerText = user.name;
+  } else {
+    document.getElementById("portfolioName").innerText = user.email;
+  }
+  document.getElementById("portfolioSelfIntroduction").innerText = user.selfIntroduction;
+}
+
+

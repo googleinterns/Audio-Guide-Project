@@ -4,6 +4,7 @@ class User {
     this._email = email;
     this._name = name;
     this._publicPortfolio = publicPortfolio;
+    this._selfIntroduction = selfIntroduction;
     this._imgKey = imgKey;
   }
 
