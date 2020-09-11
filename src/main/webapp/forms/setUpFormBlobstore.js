@@ -50,22 +50,22 @@ function setFormInputValue(input, value) {
 function setSrcToElementOnChangeEvent(elementId, previewId, displayBlock) {
   const element = document.getElementById(elementId);
   const preview = document.getElementById(previewId);
-  element.addEventListener("change", function() {
+  element.addEventListener('change', function() {
     const file = this.files[0];
 
     if (file) {
       const reader = new FileReader();
       if (displayBlock) {
-        preview.style.display = "block"; 
+        preview.style.display = 'block';
       }
 
-      reader.addEventListener("load", function() {
-        preview.setAttribute("src", this.result);
+      reader.addEventListener('load', function() {
+        preview.setAttribute('src', this.result);
       });
 
       reader.readAsDataURL(file);
     } else {
-        preview.style.display = "none";
+      preview.style.display = 'none';
     }
   });
 }
@@ -73,22 +73,22 @@ function setSrcToElementOnChangeEvent(elementId, previewId, displayBlock) {
 function setBlobKeySrcToElement(blobKey, previewId, displayBlock) {
   const preview = document.getElementById(previewId);
   if (displayBlock) {
-    preview.style.display = "block";
+    preview.style.display = 'block';
   }
-  const src = new URL("/serve-blob", document.URL);
+  const src = new URL('/serve-blob', document.URL);
   src.searchParams.append('blob-key', blobKey);
-  preview.setAttribute("src", src);
+  preview.setAttribute('src', src);
 }
 
 function handleIconVisibilityOnFileChangeEvent(elementId, icon) {
   const element = document.getElementById(elementId);
-  element.addEventListener("change", function() {
+  element.addEventListener('change', function() {
     const file = this.files[0];
 
     if (file) {
-      icon.style.display = "none";
+      icon.style.display = 'none';
     } else {
-      icon.style.display = "block";
+      icon.style.display = 'block';
     }
   });
 }
