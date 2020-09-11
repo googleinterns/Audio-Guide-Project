@@ -14,7 +14,6 @@
 let map;
 let placeGuideManager;
 
-
 function initPage() {
   authenticateUser().then((userAuthenticationStatus) => {
     if (!userAuthenticationStatus.isLoggedIn) {
