@@ -132,10 +132,10 @@ function fillFormWithPlaceGuideToEdit() {
       GET[paramName] = paramValue;
     });
     document.getElementById('id').value = GET['placeGuideId'];
-    setFormInputValue(
+    setFormInputValueOrEmpty(
         document.getElementById('placeId').value,
         GET['placeId']);
-    setFormInputValue(
+    setFormInputValueOrEmpty(
         new mdc.textField.MDCTextField(document.getElementById('nameInput')),
         GET['name']);
     document.getElementById('audioPlayer').src = PlaceGuideOnList.getBlobSrc(GET['audioKey']);
@@ -147,17 +147,17 @@ function fillFormWithPlaceGuideToEdit() {
           .style.display = 'none';
     }
     if (GET['description'] != 'undefined') {
-      setFormInputValue(
+      setFormInputValueOrEmpty(
           new mdc.textField.MDCTextField(document.getElementById('descriptionInput')),
           GET['description']);
     }
-    setFormInputValue(
+    setFormInputValueOrEmpty(
         document.getElementById('latitude'),
         GET['latitude']);
-    setFormInputValue(
+    setFormInputValueOrEmpty(
         document.getElementById('longitude'),
         GET['longitude']);
-    setFormInputValue(
+    setFormInputValueOrEmpty(
         new mdc.textField.MDCTextField(document.getElementById('lengthInput')),
         GET['audioLength']);
     const publicitySwitchControl =
