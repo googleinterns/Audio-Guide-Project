@@ -7,7 +7,7 @@ function setUpCreatePlaceGuideForm() {
   addBlobstoreUploadUrlToForm(
       'CREATE_PLACE_GUIDE_FORM', 'createPlaceGuideForm');
   activatePreviewFeature();
-  activateRemoveImageFeature("clear-img-icon", false);
+  activateRemoveImageFeature('clear-img-icon', false);
   styleInputs();
   fillFormWithPlaceGuideToEdit();
 }
@@ -24,18 +24,18 @@ function styleInputs() {
   const descriptionInput = new mdc.textField.MDCTextField(
       document.getElementById('descriptionInput'));
   const submitButtonRipple = new mdc.ripple.MDCRipple(
-      document.getElementById("submitBtn"));
+      document.getElementById('submitBtn'));
   const chooseAudioFileButtonRipple = new mdc.ripple.MDCRipple(
-      document.getElementById("chooseAudioFileBtn"));
+      document.getElementById('chooseAudioFileBtn'));
   const chooseImageFileButtonRipple = new mdc.ripple.MDCRipple(
-      document.getElementById("chooseImageFileBtn"));
+      document.getElementById('chooseImageFileBtn'));
   const deletePrevImageCheckbox = new mdc.checkbox.MDCCheckbox(
       document.getElementById('deletePrevImageCheckbox'));
   const deletePrevImageFormField = new mdc.formField.MDCFormField(
       document.getElementById('deletePrevImageFormField'));
   deletePrevImageFormField.input = deletePrevImageCheckbox;
   const publicitySwitchControl = new mdc.switchControl.MDCSwitch(
-      document.getElementById("publicitySwitch"));
+      document.getElementById('publicitySwitch'));
 }
 
 /**
@@ -49,7 +49,7 @@ function activatePreviewFeature() {
 }
 
 function enableSubmission() {
-  document.getElementById("submitBtn").disabled = false;
+  document.getElementById('submitBtn').disabled = false;
 }
 
 /**
@@ -85,7 +85,7 @@ function fillFormWithPlaceGuideData(placeGuide) {
   setBlobKeySrcToElement(
       placeGuide.audioKey, 'audioPlayer', false);
   const publicitySwitchControl =
-      new mdc.switchControl.MDCSwitch(document.getElementById("publicitySwitch"));
+      new mdc.switchControl.MDCSwitch(document.getElementById('publicitySwitch'));
   if (placeGuide.isPublic) {
     publicitySwitchControl.checked = true;
   } else {
@@ -105,9 +105,9 @@ function fillFormWithPlaceGuideData(placeGuide) {
           document.getElementById('descriptionInput')),
       placeGuide.description);
   if (placeGuide.imageKey != undefined) {
-    setBlobKeySrcToElement(placeGuide.imageKey, "imagePreview", true);
-    document.getElementById("no-img-icon").style.display = "none";
-    document.getElementById("clear-img-icon").style.display = "block";
+    setBlobKeySrcToElement(placeGuide.imageKey, 'imagePreview', true);
+    document.getElementById('no-img-icon').style.display = 'none';
+    document.getElementById('clear-img-icon').style.display = 'block';
     activateRemoveImageFeature(true);
   } else {
     activateRemoveImageFeature(false);

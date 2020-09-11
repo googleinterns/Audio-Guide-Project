@@ -25,10 +25,9 @@ function initPage() {
       mapWidget.addGeolocationFunctionality();
       mapWidget.addLocationChoosingAndSavingFunctionality();
       map = mapWidget.map;
-      placeGuideManager = new PlaceGuideManager(PlaceGuideManager.PAGE.CREATE_PLACE_GUIDE, map);
-      google.maps.event.addListener(map, 'idle', function() {
-        placeGuideManager.refreshPlaceGuides(map.getBounds(), map.getZoom(), false);
-      });
+
+      placeGuideManager = new PlaceGuideManager(
+          PlaceGuideManager.PAGE.CREATE_PLACE_GUIDE, map);
       document.getElementById('map')
           .addEventListener(MapWidget.CHOSEN_LOCATION_CHANGE_EVENT, function() {
             handleChosenLocationChangeEvent(mapWidget);
