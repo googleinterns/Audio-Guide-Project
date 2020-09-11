@@ -14,7 +14,7 @@ function initPage() {
     if (!userAuthenticationStatus.isLoggedIn) {
       location.replace(userAuthenticationStatus.loginUrl);
     } else {
-      const menu = new Menu(Menu.PAGE_NAMES.MY_PLACEGUIDES);
+      const menu = new Menu(undefined);
       const mapWidget = new MapWidget();
       mapWidget.addGeolocationFunctionality();
       mapWidget.addSearchingFunctionality();
