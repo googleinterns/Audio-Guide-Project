@@ -407,7 +407,7 @@ class PlaceGuideOnList {
   createBackToListButton(placeGuideId, parentDiv) {
     const backToListButton = this.getPlaceGuideButtonWithPreparedClasses();
     backToListButton.setAttribute('title', 'back to list');
-    backToListButton.innerText = 'reorder';
+    backToListButton.innerText = 'close_fullscreen';
     backToListButton.addEventListener('click', function() {
       PlaceGuideOnList.close(placeGuideId);
     });
