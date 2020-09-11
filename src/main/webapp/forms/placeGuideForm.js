@@ -127,5 +127,7 @@ function fillFormWithPlaceGuideToEdit() {
     } else {
       publicitySwitchControl.checked = false;
     }
+  } else {
+    activateRemoveImageFeature('clear-img-icon', false);
   }
 }
