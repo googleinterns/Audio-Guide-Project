@@ -176,3 +176,16 @@ form img {
 .form-action-button {
     width: 235px;
 }
+
+.mdc-card {
+    height: 350px;
+    width: 350px;
+}
+
+.mdc-card-content {
+    padding: 16px;
+}
+
+.rounded-div {
+    border-radius: 50%;
+}
