@@ -168,7 +168,7 @@ class PlaceGuideRepository {
       const url = new URL("bookmark-place-guide", document.URL);
       url.searchParams.append("placeGuideId", placeGuideId);
       if (isBookmarked) {
-        url.searchParams.append("bookmarkHandlingType", "REMOVE");
+        url.searchParams.append("bookmarkHandlingType", "UNBOOKMARK");
       } else {
         url.searchParams.append("bookmarkHandlingType", "BOOKMARK");
       }
