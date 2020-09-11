@@ -27,10 +27,10 @@ function initPage() {
       map = mapWidget.map;
       const placeGuideRepository =
           new PlaceGuideRepository(
-              PlaceGuideRepository.QueryType.CREATED_ALL_IN_MAP_AREA);
-      placeGuideManager = new PlaceGuideManager(placeGuideRepository, false);
+              PlaceGuideRepository.QUERY_TYPE.CREATED_ALL_IN_MAP_AREA);
+      placeGuideManager = new PlaceGuideManager(PlaceGuideManager.PAGE.CREATE_PLACE_GUIDE, map);
       google.maps.event.addListener(map, 'idle', function () {
-        placeGuideManager.update(map.getBounds(), map.getZoom(), false);
+        placeGuideManager.refreshPlaceGuides(map.getBounds(), map.getZoom(), false);
       });
       document.getElementById("map")
           .addEventListener(MapWidget.CHOSEN_LOCATION_CHANGE_EVENT, function () {
@@ -39,6 +39,12 @@ function initPage() {
     }
   });
 }
+
+function setMapWidth() {
+  const availableWidth = window.innerWidth - 370;
+  document.getElementById('mapDisplayer').style.width = availableWidth.toString() + 'px';
+}
+
 
 function handleChosenLocationChangeEvent(mapWidget) {
   enableSubmission();

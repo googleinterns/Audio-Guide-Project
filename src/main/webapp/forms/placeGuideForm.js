@@ -139,11 +139,11 @@ function fillFormWithPlaceGuideToEdit() {
     setFormInputValue(
       new mdc.textField.MDCTextField(document.getElementById('nameInput')),
       GET["name"]);
-    document.getElementById("audioPlayer").src = getBlobSrc(GET["audioKey"]);
+    document.getElementById("audioPlayer").src = PlaceGuideOnList.getBlobSrc(GET["audioKey"]);
     if (GET["imageKey"] != "undefined") {
       document.getElementById("imagePreview").style.display = "block";
       document.getElementById("imagePreview").src = 
-        getBlobSrc(GET["imageKey"]);
+        PlaceGuideOnList.getBlobSrc(GET["imageKey"]);
       document.getElementById("no-img-icon")
         .style.display = "none";
     }
