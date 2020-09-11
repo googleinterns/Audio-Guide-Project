@@ -259,13 +259,13 @@ body {
 
 #listPlaceGuideDisplayer {
   width: 350px;
-  height: 93%;
+  height: 100%;
   float: left;
 }
 
 #mapDisplayer {
   margin-left: 350px;
-  height: 95%;
+  height: 100%;
 }
 
 #mapDisplayer #map{

@@ -39,7 +39,7 @@ class PlaceGuideManager {
     google.maps.event.addListenerOnce(map, 'idle', function () {
       thisManager.refreshPlaceGuides(map.getBounds(), map.getZoom());
     });
-    if (this._page != PlaceGuideManager.BOOKMARKED_PLACEGUIDES) {
+    if (this._page != PlaceGuideManager.PAGE.BOOKMARKED_PLACEGUIDES) {
       google.maps.event.addListener(map, 'idle', function () {
         thisManager.refreshPlaceGuides(map.getBounds(), map.getZoom());
       });
