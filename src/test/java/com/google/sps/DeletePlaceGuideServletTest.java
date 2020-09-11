@@ -128,7 +128,7 @@ public final class DeletePlaceGuideServletTest {
 
   @Test(expected = EntityNotFoundException.class)
   public void doGet_deletePlaceGuide() throws EntityNotFoundException, IOException {
-    when(request.getParameter("id")).thenReturn("12345");
+    when(request.getParameter("id")).thenReturn(String.valueOf(A_PUBLIC_ID));
     when(request.getParameter("currentUrl")).thenReturn("currentUrl");
     List<PlaceGuide> testPlaceGuidesList =
         Arrays.asList(
