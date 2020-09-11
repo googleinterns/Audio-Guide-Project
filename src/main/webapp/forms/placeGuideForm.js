@@ -1,5 +1,3 @@
-const DUMMY_DATA_FOR_PLACE_NAME = 'placeName';
-
 /**
  * Handles setting up the create place guide form whenever the page is loaded.
  */
@@ -74,48 +72,6 @@ function updateLocation(position, placeId, placeName) {
       'longitude').setAttribute('value', position.lng());
 }
 
-function fillFormWithPlaceGuideData(placeGuide) {
-  // Set required attribute to false since there must be a previous audio key
-  // from the previous place guide data.
-  document.getElementById('audioKey').required = false;
-  setFormInputValueOrEmpty(document.getElementById('id'), placeGuide.id);
-  setFormInputValueOrEmpty(
-      new mdc.textField.MDCTextField(document.getElementById('nameInput')),
-      placeGuide.name);
-  setBlobKeySrcToElement(
-      placeGuide.audioKey, 'audioPlayer', false);
-  const publicitySwitchControl =
-      new mdc.switchControl.MDCSwitch(document.getElementById('publicitySwitch'));
-  if (placeGuide.isPublic) {
-    publicitySwitchControl.checked = true;
-  } else {
-    publicitySwitchControl.checked = false;
-  }
-  setFormInputValueOrEmpty(
-      document.getElementById('latitude'),
-      placeGuide.coordinate.latitude);
-  setFormInputValueOrEmpty(
-      document.getElementById('longitude'),
-      placeGuide.coordinate.longitude);
-  setFormInputValueOrEmpty(
-      document.getElementById('length'),
-      placeGuide.length);
-  setFormInputValueOrEmpty(
-      new mdc.textField.MDCTextField(
-          document.getElementById('descriptionInput')),
-      placeGuide.description);
-  if (placeGuide.imageKey != undefined) {
-    setBlobKeySrcToElement(placeGuide.imageKey, 'imagePreview', true);
-    document.getElementById('no-img-icon').style.display = 'none';
-    document.getElementById('clear-img-icon').style.display = 'block';
-    activateRemoveImageFeature(true);
-  } else {
-    activateRemoveImageFeature(false);
-  }
-  setFormInputValueOrEmpty(document.getElementById('placeName'),
-      DUMMY_DATA_FOR_PLACE_NAME);
-}
-
 /**
  * Will fill the form if query string exists. Query string exists only when user wants
  * to edit a place guide.
@@ -145,6 +101,10 @@ function fillFormWithPlaceGuideToEdit() {
         PlaceGuideOnList.getBlobSrc(GET['imageKey']);
       document.getElementById('no-img-icon')
           .style.display = 'none';
+      document.getElementById('clear-img-icon').style.display = 'block';
+      activateRemoveImageFeature('clear-img-icon', true);
+    } else {
+      activateRemoveImageFeature('clear-img-icon', false);
     }
     if (GET['description'] != 'undefined') {
       setFormInputValueOrEmpty(
