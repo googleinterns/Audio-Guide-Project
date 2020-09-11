@@ -189,3 +189,9 @@ form img {
 .rounded-div {
     border-radius: 50%;
 }
+
+.portfolio-img {
+    width: 200px;
+    height: 200px;
+    margin: 20px auto;
+}
