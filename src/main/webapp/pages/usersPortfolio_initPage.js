@@ -19,11 +19,10 @@ function initPage() {
       mapWidget.addGeolocationFunctionality();
       mapWidget.addSearchingFunctionality();
       map = mapWidget.map;
-      const creatorId = "167176955777861719774";
-      const user = new User("167176955777861719774", "email@yahoo.com", "boriName", true, "I am Bori", undefined);
+      const user = getUserFromQueryString();
       fillPortfolioDiv(user);
       placeGuideManager = new PlaceGuideManager(
-          PlaceGuideManager.PAGE.USERS_PORTFOLIO, map, creatorId);
+          PlaceGuideManager.PAGE.USERS_PORTFOLIO, map, user.id);
     }
   });
 }
@@ -39,5 +38,6 @@ function fillPortfolioDiv(user) {
   }
   document.getElementById("portfolioSelfIntroduction").innerText = user.selfIntroduction;
 }
+
 
 
