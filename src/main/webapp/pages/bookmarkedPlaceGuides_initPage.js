@@ -21,6 +21,13 @@ function initPage() {
       map = mapWidget.map;
       placeGuideManager = new PlaceGuideManager(
           PlaceGuideManager.PAGE.BOOKMARKED_PLACEGUIDES, map);
+      setMapWidth();
+      window.addEventListener('resize', setMapWidth);
     }
   });
+}
+
+function setMapWidth() {
+  const availableWidth = window.innerWidth - 370;
+  document.getElementById('mapDisplayer').style.width = availableWidth.toString() + 'px';
 }

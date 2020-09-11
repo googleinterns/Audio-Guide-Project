@@ -25,6 +25,7 @@ function initPage() {
       mapWidget.addGeolocationFunctionality();
       mapWidget.addLocationChoosingAndSavingFunctionality();
       map = mapWidget.map;
+
       placeGuideManager = new PlaceGuideManager(
           PlaceGuideManager.PAGE.CREATE_PLACE_GUIDE, map);
       document.getElementById('map')
@@ -34,6 +35,12 @@ function initPage() {
     }
   });
 }
+
+function setMapWidth() {
+  const availableWidth = window.innerWidth - 370;
+  document.getElementById('mapDisplayer').style.width = availableWidth.toString() + 'px';
+}
+
 
 function handleChosenLocationChangeEvent(mapWidget) {
   enableSubmission();
