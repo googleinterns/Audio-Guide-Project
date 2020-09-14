@@ -19,11 +19,15 @@ function initPage() {
       mapWidget.addGeolocationFunctionality();
       mapWidget.addSearchingFunctionality();
       map = mapWidget.map;
-      const placeGuideRepository =
-          new PlaceGuideRepository(
-              PlaceGuideRepository.QueryType.BOOKMARKED);
-      placeGuideManager = new PlaceGuideManager(placeGuideRepository);
-      placeGuideManager.update(map.getBounds(), map.getZoom(), true);
+      placeGuideManager = new PlaceGuideManager(
+          PlaceGuideManager.PAGE.BOOKMARKED_PLACEGUIDES, map);
+      setMapWidth();
+      window.addEventListener('resize', setMapWidth);
     }
   });
+}
+
+function setMapWidth() {
+  const availableWidth = window.innerWidth - 370;
+  document.getElementById('mapDisplayer').style.width = availableWidth.toString() + 'px';
 }

@@ -68,7 +68,8 @@ class Geolocator {
 
   /**
    * This function tries to find the user's current location, and
-   * if it is found, it centers the map around it and sets 
+   * if it is found within 1 second,
+   * it centers the map around it and sets 
    * a higher zoom level.
    * If the location cannot be found, nothing happens.
    */
@@ -78,7 +79,9 @@ class Geolocator {
        map.setZoom(10);
        map.setCenter(
         Geolocator.convertCurrentLocationToLatLng(position));
-      }
+      },
+      error => {},
+      {timeout:1000}
     );
   }
 
@@ -111,7 +114,7 @@ class Geolocator {
           error => {
             this._foundLocation = false;
             this._currentLocation.visible = false;
-            showError(error);
+            this.showError(error);
           }
       );
     } else {
