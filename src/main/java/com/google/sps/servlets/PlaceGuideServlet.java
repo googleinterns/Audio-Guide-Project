@@ -50,7 +50,7 @@ public class PlaceGuideServlet extends HttpServlet {
   public static final String DESCRIPTION_INPUT = "description";
   public static final String LENGTH_INPUT = "length";
   public static final String IMAGE_KEY_INPUT = "imageKey";
-  public static final String DELETE_IMAGE_INPUT = "deleteImage";
+  public static final String DELETE_IMAGE_INPUT = "deleteImg";
   public static final String PLACE_GUIDE_QUERY_TYPE_PARAMETER = "placeGuideType";
   public static final String REGION_CORNERS_PARAMETER = "regionCorners";
 

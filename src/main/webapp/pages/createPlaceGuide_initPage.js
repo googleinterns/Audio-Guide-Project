@@ -25,27 +25,29 @@ function initPage() {
       mapWidget.addGeolocationFunctionality();
       mapWidget.addLocationChoosingAndSavingFunctionality();
       map = mapWidget.map;
-      const placeGuideRepository =
-          new PlaceGuideRepository(
-              PlaceGuideRepository.QueryType.CREATED_ALL_IN_MAP_AREA);
-      placeGuideManager = new PlaceGuideManager(placeGuideRepository);
-      google.maps.event.addListener(map, 'idle', function () {
-        placeGuideManager.update(map.getBounds(), map.getZoom(), false);
-      });
-      document.getElementById("map")
-          .addEventListener(MapWidget.CHOSEN_LOCATION_CHANGE_EVENT, function () {
+
+      placeGuideManager = new PlaceGuideManager(
+          PlaceGuideManager.PAGE.CREATE_PLACE_GUIDE, map);
+      document.getElementById('map')
+          .addEventListener(MapWidget.CHOSEN_LOCATION_CHANGE_EVENT, function() {
             handleChosenLocationChangeEvent(mapWidget);
           });
     }
   });
 }
 
+function setMapWidth() {
+  const availableWidth = window.innerWidth - 370;
+  document.getElementById('mapDisplayer').style.width = availableWidth.toString() + 'px';
+}
+
+
 function handleChosenLocationChangeEvent(mapWidget) {
   enableSubmission();
   if (mapWidget.pickedLocation.place != null) {
     updateLocation(mapWidget.pickedLocation.position,
-                  mapWidget.pickedLocation.place.place_id,
-                  mapWidget.pickedLocation.place.name);
+        mapWidget.pickedLocation.place.place_id,
+        mapWidget.pickedLocation.place.name);
   } else {
     updateLocation(mapWidget.pickedLocation.position, null, null);
   }

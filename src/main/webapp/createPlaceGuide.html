@@ -20,6 +20,7 @@
         </div>
     </div>
 
+    <div id = "listPlaceGuideDisplayer" style = "display: none; visibility: hidden; width: 0px;"></div>
     <div id="createPlaceGuide" class="left-element">
         <form method = "POST" id = "createPlaceGuideForm" enctype = "multipart/form-data" class="form-card">
             <h2 class="primary-text align-center">New Audio Guide</h2>
@@ -27,7 +28,7 @@
             <input type="hidden" id="placeId" name="placeId">
 
             <label id= "nameInput" class="mdc-text-field mdc-text-field--outlined form-field">
-                <input type="text" class="mdc-text-field__input" aria-labelledby="my-label-id" name = "name" required id = "name" pattern = "[A-Za-z':-\s]+" title = "Enter appropriate name!" maxlength = "20">
+                <input type="text" class="mdc-text-field__input" aria-labelledby="my-label-id" name = "name" required id = "name" pattern = "[A-Za-z\s]+" title = "Enter appropriate name!" maxlength = "20">
                 <span class="mdc-notched-outline">
                     <span class="mdc-notched-outline__leading"></span>
                     <span class="mdc-notched-outline__notch">
@@ -88,7 +89,7 @@
                 <img alt = "image preview" id = "imagePreview">
             </div>
 
-            <div class="align-center" style="display: none;">
+            <div class="align-center" style="display: none">
                 <div id="deletePrevImageFormField" class="mdc-form-field">
                     <div id="deletePrevImageCheckbox" class="mdc-checkbox">
                         <input type="checkbox"
@@ -158,9 +159,10 @@
     <script src = "./placeGuides/Location.js"></script>
     <script src = "./placeGuides/ListPlaceGuideDisplayer.js"></script>
     <script src = "./placeGuides/MapPlaceGuideDisplayer.js"></script>
+    <script src = "./placeGuides/PlaceGuideOnList.js"></script>
     <script src = "./placeGuides/PlaceGuideOnMap.js"></script>
-    <script src = "./placeGuides/PlaceGuideManager.js"></script>
     <script src = "./placeGuides/PlaceGuideRepository.js"></script>
+    <script src = "./placeGuides/PlaceGuideManager.js"></script>
     <script src = "./placeGuides/PlaceGuide.js"></script>
     <script src = "./user/User.js"></script>
     <script src = "./pages/createPlaceGuide_initPage.js"></script>

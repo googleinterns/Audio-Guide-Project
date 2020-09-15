@@ -8,6 +8,9 @@
     <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
     <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel = "stylesheet" href = "style.css">
 </head>
 <body onload = "setApiKeyAndMapsCallback()">
@@ -20,8 +23,14 @@
         </div>
     </div>
 
-    <input id = "search-box" type = "text" placeholder = "Search for a new place!"/>
-    <div id = "map"></div>
+    <div class = "content-container">
+        <div id = "listPlaceGuideDisplayer"></div>
+
+        <div id = "mapDisplayer">
+            <input id = "search-box" type = "text" placeholder = "Search for a new place!"/>
+            <div id = "map"></div>
+        </div>
+    </div>
 
     <script src = "./pages/menu.js"></script>
     <script src = "./user/userAuthentication.js"></script>
@@ -33,9 +42,10 @@
     <script src = "./placeGuides/Location.js"></script>
     <script src = "./placeGuides/ListPlaceGuideDisplayer.js"></script>
     <script src = "./placeGuides/MapPlaceGuideDisplayer.js"></script>
+    <script src = "./placeGuides/PlaceGuideOnList.js"></script>
     <script src = "./placeGuides/PlaceGuideOnMap.js"></script>
-    <script src = "./placeGuides/PlaceGuideManager.js"></script>
     <script src = "./placeGuides/PlaceGuideRepository.js"></script>
+    <script src = "./placeGuides/PlaceGuideManager.js"></script>
     <script src = "./placeGuides/PlaceGuide.js"></script>
     <script src = "./user/User.js"></script>
     <script src = "./pages/discover_initPage.js"></script>
