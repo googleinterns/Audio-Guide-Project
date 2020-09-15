@@ -25,7 +25,7 @@ class MapPlaceGuideDisplayer {
   }
 
   unhighlight(placeGuideId) {
-    if( this._placeGuidesOnMap[placeGuideId] != undefined) {
+    if ( this._placeGuidesOnMap[placeGuideId] != undefined) {
       this._placeGuidesOnMap[placeGuideId].unhighlight();
     }
   }

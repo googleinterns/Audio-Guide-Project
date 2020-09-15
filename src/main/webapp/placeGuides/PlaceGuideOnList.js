@@ -419,8 +419,10 @@ class PlaceGuideOnList {
     const divId = 'placeGuideOnList-' + '{' + placeGuideId + '}';
     const placeGuideDiv = document.getElementById(divId);
     if (placeGuideDiv != null) {
-      placeGuideDiv.querySelectorAll('.folded-placeGuide')[0].style.display = 'block';
-      placeGuideDiv.querySelectorAll('.card-placeGuide')[0].style.display = 'none';
+      placeGuideDiv
+          .querySelectorAll('.folded-placeGuide')[0].style.display = 'block';
+      placeGuideDiv
+          .querySelectorAll('.card-placeGuide')[0].style.display = 'none';
       placeGuideDiv.style.removeProperty('padding');
     }
   }
