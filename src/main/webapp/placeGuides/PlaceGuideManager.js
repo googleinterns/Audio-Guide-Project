@@ -10,22 +10,22 @@ class PlaceGuideManager {
   static PAGE = {
     DISCOVER: {
       query: PlaceGuideRepository.QUERY_TYPE.ALL_PUBLIC_IN_MAP_AREA,
-      onGuideBookmarkStatusChanged: undefined,
+      onGuideBookmarkStatusChanged: PlaceGuideManager.toogleBookmarkIcon,
       name: "DISCOVER"
     },
     MY_GUIDES: {
       query: PlaceGuideRepository.QUERY_TYPE.CREATED_ALL_IN_MAP_AREA,
-      onGuideBookmarkStatusChanged: undefined,
+      onGuideBookmarkStatusChanged: PlaceGuideManager.toogleBookmarkIcon,
       name: "MY_GUIDES"
     },
     CREATE_PLACE_GUIDE: {
       query: PlaceGuideRepository.QUERY_TYPE.CREATED_ALL_IN_MAP_AREA,
-      onGuideBookmarkStatusChanged: undefined,
+      onGuideBookmarkStatusChanged: PlaceGuideManager.toogleBookmarkIcon,
       name: "CREATE_PLACE_GUIDE"
     },
     BOOKMARKED_PLACEGUIDES: {
       query: PlaceGuideRepository.QUERY_TYPE.BOOKMARKED,
-      onGuideBookmarkStatusChanged: PlaceGuideManager.removeGuideIfUnbookmarked,
+      onGuideBookmarkStatusChanged: PlaceGuideManager.removeGuideIfUnbookmarked_elseToogleIcon,
       name: "BOOKMARKED_PLACEGUIDES"
     },
   };
@@ -91,11 +91,11 @@ class PlaceGuideManager {
   toggleBookmark(placeGuideId) {
     this._placeGuideRepository.togglePlaceGuideBookmarkStatus(placeGuideId)
       .then((response) => {
-        if(response == PlaceGuideRepository.BOOKMARK_ACTION_RESULT_TYPE.SUCCESS) {
+        if(response === PlaceGuideRepository.BOOKMARK_ACTION_RESULT_TYPE.SUCCESS) {
           if (this._page.onGuideBookmarkStatusChanged != undefined) {
             this._page.onGuideBookmarkStatusChanged(this, placeGuideId);
           }
-        } else if(response == PlaceGuideRepository.BOOKMARK_ACTION_RESULT_TYPE.SUCCESS) {
+        } else if(response === PlaceGuideRepository.BOOKMARK_ACTION_RESULT_TYPE.NOT_ALLOWED) {
           alert(`You can't bookmark more than ${MAX_NO_BOOKMARKED_GUIDES} gudies. Please unbookmark some of them before bookmarking a new one`);
         } else {
           alert("Failed to execute bookmarking/unbookmarking");
@@ -103,9 +103,27 @@ class PlaceGuideManager {
       });
   }
 
-  static removeGuideIfUnbookmarked(placeGuideManager, placeGuideId) {
-    if(!placeGuideManager._placeGuideRepository.isBookmarked(placeGuideId)) {
+  static removeGuideIfUnbookmarked_elseToogleIcon(placeGuideManager, placeGuideId) {
+    if (!placeGuideManager._placeGuideRepository.isBookmarked(placeGuideId)) {
+      placeGuideManager.setBookmarked(placeGuideId);
+    } else {
       placeGuideManager.removePlaceGuideRepresentation(placeGuideId);
     }
+  }
+
+  static toogleBookmarkIcon(placeGuideManager, placeGuideId) {
+    if (placeGuideManager._placeGuideRepository.isBookmarked(placeGuideId)) {
+      placeGuideManager.setBookmarked(placeGuideId);
+    } else {
+      placeGuideManager.setUnBookmarked((placeGuideId));
+    }
+  }
+
+  setBookmarked(placeGuideId) {
+    this._listPlaceGuideDisplayer.bookmark(placeGuideId);
+  }
+
+  setUnBookmarked(placeGuideId) {
+    this._listPlaceGuideDisplayer.unbookmark(placeGuideId);
   }
 }
