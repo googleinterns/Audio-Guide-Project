@@ -37,13 +37,15 @@ class PlaceGuideOnList {
   }
 
   static bookmark(placeGuideId) {
-    const bookmarkButton = document.getElementById(PlaceGuideOnList.bookmarkButtonId(placeGuideId));
+    const bookmarkButton = document
+        .getElementById(PlaceGuideOnList.bookmarkButtonId(placeGuideId));
     bookmarkButton.innerText = 'bookmark';
     bookmarkButton.setAttribute('title', 'unbookmark place guide');
   }
 
   static unbookmark(placeGuideId) {
-    const bookmarkButton = document.getElementById(PlaceGuideOnList.bookmarkButtonId(placeGuideId));
+    const bookmarkButton = document
+        .getElementById(PlaceGuideOnList.bookmarkButtonId(placeGuideId));
     bookmarkButton.innerText = 'bookmark_border';
     bookmarkButton.setAttribute('title', 'bookmark place guide');
   }
@@ -387,7 +389,8 @@ class PlaceGuideOnList {
 
   createBookmarkButton(placeGuideId, bookmarkedByCurrentUser, parentDiv) {
     const bookmarkButton = this.getPlaceGuideButtonWithPreparedClasses();
-    bookmarkButton.setAttribute("id", PlaceGuideOnList.bookmarkButtonId(placeGuideId));
+    bookmarkButton.setAttribute("id",
+        PlaceGuideOnList.bookmarkButtonId(placeGuideId));
     bookmarkButton.setAttribute('title', 'bookmark place guide');
     bookmarkButton.innerText = 'bookmark_border';
     if (bookmarkedByCurrentUser) {
