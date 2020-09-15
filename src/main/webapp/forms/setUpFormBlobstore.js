@@ -46,9 +46,9 @@ function setBlobKeySrcToElement(blobKey, previewId, displayBlock) {
   preview.setAttribute("src", src);
 }
 
-function setBlobKeyBackgroundToElement(blobKey, element) {
-  const htmlElement = document.getElementById(element);
+function setBlobKeyBackgroundToElement(blobKey, elementId) {
+  const htmlElement = document.getElementById(elementId);
   const src = new URL("/serve-blob", document.URL);
   src.searchParams.append('blob-key', blobKey);
-  htmlElement.style.backgroundImage = src;
+  htmlElement.style.backgroundImage = `url('${src}')`;
 }

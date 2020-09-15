@@ -257,10 +257,21 @@ body {
   padding: 10px;
 }
 
+.listContainer {
+    width: 350px;
+    height: 100%;
+    float: left;
+    position: relative;
+    background-color: #fff;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
+    border-radius: 3px;
+    border: 0px;
+    margin: 10px;
+    padding: 30px 20px;
+}
+
 #listPlaceGuideDisplayer {
   width: 350px;
-  height: 100%;
-  float: left;
 }
 
 #mapDisplayer {
@@ -282,16 +293,16 @@ body {
   width: 0px;
 }
 
-.list-card {
-  position: relative;
-  background-color: #fff;
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
-  border-radius: 3px;
-  border: 0px;
-  margin: 10px;
-  padding: 30px 20px;
-  width: 350px;
-}
+/*.list-card {*/
+/*  position: relative;*/
+/*  background-color: #fff;*/
+/*  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);*/
+/*  border-radius: 3px;*/
+/*  border: 0px;*/
+/*  margin: 10px;*/
+/*  padding: 30px 20px;*/
+/*  width: 350px;*/
+/*}*/
 
 .form-card {
   position: relative;
@@ -338,14 +349,18 @@ body {
     border-radius: 50%;
 }
 
-.portfolio-img {
+#portfolioImg {
     width: 200px;
     height: 200px;
-    margin: 20px auto;
+    margin: 60px auto 20px auto;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: lightgray;
 }
 
 .portfolio-text {
     position: absolute;
-    top: 240px;
-    margin: 0px 30px 20px 30px;
+    top: 270px;
+    margin: 0px 40px 20px 40px;
 }

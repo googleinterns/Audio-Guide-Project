@@ -34,8 +34,7 @@ class ListPlaceGuideDisplayer {
     this._listPlaceGuideDisplayerDiv.classList.add(
         "list-group", 
         "my-place-guide-list", 
-        "list-place-guide-displayer", 
-        "form-card");
+        "list-place-guide-displayer");
     this._page = page;
     this._listPlaceGuideDisplayerDiv.appendChild(
         this.createListTitle(
