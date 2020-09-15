@@ -36,6 +36,18 @@ class PlaceGuideOnList {
     PlaceGuideOnList.close(placeGuideId);
   }
 
+  static bookmark(placeGuideId) {
+    const bookmarkButton = document.getElementById(PlaceGuideOnList.bookmarkButtonId(placeGuideId));
+    bookmarkButton.innerText = 'bookmark';
+    bookmarkButton.setAttribute('title', 'unbookmark place guide');
+  }
+
+  static unbookmark(placeGuideId) {
+    const bookmarkButton = document.getElementById(PlaceGuideOnList.bookmarkButtonId(placeGuideId));
+    bookmarkButton.innerText = 'bookmark_border';
+    bookmarkButton.setAttribute('title', 'bookmark place guide');
+  }
+
   createPlaceGuideOnListDiv(
       placeGuideProperties,
       creator,
@@ -375,6 +387,7 @@ class PlaceGuideOnList {
 
   createBookmarkButton(placeGuideId, bookmarkedByCurrentUser, parentDiv) {
     const bookmarkButton = this.getPlaceGuideButtonWithPreparedClasses();
+    bookmarkButton.setAttribute("id", PlaceGuideOnList.bookmarkButtonId(placeGuideId));
     bookmarkButton.setAttribute('title', 'bookmark place guide');
     bookmarkButton.innerText = 'bookmark_border';
     if (bookmarkedByCurrentUser) {
@@ -382,13 +395,6 @@ class PlaceGuideOnList {
       bookmarkButton.setAttribute('title', 'unbookmark place guide');
     }
     bookmarkButton.addEventListener('click', function() {
-      if (bookmarkButton.innerText == 'bookmark') {
-        bookmarkButton.innerText = 'bookmark_border';
-        bookmarkButton.setAttribute('title', 'bookmark place guide');
-      } else {
-        bookmarkButton.innerText = 'bookmark';
-        bookmarkButton.setAttribute('title', 'unbookmark place guide');
-      }
       placeGuideManager.toggleBookmark(placeGuideId);
     });
     parentDiv.appendChild(bookmarkButton);
@@ -421,5 +427,9 @@ class PlaceGuideOnList {
     placeGuideDiv.querySelectorAll('.folded-placeGuide')[0].style.display = 'block';
     placeGuideDiv.querySelectorAll('.card-placeGuide')[0].style.display = 'none';
     placeGuideDiv.style.removeProperty('padding');
+  }
+
+  static bookmarkButtonId(placeGuideId) {
+    return `bookmarkBtn-${placeGuideId}`;
   }
 }

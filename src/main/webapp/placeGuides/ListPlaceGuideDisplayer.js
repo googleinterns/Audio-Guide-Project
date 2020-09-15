@@ -60,6 +60,14 @@ class ListPlaceGuideDisplayer {
     this.addPlaceGuidesToList(placeGuidesCopy);
   }
 
+  bookmark(placeGuideId) {
+    PlaceGuideOnList.bookmark(placeGuideId);
+  }
+
+  unbookmark(placeGuideId) {
+    PlaceGuideOnList.unbookmark(placeGuideId);
+  }
+
   extractIdFromDivId(placeGuideDivId) {
     return Number(placeGuideDivId.slice(18, placeGuideDivId.length - 1));
   }
