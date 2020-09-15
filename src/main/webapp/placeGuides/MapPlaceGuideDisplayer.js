@@ -14,6 +14,8 @@ class MapPlaceGuideDisplayer {
   }
 
   remove(placeGuideId) {
+    this._markerClusterer.removeMarker(
+        this._placeGuidesOnMap[placeGuideId].marker);
     this._placeGuidesOnMap[placeGuideId].remove();
     delete this._placeGuidesOnMap[placeGuideId];
   }
@@ -23,7 +25,9 @@ class MapPlaceGuideDisplayer {
   }
 
   unhighlight(placeGuideId) {
-    this._placeGuidesOnMap[placeGuideId].unhighlight();
+    if( this._placeGuidesOnMap[placeGuideId] != undefined) {
+      this._placeGuidesOnMap[placeGuideId].unhighlight();
+    }
   }
 
   // This function sets the map bound to the minimum one
@@ -97,20 +101,5 @@ class MapPlaceGuideDisplayer {
         placeGuide.creator,
         placeGuide.description,
         placeType);
-  }
-
-  remove(placeGuideId) {
-    this._markerClusterer.removeMarker(
-        this._placeGuidesOnMap[placeGuideId].marker);
-    this._placeGuidesOnMap[placeGuideId].remove();
-    delete this._placeGuidesOnMap[placeGuideId];
-  }
-
-  highlight(placeGuideId) {
-    this._placeGuidesOnMap[placeGuideId].highlight();
-  }
-
-  unhighlight(placeGuideId) {
-    this._placeGuidesOnMap[placeGuideId].unhighlight();
   }
 }
