@@ -25,22 +25,29 @@ function initPage() {
       mapWidget.addGeolocationFunctionality();
       mapWidget.addLocationChoosingAndSavingFunctionality();
       map = mapWidget.map;
+
       placeGuideManager = new PlaceGuideManager(
           PlaceGuideManager.PAGE.CREATE_PLACE_GUIDE, map);
-      document.getElementById("map")
-          .addEventListener(MapWidget.CHOSEN_LOCATION_CHANGE_EVENT, function () {
+      document.getElementById('map')
+          .addEventListener(MapWidget.CHOSEN_LOCATION_CHANGE_EVENT, function() {
             handleChosenLocationChangeEvent(mapWidget);
           });
     }
   });
 }
 
+function setMapWidth() {
+  const availableWidth = window.innerWidth - 370;
+  document.getElementById('mapDisplayer').style.width = availableWidth.toString() + 'px';
+}
+
+
 function handleChosenLocationChangeEvent(mapWidget) {
   enableSubmission();
   if (mapWidget.pickedLocation.place != null) {
     updateLocation(mapWidget.pickedLocation.position,
-                  mapWidget.pickedLocation.place.place_id,
-                  mapWidget.pickedLocation.place.name);
+        mapWidget.pickedLocation.place.place_id,
+        mapWidget.pickedLocation.place.name);
   } else {
     updateLocation(mapWidget.pickedLocation.position, null, null);
   }

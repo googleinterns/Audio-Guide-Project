@@ -11,19 +11,23 @@ class PlaceGuideManager {
     DISCOVER: {
       query: PlaceGuideRepository.QUERY_TYPE.ALL_PUBLIC_IN_MAP_AREA,
       onGuideBookmarkStatusChanged: undefined,
+      name: "DISCOVER"
     },
     MY_GUIDES: {
       query: PlaceGuideRepository.QUERY_TYPE.CREATED_ALL_IN_MAP_AREA,
       onGuideBookmarkStatusChanged: undefined,
+      name: "MY_GUIDES"
     },
     CREATE_PLACE_GUIDE: {
       query: PlaceGuideRepository.QUERY_TYPE.CREATED_ALL_IN_MAP_AREA,
       onGuideBookmarkStatusChanged: undefined,
+      name: "CREATE_PLACE_GUIDE"
     },
     BOOKMARKED_PLACEGUIDES: {
       query: PlaceGuideRepository.QUERY_TYPE.BOOKMARKED,
       onGuideBookmarkStatusChanged: PlaceGuideManager.removeGuideIfUnbookmarked,
-    }
+      name: "BOOKMARKED_PLACEGUIDES"
+    },
   };
 
   constructor(page, map) {
@@ -31,12 +35,12 @@ class PlaceGuideManager {
     this._placeGuideRepository = new PlaceGuideRepository();
     this._highlightedPlaceGuideId = null;
     this._mapPlaceGuideDisplayer = new MapPlaceGuideDisplayer();
-    this._listPlaceGuideDisplayer = new ListPlaceGuideDisplayer();
+    this._listPlaceGuideDisplayer = new ListPlaceGuideDisplayer(page);
     let thisManager = this;
     google.maps.event.addListenerOnce(map, 'idle', function () {
       thisManager.refreshPlaceGuides(map.getBounds(), map.getZoom());
     });
-    if (this._page != PlaceGuideManager.BOOKMARKED_PLACEGUIDES) {
+    if (this._page != PlaceGuideManager.PAGE.BOOKMARKED_PLACEGUIDES) {
       google.maps.event.addListener(map, 'idle', function () {
         thisManager.refreshPlaceGuides(map.getBounds(), map.getZoom());
       });
@@ -47,7 +51,7 @@ class PlaceGuideManager {
     this._placeGuideRepository.fetchPlaceGuides(this._page.query, bounds, zoom)
         .then((response) => {
           const placeGuides = this._placeGuideRepository.placeGuides;
-          this._mapPlaceGuideDisplayer.update(placeGuides);
+          this._listPlaceGuideDisplayer.update(placeGuides);
           this._mapPlaceGuideDisplayer.update(placeGuides);
           if (this._page === PlaceGuideManager.PAGE.BOOKMARKED_PLACEGUIDES) {
             this._mapPlaceGuideDisplayer.adjustMapToShowAll();

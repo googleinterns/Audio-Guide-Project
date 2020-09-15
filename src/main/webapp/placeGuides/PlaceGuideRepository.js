@@ -151,6 +151,7 @@ class PlaceGuideRepository {
       // Remove from database.
       const url = new URL("/delete-place-guide-data", document.URL);
       url.searchParams.append('id', placeGuideId);
+      url.searchParams.append('currentUrl', )
       fetch(url)
         .catch(error => {
           console.log("DeletePlaceGuideServlet: failed to fetch: "
@@ -174,7 +175,7 @@ class PlaceGuideRepository {
       const url = new URL("bookmark-place-guide", document.URL);
       url.searchParams.append("placeGuideId", placeGuideId);
       if (isBookmarked) {
-        url.searchParams.append("bookmarkHandlingType", "REMOVE");
+        url.searchParams.append("bookmarkHandlingType", "UNBOOKMARK");
       } else {
         url.searchParams.append("bookmarkHandlingType", "BOOKMARK");
       }

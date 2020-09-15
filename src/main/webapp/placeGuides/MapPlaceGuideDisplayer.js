@@ -29,15 +29,15 @@ class MapPlaceGuideDisplayer {
   // This function sets the map bound to the minimum one
   // which contains all the PlaceGuides.
   adjustMapToShowAll() {
-    let mapBounds = new google.maps.LatLngBounds();
+    const mapBounds = new google.maps.LatLngBounds();
     let guidesExist = false;
     const placeGuideIds = Object.getOwnPropertyNames(this._placeGuidesOnMap);
     placeGuideIds.forEach((placeGuideId) => {
-        const position =
+      const position =
           this._placeGuidesOnMap[placeGuideId].marker.getPosition();
-        mapBounds.extend(position);
-        guidesExist = true;
-      }
+      mapBounds.extend(position);
+      guidesExist = true;
+    },
     );
     if (guidesExist) {
       // Unless the zoom is increased manually, the fitBounds()
@@ -82,11 +82,11 @@ class MapPlaceGuideDisplayer {
   constructPlaceGuideOnMapFromPlaceGuide(placeGuide) {
     let placeType;
     if (placeGuide.isPublic) {
-        if (placeGuide.createdByCurrentUser) {
-            placeType = PlaceType.PUBLIC_OWN;
-        } else {
-            placeType = PlaceType.PUBLIC;
-        }
+      if (placeGuide.createdByCurrentUser) {
+        placeType = PlaceType.PUBLIC_OWN;
+      } else {
+        placeType = PlaceType.PUBLIC;
+      }
     } else {
       placeType = PlaceType.PRIVATE;
     }
