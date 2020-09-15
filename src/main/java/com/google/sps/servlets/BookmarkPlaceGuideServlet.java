@@ -26,7 +26,7 @@ public class BookmarkPlaceGuideServlet extends HttpServlet {
 
   private enum BookmarkPlaceGuideQueryType {
     BOOKMARK,
-    REMOVE
+    UNBOOKMARK
   }
 
   @Override
@@ -45,7 +45,7 @@ public class BookmarkPlaceGuideServlet extends HttpServlet {
       case BOOKMARK:
         userRepository.bookmarkPlaceGuide(placeGuideId, userId);
         break;
-      case REMOVE:
+      case UNBOOKMARK:
         userRepository.removeBookmarkedPlaceGuide(placeGuideId, userId);
         break;
       default:

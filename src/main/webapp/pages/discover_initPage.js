@@ -20,6 +20,13 @@ function initPage() {
       map = mapWidget.map;
       placeGuideManager = new PlaceGuideManager(
           PlaceGuideManager.PAGE.DISCOVER, map);
+      setMapWidth();
+      window.addEventListener('resize', setMapWidth);
     }
   });
+}
+
+function setMapWidth() {
+  const availableWidth = window.innerWidth - 370;
+  document.getElementById('mapDisplayer').style.width = availableWidth.toString() + 'px';
 }
