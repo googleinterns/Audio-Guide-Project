@@ -20,7 +20,7 @@
         </div>
     </div>
 
-    <div id="portfolioDiv" class="mdc-card mdc-card--outlined align-center">
+    <div id="portfolioDiv" class="mdc-card--outlined align-center">
         <div class="mdc-card__media-content rounded-div portfolio-img" id="portfolioImg"></div>
         <div class="mdc-card__media-content portfolio-text">
             <h2 id="portfolioName"></h2>
@@ -28,9 +28,16 @@
         </div>
     </div>
 
-    <input id = "search-box" type = "text" placeholder = "Search for a new place!"/>
-    <div id = "map"></div>
+    <div class = "content-container">
+        <div id = "listPlaceGuideDisplayer"></div>
 
+        <div id = "mapDisplayer">
+            <input id = "search-box" type = "text" placeholder = "Search for a new place!"/>
+            <div id = "map"></div>
+        </div>
+    </div>
+
+    <script src = "./forms/setUpFormBlobstore.js"></script>
     <script src = "./pages/menu.js"></script>
     <script src = "./user/userAuthentication.js"></script>
     <script src = "./maps/Geolocator.js"></script>
@@ -38,7 +45,9 @@
     <script src = "./maps/Place.js"></script>
     <script src="https://unpkg.com/@google/markerclustererplus@4.0.1/dist/markerclustererplus.min.js"></script>
     <script src = "./maps/MapWidget.js"></script>
+    <script src = "./user/UserRepresentation.js"></script>
     <script src = "./placeGuides/Location.js"></script>
+    <script src = "./placeGuides/PlaceGuideOnList.js"></script>
     <script src = "./placeGuides/ListPlaceGuideDisplayer.js"></script>
     <script src = "./placeGuides/MapPlaceGuideDisplayer.js"></script>
     <script src = "./placeGuides/PlaceGuideOnMap.js"></script>

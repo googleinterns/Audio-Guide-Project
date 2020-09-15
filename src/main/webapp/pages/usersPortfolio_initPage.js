@@ -29,7 +29,7 @@ function initPage() {
 
 function fillPortfolioDiv(user) {
   if (user.imgKey != undefined) {
-    setBlobKeyBackgroundToElement(user.imgKey, document.getElementById("portfolioImg"));
+    setBlobKeyBackgroundToElement(user.imgKey, "portfolioImg");
   }
   if (user.name != undefined) {
     document.getElementById("portfolioName").innerText = user.name;

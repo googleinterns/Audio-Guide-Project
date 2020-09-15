@@ -1,6 +1,6 @@
 class UserRepresentation {
   constructor(user) {
-    this._userRepresentationDiv = this.createUserDiv(user);
+    this._userRepresentationDiv = UserRepresentation.createUserDiv(user);
   }
 
   get div() {

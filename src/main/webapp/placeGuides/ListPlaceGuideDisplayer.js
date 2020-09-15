@@ -21,6 +21,10 @@ class ListPlaceGuideDisplayer {
     "BOOKMARKED_PLACEGUIDES": {
       listTitle: "Bookmarked Guides",
       listSubTitle: ""
+    },
+    "USERS_PORTFOLIO": {
+      listTitle: "Portfolio",
+      listSubTitle: ""
     }
   }
 

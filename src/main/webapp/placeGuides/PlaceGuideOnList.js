@@ -15,6 +15,7 @@ class PlaceGuideOnList {
       isPublic: isPublic,
       latitude: latitude,
       longitude: longitude,
+      creator: creator,
     };
 
     this._placeGuideOnListDiv = this.createPlaceGuideOnListDiv(
@@ -145,7 +146,7 @@ class PlaceGuideOnList {
     const cardDiv = this.createCardDiv();
 
     const cardContentsContainer =
-        this.createAndPopulateCardContentsContainer(placeGuideProperties, creator);
+        this.createAndPopulateCardContentsContainer(placeGuideProperties);
 
     const buttonsContainer =
         this.createAndPopulateButtonsContainer(
@@ -172,7 +173,7 @@ class PlaceGuideOnList {
     return cardDiv;
   }
 
-  createAndPopulateCardContentsContainer(placeGuideProperties, creator) {
+  createAndPopulateCardContentsContainer(placeGuideProperties) {
     const cardContentsContainer = document.createElement('div');
     cardContentsContainer.classList.add(
         'mdc-card__media',
@@ -183,7 +184,7 @@ class PlaceGuideOnList {
     const placeGuideImage =
         this.createPlaceGuideImageElement(placeGuideProperties.imageKey);
     const placeGuideTitle =
-        this.createPlaceGuideTitle(placeGuideProperties.name, creator.email);
+        this.createPlaceGuideTitle(placeGuideProperties.name, placeGuideProperties.creator);
     const placeGuideLength =
         this.createPlaceGuideLengthElement(placeGuideProperties.audioLength);
     const placeGuideDescription =
@@ -222,14 +223,12 @@ class PlaceGuideOnList {
     return placeGuideImage;
   }
 
-  createPlaceGuideTitle(placeGuideName, creatorEmail) {
+  createPlaceGuideTitle(placeGuideName, creator) {
     const placeGuideTitle = document.createElement('div');
     placeGuideTitle.classList.add('place-guide-title');
     const placeGuideNameElement = document.createElement('h5');
     placeGuideNameElement.innerText = placeGuideName;
-    const creatorButton = this.getPlaceGuideButtonWithPreparedClasses();
-    creatorButton.setAttribute('title', creatorEmail);
-    creatorButton.innerText = 'account_circle';
+    const creatorButton = new UserRepresentation(creator).div;
     placeGuideTitle.appendChild(placeGuideNameElement);
     placeGuideTitle.appendChild(creatorButton);
     placeGuideTitle.style.paddingTop = '10px';
