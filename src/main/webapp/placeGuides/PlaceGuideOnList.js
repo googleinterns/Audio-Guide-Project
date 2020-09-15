@@ -418,7 +418,7 @@ class PlaceGuideOnList {
   static close(placeGuideId) {
     const divId = 'placeGuideOnList-' + '{' + placeGuideId + '}';
     const placeGuideDiv = document.getElementById(divId);
-    if (placeGuideDiv != null) {
+    if (placeGuideDiv !== null) {
       placeGuideDiv
           .querySelectorAll('.folded-placeGuide')[0].style.display = 'block';
       placeGuideDiv
