@@ -25,7 +25,7 @@ class PlaceGuideManager {
     },
     BOOKMARKED_PLACEGUIDES: {
       query: PlaceGuideRepository.QUERY_TYPE.BOOKMARKED,
-      onGuideBookmarkStatusChanged: PlaceGuideManager.removeGuideIfUnbookmarked_elseToogleIcon,
+      onGuideBookmarkStatusChanged: PlaceGuideManager.removeGuideIfUnbookmarked,
       name: "BOOKMARKED_PLACEGUIDES"
     },
   };
@@ -96,17 +96,15 @@ class PlaceGuideManager {
             this._page.onGuideBookmarkStatusChanged(this, placeGuideId);
           }
         } else if(response === PlaceGuideRepository.BOOKMARK_ACTION_RESULT_TYPE.NOT_ALLOWED) {
-          alert(`You can't bookmark more than ${MAX_NO_BOOKMARKED_GUIDES} gudies. Please unbookmark some of them before bookmarking a new one`);
+          alert(`You can't bookmark more than ${PlaceGuideManager.MAX_NO_BOOKMARKED_GUIDES} gudies. Please unbookmark some of them before bookmarking a new one`);
         } else {
           alert("Failed to execute bookmarking/unbookmarking");
         }
       });
   }
 
-  static removeGuideIfUnbookmarked_elseToogleIcon(placeGuideManager, placeGuideId) {
+  static removeGuideIfUnbookmarked(placeGuideManager, placeGuideId) {
     if (!placeGuideManager._placeGuideRepository.isBookmarked(placeGuideId)) {
-      placeGuideManager.setBookmarked(placeGuideId);
-    } else {
       placeGuideManager.removePlaceGuideRepresentation(placeGuideId);
     }
   }
