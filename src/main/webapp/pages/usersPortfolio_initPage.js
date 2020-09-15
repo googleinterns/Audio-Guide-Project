@@ -30,6 +30,12 @@ function initPage() {
 function fillPortfolioDiv(user) {
   if (user.imgKey != undefined) {
     setBlobKeyBackgroundToElement(user.imgKey, "portfolioImg");
+  } else {
+    const icon = document.createElement("icon");
+    icon.classList.add("mdc-tab__icon", "material-icons", "no-portfolio-img-icon");
+    icon.setAttribute("aria-hidden", true);
+    icon.innerText = "no_photography";
+    document.getElementById("portfolioImg").appendChild(icon);
   }
   if (user.name != undefined) {
     document.getElementById("portfolioName").innerText = user.name;

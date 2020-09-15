@@ -364,3 +364,9 @@ body {
     top: 270px;
     margin: 0px 40px 20px 40px;
 }
+
+.no-portfolio-img-icon {
+    position: absolute;
+    top: 88px;
+    left: 88px;
+}
