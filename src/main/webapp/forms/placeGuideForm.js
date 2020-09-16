@@ -66,9 +66,11 @@ function updateLocation(position, placeId, placeName) {
         'placeId').setAttribute('value', '');
   }
   document.getElementById(
-      'latitude').setAttribute('value', position.lat());
+      'latitude').value = position.lat(); //setAttribute('value',
+  // position.lat());
   document.getElementById(
-      'longitude').setAttribute('value', position.lng());
+      'longitude').value = position.lng(); //setAttribute('value',
+  // position.lng());
 }
 
 /**
