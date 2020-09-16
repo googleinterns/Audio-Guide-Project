@@ -36,7 +36,7 @@ class UserRepresentation {
         const url = './usersPortfolio.html?' + queryString;
         window.location = url;
       } else {
-        alert("The creator of this place guide does not have a private place guide!");
+        alert("The portfolio of this user is not public");
       }
     });
     return userDiv;
