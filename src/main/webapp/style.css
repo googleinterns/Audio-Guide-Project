@@ -270,10 +270,6 @@ body {
     padding: 30px 20px;
 }
 
-#listPlaceGuideDisplayer {
-  width: 350px;
-}
-
 #mapDisplayer {
   margin-left: 350px;
   height: 100%;
@@ -336,11 +332,6 @@ body {
     width: 235px;
 }
 
-/*.mdc-card {*/
-/*    height: 350px;*/
-/*    width: 350px;*/
-/*}*/
-
 .mdc-card-content {
     padding: 16px;
 }
@@ -363,10 +354,15 @@ body {
     position: absolute;
     top: 270px;
     margin: 0px 40px 20px 40px;
+    height: fit-content;
 }
 
 .no-portfolio-img-icon {
     position: absolute;
     top: 88px;
     left: 88px;
+}
+
+#portfolioDiv {
+    height: 390px;
 }
