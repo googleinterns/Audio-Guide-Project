@@ -52,13 +52,16 @@ class User {
         name = undefined;
       }
       const email = GET['email'];
-      const selfIntroduction = GET['selfIntroduction'];
+      let selfIntroduction = GET['selfIntroduction'];
+      if (selfIntroduction === "undefined") {
+        selfIntroduction = undefined;
+      }
       let imgKey = GET['imgKey'];
-      if (imgKey == "undefined") {
+      if (imgKey === "undefined") {
         imgKey = undefined;
       }
       let publicPortfolio = GET['publicPortfolio'];
-      if (publicPortfolio == "true") {
+      if (publicPortfolio === "true") {
         publicPortfolio = true;
       } else {
         publicPortfolio = false;

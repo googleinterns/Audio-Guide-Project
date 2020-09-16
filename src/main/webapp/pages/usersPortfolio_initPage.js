@@ -47,7 +47,9 @@ function fillPortfolioDiv(user) {
   } else {
     document.getElementById("portfolioName").innerText = user.email;
   }
-  document.getElementById("portfolioSelfIntroduction").innerText = user.selfIntroduction;
+  if (user.selfIntroduction != undefined) {
+    document.getElementById("portfolioSelfIntroduction").innerText = user.selfIntroduction;
+  }
 }
 
 function setMapWidth() {
