@@ -66,11 +66,13 @@ class PlaceGuideOnList {
   static close(placeGuideId) {
     const divId = 'placeGuideOnList-' + '{' + placeGuideId + '}';
     const placeGuideDiv = document.getElementById(divId);
-    placeGuideDiv.querySelectorAll('.folded-placeGuide')[0]
-        .style.display = 'block';
-    placeGuideDiv.querySelectorAll('.card-placeGuide')[0]
-        .style.display = 'none';
-    placeGuideDiv.style.removeProperty('padding');
+    if (placeGuideDiv !== null) {
+      placeGuideDiv
+          .querySelectorAll('.folded-placeGuide')[0].style.display = 'block';
+      placeGuideDiv
+          .querySelectorAll('.card-placeGuide')[0].style.display = 'none';
+      placeGuideDiv.style.removeProperty('padding');
+    }
   }
 
   createPlaceGuideOnListDiv(
