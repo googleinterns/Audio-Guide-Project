@@ -46,7 +46,7 @@ class ListPlaceGuideDisplayer {
   }
 
   static getPlaceGuideOnListDivId(placeGuideId) {
-    return "placeGuideOnList-" + "{" + placeGuideId + "}";
+    return `placeGuideOnList-{${placeGuideId}}`;
   }
 
   update(placeGuides) {

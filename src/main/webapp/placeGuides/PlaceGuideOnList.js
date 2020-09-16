@@ -136,19 +136,6 @@ class PlaceGuideOnList {
     return placeGuideNameContainer;
   }
 
-  foldedPlaceGuide_name(placeGuideName) {
-    const placeGuideNameContainer = document.createElement('div');
-    placeGuideNameContainer.classList.add(
-        'd-flex',
-        'w-100',
-        'justify-content-between');
-    const placeGuideNameElement = document.createElement('h5');
-    placeGuideNameElement.classList.add('mb-1');
-    placeGuideNameElement.innerText = placeGuideName;
-    placeGuideNameContainer.appendChild(placeGuideNameElement);
-    return placeGuideNameContainer;
-  }
-
   foldedPlaceGuide_placeName(placeName) {
     const placeNameElement = document.createElement('p');
     placeNameElement.classList.add('mb-1');
