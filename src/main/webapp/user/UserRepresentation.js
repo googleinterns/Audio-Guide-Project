@@ -14,7 +14,7 @@ class UserRepresentation {
 
   static createUserDiv(user) {
     const userDiv = document.createElement("div");
-    if (user.imgKey !==  undefined) {
+    if (user.imgKey !== undefined) {
       if (user.name !== undefined) {
         userDiv.appendChild(
             UserRepresentation.createUserImg(user.imgKey, user.name));
@@ -67,6 +67,6 @@ class UserRepresentation {
   }
 
   static emailNamePart(email) {
-    return email.substring(0, email.indexOf("@"))
+    return email.substring(0, email.indexOf("@"));
   }
 }
