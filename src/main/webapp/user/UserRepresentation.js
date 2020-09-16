@@ -19,7 +19,7 @@ class UserRepresentation {
             UserRepresentation.createUserImg(user.imgKey, user.name));
       } else {
         userDiv.appendChild(
-            UserRepresentation.createUserImg(user.imgKey, user.email));
+            UserRepresentation.createUserImg(user.email.substring(0, user.email.indexOf("@"))));
       }
     } else {
       if (user.name != undefined) {
@@ -27,7 +27,7 @@ class UserRepresentation {
             UserRepresentation.createUserIcon(user.name));
       } else {
         userDiv.appendChild(
-            UserRepresentation.createUserIcon(user.email));
+            UserRepresentation.createUserIcon(user.email.substring(0, user.email.indexOf("@"))));
       }
     }
     userDiv.addEventListener("click", function() {

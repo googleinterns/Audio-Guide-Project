@@ -45,7 +45,7 @@ function fillPortfolioDiv(user) {
   if (user.name != undefined) {
     document.getElementById("portfolioName").innerText = user.name;
   } else {
-    document.getElementById("portfolioName").innerText = user.email;
+    document.getElementById("portfolioName").innerText = user.email.substring(0, user.email.indexOf("@"));
   }
   if (user.selfIntroduction != undefined) {
     document.getElementById("portfolioSelfIntroduction").innerText = user.selfIntroduction;
