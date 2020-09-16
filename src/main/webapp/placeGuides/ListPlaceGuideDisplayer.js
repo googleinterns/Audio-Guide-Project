@@ -24,7 +24,7 @@ class ListPlaceGuideDisplayer {
     },
     "USERS_PORTFOLIO": {
       listTitle: "Portfolio",
-      listSubTitle: ""
+      listSubTitle: "Guides in the selected map area"
     }
   }
 
