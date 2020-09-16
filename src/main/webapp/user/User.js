@@ -41,13 +41,7 @@ class User {
 
   static getUserFromQueryString() {
     if (window.location.search != '') {
-      const GET = {};
-      const queryString = decodeURI(window.location.search.replace(/^\?/, ''));
-      queryString.split(/\&/).forEach(function(keyValuePair) {
-        const paramName = keyValuePair.replace(/=.*$/, '');
-        const paramValue = keyValuePair.replace(/^[^=]*\=/, '');
-        GET[paramName] = paramValue;
-      });
+      const GET = UrlQueryUtils.getParamsFromQueryString();
       const id = GET['id'];
       let name = GET['name'];
       if (name === "undefined") {
