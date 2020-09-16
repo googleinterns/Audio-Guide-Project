@@ -24,8 +24,8 @@ class UserRepresentation {
             UserRepresentation.createUserImg(user.imgKey, user.name));
       } else {
         userDiv.appendChild(
-            UserRepresentation.createUserImg(user.imgKey, user.email.substring(
-                0, user.email.indexOf("@"))));
+            UserRepresentation.createUserImg(user.imgKey,
+                UserRepresentation.emailNamePart(user.email)));
       }
     } else {
       if (user.name !== undefined) {
@@ -33,8 +33,8 @@ class UserRepresentation {
             UserRepresentation.createUserIcon(user.name));
       } else {
         userDiv.appendChild(
-            UserRepresentation.createUserIcon(user.email.substring(
-                0, user.email.indexOf("@"))));
+            UserRepresentation.createUserIcon(
+                UserRepresentation.emailNamePart(user.email)));
       }
     }
     userDiv.addEventListener("click", function() {
@@ -68,5 +68,9 @@ class UserRepresentation {
     userIcon.innerText = "account_circle";
     userIcon.setAttribute("title", "Owner: " + name);
     return userIcon;
+  }
+
+  static emailNamePart(email) {
+    return email.substring(0, email.indexOf("@"))
   }
 }
