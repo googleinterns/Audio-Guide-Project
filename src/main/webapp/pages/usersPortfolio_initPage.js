@@ -24,7 +24,7 @@ function initPage() {
       placeGuideManager = new PlaceGuideManager(
           PlaceGuideManager.PAGE.USERS_PORTFOLIO, map, user.id);
       setListHeight();
-      window.addEventListener('resize', function() {
+      window.addEventListener('resize', function () {
         setMapWidth();
         setListHeight();
       });
@@ -58,7 +58,7 @@ function setMapWidth() {
 }
 
 function setListHeight() {
-  const availableHeight= window.innerHeight - 520;
+  const availableHeight = window.innerHeight - 520;
   document.getElementById('listPlaceGuideDisplayer').style.height = availableHeight.toString() + 'px';
 }
 

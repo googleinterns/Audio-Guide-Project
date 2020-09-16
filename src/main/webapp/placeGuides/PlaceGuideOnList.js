@@ -37,6 +37,38 @@ class PlaceGuideOnList {
     PlaceGuideOnList.close(placeGuideId);
   }
 
+  static expand(placeGuideId) {
+    const divId = 'placeGuideOnList-' + '{' + placeGuideId + '}';
+    const placeGuideDiv = document.getElementById(divId);
+    placeGuideDiv.querySelectorAll('.folded-placeGuide')[0].style.display = 'none';
+    placeGuideDiv.querySelectorAll('.card-placeGuide')[0].style.display = 'block';
+    placeGuideDiv.style.padding = '0px';
+  }
+
+  static getBlobSrc(blobKey) {
+    const src = new URL('/serve-blob', document.URL);
+    src.searchParams.append('blob-key', blobKey);
+    return src;
+  }
+
+  static generateQueryString(placeGuideProperties) {
+    const esc = encodeURIComponent;
+    const query = Object.keys(placeGuideProperties)
+        .map(function (k) {
+          return esc(k) + '=' + esc(placeGuideProperties[k]);
+        })
+        .join('&');
+    return query;
+  }
+
+  static close(placeGuideId) {
+    const divId = 'placeGuideOnList-' + '{' + placeGuideId + '}';
+    const placeGuideDiv = document.getElementById(divId);
+    placeGuideDiv.querySelectorAll('.folded-placeGuide')[0].style.display = 'block';
+    placeGuideDiv.querySelectorAll('.card-placeGuide')[0].style.display = 'none';
+    placeGuideDiv.style.removeProperty('padding');
+  }
+
   createPlaceGuideOnListDiv(
       placeGuideProperties,
       creator,
@@ -125,19 +157,11 @@ class PlaceGuideOnList {
     const expandButton = this.getPlaceGuideButtonWithPreparedClasses();
     expandButton.setAttribute('title', 'expand');
     expandButton.innerText = 'open_in_full';
-    expandButton.addEventListener('click', function() {
+    expandButton.addEventListener('click', function () {
       PlaceGuideOnList.expand(placeGuideId);
     });
     buttonsContainer.appendChild(expandButton);
     return buttonsContainer;
-  }
-
-  static expand(placeGuideId) {
-    const divId = 'placeGuideOnList-' + '{' + placeGuideId + '}';
-    const placeGuideDiv = document.getElementById(divId);
-    placeGuideDiv.querySelectorAll('.folded-placeGuide')[0].style.display = 'none';
-    placeGuideDiv.querySelectorAll('.card-placeGuide')[0].style.display = 'block';
-    placeGuideDiv.style.padding = '0px';
   }
 
   createCardPlaceGuide(
@@ -281,7 +305,7 @@ class PlaceGuideOnList {
     const audioButton = this.getPlaceGuideButtonWithPreparedClasses();
     audioButton.setAttribute('title', 'play/pause audio');
     audioButton.innerText = 'play_arrow';
-    audioButton.addEventListener('click', function() {
+    audioButton.addEventListener('click', function () {
       if (audioButton.innerText == 'play_arrow') {
         audioPlayer.play();
         audioButton.innerText = 'pause';
@@ -311,7 +335,7 @@ class PlaceGuideOnList {
   }
 
   highlightOnInfoBoxClick(placeGuideDiv, placeGuideId) {
-    placeGuideDiv.addEventListener('click', function() {
+    placeGuideDiv.addEventListener('click', function () {
       highlightOnInfoBoxClick(placeGuideId);
     });
   }
@@ -321,22 +345,6 @@ class PlaceGuideOnList {
     const src = PlaceGuideOnList.getBlobSrc(blobKey);
     element.setAttribute('src', src);
     return element;
-  }
-
-  static getBlobSrc(blobKey) {
-    const src = new URL('/serve-blob', document.URL);
-    src.searchParams.append('blob-key', blobKey);
-    return src;
-  }
-
-  static generateQueryString(placeGuideProperties) {
-    const esc = encodeURIComponent;
-    const query = Object.keys(placeGuideProperties)
-        .map(function(k) {
-          return esc(k) + '=' + esc(placeGuideProperties[k]);
-        })
-        .join('&');
-    return query;
   }
 
   createButtonsIfUserIsCreator(createdByCurrentUser, parentDiv, placeGuideProperties) {
@@ -351,7 +359,7 @@ class PlaceGuideOnList {
     deleteButton.setAttribute('title', 'delete place guide');
     deleteButton.innerText = 'delete';
 
-    deleteButton.addEventListener('click', function() {
+    deleteButton.addEventListener('click', function () {
       if (window.confirm('Click ok if you want to delete the place guide')) {
         placeGuideManager.removePlaceGuide(placeGuideId);
       }
@@ -364,7 +372,7 @@ class PlaceGuideOnList {
     editButton.setAttribute('title', 'edit place guide');
     editButton.innerText = 'edit';
 
-    editButton.addEventListener('click', function() {
+    editButton.addEventListener('click', function () {
       const queryString = PlaceGuideOnList.generateQueryString(placeGuideProperties);
       const url = './createPlaceGuide.html?' + queryString;
       window.location = url;
@@ -380,7 +388,7 @@ class PlaceGuideOnList {
       bookmarkButton.innerText = 'bookmark';
       bookmarkButton.setAttribute('title', 'unbookmark place guide');
     }
-    bookmarkButton.addEventListener('click', function() {
+    bookmarkButton.addEventListener('click', function () {
       if (bookmarkButton.innerText == 'bookmark') {
         bookmarkButton.innerText = 'bookmark_border';
         bookmarkButton.setAttribute('title', 'bookmark place guide');
@@ -397,7 +405,7 @@ class PlaceGuideOnList {
     const downloadButton = this.getPlaceGuideButtonWithPreparedClasses();
     downloadButton.setAttribute('title', 'download audio');
     downloadButton.innerText = 'get_app';
-    downloadButton.addEventListener('click', function() {
+    downloadButton.addEventListener('click', function () {
       window.location.href = PlaceGuideOnList.getBlobSrc(audioKey);
     });
     parentDiv.appendChild(downloadButton);
@@ -407,18 +415,10 @@ class PlaceGuideOnList {
     const backToListButton = this.getPlaceGuideButtonWithPreparedClasses();
     backToListButton.setAttribute('title', 'back to list');
     backToListButton.innerText = 'close_fullscreen';
-    backToListButton.addEventListener('click', function() {
+    backToListButton.addEventListener('click', function () {
       PlaceGuideOnList.close(placeGuideId);
     });
 
     parentDiv.appendChild(backToListButton);
-  }
-
-  static close(placeGuideId) {
-    const divId = 'placeGuideOnList-' + '{' + placeGuideId + '}';
-    const placeGuideDiv = document.getElementById(divId);
-    placeGuideDiv.querySelectorAll('.folded-placeGuide')[0].style.display = 'block';
-    placeGuideDiv.querySelectorAll('.card-placeGuide')[0].style.display = 'none';
-    placeGuideDiv.style.removeProperty('padding');
   }
 }

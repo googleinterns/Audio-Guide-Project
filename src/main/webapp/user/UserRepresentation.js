@@ -30,7 +30,7 @@ class UserRepresentation {
             UserRepresentation.createUserIcon(user.email.substring(0, user.email.indexOf("@"))));
       }
     }
-    userDiv.addEventListener("click", function() {
+    userDiv.addEventListener("click", function () {
       if (user.publicPortfolio) {
         const queryString = user.queryString;
         const url = './usersPortfolio.html?' + queryString;
