@@ -16,16 +16,19 @@ package com.google.sps.data;
 
 /** Specifies the possible form types of queries for PlaceGuides. */
 public enum PlaceGuideQueryType {
-  ALL_PUBLIC(false, false),
-  CREATED_ALL(false, false),
-  CREATED_PUBLIC(false, false),
-  CREATED_PRIVATE(false, false),
-  BOOKMARKED(false, false),
-  ALL_PUBLIC_IN_MAP_AREA(true, false),
-  CREATED_ALL_IN_MAP_AREA(true, false),
-  CREATED_PUBLIC_IN_MAP_AREA(true, false),
-  CREATED_PRIVATE_IN_MAP_AREA(true, false),
-  CREATED_BY_GIVEN_USER_PUBLIC_IN_MAP_AREA(true, true);
+  ALL_PUBLIC(/* reuiresCorodinates= */ false, /* requiresUserIdFromRequest= */ false),
+  CREATED_ALL(/* reuiresCorodinates= */ false, /* requiresUserIdFromRequest= */ false),
+  CREATED_PUBLIC(/* reuiresCorodinates= */ false, /* requiresUserIdFromRequest= */ false),
+  CREATED_PRIVATE(/* reuiresCorodinates= */ false, /* requiresUserIdFromRequest= */ false),
+  BOOKMARKED(/* reuiresCorodinates= */ false, /* requiresUserIdFromRequest= */ false),
+  ALL_PUBLIC_IN_MAP_AREA(/* reuiresCorodinates= */ true, /* requiresUserIdFromRequest= */ false),
+  CREATED_ALL_IN_MAP_AREA(/* reuiresCorodinates= */ true, /* requiresUserIdFromRequest= */ false),
+  CREATED_PUBLIC_IN_MAP_AREA(
+      /* reuiresCorodinates= */ true, /* requiresUserIdFromRequest= */ false),
+  CREATED_PRIVATE_IN_MAP_AREA(
+      /* reuiresCorodinates= */ true, /* requiresUserIdFromRequest= */ false),
+  CREATED_BY_GIVEN_USER_PUBLIC_IN_MAP_AREA(
+      /* reuiresCorodinates= */ true, /* requiresUserIdFromRequest= */ true);
 
   private final boolean requiresCoordinates;
   private final boolean requiresUserIdFromRequest;
