@@ -23,6 +23,11 @@ function initPage() {
       fillPortfolioDiv(user);
       placeGuideManager = new PlaceGuideManager(
           PlaceGuideManager.PAGE.USERS_PORTFOLIO, map, user.id);
+      setListHeight();
+      window.addEventListener('resize', function() {
+        setMapWidth();
+        setListHeight();
+      });
     }
   });
 }
@@ -44,6 +49,17 @@ function fillPortfolioDiv(user) {
   }
   document.getElementById("portfolioSelfIntroduction").innerText = user.selfIntroduction;
 }
+
+function setMapWidth() {
+  const availableWidth = window.innerWidth - 370;
+  document.getElementById('mapDisplayer').style.width = availableWidth.toString() + 'px';
+}
+
+function setListHeight() {
+  const availableHeight= window.innerHeight - 520;
+  document.getElementById('listPlaceGuideDisplayer').style.height = availableHeight.toString() + 'px';
+}
+
 
 
 
