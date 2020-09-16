@@ -40,8 +40,10 @@ class PlaceGuideOnList {
   static expand(placeGuideId) {
     const divId = 'placeGuideOnList-' + '{' + placeGuideId + '}';
     const placeGuideDiv = document.getElementById(divId);
-    placeGuideDiv.querySelectorAll('.folded-placeGuide')[0].style.display = 'none';
-    placeGuideDiv.querySelectorAll('.card-placeGuide')[0].style.display = 'block';
+    placeGuideDiv.querySelectorAll('.folded-placeGuide')[0]
+        .style.display = 'none';
+    placeGuideDiv.querySelectorAll('.card-placeGuide')[0]
+        .style.display = 'block';
     placeGuideDiv.style.padding = '0px';
   }
 
@@ -54,7 +56,7 @@ class PlaceGuideOnList {
   static generateQueryString(placeGuideProperties) {
     const esc = encodeURIComponent;
     const query = Object.keys(placeGuideProperties)
-        .map(function (k) {
+        .map(function(k) {
           return esc(k) + '=' + esc(placeGuideProperties[k]);
         })
         .join('&');
@@ -64,8 +66,10 @@ class PlaceGuideOnList {
   static close(placeGuideId) {
     const divId = 'placeGuideOnList-' + '{' + placeGuideId + '}';
     const placeGuideDiv = document.getElementById(divId);
-    placeGuideDiv.querySelectorAll('.folded-placeGuide')[0].style.display = 'block';
-    placeGuideDiv.querySelectorAll('.card-placeGuide')[0].style.display = 'none';
+    placeGuideDiv.querySelectorAll('.folded-placeGuide')[0]
+        .style.display = 'block';
+    placeGuideDiv.querySelectorAll('.card-placeGuide')[0]
+        .style.display = 'none';
     placeGuideDiv.style.removeProperty('padding');
   }
 

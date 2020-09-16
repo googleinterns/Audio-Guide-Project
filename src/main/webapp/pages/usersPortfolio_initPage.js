@@ -1,10 +1,9 @@
 /**
- * This function initialises the map and adds some functionalities to it:
- * Geolocation: to track the user's current location,
- * display it and center the map around it.
- * Searching: lets the user search for places and center the map around it.
- * Display place guides: displays the place guides created
- * by the user with the given creatorId.
+ * This function initializes the usersPortfolio page
+ * having the following components(for a selected user A):
+ * - one map showing the guides of the user A in the map area
+ * - a list displaying the same guides
+ * - an info box with user A's data
  */
 let map;
 let placeGuideManager;
@@ -37,7 +36,8 @@ function fillPortfolioDiv(user) {
     setBlobKeyBackgroundToElement(user.imgKey, "portfolioImg");
   } else {
     const icon = document.createElement("icon");
-    icon.classList.add("mdc-tab__icon", "material-icons", "no-portfolio-img-icon");
+    icon.classList
+        .add("mdc-tab__icon", "material-icons", "no-portfolio-img-icon");
     icon.setAttribute("aria-hidden", true);
     icon.innerText = "no_photography";
     document.getElementById("portfolioImg").appendChild(icon);
@@ -45,23 +45,23 @@ function fillPortfolioDiv(user) {
   if (user.name != undefined) {
     document.getElementById("portfolioName").innerText = user.name;
   } else {
-    document.getElementById("portfolioName").innerText = user.email.substring(0, user.email.indexOf("@"));
+    document.getElementById("portfolioName").innerText =
+        user.email.substring(0, user.email.indexOf("@"));
   }
   if (user.selfIntroduction != undefined) {
-    document.getElementById("portfolioSelfIntroduction").innerText = user.selfIntroduction;
+    document.getElementById("portfolioSelfIntroduction").innerText =
+        user.selfIntroduction;
   }
 }
 
 function setMapWidth() {
   const availableWidth = window.innerWidth - 370;
-  document.getElementById('mapDisplayer').style.width = availableWidth.toString() + 'px';
+  document.getElementById('mapDisplayer').style.width =
+      availableWidth.toString() + 'px';
 }
 
 function setListHeight() {
   const availableHeight = window.innerHeight - 520;
-  document.getElementById('listPlaceGuideDisplayer').style.height = availableHeight.toString() + 'px';
+  document.getElementById('listPlaceGuideDisplayer').style.height =
+      availableHeight.toString() + 'px';
 }
-
-
-
-
