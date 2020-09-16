@@ -163,7 +163,7 @@ class PlaceGuideOnList {
     const expandButton = this.getPlaceGuideButtonWithPreparedClasses();
     expandButton.setAttribute('title', 'expand');
     expandButton.innerText = 'open_in_full';
-    expandButton.addEventListener('click', function () {
+    expandButton.addEventListener('click', function() {
       PlaceGuideOnList.expand(placeGuideId);
     });
     buttonsContainer.appendChild(expandButton);
@@ -214,7 +214,9 @@ class PlaceGuideOnList {
     const placeGuideImage =
         this.createPlaceGuideImageElement(placeGuideProperties.imageKey);
     const placeGuideTitle =
-        this.createPlaceGuideTitle(placeGuideProperties.name, placeGuideProperties.creator);
+        this.createPlaceGuideTitle(
+            placeGuideProperties.name,
+            placeGuideProperties.creator);
     const placeGuideLength =
         this.createPlaceGuideLengthElement(placeGuideProperties.audioLength);
     const placeGuideDescription =
@@ -311,7 +313,7 @@ class PlaceGuideOnList {
     const audioButton = this.getPlaceGuideButtonWithPreparedClasses();
     audioButton.setAttribute('title', 'play/pause audio');
     audioButton.innerText = 'play_arrow';
-    audioButton.addEventListener('click', function () {
+    audioButton.addEventListener('click', function() {
       if (audioButton.innerText == 'play_arrow') {
         audioPlayer.play();
         audioButton.innerText = 'pause';
@@ -341,7 +343,7 @@ class PlaceGuideOnList {
   }
 
   highlightOnInfoBoxClick(placeGuideDiv, placeGuideId) {
-    placeGuideDiv.addEventListener('click', function () {
+    placeGuideDiv.addEventListener('click', function() {
       highlightOnInfoBoxClick(placeGuideId);
     });
   }
@@ -365,7 +367,7 @@ class PlaceGuideOnList {
     deleteButton.setAttribute('title', 'delete place guide');
     deleteButton.innerText = 'delete';
 
-    deleteButton.addEventListener('click', function () {
+    deleteButton.addEventListener('click', function() {
       if (window.confirm('Click ok if you want to delete the place guide')) {
         placeGuideManager.removePlaceGuide(placeGuideId);
       }
@@ -378,7 +380,7 @@ class PlaceGuideOnList {
     editButton.setAttribute('title', 'edit place guide');
     editButton.innerText = 'edit';
 
-    editButton.addEventListener('click', function () {
+    editButton.addEventListener('click', function() {
       const queryString = PlaceGuideOnList.generateQueryString(placeGuideProperties);
       const url = './createPlaceGuide.html?' + queryString;
       window.location = url;
@@ -394,7 +396,7 @@ class PlaceGuideOnList {
       bookmarkButton.innerText = 'bookmark';
       bookmarkButton.setAttribute('title', 'unbookmark place guide');
     }
-    bookmarkButton.addEventListener('click', function () {
+    bookmarkButton.addEventListener('click', function() {
       if (bookmarkButton.innerText == 'bookmark') {
         bookmarkButton.innerText = 'bookmark_border';
         bookmarkButton.setAttribute('title', 'bookmark place guide');
@@ -411,7 +413,7 @@ class PlaceGuideOnList {
     const downloadButton = this.getPlaceGuideButtonWithPreparedClasses();
     downloadButton.setAttribute('title', 'download audio');
     downloadButton.innerText = 'get_app';
-    downloadButton.addEventListener('click', function () {
+    downloadButton.addEventListener('click', function() {
       window.location.href = PlaceGuideOnList.getBlobSrc(audioKey);
     });
     parentDiv.appendChild(downloadButton);
@@ -421,7 +423,7 @@ class PlaceGuideOnList {
     const backToListButton = this.getPlaceGuideButtonWithPreparedClasses();
     backToListButton.setAttribute('title', 'back to list');
     backToListButton.innerText = 'close_fullscreen';
-    backToListButton.addEventListener('click', function () {
+    backToListButton.addEventListener('click', function() {
       PlaceGuideOnList.close(placeGuideId);
     });
 

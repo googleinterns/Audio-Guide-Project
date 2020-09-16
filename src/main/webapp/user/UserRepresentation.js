@@ -1,3 +1,8 @@
+/**
+ * This class is responsible for displaying an icon for the creator of
+ * placeguides, used in each placeguide info box. The icon creates a link to
+ * the portfolio of the given user.
+ */
 class UserRepresentation {
   constructor(user) {
     this._userRepresentationDiv = UserRepresentation.createUserDiv(user);

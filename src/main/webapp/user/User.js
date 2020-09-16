@@ -33,7 +33,9 @@ class User {
   }
 
   get queryString() {
-    const query = `id=${this._id}&name=${this._name}&email=${this._email}&publicPortfolio=${this._publicPortfolio}&selfIntroduction=${this._selfIntroduction}&imgKey=${this._imgKey}`;
+    const query = `id=${this._id}&name=${this._name}&email=${this._email}\
+      &publicPortfolio=${this._publicPortfolio}&selfIntroduction=\
+      ${this._selfIntroduction}&imgKey=${this._imgKey}`;
     return query;
   }
 
@@ -41,7 +43,7 @@ class User {
     if (window.location.search != '') {
       const GET = {};
       const queryString = decodeURI(window.location.search.replace(/^\?/, ''));
-      queryString.split(/\&/).forEach(function (keyValuePair) {
+      queryString.split(/\&/).forEach(function(keyValuePair) {
         const paramName = keyValuePair.replace(/=.*$/, '');
         const paramValue = keyValuePair.replace(/^[^=]*\=/, '');
         GET[paramName] = paramValue;
@@ -66,7 +68,8 @@ class User {
       } else {
         publicPortfolio = false;
       }
-      return new User(id, email, name, publicPortfolio, selfIntroduction, imgKey);
+      return new User(
+          id, email, name, publicPortfolio, selfIntroduction, imgKey);
     }
   }
 }
