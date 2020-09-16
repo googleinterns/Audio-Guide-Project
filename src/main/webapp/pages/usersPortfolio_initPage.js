@@ -60,11 +60,11 @@ function fillPortfolioDiv(user) {
 function setMapWidth() {
   const availableWidth = window.innerWidth - LIST_WIDTH;
   document.getElementById('mapDisplayer').style.width =
-      availableWidth.toString() + 'px';
+      availableWidth + 'px';
 }
 
 function setListHeight() {
   const availableHeight = window.innerHeight - MENU_AND_USER_PORTFOLIO_HEIGHT;
   document.getElementById('listPlaceGuideDisplayer').style.height =
-      availableHeight.toString() + 'px';
+      availableHeight+ 'px';
 }

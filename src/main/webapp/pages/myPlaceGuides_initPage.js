@@ -31,5 +31,5 @@ function initPage() {
 
 function setMapWidth() {
   const availableWidth = window.innerWidth - LIST_WIDTH;
-  document.getElementById('mapDisplayer').style.width = availableWidth.toString() + 'px';
+  document.getElementById('mapDisplayer').style.width = availableWidth + 'px';
 }
