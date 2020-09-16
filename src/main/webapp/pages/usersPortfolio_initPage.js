@@ -8,6 +8,9 @@
 let map;
 let placeGuideManager;
 
+const LIST_WIDTH = 370;
+const MENU_AND_USER_PORTFOLIO_HEIGHT = 520;
+
 function initPage() {
   authenticateUser().then((userAuthenticationStatus) => {
     if (!userAuthenticationStatus.isLoggedIn) {
@@ -55,13 +58,13 @@ function fillPortfolioDiv(user) {
 }
 
 function setMapWidth() {
-  const availableWidth = window.innerWidth - 370;
+  const availableWidth = window.innerWidth - LIST_WIDTH;
   document.getElementById('mapDisplayer').style.width =
       availableWidth.toString() + 'px';
 }
 
 function setListHeight() {
-  const availableHeight = window.innerHeight - 520;
+  const availableHeight = window.innerHeight - MENU_AND_USER_PORTFOLIO_HEIGHT;
   document.getElementById('listPlaceGuideDisplayer').style.height =
       availableHeight.toString() + 'px';
 }

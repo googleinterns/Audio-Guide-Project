@@ -8,6 +8,8 @@
 let map;
 let placeGuideManager;
 
+const LIST_WIDTH = 370;
+
 function initPage() {
   authenticateUser().then((userAuthenticationStatus) => {
     if (!userAuthenticationStatus.isLoggedIn) {
@@ -27,6 +29,6 @@ function initPage() {
 }
 
 function setMapWidth() {
-  const availableWidth = window.innerWidth - 370;
+  const availableWidth = window.innerWidth - LIST_WIDTH;
   document.getElementById('mapDisplayer').style.width = availableWidth.toString() + 'px';
 }
