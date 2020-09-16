@@ -54,10 +54,10 @@ class PlaceGuideOnList {
   }
 
   static generateQueryString(placeGuideProperties) {
-    const esc = encodeURIComponent;
     const query = Object.keys(placeGuideProperties)
-        .map(function(k) {
-          return esc(k) + '=' + esc(placeGuideProperties[k]);
+        .map(function(propertyKey) {
+          return encodeURIComponent(propertyKey) + '=' +
+              encodeURIComponent(placeGuideProperties[propertyKey]);
         })
         .join('&');
     return query;
