@@ -50,7 +50,7 @@ class User {
       });
       const id = GET['id'];
       let name = GET['name'];
-      if (name == "undefined") {
+      if (name === "undefined") {
         name = undefined;
       }
       const email = GET['email'];

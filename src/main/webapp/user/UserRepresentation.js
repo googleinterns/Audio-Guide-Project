@@ -18,8 +18,8 @@ class UserRepresentation {
     userDiv.style.width = "50px";
     const userDivClass = "userRepresentation-" + "{" + user.id + "}";
     userDiv.setAttribute("class", userDivClass);
-    if (user.imgKey != undefined) {
-      if (user.name != undefined) {
+    if (user.imgKey !==  undefined) {
+      if (user.name !== undefined) {
         userDiv.appendChild(
             UserRepresentation.createUserImg(user.imgKey, user.name));
       } else {
@@ -28,7 +28,7 @@ class UserRepresentation {
                 0, user.email.indexOf("@"))));
       }
     } else {
-      if (user.name != undefined) {
+      if (user.name !== undefined) {
         userDiv.appendChild(
             UserRepresentation.createUserIcon(user.name));
       } else {

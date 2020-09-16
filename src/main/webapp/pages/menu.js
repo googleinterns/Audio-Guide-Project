@@ -43,12 +43,12 @@ class Menu {
   constructor(pageName) {
     const NO_TABS = 5;
     for (var i = 0; i < NO_TABS; i++) {
-      const isFocused = pageName != undefined && pageName.index == i;
+      const isFocused = pageName !== undefined && pageName.index === i;
       var tab = this.createMenuTab(i, isFocused);
       document.querySelector('.mdc-tab-scroller__scroll-content').appendChild(tab);
     }
     const tabBar = new mdc.tabBar.MDCTabBar(document.querySelector('.mdc-tab-bar'));
-    if (pageName != undefined) {
+    if (pageName !== undefined) {
       const tabs = document.querySelectorAll('.mdc-tab');
       tabs[pageName.index].focus();
     }
