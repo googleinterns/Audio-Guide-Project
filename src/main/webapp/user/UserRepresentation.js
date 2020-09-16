@@ -24,7 +24,8 @@ class UserRepresentation {
             UserRepresentation.createUserImg(user.imgKey, user.name));
       } else {
         userDiv.appendChild(
-            UserRepresentation.createUserImg(user.email.substring(0, user.email.indexOf("@"))));
+            UserRepresentation.createUserImg(user.imgKey, user.email.substring(
+                0, user.email.indexOf("@"))));
       }
     } else {
       if (user.name != undefined) {
@@ -32,10 +33,11 @@ class UserRepresentation {
             UserRepresentation.createUserIcon(user.name));
       } else {
         userDiv.appendChild(
-            UserRepresentation.createUserIcon(user.email.substring(0, user.email.indexOf("@"))));
+            UserRepresentation.createUserIcon(user.email.substring(
+                0, user.email.indexOf("@"))));
       }
     }
-    userDiv.addEventListener("click", function () {
+    userDiv.addEventListener("click", function() {
       if (user.publicPortfolio) {
         const queryString = user.queryString;
         const url = './usersPortfolio.html?' + queryString;
