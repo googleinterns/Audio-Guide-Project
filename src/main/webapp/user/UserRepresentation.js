@@ -14,10 +14,6 @@ class UserRepresentation {
 
   static createUserDiv(user) {
     const userDiv = document.createElement("div");
-    userDiv.style.height = "5px";
-    userDiv.style.width = "50px";
-    const userDivClass = "userRepresentation-" + "{" + user.id + "}";
-    userDiv.setAttribute("class", userDivClass);
     if (user.imgKey !==  undefined) {
       if (user.name !== undefined) {
         userDiv.appendChild(
