@@ -12,6 +12,7 @@ class PlaceGuideOnMap {
     this._marker = PlaceGuideOnMap.getMarker(placeType, name, location.position);
     this._infoWindow = undefined;
     this._highlighted = false;
+    this._highlightingStopped = false;
     this.setupHighlightOnMarkerClick();
     this.setupUnhighlightOnMapClick();
   }
@@ -78,6 +79,7 @@ class PlaceGuideOnMap {
   }
 
   highlight() {
+    this._highlightingStopped = false;
     if (this._infoWindow !== undefined) {
       this._infoWindow.open(map, this._marker);
       this._highlighted = true;
@@ -90,14 +92,17 @@ class PlaceGuideOnMap {
                     placeName,
                     this._creator,
                     this._description);
-            this._infoWindow.open(map, this._marker);
-            this._highlighted = true;
+            if (!this._highlightingStopped) {
+              this._infoWindow.open(map, this._marker);
+              this._highlighted = true;
+            }
           });
     }
   }
 
   unhighlight() {
     if (this._infoWindow !== undefined) {
+      this._highlightingStopped = true;
       this._infoWindow.close();
     }
     this._highlighted = false;
