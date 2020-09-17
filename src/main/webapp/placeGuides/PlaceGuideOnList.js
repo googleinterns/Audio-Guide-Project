@@ -1,12 +1,11 @@
 class PlaceGuideOnList {
   constructor(
-      placeGuideId, placeName, placeId, name, creator, description,
+      placeGuideId, location, name, creator, description,
       audioKey, audioLength, isPublic, imageKey, createdByCurrentUser,
       bookmarkedByCurrentUser, latitude, longitude) {
     this._placeGuideProperties = {
       placeGuideId: placeGuideId,
-      placeName: placeName,
-      placeId: placeId,
+      location: location,
       name: name,
       audioKey: audioKey,
       imageKey: imageKey,
@@ -72,6 +71,7 @@ class PlaceGuideOnList {
     const placeGuideAudioKey = placeGuideProperties.audioKey;
     const placeGuideId = placeGuideProperties.placeGuideId;
     const placeGuideName = placeGuideProperties.name;
+    // todo
     const placeName = placeGuideProperties.placeName;
     const foldedPlaceGuideDiv = document.createElement('div');
     foldedPlaceGuideDiv.style.display = 'block';
@@ -107,6 +107,7 @@ class PlaceGuideOnList {
     return placeGuideNameContainer;
   }
 
+  // todo
   foldedPlaceGuide_placeName(placeName) {
     const placeNameElement = document.createElement('p');
     placeNameElement.classList.add('mb-1');
@@ -185,6 +186,10 @@ class PlaceGuideOnList {
         this.createPlaceGuideLengthElement(placeGuideProperties.audioLength);
     const placeGuideDescription =
         this.createPlaceGuideDescriptionElement(placeGuideProperties.description);
+    // todo: add placename to card content
+    // if (placeName != undefined || placeName != '' || placeName != null) {
+    //   foldedPlaceGuideDiv.appendChild(this.foldedPlaceGuide_placeName(placeName));
+    // }
 
     cardContents.appendChild(placeGuideImage);
     cardContents.appendChild(placeGuideTitle);
