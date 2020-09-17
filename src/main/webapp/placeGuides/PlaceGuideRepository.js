@@ -23,24 +23,12 @@ class PlaceGuideRepository {
 
   static buildPlaceGuideDictionaryFromResponse(placeGuideWithCreatorPairs) {
     var placeGuidesDict = {};
-    var promises = [];
-    return new Promise(function (resolve, reject) {
-          for (var i = 0; i < placeGuideWithCreatorPairs.length; i++) {
-            promises.push(new Promise(function (resolve, reject) {
-              PlaceGuideRepository
-                  .getPlaceGuideFromPlaceGuideWithCreatorPair(
-                      placeGuideWithCreatorPairs[i])
-                  .then(placeGuide => {
-                    placeGuidesDict[placeGuide.id] = placeGuide;
-                  })
-                  .then(finished => resolve())
-            }));
-          }
-          Promise.all(promises).then(() => {
-            resolve(placeGuidesDict);
-          });
-        }
-    );
+    for (var i = 0; i < placeGuideWithCreatorPairs.length; i++) {
+      const placeGuide = PlaceGuideRepository
+          .getPlaceGuideFromPlaceGuideWithCreatorPair(
+            placeGuideWithCreatorPairs[i]);
+      placeGuidesDict[placeGuide.id] = placeGuide;
+    }
   }
 
   static getPlaceGuideFromPlaceGuideWithCreatorPair(placeGuideInfo) {
@@ -49,18 +37,17 @@ class PlaceGuideRepository {
     const location = new Location(placeGuideResponse.coordinate.latitude,
                                   placeGuideResponse.coordinate.longitude,
                                   placeGuideResponse.placeId);
-    const placeGuide = new PlaceGuide(placeGuideResponse.id,
-                                      placeGuideResponse.name,
-                                      location,
-                                      placeGuideResponse.audioKey,
-                                      placeGuideResponse.length,
-                                      placeGuideResponse.imageKey,
-                                      creator,
-                                      placeGuideResponse.description,
-                                      placeGuideResponse.isPublic,
-                                      placeGuideInfo.createdByCurrentUser,
-                                      placeGuideInfo.bookmarkedByCurrentUser);
-    return placeGuide;
+    return new PlaceGuide(placeGuideResponse.id,
+                          placeGuideResponse.name,
+                          location,
+                          placeGuideResponse.audioKey,
+                          placeGuideResponse.length,
+                          placeGuideResponse.imageKey,
+                          creator,
+                          placeGuideResponse.description,
+                          placeGuideResponse.isPublic,
+                          placeGuideInfo.createdByCurrentUser,
+                          placeGuideInfo.bookmarkedByCurrentUser);
   }
 
   static getUserFromResponse(userResponse) {
@@ -96,17 +83,11 @@ class PlaceGuideRepository {
                   + error);
             alert("Failed to process the data of guides");
           })
-          .then(placeGuideWithCreatorPairs =>
-              PlaceGuideRepository
-                  .buildPlaceGuideDictionaryFromResponse(
-                      placeGuideWithCreatorPairs))
-          .catch(error => {
-            console.log(
-                  "updatePlaceGuides: unable to build placeGuide dictionary: "
-                  + error);
-            alert("Failed to process the data of guides")
-          })
-          .then(placeGuides => thisRepository._placeGuides = placeGuides);
+          .then(placeGuideWithCreatorPairs => function() {
+            thisRepository._placeGuides = PlaceGuideRepository
+                .buildPlaceGuideDictionaryFromResponse(
+                    placeGuideWithCreatorPairs)
+          });
     } else {
       var thisRepository = this;
       return new Promise(function (resolve, reject) {
