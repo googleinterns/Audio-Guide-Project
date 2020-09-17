@@ -3,8 +3,8 @@
  * coordinates or by a place_id, which will be decoded with PlacesService.
  */
 class Location {
-  constructor(position, placeId) {
-    this._position = position;
+  constructor(latitude, longitude, placeId) {
+    this._position = new google.maps.LatLng(latitude, longitude);
     this._placeId = placeId;
     this._placeName = undefined;
   }
