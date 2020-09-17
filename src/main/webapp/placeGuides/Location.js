@@ -18,18 +18,43 @@ class Location {
     return this._position;
   }
 
-  // get placeName() {
-  //   if (this._placeName !== undefined) {
-  //     return this._placeName;
-  //   } else {
-  //
-  //   }
-  //   return this._placeName;
-  // }
+  get placeName() {
+    if (this._placeName !== undefined) {
+      const thisPlaceName = this._placeName;
+      return new Promise(function(resolve, reject) {
+        return thisPlaceName;
+      });
+    } else {
+      const thisLocation = this;
+      this.definePlaceName()
+          .then(newPlaceName => {
+            thisLocation._placeName = newPlaceName;
+            return newPlaceName;
+          });
+    }
+  }
 
   static constructLocationBasedOnCoordinates(positionLat, positionLng) {
     return new Location(
         new google.maps.LatLng(positionLat, positionLng), null);
+  }
+
+  definePlaceName() {
+    const request = {
+      placeId: placeId,
+      fields: ['name'],
+    };
+    return new Promise(function(resolve, reject) {
+      const service = new google.maps.places.PlacesService(map);
+      service.getDetails(request, (place, status) => {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+          resolve(place.name);
+        } else {
+          reject(new Error('Couldn\'t find the place ' + placeId + ' because' +
+              ' ' + status));
+        }
+      });
+    });
   }
 
   static constructLocationBasedOnPlaceId(placeId) {
