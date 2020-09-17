@@ -98,10 +98,10 @@ class ListPlaceGuideDisplayer {
   }
 
  // Move the highlighted place guide to top of list.
-  highlight(placeGuideId) {
+  highlight(placeGuideId, location) {
     const placeGuideDiv = this.remove(placeGuideId);
     this.insertDivAfterTitle(placeGuideDiv);
-    PlaceGuideOnList.highlight(placeGuideId);
+    PlaceGuideOnList.highlight(placeGuideId, location);
   }
 
   insertDivAfterTitle(placeGuideDiv) {

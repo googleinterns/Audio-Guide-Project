@@ -77,7 +77,8 @@ class PlaceGuideManager {
     }
     this._highlightedPlaceGuideId = placeGuideId;
     this._mapPlaceGuideDisplayer.highlight(placeGuideId);
-    this._listPlaceGuideDisplayer.highlight(placeGuideId);
+    this._listPlaceGuideDisplayer.highlight(placeGuideId,
+        this._placeGuideRepository.location(placeGuideId));
   }
 
   unhighlightPlaceGuide() {

@@ -13,6 +13,10 @@ class Location {
     return this._position;
   }
 
+  get placeId() {
+    return this._placeId;
+  }
+
   get placeName() {
     if (this._placeName !== undefined) {
       const thisPlaceName = this._placeName;

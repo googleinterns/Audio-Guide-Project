@@ -27,8 +27,8 @@ class PlaceGuideOnList {
     return this._placeGuideOnListDiv;
   }
 
-  static highlight(placeGuideId) {
-    PlaceGuideOnList.expand(placeGuideId);
+  static highlight(placeGuideId, location) {
+    PlaceGuideOnList.expand(placeGuideId, location);
   }
 
   static unhighlight(placeGuideId) {
@@ -100,8 +100,9 @@ class PlaceGuideOnList {
     const expandButton = this.getPlaceGuideButtonWithPreparedClasses();
     expandButton.setAttribute('title', 'expand');
     expandButton.innerText = 'open_in_full';
+    const placeGuideLocation = this._placeGuideProperties.location;
     expandButton.addEventListener('click', function() {
-      PlaceGuideOnList.expand(placeGuideId);
+      PlaceGuideOnList.expand(placeGuideId, placeGuideLocation);
     });
     buttonsContainer.appendChild(expandButton);
     return buttonsContainer;
@@ -112,16 +113,16 @@ class PlaceGuideOnList {
     const placeGuideDiv = document.getElementById(divId);
     location.placeName
         .then(placeName => {
-          if (placeName !== undefined) {
-            document.getElementById(
-                PlaceGuideOnList.getPlaceGuidePlaceNameElementId(placeGuideId))
-                .innerText = placeName;
-          }
           placeGuideDiv.querySelectorAll('.folded-placeGuide')[0]
               .style.display = 'none';
           placeGuideDiv.querySelectorAll('.card-placeGuide')[0]
               .style.display = 'block';
           placeGuideDiv.style.padding = '0px';
+          if (placeName !== undefined) {
+            document.getElementById(
+                PlaceGuideOnList.getPlaceGuidePlaceNameElementId(placeGuideId))
+                .innerText = placeName;
+          }
         });
   }
 
@@ -172,14 +173,16 @@ class PlaceGuideOnList {
         this.createPlaceGuideTitle(placeGuideProperties.name, creator.email);
     const placeGuideLength =
         this.createPlaceGuideLengthElement(placeGuideProperties.audioLength);
-    const placeGuidePlaceName =
-        this.createPlaceGuidePlaceNameElement();
     const placeGuideDescription =
         this.createPlaceGuideDescriptionElement(placeGuideProperties.description);
 
     cardContents.appendChild(placeGuideImage);
     cardContents.appendChild(placeGuideTitle);
-    cardContents.appendChild(placeGuidePlaceName);
+    if (this._placeGuideProperties.location.placeId !== undefined) {
+      const placeGuidePlaceName =
+          this.createPlaceGuidePlaceNameElement();
+      cardContents.appendChild(placeGuidePlaceName);
+    }
     cardContents.appendChild(placeGuideLength);
     cardContents.appendChild(placeGuideDescription);
     cardContentsContainer.appendChild(cardContents);
@@ -235,7 +238,8 @@ class PlaceGuideOnList {
 
   createPlaceGuidePlaceNameElement() {
     const placeNameElement = document.createElement('h5');
-    const divId = PlaceGuideOnList.getPlaceGuidePlaceNameElementId();
+    const divId = PlaceGuideOnList.getPlaceGuidePlaceNameElementId(
+        this._placeGuideProperties.placeGuideId);
     placeNameElement.setAttribute('id', divId);
     placeNameElement.classList.add('place-guide-place-name');
     placeNameElement.innerText = "Random Name";

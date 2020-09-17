@@ -156,4 +156,8 @@ class PlaceGuideRepository {
   isBookmarked(placeGuideId) {
     return this._placeGuides[placeGuideId].bookmarkedByCurrentUser;
   }
+
+  location(placeGuideId) {
+    return this._placeGuides[placeGuideId].location;
+  }
 }
