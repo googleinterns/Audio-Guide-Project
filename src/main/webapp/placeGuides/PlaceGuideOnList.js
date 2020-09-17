@@ -107,12 +107,22 @@ class PlaceGuideOnList {
     return buttonsContainer;
   }
 
-  static expand(placeGuideId) {
+  static expand(placeGuideId, location) {
     const divId = 'placeGuideOnList-' + '{' + placeGuideId + '}';
     const placeGuideDiv = document.getElementById(divId);
-    placeGuideDiv.querySelectorAll('.folded-placeGuide')[0].style.display = 'none';
-    placeGuideDiv.querySelectorAll('.card-placeGuide')[0].style.display = 'block';
-    placeGuideDiv.style.padding = '0px';
+    location.placeName
+        .then(placeName => {
+          if (placeName !== undefined) {
+            document.getElementById(
+                PlaceGuideOnList.getPlaceGuidePlaceNameElementId(placeGuideId))
+                .innerText = placeName;
+          }
+          placeGuideDiv.querySelectorAll('.folded-placeGuide')[0]
+              .style.display = 'none';
+          placeGuideDiv.querySelectorAll('.card-placeGuide')[0]
+              .style.display = 'block';
+          placeGuideDiv.style.padding = '0px';
+        });
   }
 
   createCardPlaceGuide(
@@ -225,9 +235,15 @@ class PlaceGuideOnList {
 
   createPlaceGuidePlaceNameElement() {
     const placeNameElement = document.createElement('h5');
+    const divId = PlaceGuideOnList.getPlaceGuidePlaceNameElementId();
+    placeNameElement.setAttribute('id', divId);
     placeNameElement.classList.add('place-guide-place-name');
     placeNameElement.innerText = "Random Name";
     return placeNameElement;
+  }
+
+  static getPlaceGuidePlaceNameElementId(placeGuideId) {
+    return `placeGuidePlaceName-{${placeGuideId}}`;
   }
 
   createPlaceGuideDescriptionElement(placeGuideDescription) {
