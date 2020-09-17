@@ -146,7 +146,7 @@ class PlaceGuideOnMap {
 
   setupUnhighlightOnMapClick() {
     const thisPlaceGuideOnMap = this;
-    map.addListener('click', function(mapsMouseEvent) {
+    map.addListener('click', function (mapsMouseEvent) {
       if (thisPlaceGuideOnMap.isHighlighted()) {
         placeGuideManager.unhighlightPlaceGuide();
       }

@@ -11,6 +11,7 @@ class PlaceGuideRepository {
     CREATED_PUBLIC_IN_MAP_AREA: "CREATED_PUBLIC_IN_MAP_AREA",
     CREATED_PRIVATE_IN_MAP_AREA: "CREATED_PRIVATE_IN_MAP_AREA",
     BOOKMARKED: "BOOKMARKED",
+    CREATED_BY_GIVEN_USER_PUBLIC_IN_MAP_AREA: "CREATED_BY_GIVEN_USER_PUBLIC_IN_MAP_AREA"
   };
 
   constructor() {
@@ -65,7 +66,7 @@ class PlaceGuideRepository {
         userResponse.imgKey);
   }
 
-  fetchPlaceGuides(queryType, bounds, zoom) {
+  fetchPlaceGuides(queryType, bounds, zoom, portfolioUserId) {
     if (PlaceGuideRepository.MIN_ZOOM <= zoom ||
         queryType == PlaceGuideRepository.QUERY_TYPE.BOOKMARKED) {
       // As the number of bookmarked placeGuides will be restricted,
@@ -76,6 +77,9 @@ class PlaceGuideRepository {
       url.searchParams.append("placeGuideType", queryType);
       if (queryType != PlaceGuideRepository.QUERY_TYPE.BOOKMARKED) {
         url.searchParams.append("regionCorners", bounds.toUrlValue());
+      }
+      if (queryType === PlaceGuideRepository.QUERY_TYPE.CREATED_BY_GIVEN_USER_PUBLIC_IN_MAP_AREA) {
+        url.searchParams.append("creatorId", portfolioUserId);
       }
       var thisRepository = this;
       return fetch(url)

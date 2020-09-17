@@ -26,10 +26,15 @@ class PlaceGuideManager {
       query: PlaceGuideRepository.QUERY_TYPE.BOOKMARKED,
       guideBookmarkStatusChanged: PlaceGuideManager.removeGuideIfUnbookmarked,
       name: "BOOKMARKED_PLACEGUIDES"
+    },
+    USERS_PORTFOLIO: {
+      query: PlaceGuideRepository.QUERY_TYPE.CREATED_BY_GIVEN_USER_PUBLIC_IN_MAP_AREA,
+      guideBookmarkStatusChanged: undefined,
+      name: "USERS_PORTFOLIO"
     }
   };
 
-  constructor(page, map) {
+  constructor(page, map, portfolioUserId) {
     this._page = page;
     this._placeGuideRepository = new PlaceGuideRepository();
     this._highlightedPlaceGuideId = null;
@@ -37,17 +42,17 @@ class PlaceGuideManager {
     this._listPlaceGuideDisplayer = new ListPlaceGuideDisplayer(page);
     let thisManager = this;
     google.maps.event.addListenerOnce(map, 'idle', function () {
-      thisManager.refreshPlaceGuides(map.getBounds(), map.getZoom());
+      thisManager.refreshPlaceGuides(map.getBounds(), map.getZoom(), portfolioUserId);
     });
     if (this._page != PlaceGuideManager.PAGE.BOOKMARKED_PLACEGUIDES) {
       google.maps.event.addListener(map, 'idle', function () {
-        thisManager.refreshPlaceGuides(map.getBounds(), map.getZoom());
+        thisManager.refreshPlaceGuides(map.getBounds(), map.getZoom(), portfolioUserId);
       });
     }
   }
 
-  refreshPlaceGuides(bounds, zoom) {
-    this._placeGuideRepository.fetchPlaceGuides(this._page.query, bounds, zoom)
+  refreshPlaceGuides(bounds, zoom, portfolioUserId) {
+    this._placeGuideRepository.fetchPlaceGuides(this._page.query, bounds, zoom, portfolioUserId)
         .then((placeGuides) => {
           this._listPlaceGuideDisplayer.update(placeGuides);
           this._mapPlaceGuideDisplayer.update(placeGuides);

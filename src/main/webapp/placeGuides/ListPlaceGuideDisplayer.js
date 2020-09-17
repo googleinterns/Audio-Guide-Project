@@ -21,17 +21,20 @@ class ListPlaceGuideDisplayer {
     "BOOKMARKED_PLACEGUIDES": {
       listTitle: "Bookmarked Guides",
       listSubTitle: ""
+    },
+    "USERS_PORTFOLIO": {
+      listTitle: "Portfolio",
+      listSubTitle: "Guides in the selected map area"
     }
-  }
+  };
 
   constructor(page) {
-    this._listPlaceGuideDisplayerDiv = 
+    this._listPlaceGuideDisplayerDiv =
         document.getElementById("listPlaceGuideDisplayer");
     this._listPlaceGuideDisplayerDiv.classList.add(
-        "list-group", 
-        "my-place-guide-list", 
-        "list-place-guide-displayer", 
-        "form-card");
+        "list-group",
+        "my-place-guide-list",
+        "list-place-guide-displayer");
     this._page = page;
     this._listPlaceGuideDisplayerDiv.appendChild(
         this.createListTitle(
@@ -42,10 +45,14 @@ class ListPlaceGuideDisplayer {
     return this._listPlaceGuideDisplayerDiv;
   }
 
+  static getPlaceGuideOnListDivId(placeGuideId) {
+    return `placeGuideOnList-{${placeGuideId}}`;
+  }
+
   update(placeGuides) {
     var placeGuidesCopy = {};
     Object.assign(placeGuidesCopy, placeGuides);
-    var placeGuideDiv = 
+    var placeGuideDiv =
         this._listPlaceGuideDisplayerDiv.firstChild.nextSibling;
     while (placeGuideDiv != null) {
       if (!placeGuidesCopy.hasOwnProperty(this.extractIdFromDivId(placeGuideDiv.id))) {
@@ -68,13 +75,14 @@ class ListPlaceGuideDisplayer {
     while (this._listPlaceGuideDisplayerDiv.firstChild) {
       this._listPlaceGuideDisplayerDiv.removeChild(
           this._listPlaceGuideDisplayerDiv.lastChild);
-    };
+    }
+
   }
 
   addPlaceGuidesToList(placeGuides) {
     for (var placeGuideId in placeGuides) {
       if (placeGuides.hasOwnProperty(placeGuideId)) {
-        var constructedPlaceGuideOnListDiv = 
+        var constructedPlaceGuideOnListDiv =
             this.constructPlaceGuideOnListDivFromPlaceGuide(
                 placeGuides[placeGuideId]);
         this._listPlaceGuideDisplayerDiv.appendChild(
@@ -84,7 +92,7 @@ class ListPlaceGuideDisplayer {
   }
 
   remove(placeGuideId) {
-    const placeGuideOnListDivId = 
+    const placeGuideOnListDivId =
         ListPlaceGuideDisplayer.getPlaceGuideOnListDivId(placeGuideId);
     const placeGuideDiv = document.getElementById(placeGuideOnListDivId);
     if (this._listPlaceGuideDisplayerDiv.contains(placeGuideDiv)) {
@@ -106,7 +114,7 @@ class ListPlaceGuideDisplayer {
 
   insertDivAfterTitle(placeGuideDiv) {
     this._listPlaceGuideDisplayerDiv.insertBefore(
-        placeGuideDiv, 
+        placeGuideDiv,
         this._listPlaceGuideDisplayerDiv.firstChild.nextSibling);
   }
 
@@ -136,7 +144,7 @@ class ListPlaceGuideDisplayer {
     const listTitleDiv = document.createElement("div");
     listTitleDiv.setAttribute("id", "listTitle");
     listTitleDiv.classList.add(
-        "list-group-item", 
+        "list-group-item",
         "flex-column",
         "align-items-start");
     listTitleDiv.style.backgroundColor = "#80ba83";
