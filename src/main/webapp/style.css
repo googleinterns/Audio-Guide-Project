@@ -245,6 +245,13 @@ body {
     padding-left: 16px;
 }
 
+.place-guide-place-name {
+    font-size: 12px;
+    padding-bottom: 2px;
+    font-style: italic;
+    padding-left: 16px;
+}
+
 .list-place-guide-displayer {
     overflow:hidden; 
     overflow-y:scroll;

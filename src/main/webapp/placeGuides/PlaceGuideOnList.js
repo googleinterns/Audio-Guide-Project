@@ -93,26 +93,6 @@ class PlaceGuideOnList {
     return placeGuideNameContainer;
   }
 
-  foldedPlaceGuide_name(placeGuideName) {
-    const placeGuideNameContainer = document.createElement('div');
-    placeGuideNameContainer.classList.add(
-        'd-flex',
-        'w-100',
-        'justify-content-between');
-    const placeGuideNameElement = document.createElement('h5');
-    placeGuideNameElement.classList.add('mb-1');
-    placeGuideNameElement.innerText = placeGuideName;
-    placeGuideNameContainer.appendChild(placeGuideNameElement);
-    return placeGuideNameContainer;
-  }
-
-  foldedPlaceGuide_placeName(placeName) {
-    const placeNameElement = document.createElement('p');
-    placeNameElement.classList.add('mb-1');
-    placeNameElement.innerText = placeName;
-    return placeNameElement;
-  }
-
   foldedPlaceGuide_buttons(placeGuideId, audioKey) {
     const buttonsContainer = document.createElement('div');
     buttonsContainer.classList.add('mdc-card__action-icons');
@@ -182,11 +162,14 @@ class PlaceGuideOnList {
         this.createPlaceGuideTitle(placeGuideProperties.name, creator.email);
     const placeGuideLength =
         this.createPlaceGuideLengthElement(placeGuideProperties.audioLength);
+    const placeGuidePlaceName =
+        this.createPlaceGuidePlaceNameElement();
     const placeGuideDescription =
         this.createPlaceGuideDescriptionElement(placeGuideProperties.description);
 
     cardContents.appendChild(placeGuideImage);
     cardContents.appendChild(placeGuideTitle);
+    cardContents.appendChild(placeGuidePlaceName);
     cardContents.appendChild(placeGuideLength);
     cardContents.appendChild(placeGuideDescription);
     cardContentsContainer.appendChild(cardContents);
@@ -238,6 +221,13 @@ class PlaceGuideOnList {
     placeGuideLength.classList.add('place-guide-length');
     placeGuideLength.innerText = placeGuideAudioLength + ' minutes';
     return placeGuideLength;
+  }
+
+  createPlaceGuidePlaceNameElement() {
+    const placeNameElement = document.createElement('h5');
+    placeNameElement.classList.add('place-guide-place-name');
+    placeNameElement.innerText = "Random Name";
+    return placeNameElement;
   }
 
   createPlaceGuideDescriptionElement(placeGuideDescription) {
