@@ -140,11 +140,11 @@ class PlaceGuideOnList {
   static expand(placeGuideId, location) {
     const divId = 'placeGuideOnList-' + '{' + placeGuideId + '}';
     const placeGuideDiv = document.getElementById(divId);
-    const placeNameDiv =  document.getElementById(
+    const placeNameDiv = document.getElementById(
         PlaceGuideOnList.getPlaceGuidePlaceNameElementId(placeGuideId));
     if (placeNameDiv !== null && placeNameDiv.innerText === "") {
       location.placeName
-          .then(placeName => {
+          .then((placeName) => {
             PlaceGuideOnList.showCardInsteadOfFoldedGuide(placeGuideDiv);
             if (placeName !== undefined) {
               placeNameDiv.innerText = placeName;

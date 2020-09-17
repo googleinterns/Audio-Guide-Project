@@ -9,7 +9,8 @@ class PlaceGuideOnMap {
     this._description = description;
     this._id = id;
     this._location = location;
-    this._marker = PlaceGuideOnMap.getMarker(placeType, name, location.position);
+    this._marker = PlaceGuideOnMap
+        .getMarker(placeType, name, location.position);
     this._infoWindow = undefined;
     this._highlighted = false;
     this._highlightingStopped = false;
@@ -49,7 +50,8 @@ class PlaceGuideOnMap {
   static getInfoWindow(name, position, placeName, creator, description) {
     return new google.maps.InfoWindow({
       content: PlaceGuideOnMap
-          .getInfoWindowContent(name, position, placeName, creator, description),
+          .getInfoWindowContent(
+              name, position, placeName, creator, description),
       maxWidth: 200,
     });
   }
@@ -85,7 +87,7 @@ class PlaceGuideOnMap {
       this._highlighted = true;
     } else {
       this._location.placeName
-          .then(placeName => {
+          .then((placeName) => {
             this._infoWindow = PlaceGuideOnMap
                 .getInfoWindow(this._guideName,
                     this._location.position,
@@ -117,7 +119,7 @@ class PlaceGuideOnMap {
       this._infoWindow.open(map, this._marker);
     } else {
       this._location.placeName
-          .then(placeName => {
+          .then((placeName) => {
             this._infoWindow = PlaceGuideOnMap
                 .getInfoWindow(this._guideName,
                                this._location.position,

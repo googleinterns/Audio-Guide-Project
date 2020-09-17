@@ -31,7 +31,7 @@ class Location {
       }
       const thisLocation = this;
       return this.definePlaceName()
-          .then(newPlaceName => {
+          .then((newPlaceName) => {
             thisLocation._placeName = newPlaceName;
             return newPlaceName;
           });
