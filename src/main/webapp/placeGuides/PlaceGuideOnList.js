@@ -1,12 +1,11 @@
 class PlaceGuideOnList {
   constructor(
-      placeGuideId, placeName, placeId, name, creator, description,
+      placeGuideId, location, name, creator, description,
       audioKey, audioLength, isPublic, imageKey, createdByCurrentUser,
       bookmarkedByCurrentUser, latitude, longitude) {
     this._placeGuideProperties = {
       placeGuideId: placeGuideId,
-      placeName: placeName,
-      placeId: placeId,
+      location: location,
       name: name,
       audioKey: audioKey,
       imageKey: imageKey,
