@@ -111,19 +111,27 @@ class PlaceGuideOnList {
   static expand(placeGuideId, location) {
     const divId = 'placeGuideOnList-' + '{' + placeGuideId + '}';
     const placeGuideDiv = document.getElementById(divId);
-    location.placeName
-        .then(placeName => {
-          placeGuideDiv.querySelectorAll('.folded-placeGuide')[0]
-              .style.display = 'none';
-          placeGuideDiv.querySelectorAll('.card-placeGuide')[0]
-              .style.display = 'block';
-          placeGuideDiv.style.padding = '0px';
-          if (placeName !== undefined) {
-            document.getElementById(
-                PlaceGuideOnList.getPlaceGuidePlaceNameElementId(placeGuideId))
-                .innerText = placeName;
-          }
-        });
+    const placeNameDiv =  document.getElementById(
+        PlaceGuideOnList.getPlaceGuidePlaceNameElementId(placeGuideId));
+    if (placeNameDiv !== null && placeNameDiv.innerText === "") {
+      location.placeName
+          .then(placeName => {
+            placeGuideDiv.querySelectorAll('.folded-placeGuide')[0]
+                .style.display = 'none';
+            placeGuideDiv.querySelectorAll('.card-placeGuide')[0]
+                .style.display = 'block';
+            placeGuideDiv.style.padding = '0px';
+            if (placeName !== undefined) {
+              placeNameDiv.innerText = placeName;
+            }
+          });
+    } else {
+      placeGuideDiv.querySelectorAll('.folded-placeGuide')[0]
+          .style.display = 'none';
+      placeGuideDiv.querySelectorAll('.card-placeGuide')[0]
+          .style.display = 'block';
+      placeGuideDiv.style.padding = '0px';
+    }
   }
 
   createCardPlaceGuide(
@@ -242,7 +250,7 @@ class PlaceGuideOnList {
         this._placeGuideProperties.placeGuideId);
     placeNameElement.setAttribute('id', divId);
     placeNameElement.classList.add('place-guide-place-name');
-    placeNameElement.innerText = "Random Name";
+    placeNameElement.innerText = "";
     return placeNameElement;
   }
 
