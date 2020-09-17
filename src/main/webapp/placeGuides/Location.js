@@ -7,11 +7,6 @@ class Location {
     this._position = position;
     this._placeId = placeId;
     this._placeName = undefined;
-    // if (this._mapsPlace != null) {
-    //   this._position = this._mapsPlace.geometry.location;
-    // } else {
-    //   this._position = position;
-    // }
   }
 
   get position() {
