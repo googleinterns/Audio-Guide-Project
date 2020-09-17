@@ -116,22 +116,22 @@ class PlaceGuideOnList {
     if (placeNameDiv !== null && placeNameDiv.innerText === "") {
       location.placeName
           .then(placeName => {
-            placeGuideDiv.querySelectorAll('.folded-placeGuide')[0]
-                .style.display = 'none';
-            placeGuideDiv.querySelectorAll('.card-placeGuide')[0]
-                .style.display = 'block';
-            placeGuideDiv.style.padding = '0px';
+            PlaceGuideOnList.showCardInsteadOfFoldedGuide(placeGuideDiv);
             if (placeName !== undefined) {
               placeNameDiv.innerText = placeName;
             }
           });
     } else {
-      placeGuideDiv.querySelectorAll('.folded-placeGuide')[0]
-          .style.display = 'none';
-      placeGuideDiv.querySelectorAll('.card-placeGuide')[0]
-          .style.display = 'block';
-      placeGuideDiv.style.padding = '0px';
+      PlaceGuideOnList.showCardInsteadOfFoldedGuide(placeGuideDiv);
     }
+  }
+
+  static showCardInsteadOfFoldedGuide(placeGuideDiv) {
+    placeGuideDiv.querySelectorAll('.folded-placeGuide')[0]
+        .style.display = 'none';
+    placeGuideDiv.querySelectorAll('.card-placeGuide')[0]
+        .style.display = 'block';
+    placeGuideDiv.style.padding = '0px';
   }
 
   createCardPlaceGuide(
