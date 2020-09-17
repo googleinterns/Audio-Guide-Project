@@ -3,22 +3,29 @@
  * coordinates or by a place_id, which will be decoded with PlacesService.
  */
 class Location {
-  constructor(position, mapsPlace) {
-    this._mapsPlace = mapsPlace;
-    if (this._mapsPlace != null) {
-      this._position = this._mapsPlace.geometry.location;
-    } else {
-      this._position = position;
-    }
+  constructor(position, placeId) {
+    this._position = position;
+    this._placeId = placeId;
+    this._placeName = undefined;
+    // if (this._mapsPlace != null) {
+    //   this._position = this._mapsPlace.geometry.location;
+    // } else {
+    //   this._position = position;
+    // }
   }
 
   get position() {
     return this._position;
   }
 
-  get mapsPlace() {
-    return this._mapsPlace;
-  }
+  // get placeName() {
+  //   if (this._placeName !== undefined) {
+  //     return this._placeName;
+  //   } else {
+  //
+  //   }
+  //   return this._placeName;
+  // }
 
   static constructLocationBasedOnCoordinates(positionLat, positionLng) {
     return new Location(
