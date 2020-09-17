@@ -3,12 +3,11 @@
  * placeGuide on map.
  */
 class PlaceGuideOnMap {
-  constructor(id, name, position, place, creator, description, placeType) {
+  constructor(id, name, location, creator, description, placeType) {
     this._id = id;
     this._infoWindowClosed = true;
-    this._infoWindow = PlaceGuideOnMap
-        .getInfoWindow(name, position, place, creator, description);
-    this._marker = PlaceGuideOnMap.getMarker(placeType, name, position);
+    this._location = location;
+    this._marker = PlaceGuideOnMap.getMarker(placeType, name, location.position);
     this._highlighted = false;
     this.setupHighlightOnMarkerClick();
     this.setupUnhighlightOnMapClick();
@@ -51,12 +50,12 @@ class PlaceGuideOnMap {
     });
   }
 
-  static getInfoWindowContent(name, position, place, creator, description) {
-    let placeName;
-    if (place != null) {
-      placeName = place.name;
+  static getInfoWindowContent(name, position, placeName, creator, description) {
+    let toDisplayPlaceName;
+    if (placeName !== undefined) {
+      toDisplayPlaceName = placeName;
     } else {
-      placeName = position.toString();
+      toDisplayPlaceName = position.toString();
     }
     let creatorName = creator.name;
     if (creatorName == undefined) {
@@ -64,7 +63,7 @@ class PlaceGuideOnMap {
     }
     let content = `<h3>${name}</h3>
       <h4> Created by: ${creatorName}</h4>
-      <h4> Place: ${placeName}</h4>`;
+      <h4> Place: ${toDisplayPlaceName}</h4>`;
     if (description != undefined) {
       content += `<p>${description}</p>`;
     }
@@ -91,8 +90,13 @@ class PlaceGuideOnMap {
   }
 
   openInfoWindow() {
-    this._infoWindow.open(map, this._marker);
-    this._infoWindowClosed = false;
+    if (this._infoWindow != undefined) {
+      this._infoWindow.open(map, this._marker);
+      this._infoWindowClosed = false;
+    } else {
+      this._infoWindow = PlaceGuideOnMap
+          .getInfoWindow(name, position, place, creator, description);
+    }
   }
 
   remove() {
