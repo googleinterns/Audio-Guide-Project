@@ -75,13 +75,7 @@ function fillFormWithPlaceGuideToEdit() {
   if (window.location.search != '') {
     enableSubmission();
     document.getElementById('audioKey').required = false;
-    const GET = {};
-    const queryString = decodeURI(window.location.search.replace(/^\?/, ''));
-    queryString.split(/\&/).forEach(function(keyValuePair) {
-      const paramName = keyValuePair.replace(/=.*$/, '');
-      const paramValue = keyValuePair.replace(/^[^=]*\=/, '');
-      GET[paramName] = paramValue;
-    });
+    const GET = UrlQueryUtils.getParamsFromQueryString();
     document.getElementById('id').value = GET['placeGuideId'];
     setFormInputValueOrEmpty(
         document.getElementById('placeId'),
