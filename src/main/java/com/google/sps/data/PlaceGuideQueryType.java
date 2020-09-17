@@ -16,19 +16,19 @@ package com.google.sps.data;
 
 /** Specifies the possible form types of queries for PlaceGuides. */
 public enum PlaceGuideQueryType {
-  ALL_PUBLIC(/* reuiresCorodinates= */ false, /* requiresUserIdFromRequest= */ false),
-  CREATED_ALL(/* reuiresCorodinates= */ false, /* requiresUserIdFromRequest= */ false),
-  CREATED_PUBLIC(/* reuiresCorodinates= */ false, /* requiresUserIdFromRequest= */ false),
-  CREATED_PRIVATE(/* reuiresCorodinates= */ false, /* requiresUserIdFromRequest= */ false),
-  BOOKMARKED(/* reuiresCorodinates= */ false, /* requiresUserIdFromRequest= */ false),
-  ALL_PUBLIC_IN_MAP_AREA(/* reuiresCorodinates= */ true, /* requiresUserIdFromRequest= */ false),
-  CREATED_ALL_IN_MAP_AREA(/* reuiresCorodinates= */ true, /* requiresUserIdFromRequest= */ false),
+  ALL_PUBLIC(/* requiresCoordinates= */ false, /* requiresUserIdFromRequest= */ false),
+  CREATED_ALL(/* requiresCoordinates= */ false, /* requiresUserIdFromRequest= */ false),
+  CREATED_PUBLIC(/* requiresCoordinates= */ false, /* requiresUserIdFromRequest= */ false),
+  CREATED_PRIVATE(/* requiresCoordinates= */ false, /* requiresUserIdFromRequest= */ false),
+  BOOKMARKED(/* requiresCoordinates= */ false, /* requiresUserIdFromRequest= */ false),
+  ALL_PUBLIC_IN_MAP_AREA(/* requiresCoordinates= */ true, /* requiresUserIdFromRequest= */ false),
+  CREATED_ALL_IN_MAP_AREA(/* requiresCoordinates= */ true, /* requiresUserIdFromRequest= */ false),
   CREATED_PUBLIC_IN_MAP_AREA(
-      /* reuiresCorodinates= */ true, /* requiresUserIdFromRequest= */ false),
+      /* requiresCoordinates= */ true, /* requiresUserIdFromRequest= */ false),
   CREATED_PRIVATE_IN_MAP_AREA(
-      /* reuiresCorodinates= */ true, /* requiresUserIdFromRequest= */ false),
+      /* requiresCoordinates= */ true, /* requiresUserIdFromRequest= */ false),
   CREATED_BY_GIVEN_USER_PUBLIC_IN_MAP_AREA(
-      /* reuiresCorodinates= */ true, /* requiresUserIdFromRequest= */ true);
+      /* requiresCoordinates= */ true, /* requiresUserIdFromRequest= */ true);
 
   private final boolean requiresCoordinates;
   private final boolean requiresUserIdFromRequest;
