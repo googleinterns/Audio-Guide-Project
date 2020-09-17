@@ -44,46 +44,23 @@ class PlaceGuideRepository {
   }
 
   static getPlaceGuideFromPlaceGuideWithCreatorPair(placeGuideInfo) {
-    var thisRepository = this;
-    return new Promise(function (resolve, reject) {
-      var creator = thisRepository.getUserFromResponse(placeGuideInfo.creator);
-      var placeGuideResponse = placeGuideInfo.placeGuide;
-      if (placeGuideResponse.placeId !== undefined) {
-        Location.constructLocationBasedOnPlaceId(placeGuideResponse.placeId)
-            .then(location => {
-              var placeGuide = new PlaceGuide(placeGuideResponse.id,
-                  placeGuideResponse.name,
-                  location,
-                  placeGuideResponse.audioKey,
-                  placeGuideResponse.length,
-                  placeGuideResponse.imageKey,
-                  creator,
-                  placeGuideResponse.description,
-                  placeGuideResponse.isPublic,
-                  placeGuideInfo.createdByCurrentUser,
-                  placeGuideInfo.bookmarkedByCurrentUser);
-              resolve(placeGuide);
-            });
-      } else {
-        var location =
-            Location.constructLocationBasedOnCoordinates(
-                placeGuideResponse.coordinate.latitude,
-                placeGuideResponse.coordinate.longitude);
-        var placeGuide = new PlaceGuide(placeGuideResponse.id,
-            placeGuideResponse.name,
-            location,
-            placeGuideResponse.audioKey,
-            placeGuideResponse.length,
-            placeGuideResponse.imageKey,
-            creator,
-            placeGuideResponse.description,
-            placeGuideResponse.isPublic,
-            placeGuideInfo.createdByCurrentUser,
-            placeGuideInfo.bookmarkedByCurrentUser);
-        resolve(placeGuide);
-      }
-    });
-
+    const creator = thisRepository.getUserFromResponse(placeGuideInfo.creator);
+    const placeGuideResponse = placeGuideInfo.placeGuide;
+    const location = new Location(placeGuideResponse.coordinate.latitude,
+                                  placeGuideResponse.coordinate.longitude,
+                                  placeGuideResponse.placeId);
+    const placeGuide = new PlaceGuide(placeGuideResponse.id,
+                                      placeGuideResponse.name,
+                                      location,
+                                      placeGuideResponse.audioKey,
+                                      placeGuideResponse.length,
+                                      placeGuideResponse.imageKey,
+                                      creator,
+                                      placeGuideResponse.description,
+                                      placeGuideResponse.isPublic,
+                                      placeGuideInfo.createdByCurrentUser,
+                                      placeGuideInfo.bookmarkedByCurrentUser);
+    return placeGuide;
   }
 
   static getUserFromResponse(userResponse) {
