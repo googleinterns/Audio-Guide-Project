@@ -56,21 +56,19 @@ function enableSubmission() {
 function updateLocation(position, placeId, placeName) {
   if (placeName != null) {
     document.getElementById(
-        'placeName').setAttribute('value', placeName);
+        'placeName').value = placeName;
     document.getElementById(
-        'placeId').setAttribute('value', placeId);
+        'placeId').value = placeId;
   } else {
     document.getElementById(
-        'placeName').setAttribute('value', '-');
+        'placeName').value = '-';
     document.getElementById(
-        'placeId').setAttribute('value', '');
+        'placeId').value = '';
   }
   document.getElementById(
-      'latitude').value = position.lat(); //setAttribute('value',
-  // position.lat());
+      'latitude').value = position.lat();
   document.getElementById(
-      'longitude').value = position.lng(); //setAttribute('value',
-  // position.lng());
+      'longitude').value = position.lng();
 }
 
 /**
