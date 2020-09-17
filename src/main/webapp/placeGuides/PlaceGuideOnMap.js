@@ -78,13 +78,29 @@ class PlaceGuideOnMap {
   }
 
   highlight() {
-    this._highlighted = true;
-    this.openInfoWindow();
+    if (this._infoWindow !== undefined) {
+      this._infoWindow.open(map, this._marker);
+      this._highlighted = true;
+    } else {
+      this._location.placeName
+          .then(placeName => {
+            this._infoWindow = PlaceGuideOnMap
+                .getInfoWindow(this._guideName,
+                    this._location.position,
+                    placeName,
+                    this._creator,
+                    this._description);
+            this._infoWindow.open(map, this._marker);
+            this._highlighted = true;
+          });
+    }
   }
 
   unhighlight() {
+    if (this._infoWindow !== undefined) {
+      this._infoWindow.close();
+    }
     this._highlighted = false;
-    this.closeInfoWindow();
   }
 
   closeInfoWindow() {
@@ -92,7 +108,7 @@ class PlaceGuideOnMap {
   }
 
   openInfoWindow() {
-    if (this._infoWindow != undefined) {
+    if (this._infoWindow !== undefined) {
       this._infoWindow.open(map, this._marker);
     } else {
       this._location.placeName
