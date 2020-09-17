@@ -53,15 +53,11 @@ function enableSubmission() {
  * This function writes in the hidden form inputs the
  * data of the newly chosen location for the placeguide.
  */
-function updateLocation(position, placeId, placeName) {
-  if (placeName != null) {
-    document.getElementById(
-        'placeName').value = placeName;
+function updateLocation(position, placeId) {
+  if (placeId != null) {
     document.getElementById(
         'placeId').value = placeId;
   } else {
-    document.getElementById(
-        'placeName').value = '-';
     document.getElementById(
         'placeId').value = '';
   }
