@@ -17,9 +17,14 @@ class PlaceGuideRepository {
     this._placeGuides = {};
   }
 
-  get placeGuides() {
-    return this._placeGuides;
-  }
+  // get placeGuides() {
+  //   for (const placeGuideId in this._placeGuides) {
+  //     if (this._placeGuides.hasOwnProperty(placeGuideId)) {
+  //       console.log(this._placeGuides[placeGuideId]);
+  //     }
+  //   }
+  //   return this._placeGuides;
+  // }
 
   static buildPlaceGuideDictionaryFromResponse(placeGuideWithCreatorPairs) {
     var placeGuidesDict = {};
@@ -29,10 +34,11 @@ class PlaceGuideRepository {
             placeGuideWithCreatorPairs[i]);
       placeGuidesDict[placeGuide.id] = placeGuide;
     }
+    return placeGuidesDict;
   }
 
   static getPlaceGuideFromPlaceGuideWithCreatorPair(placeGuideInfo) {
-    const creator = thisRepository.getUserFromResponse(placeGuideInfo.creator);
+    const creator = PlaceGuideRepository.getUserFromResponse(placeGuideInfo.creator);
     const placeGuideResponse = placeGuideInfo.placeGuide;
     const location = new Location(placeGuideResponse.coordinate.latitude,
                                   placeGuideResponse.coordinate.longitude,
@@ -83,16 +89,17 @@ class PlaceGuideRepository {
                   + error);
             alert("Failed to process the data of guides");
           })
-          .then(placeGuideWithCreatorPairs => function() {
+          .then(placeGuideWithCreatorPairs => {
             thisRepository._placeGuides = PlaceGuideRepository
                 .buildPlaceGuideDictionaryFromResponse(
-                    placeGuideWithCreatorPairs)
+                    placeGuideWithCreatorPairs);
+            return thisRepository._placeGuides;
           });
     } else {
       var thisRepository = this;
       return new Promise(function (resolve, reject) {
         thisRepository._placeGuides = {};
-        resolve();
+        resolve(thisRepository._placeGuides);
       });
     }
   }

@@ -96,7 +96,7 @@ class PlaceGuideOnMap {
       this._infoWindow.open(map, this._marker);
     } else {
       this._location.placeName
-          .then(placeName => function() {
+          .then(placeName => {
             this._infoWindow = PlaceGuideOnMap
                 .getInfoWindow(this._guideName,
                                this._location.position,

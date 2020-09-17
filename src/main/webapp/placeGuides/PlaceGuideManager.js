@@ -48,8 +48,7 @@ class PlaceGuideManager {
 
   refreshPlaceGuides(bounds, zoom) {
     this._placeGuideRepository.fetchPlaceGuides(this._page.query, bounds, zoom)
-        .then((response) => {
-          const placeGuides = this._placeGuideRepository.placeGuides;
+        .then((placeGuides) => {
           this._listPlaceGuideDisplayer.update(placeGuides);
           this._mapPlaceGuideDisplayer.update(placeGuides);
           if (this._page === PlaceGuideManager.PAGE.BOOKMARKED_PLACEGUIDES) {

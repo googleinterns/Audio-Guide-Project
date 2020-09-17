@@ -26,7 +26,7 @@ class Location {
         });
       }
       const thisLocation = this;
-      this.definePlaceName()
+      return this.definePlaceName()
           .then(newPlaceName => {
             thisLocation._placeName = newPlaceName;
             return newPlaceName;
@@ -36,7 +36,7 @@ class Location {
 
   definePlaceName() {
     const request = {
-      placeId: placeId,
+      placeId: this._placeId,
       fields: ['name'],
     };
     return new Promise(function(resolve, reject) {

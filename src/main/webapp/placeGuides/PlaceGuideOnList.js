@@ -77,9 +77,9 @@ class PlaceGuideOnList {
     foldedPlaceGuideDiv.style.display = 'block';
     foldedPlaceGuideDiv.classList.add('folded-placeGuide');
     foldedPlaceGuideDiv.appendChild(this.foldedPlaceGuide_name(placeGuideName));
-    if (placeName != undefined || placeName != '' || placeName != null) {
-      foldedPlaceGuideDiv.appendChild(this.foldedPlaceGuide_placeName(placeName));
-    }
+    // if (placeName != undefined || placeName != '' || placeName != null) {
+    //   foldedPlaceGuideDiv.appendChild(this.foldedPlaceGuide_placeName(placeName));
+    // }
     foldedPlaceGuideDiv.appendChild(this.foldedPlaceGuide_buttons(placeGuideId, placeGuideAudioKey));
     return foldedPlaceGuideDiv;
   }
