@@ -88,7 +88,7 @@ function fillFormWithPlaceGuideToEdit() {
     });
     document.getElementById('id').value = GET['placeGuideId'];
     setFormInputValueOrEmpty(
-        document.getElementById('placeId').value,
+        document.getElementById('placeId'),
         GET['placeId']);
     setFormInputValueOrEmpty(
         new mdc.textField.MDCTextField(document.getElementById('nameInput')),
