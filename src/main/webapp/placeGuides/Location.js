@@ -34,11 +34,6 @@ class Location {
     }
   }
 
-  static constructLocationBasedOnCoordinates(positionLat, positionLng) {
-    return new Location(
-        new google.maps.LatLng(positionLat, positionLng), null);
-  }
-
   definePlaceName() {
     const request = {
       placeId: placeId,
@@ -52,23 +47,6 @@ class Location {
         } else {
           reject(new Error('Couldn\'t find the place ' + placeId + ' because' +
               ' ' + status));
-        }
-      });
-    });
-  }
-
-  static constructLocationBasedOnPlaceId(placeId) {
-    const request = {
-      placeId: placeId,
-      fields: ['address_components', 'name', 'geometry', 'place_id'],
-    };
-    return new Promise(function(resolve, reject) {
-      const service = new google.maps.places.PlacesService(map);
-      service.getDetails(request, (place, status) => {
-        if (status === google.maps.places.PlacesServiceStatus.OK) {
-          resolve(new Location(null, place));
-        } else {
-          reject(new Error('Couldn\'t find the place ' + placeId));
         }
       });
     });
