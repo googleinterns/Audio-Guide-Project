@@ -31,6 +31,10 @@ function initPage() {
           .addEventListener(MapWidget.CHOSEN_LOCATION_CHANGE_EVENT, function() {
             handleChosenLocationChangeEvent(mapWidget);
           });
+      setContentHeight();
+      window.addEventListener('resize', function() {
+        setContentHeight();
+      });
     }
   });
 }

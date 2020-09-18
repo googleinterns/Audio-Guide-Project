@@ -25,8 +25,10 @@ function initPage() {
       placeGuideManager = new PlaceGuideManager(
           PlaceGuideManager.PAGE.USERS_PORTFOLIO, map, user.id);
       setListHeight();
+      setContentHeight();
       window.addEventListener('resize', function () {
         setListHeight();
+        setContentHeight();
       });
     }
   });

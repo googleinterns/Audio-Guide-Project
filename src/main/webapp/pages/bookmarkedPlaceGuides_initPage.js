@@ -21,6 +21,10 @@ function initPage() {
       map = mapWidget.map;
       placeGuideManager = new PlaceGuideManager(
           PlaceGuideManager.PAGE.BOOKMARKED_PLACEGUIDES, map);
+      setContentHeight();
+      window.addEventListener('resize', function() {
+        setContentHeight();
+      });
     }
   });
 }

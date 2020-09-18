@@ -20,6 +20,10 @@ function initPage() {
       map = mapWidget.map;
       placeGuideManager = new PlaceGuideManager(
           PlaceGuideManager.PAGE.DISCOVER, map);
+      setContentHeight();
+      window.addEventListener('resize', function() {
+        setContentHeight();
+      });
     }
   });
 }
