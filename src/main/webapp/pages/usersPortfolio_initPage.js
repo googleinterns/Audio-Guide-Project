@@ -14,6 +14,10 @@ function initPage() {
       location.replace(userAuthenticationStatus.loginUrl);
     } else {
       const menu = new Menu(undefined);
+      fitContent();
+      window.addEventListener('resize', function() {
+        fitContent();
+      });
       const mapWidget = new MapWidget();
       mapWidget.addGeolocationFunctionality();
       mapWidget.addSearchingFunctionality();
@@ -22,10 +26,6 @@ function initPage() {
       fillPortfolioDiv(user);
       placeGuideManager = new PlaceGuideManager(
           PlaceGuideManager.PAGE.USERS_PORTFOLIO, map, user.id);
-      fitContent();
-      window.addEventListener('resize', function() {
-        fitContent();
-      });
     }
   });
 }

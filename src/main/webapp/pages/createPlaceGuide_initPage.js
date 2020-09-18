@@ -20,6 +20,10 @@ function initPage() {
       location.replace(userAuthenticationStatus.loginUrl);
     } else {
       const menu = new Menu(Menu.PAGE_NAMES.CREATE_PLACEGUIDE);
+      fitContent();
+      window.addEventListener('resize', function() {
+        fitContent();
+      });
       setUpCreatePlaceGuideForm();
       const mapWidget = new MapWidget();
       mapWidget.addGeolocationFunctionality();
@@ -31,10 +35,6 @@ function initPage() {
           .addEventListener(MapWidget.CHOSEN_LOCATION_CHANGE_EVENT, function() {
             handleChosenLocationChangeEvent(mapWidget);
           });
-      fitContent();
-      window.addEventListener('resize', function() {
-        fitContent();
-      });
     }
   });
 }
