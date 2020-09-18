@@ -57,6 +57,7 @@ p {
     width: 350px;
     float: left;
     position: relative;
+    height: 100%;
 }
 
 .align-center {
@@ -79,11 +80,11 @@ p {
   background-color: #fff;
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
   border-radius: 3px;
-  border: 0px;
-  margin: 10px;
+  border: 0;
+  margin: 0 10px 10px 10px;
   padding: 30px 20px;
-  width: 95%;
-  min-width: 250px;
+    height: 100%;
+    overflow-y: auto;
 }
 
 #map {
@@ -281,18 +282,6 @@ body {
 
 #specialListPlaceGuideDisplayer {
   width: 0px;
-}
-
-.form-card {
-  position: relative;
-  background-color: #fff;
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
-  border-radius: 3px;
-  border: 0px;
-  margin: 10px;
-  padding: 30px 20px;
-  width: 95%;
-  min-width: 250px;
 }
 
 .user-img {
