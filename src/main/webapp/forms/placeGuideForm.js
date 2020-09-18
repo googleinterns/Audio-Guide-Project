@@ -54,7 +54,7 @@ function enableSubmission() {
  * data of the newly chosen location for the placeguide.
  */
 function updateLocation(position, placeId) {
-  if (placeId != null) {
+  if (placeId !== null) {
     document.getElementById(
         'placeId').value = placeId;
   } else {
