@@ -53,16 +53,10 @@ p {
     margin: 15px auto;
 }
 
-.left-element {
-  width: 30%;
-  float: left;
-  max-height: 95%;
-  overflow: auto;
-}
-
-.right-element {
-    width: 70%;
-    float: right;
+#createPlaceGuide {
+    width: 350px;
+    float: left;
+    position: relative;
 }
 
 .align-center {
