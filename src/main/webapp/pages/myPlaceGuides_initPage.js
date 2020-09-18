@@ -21,10 +21,15 @@ function initPage() {
       map = mapWidget.map;
       placeGuideManager = new PlaceGuideManager(
           PlaceGuideManager.PAGE.MY_GUIDES, map);
-      setContentHeight();
+      fitContent();
       window.addEventListener('resize', function() {
-        setContentHeight();
+        fitContent();
       });
     }
   });
+}
+
+function fitContent() {
+  setMapWidth();
+  setContentHeight();
 }

@@ -8,8 +8,6 @@
 let map;
 let placeGuideManager;
 
-const MENU_AND_USER_PORTFOLIO_HEIGHT = 520;
-
 function initPage() {
   authenticateUser().then((userAuthenticationStatus) => {
     if (!userAuthenticationStatus.isLoggedIn) {
@@ -24,11 +22,9 @@ function initPage() {
       fillPortfolioDiv(user);
       placeGuideManager = new PlaceGuideManager(
           PlaceGuideManager.PAGE.USERS_PORTFOLIO, map, user.id);
-      setListHeight();
-      setContentHeight();
-      window.addEventListener('resize', function () {
-        setListHeight();
-        setContentHeight();
+      fitContent();
+      window.addEventListener('resize', function() {
+        fitContent();
       });
     }
   });
@@ -57,8 +53,8 @@ function fillPortfolioDiv(user) {
   }
 }
 
-function setListHeight() {
-  const availableHeight = window.innerHeight - MENU_AND_USER_PORTFOLIO_HEIGHT;
-  document.getElementById('listPlaceGuideDisplayer').style.height =
-      availableHeight+ 'px';
+function fitContent() {
+  setMapWidth();
+  setContentHeight();
+  setListHeight();
 }
