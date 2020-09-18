@@ -8,8 +8,6 @@
 let map;
 let placeGuideManager;
 
-const LIST_WIDTH = 370;
-
 function initPage() {
   authenticateUser().then((userAuthenticationStatus) => {
     if (!userAuthenticationStatus.isLoggedIn) {
@@ -22,13 +20,6 @@ function initPage() {
       map = mapWidget.map;
       placeGuideManager = new PlaceGuideManager(
           PlaceGuideManager.PAGE.DISCOVER, map);
-      setMapWidth();
-      window.addEventListener('resize', setMapWidth);
     }
   });
-}
-
-function setMapWidth() {
-  const availableWidth = window.innerWidth - LIST_WIDTH;
-  document.getElementById('mapDisplayer').style.width = availableWidth + 'px';
 }

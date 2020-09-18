@@ -8,7 +8,6 @@
 let map;
 let placeGuideManager;
 
-const LIST_WIDTH = 370;
 const MENU_AND_USER_PORTFOLIO_HEIGHT = 520;
 
 function initPage() {
@@ -27,7 +26,6 @@ function initPage() {
           PlaceGuideManager.PAGE.USERS_PORTFOLIO, map, user.id);
       setListHeight();
       window.addEventListener('resize', function () {
-        setMapWidth();
         setListHeight();
       });
     }
@@ -55,12 +53,6 @@ function fillPortfolioDiv(user) {
     document.getElementById("portfolioSelfIntroduction").innerText =
         user.selfIntroduction;
   }
-}
-
-function setMapWidth() {
-  const availableWidth = window.innerWidth - LIST_WIDTH;
-  document.getElementById('mapDisplayer').style.width =
-      availableWidth + 'px';
 }
 
 function setListHeight() {
