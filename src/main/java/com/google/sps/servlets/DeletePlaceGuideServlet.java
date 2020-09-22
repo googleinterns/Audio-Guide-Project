@@ -20,9 +20,7 @@ public class DeletePlaceGuideServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     String id = request.getParameter("id");
-    String currentUrl = request.getParameter("currentUrl");
     long parsedId = Long.parseLong(id);
     placeGuideRepository.deletePlaceGuide(parsedId);
-    response.sendRedirect(currentUrl);
   }
 }
