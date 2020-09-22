@@ -18,7 +18,9 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import com.google.appengine.api.blobstore.BlobInfo;
 import com.google.appengine.api.blobstore.BlobInfoFactory;
+import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreService;
 import com.google.appengine.api.datastore.*;
 import com.google.appengine.tools.development.testing.LocalBlobstoreServiceTestConfig;
@@ -332,6 +334,235 @@ public final class PlaceGuideServletTest {
   }
 
   @Test
+  public void doGet_getAllPublicPlaceGuides_placeGuideExists_returnPlaceGuides()
+      throws IOException {
+    saveUser(userC);
+    List<PlaceGuide> testPlaceGuidesList =
+        Arrays.asList(
+            testInnerPrivatePlaceGuideC,
+            testInnerPublicPlaceGuideC,
+            testOuterPrivatePlaceGuideC,
+            testOuterPublicPlaceGuideC);
+    saveTestPlaceGuidesEntities(testPlaceGuidesList);
+    when(request.getParameter(PlaceGuideServlet.PLACE_GUIDE_QUERY_TYPE_PARAMETER))
+        .thenReturn(PlaceGuideQueryType.ALL_PUBLIC.toString());
+    stringWriter = new StringWriter();
+    printWriter = new PrintWriter(stringWriter);
+    when(response.getWriter()).thenReturn(printWriter);
+    PlaceGuideServlet placeGuideServlet = new PlaceGuideServlet(blobstoreService, blobInfoFactory);
+    placeGuideServlet.doGet(request, response);
+    printWriter.flush();
+    Gson gson = new Gson();
+    List<PlaceGuideInfo> result =
+        Arrays.asList(
+            new GsonBuilder().create().fromJson(stringWriter.toString(), PlaceGuideInfo[].class));
+    List<PlaceGuideInfo> expected =
+        Arrays.asList(
+            new PlaceGuideInfo(testInnerPublicPlaceGuideC, userC, true, false),
+            new PlaceGuideInfo(testOuterPublicPlaceGuideC, userC, true, false));
+    assertTrue(compare(expected, result));
+  }
+
+  @Test
+  public void doGet_getAllPublicPlaceGuides_placeGuideDoesntExists_resultIsEmpty()
+      throws IOException {
+    when(request.getParameter(PlaceGuideServlet.PLACE_GUIDE_QUERY_TYPE_PARAMETER))
+        .thenReturn(PlaceGuideQueryType.ALL_PUBLIC.toString());
+    stringWriter = new StringWriter();
+    printWriter = new PrintWriter(stringWriter);
+    when(response.getWriter()).thenReturn(printWriter);
+    PlaceGuideServlet placeGuideServlet = new PlaceGuideServlet(blobstoreService, blobInfoFactory);
+    placeGuideServlet.doGet(request, response);
+    printWriter.flush();
+    Gson gson = new Gson();
+    List<PlaceGuideInfo> result =
+        Arrays.asList(
+            new GsonBuilder().create().fromJson(stringWriter.toString(), PlaceGuideInfo[].class));
+    List<PlaceGuideInfo> expected = Collections.emptyList();
+    assertTrue(compare(expected, result));
+  }
+
+  @Test
+  public void doGet_getCreatedPlaceGuides_UserDoesntOwnAnyPlaceGuides_resultIsEmpty()
+      throws IOException {
+    saveUser(userC);
+    List<PlaceGuide> testPlaceGuidesList =
+        Arrays.asList(testOuterPublicPlaceGuideD, testInnerPublicPlaceGuideD);
+    saveTestPlaceGuidesEntities(testPlaceGuidesList);
+    when(request.getParameter(PlaceGuideServlet.PLACE_GUIDE_QUERY_TYPE_PARAMETER))
+        .thenReturn(PlaceGuideQueryType.CREATED_ALL.toString());
+    stringWriter = new StringWriter();
+    printWriter = new PrintWriter(stringWriter);
+    when(response.getWriter()).thenReturn(printWriter);
+    PlaceGuideServlet placeGuideServlet = new PlaceGuideServlet(blobstoreService, blobInfoFactory);
+    placeGuideServlet.doGet(request, response);
+    printWriter.flush();
+    Gson gson = new Gson();
+    List<PlaceGuideInfo> result =
+        Arrays.asList(
+            new GsonBuilder().create().fromJson(stringWriter.toString(), PlaceGuideInfo[].class));
+    List<PlaceGuideInfo> expected = Collections.emptyList();
+    assertTrue(compare(expected, result));
+  }
+
+  @Test
+  public void doGet_getCreatedPlaceGuides_UserOwnsPublicAndPrivate_resultContainsPlaceGuide()
+      throws IOException {
+    saveUser(userC);
+    List<PlaceGuide> testPlaceGuidesList =
+        Arrays.asList(
+            testInnerPublicPlaceGuideC, testOuterPrivatePlaceGuideC, testOuterPublicPlaceGuideD);
+    saveTestPlaceGuidesEntities(testPlaceGuidesList);
+    when(request.getParameter(PlaceGuideServlet.PLACE_GUIDE_QUERY_TYPE_PARAMETER))
+        .thenReturn(PlaceGuideQueryType.CREATED_ALL.toString());
+    stringWriter = new StringWriter();
+    printWriter = new PrintWriter(stringWriter);
+    when(response.getWriter()).thenReturn(printWriter);
+    PlaceGuideServlet placeGuideServlet = new PlaceGuideServlet(blobstoreService, blobInfoFactory);
+    placeGuideServlet.doGet(request, response);
+    printWriter.flush();
+    Gson gson = new Gson();
+    List<PlaceGuideInfo> result =
+        Arrays.asList(
+            new GsonBuilder().create().fromJson(stringWriter.toString(), PlaceGuideInfo[].class));
+    List<PlaceGuideInfo> expected =
+        Arrays.asList(
+            new PlaceGuideInfo(testInnerPublicPlaceGuideC, userC, true, false),
+            new PlaceGuideInfo(testOuterPrivatePlaceGuideC, userC, true, false));
+    assertTrue(compare(expected, result));
+  }
+
+  @Test
+  public void doGet_getCreatedPlaceGuides_placeGuideDoesntExist_resultIsEmpty() throws IOException {
+    when(request.getParameter(PlaceGuideServlet.PLACE_GUIDE_QUERY_TYPE_PARAMETER))
+        .thenReturn(PlaceGuideQueryType.CREATED_ALL.toString());
+    stringWriter = new StringWriter();
+    printWriter = new PrintWriter(stringWriter);
+    when(response.getWriter()).thenReturn(printWriter);
+    PlaceGuideServlet placeGuideServlet = new PlaceGuideServlet(blobstoreService, blobInfoFactory);
+    placeGuideServlet.doGet(request, response);
+    printWriter.flush();
+    Gson gson = new Gson();
+    List<PlaceGuideInfo> result =
+        Arrays.asList(
+            new GsonBuilder().create().fromJson(stringWriter.toString(), PlaceGuideInfo[].class));
+    List<PlaceGuideInfo> expected = Collections.emptyList();
+    assertTrue(compare(expected, result));
+  }
+
+  @Test
+  public void doGet_getCreatedPublicPlaceGuides_placeGuideDoesntExist_resultIsEmpty()
+      throws IOException {
+    when(request.getParameter(PlaceGuideServlet.PLACE_GUIDE_QUERY_TYPE_PARAMETER))
+        .thenReturn(PlaceGuideQueryType.CREATED_PUBLIC.toString());
+    stringWriter = new StringWriter();
+    printWriter = new PrintWriter(stringWriter);
+    when(response.getWriter()).thenReturn(printWriter);
+    PlaceGuideServlet placeGuideServlet = new PlaceGuideServlet(blobstoreService, blobInfoFactory);
+    placeGuideServlet.doGet(request, response);
+    printWriter.flush();
+    Gson gson = new Gson();
+    List<PlaceGuideInfo> result =
+        Arrays.asList(
+            new GsonBuilder().create().fromJson(stringWriter.toString(), PlaceGuideInfo[].class));
+    List<PlaceGuideInfo> expected = Collections.emptyList();
+    assertTrue(compare(expected, result));
+  }
+
+  @Test
+  public void doGet_getCreatedPublicPlaceGuides_UserHasPublicPlaceGuide_resultHasPlaceGuide()
+      throws IOException {
+    saveUser(userC);
+    List<PlaceGuide> testPlaceGuidesList =
+        Arrays.asList(
+            testInnerPublicPlaceGuideC, testOuterPublicPlaceGuideD, testOuterPrivatePlaceGuideC);
+    saveTestPlaceGuidesEntities(testPlaceGuidesList);
+    when(request.getParameter(PlaceGuideServlet.PLACE_GUIDE_QUERY_TYPE_PARAMETER))
+        .thenReturn(PlaceGuideQueryType.CREATED_PUBLIC.toString());
+    stringWriter = new StringWriter();
+    printWriter = new PrintWriter(stringWriter);
+    when(response.getWriter()).thenReturn(printWriter);
+    PlaceGuideServlet placeGuideServlet = new PlaceGuideServlet(blobstoreService, blobInfoFactory);
+    placeGuideServlet.doGet(request, response);
+    printWriter.flush();
+    Gson gson = new Gson();
+    List<PlaceGuideInfo> result =
+        Arrays.asList(
+            new GsonBuilder().create().fromJson(stringWriter.toString(), PlaceGuideInfo[].class));
+    List<PlaceGuideInfo> expected =
+        Arrays.asList(new PlaceGuideInfo(testInnerPublicPlaceGuideC, userC, true, false));
+    assertTrue(compare(expected, result));
+  }
+
+  @Test
+  public void doGet_getCreatedPrivatePlaceGuides_placeGuideDoesntExist_resultIsEmpty()
+      throws IOException {
+    when(request.getParameter(PlaceGuideServlet.PLACE_GUIDE_QUERY_TYPE_PARAMETER))
+        .thenReturn(PlaceGuideQueryType.CREATED_PRIVATE.toString());
+    stringWriter = new StringWriter();
+    printWriter = new PrintWriter(stringWriter);
+    when(response.getWriter()).thenReturn(printWriter);
+    PlaceGuideServlet placeGuideServlet = new PlaceGuideServlet(blobstoreService, blobInfoFactory);
+    placeGuideServlet.doGet(request, response);
+    printWriter.flush();
+    Gson gson = new Gson();
+    List<PlaceGuideInfo> result =
+        Arrays.asList(
+            new GsonBuilder().create().fromJson(stringWriter.toString(), PlaceGuideInfo[].class));
+    List<PlaceGuideInfo> expected = Collections.emptyList();
+    assertTrue(compare(expected, result));
+  }
+
+  @Test
+  public void doGet_getCreatedPrivatePlaceGuides_userDoesntOwnAnyPrivatePlaceGuides_resultIsEmpty()
+      throws IOException {
+    saveUser(userC);
+    List<PlaceGuide> testPlaceGuidesList =
+        Arrays.asList(
+            testInnerPublicPlaceGuideC, testOuterPublicPlaceGuideD, testOuterPublicPlaceGuideC);
+    saveTestPlaceGuidesEntities(testPlaceGuidesList);
+    when(request.getParameter(PlaceGuideServlet.PLACE_GUIDE_QUERY_TYPE_PARAMETER))
+        .thenReturn(PlaceGuideQueryType.CREATED_PRIVATE.toString());
+    stringWriter = new StringWriter();
+    printWriter = new PrintWriter(stringWriter);
+    when(response.getWriter()).thenReturn(printWriter);
+    PlaceGuideServlet placeGuideServlet = new PlaceGuideServlet(blobstoreService, blobInfoFactory);
+    placeGuideServlet.doGet(request, response);
+    printWriter.flush();
+    Gson gson = new Gson();
+    List<PlaceGuideInfo> result =
+        Arrays.asList(
+            new GsonBuilder().create().fromJson(stringWriter.toString(), PlaceGuideInfo[].class));
+    List<PlaceGuideInfo> expected = Collections.emptyList();
+    assertTrue(compare(expected, result));
+  }
+
+  @Test
+  public void doGet_getCreatedPrivatePlaceGuides_UserHasPrivatePlaceGuide_resultHasPlaceGuide()
+      throws IOException {
+    saveUser(userC);
+    List<PlaceGuide> testPlaceGuidesList =
+        Arrays.asList(
+            testInnerPublicPlaceGuideC, testOuterPublicPlaceGuideD, testOuterPrivatePlaceGuideC);
+    saveTestPlaceGuidesEntities(testPlaceGuidesList);
+    when(request.getParameter(PlaceGuideServlet.PLACE_GUIDE_QUERY_TYPE_PARAMETER))
+        .thenReturn(PlaceGuideQueryType.CREATED_PRIVATE.toString());
+    stringWriter = new StringWriter();
+    printWriter = new PrintWriter(stringWriter);
+    when(response.getWriter()).thenReturn(printWriter);
+    PlaceGuideServlet placeGuideServlet = new PlaceGuideServlet(blobstoreService, blobInfoFactory);
+    placeGuideServlet.doGet(request, response);
+    printWriter.flush();
+    Gson gson = new Gson();
+    List<PlaceGuideInfo> result =
+        Arrays.asList(
+            new GsonBuilder().create().fromJson(stringWriter.toString(), PlaceGuideInfo[].class));
+    List<PlaceGuideInfo> expected =
+        Arrays.asList(new PlaceGuideInfo(testOuterPrivatePlaceGuideC, userC, true, false));
+    assertTrue(compare(expected, result));
+  }
+
+  @Test
   public void doGet_ALL_PUBLIC_IN_MAP_AREA_noExistingPlaceGuides_emptyResult() throws IOException {
     setupDoGetMockRequest(
         PlaceGuideQueryType.ALL_PUBLIC_IN_MAP_AREA, SOUTH_WEST_CORNER, NORTH_EAST_CORNER);
@@ -617,6 +848,65 @@ public final class PlaceGuideServletTest {
     List<PlaceGuideInfo> expected =
         Arrays.asList(new PlaceGuideInfo(testInnerPrivatePlaceGuideC, userC, true, false));
     assertTrue(compare(expected, result));
+  }
+
+  @Test
+  public void doPost() throws IOException {
+    // Mock request and response.
+    when(request.getParameter(PlaceGuideServlet.NAME_INPUT)).thenReturn(NAME);
+    when(request.getParameter(PlaceGuideServlet.ID_INPUT)).thenReturn("123");
+    when(request.getParameter(PlaceGuideServlet.LATITUDE_INPUT)).thenReturn("12.8");
+    when(request.getParameter(PlaceGuideServlet.LONGITUDE_INPUT)).thenReturn("25.6");
+    when(request.getParameter(PlaceGuideServlet.IS_PUBLIC_INPUT)).thenReturn("true");
+    when(request.getParameter(PlaceGuideServlet.LENGTH_INPUT)).thenReturn("60");
+    when(request.getParameter(PlaceGuideServlet.PLACE_ID_INPUT)).thenReturn(PLACE_ID);
+    when(request.getParameter(PlaceGuideServlet.DESCRIPTION_INPUT)).thenReturn(DESCRIPTION);
+    StringWriter stringWriter = new StringWriter();
+    PrintWriter printWriter = new PrintWriter(stringWriter);
+    when(response.getWriter()).thenReturn(printWriter);
+
+    // Mock blobstoreService and blobInfoFactory
+    Map<String, List<BlobKey>> blobs = new HashMap<>();
+    BlobKey imageBlobKey = new BlobKey(IMAGE_KEY);
+    BlobKey audioBlobKey = new BlobKey(AUDIO_KEY);
+    blobs.put(PlaceGuideServlet.IMAGE_KEY_INPUT, Arrays.asList(imageBlobKey));
+    blobs.put(PlaceGuideServlet.AUDIO_KEY_INPUT, Arrays.asList(audioBlobKey));
+    when(blobstoreService.getUploads(request)).thenReturn(blobs);
+    BlobInfo imageBlobInfo = new BlobInfo(imageBlobKey, "img", new Date(), "file.img", 1);
+    BlobInfo audioBlobInfo = new BlobInfo(audioBlobKey, "mp3", new Date(), "file.mp3", 1);
+    when(blobInfoFactory.loadBlobInfo(imageBlobKey)).thenReturn(imageBlobInfo);
+    when(blobInfoFactory.loadBlobInfo(audioBlobKey)).thenReturn(audioBlobInfo);
+
+    PlaceGuideServlet placeGuideServlet = new PlaceGuideServlet(blobstoreService, blobInfoFactory);
+    placeGuideServlet.doPost(request, response);
+
+    Key placeGuideKey = KeyFactory.createKey(DatastorePlaceGuideRepository.ENTITY_KIND, (long) 123);
+    try {
+      Entity placeGuideEntity = datastore.get(placeGuideKey);
+      assertEquals(NAME, placeGuideEntity.getProperty(DatastorePlaceGuideRepository.NAME_PROPERTY));
+      assertEquals(
+          ID_USER_C,
+          placeGuideEntity.getProperty(DatastorePlaceGuideRepository.CREATOR_ID_PROPERTY));
+      assertEquals(
+          IS_PUBLIC,
+          placeGuideEntity.getProperty(DatastorePlaceGuideRepository.IS_PUBLIC_PROPERTY));
+      assertEquals(
+          new GeoPt((float) 12.8, (float) 25.6),
+          placeGuideEntity.getProperty(DatastorePlaceGuideRepository.COORDINATE_PROPERTY));
+      assertEquals(
+          LENGTH, placeGuideEntity.getProperty(DatastorePlaceGuideRepository.LENGTH_PROPERTY));
+      assertEquals(
+          DESCRIPTION,
+          placeGuideEntity.getProperty(DatastorePlaceGuideRepository.DESCRIPTION_PROPERTY));
+      assertEquals(
+          IMAGE_KEY,
+          placeGuideEntity.getProperty(DatastorePlaceGuideRepository.IMAGE_KEY_PROPERTY));
+      assertEquals(
+          AUDIO_KEY,
+          placeGuideEntity.getProperty(DatastorePlaceGuideRepository.AUDIO_KEY_PROPERTY));
+    } catch (EntityNotFoundException e) {
+      fail("Entity not found: " + e);
+    }
   }
 
   @After
