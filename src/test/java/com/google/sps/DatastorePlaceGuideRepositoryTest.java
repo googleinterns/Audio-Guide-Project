@@ -791,11 +791,6 @@ public final class DatastorePlaceGuideRepositoryTest {
             NORTH_EAST_CORNER_WITH_IDL, SOUTH_WEST_CORNER_WITH_IDL);
     List<PlaceGuide> expected =
         Arrays.asList(testInnerPublicPlaceGuideE, testInnerPublicPlaceGuideF);
-    System.out.println("!!!Result is:");
-    for (PlaceGuide placeGuide : result) {
-      System.out.println(
-          placeGuide.getId() + " with coordinates: " + placeGuide.getCoordinate().toString());
-    }
     assertTrue(compare(expected, result));
   }
 

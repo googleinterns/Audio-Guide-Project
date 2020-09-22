@@ -43,10 +43,9 @@ function handleChosenLocationChangeEvent(mapWidget) {
   enableSubmission();
   if (mapWidget.pickedLocation.place != null) {
     updateLocation(mapWidget.pickedLocation.position,
-        mapWidget.pickedLocation.place.place_id,
-        mapWidget.pickedLocation.place.name);
+        mapWidget.pickedLocation.place.place_id);
   } else {
-    updateLocation(mapWidget.pickedLocation.position, null, null);
+    updateLocation(mapWidget.pickedLocation.position, null);
   }
 }
 
