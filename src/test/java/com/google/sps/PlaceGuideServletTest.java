@@ -56,8 +56,8 @@ public final class PlaceGuideServletTest {
   private BlobInfoFactory blobInfoFactory;
   private LocalServiceTestHelper helper;
   private DatastoreService datastore;
-  private StringWriter sw;
-  private PrintWriter pw;
+  private StringWriter stringWriter;
+  private PrintWriter printWriter;
 
   // Creator C data.
   private static final String ID_USER_C = "idUserC";
@@ -273,9 +273,9 @@ public final class PlaceGuideServletTest {
         .thenReturn(queryType.toString());
     when(request.getParameter(PlaceGuideServlet.REGION_CORNERS_PARAMETER))
         .thenReturn(getRegionCornersString(southWestCorner, northEastCorner));
-    sw = new StringWriter();
-    pw = new PrintWriter(sw);
-    when(response.getWriter()).thenReturn(pw);
+    stringWriter = new StringWriter();
+    printWriter = new PrintWriter(stringWriter);
+    when(response.getWriter()).thenReturn(printWriter);
   }
 
   private boolean placeGuideInfoEquals(PlaceGuideInfo a, PlaceGuideInfo b) {
@@ -338,10 +338,11 @@ public final class PlaceGuideServletTest {
     PlaceGuideServlet placeGuideServlet = new PlaceGuideServlet(blobstoreService, blobInfoFactory);
     placeGuideServlet.doGet(request, response);
 
-    pw.flush();
+    printWriter.flush();
     Gson gson = new Gson();
     List<PlaceGuideInfo> result =
-        Arrays.asList(new GsonBuilder().create().fromJson(sw.toString(), PlaceGuideInfo[].class));
+        Arrays.asList(
+            new GsonBuilder().create().fromJson(stringWriter.toString(), PlaceGuideInfo[].class));
     List<PlaceGuideInfo> expected = Collections.emptyList();
     assertTrue(compare(expected, result));
   }
@@ -368,10 +369,11 @@ public final class PlaceGuideServletTest {
     PlaceGuideServlet placeGuideServlet = new PlaceGuideServlet(blobstoreService, blobInfoFactory);
     placeGuideServlet.doGet(request, response);
 
-    pw.flush();
+    printWriter.flush();
     Gson gson = new Gson();
     List<PlaceGuideInfo> result =
-        Arrays.asList(new GsonBuilder().create().fromJson(sw.toString(), PlaceGuideInfo[].class));
+        Arrays.asList(
+            new GsonBuilder().create().fromJson(stringWriter.toString(), PlaceGuideInfo[].class));
     List<PlaceGuideInfo> expected =
         Arrays.asList(
             new PlaceGuideInfo(testInnerPublicPlaceGuideC, userC, true, false),
@@ -386,10 +388,11 @@ public final class PlaceGuideServletTest {
     PlaceGuideServlet placeGuideServlet = new PlaceGuideServlet(blobstoreService, blobInfoFactory);
     placeGuideServlet.doGet(request, response);
 
-    pw.flush();
+    printWriter.flush();
     Gson gson = new Gson();
     List<PlaceGuideInfo> result =
-        Arrays.asList(new GsonBuilder().create().fromJson(sw.toString(), PlaceGuideInfo[].class));
+        Arrays.asList(
+            new GsonBuilder().create().fromJson(stringWriter.toString(), PlaceGuideInfo[].class));
     List<PlaceGuideInfo> expected = Collections.emptyList();
     assertTrue(compare(expected, result));
   }
@@ -414,10 +417,11 @@ public final class PlaceGuideServletTest {
     PlaceGuideServlet placeGuideServlet = new PlaceGuideServlet(blobstoreService, blobInfoFactory);
     placeGuideServlet.doGet(request, response);
 
-    pw.flush();
+    printWriter.flush();
     Gson gson = new Gson();
     List<PlaceGuideInfo> result =
-        Arrays.asList(new GsonBuilder().create().fromJson(sw.toString(), PlaceGuideInfo[].class));
+        Arrays.asList(
+            new GsonBuilder().create().fromJson(stringWriter.toString(), PlaceGuideInfo[].class));
     List<PlaceGuideInfo> expected = Arrays.asList();
     assertTrue(compare(expected, result));
   }
@@ -444,10 +448,11 @@ public final class PlaceGuideServletTest {
     PlaceGuideServlet placeGuideServlet = new PlaceGuideServlet(blobstoreService, blobInfoFactory);
     placeGuideServlet.doGet(request, response);
 
-    pw.flush();
+    printWriter.flush();
     Gson gson = new Gson();
     List<PlaceGuideInfo> result =
-        Arrays.asList(new GsonBuilder().create().fromJson(sw.toString(), PlaceGuideInfo[].class));
+        Arrays.asList(
+            new GsonBuilder().create().fromJson(stringWriter.toString(), PlaceGuideInfo[].class));
     List<PlaceGuideInfo> expected =
         Arrays.asList(
             new PlaceGuideInfo(testInnerPublicPlaceGuideC, userC, true, false),
@@ -463,10 +468,11 @@ public final class PlaceGuideServletTest {
     PlaceGuideServlet placeGuideServlet = new PlaceGuideServlet(blobstoreService, blobInfoFactory);
     placeGuideServlet.doGet(request, response);
 
-    pw.flush();
+    printWriter.flush();
     Gson gson = new Gson();
     List<PlaceGuideInfo> result =
-        Arrays.asList(new GsonBuilder().create().fromJson(sw.toString(), PlaceGuideInfo[].class));
+        Arrays.asList(
+            new GsonBuilder().create().fromJson(stringWriter.toString(), PlaceGuideInfo[].class));
     List<PlaceGuideInfo> expected = Collections.emptyList();
     assertTrue(compare(expected, result));
   }
@@ -492,10 +498,11 @@ public final class PlaceGuideServletTest {
     PlaceGuideServlet placeGuideServlet = new PlaceGuideServlet(blobstoreService, blobInfoFactory);
     placeGuideServlet.doGet(request, response);
 
-    pw.flush();
+    printWriter.flush();
     Gson gson = new Gson();
     List<PlaceGuideInfo> result =
-        Arrays.asList(new GsonBuilder().create().fromJson(sw.toString(), PlaceGuideInfo[].class));
+        Arrays.asList(
+            new GsonBuilder().create().fromJson(stringWriter.toString(), PlaceGuideInfo[].class));
     List<PlaceGuideInfo> expected = Arrays.asList();
     assertTrue(compare(expected, result));
   }
@@ -522,10 +529,11 @@ public final class PlaceGuideServletTest {
     PlaceGuideServlet placeGuideServlet = new PlaceGuideServlet(blobstoreService, blobInfoFactory);
     placeGuideServlet.doGet(request, response);
 
-    pw.flush();
+    printWriter.flush();
     Gson gson = new Gson();
     List<PlaceGuideInfo> result =
-        Arrays.asList(new GsonBuilder().create().fromJson(sw.toString(), PlaceGuideInfo[].class));
+        Arrays.asList(
+            new GsonBuilder().create().fromJson(stringWriter.toString(), PlaceGuideInfo[].class));
     List<PlaceGuideInfo> expected =
         Arrays.asList(new PlaceGuideInfo(testInnerPublicPlaceGuideC, userC, true, false));
     assertTrue(compare(expected, result));
@@ -539,10 +547,11 @@ public final class PlaceGuideServletTest {
     PlaceGuideServlet placeGuideServlet = new PlaceGuideServlet(blobstoreService, blobInfoFactory);
     placeGuideServlet.doGet(request, response);
 
-    pw.flush();
+    printWriter.flush();
     Gson gson = new Gson();
     List<PlaceGuideInfo> result =
-        Arrays.asList(new GsonBuilder().create().fromJson(sw.toString(), PlaceGuideInfo[].class));
+        Arrays.asList(
+            new GsonBuilder().create().fromJson(stringWriter.toString(), PlaceGuideInfo[].class));
     List<PlaceGuideInfo> expected = Collections.emptyList();
     assertTrue(compare(expected, result));
   }
@@ -568,10 +577,11 @@ public final class PlaceGuideServletTest {
     PlaceGuideServlet placeGuideServlet = new PlaceGuideServlet(blobstoreService, blobInfoFactory);
     placeGuideServlet.doGet(request, response);
 
-    pw.flush();
+    printWriter.flush();
     Gson gson = new Gson();
     List<PlaceGuideInfo> result =
-        Arrays.asList(new GsonBuilder().create().fromJson(sw.toString(), PlaceGuideInfo[].class));
+        Arrays.asList(
+            new GsonBuilder().create().fromJson(stringWriter.toString(), PlaceGuideInfo[].class));
     List<PlaceGuideInfo> expected = Arrays.asList();
     assertTrue(compare(expected, result));
   }
@@ -599,10 +609,11 @@ public final class PlaceGuideServletTest {
     PlaceGuideServlet placeGuideServlet = new PlaceGuideServlet(blobstoreService, blobInfoFactory);
     placeGuideServlet.doGet(request, response);
 
-    pw.flush();
+    printWriter.flush();
     Gson gson = new Gson();
     List<PlaceGuideInfo> result =
-        Arrays.asList(new GsonBuilder().create().fromJson(sw.toString(), PlaceGuideInfo[].class));
+        Arrays.asList(
+            new GsonBuilder().create().fromJson(stringWriter.toString(), PlaceGuideInfo[].class));
     List<PlaceGuideInfo> expected =
         Arrays.asList(new PlaceGuideInfo(testInnerPrivatePlaceGuideC, userC, true, false));
     assertTrue(compare(expected, result));
