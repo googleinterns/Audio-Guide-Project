@@ -36,6 +36,30 @@ class PlaceGuideOnList {
     PlaceGuideOnList.close(placeGuideId);
   }
 
+  static bookmark(placeGuideId) {
+    const bookmarkButton = document
+        .getElementById(PlaceGuideOnList.bookmarkButtonId(placeGuideId));
+    bookmarkButton.innerText = 'bookmark';
+    bookmarkButton.setAttribute('title', 'unbookmark place guide');
+  }
+
+  static unbookmark(placeGuideId) {
+    const bookmarkButton = document
+        .getElementById(PlaceGuideOnList.bookmarkButtonId(placeGuideId));
+    bookmarkButton.innerText = 'bookmark_border';
+    bookmarkButton.setAttribute('title', 'bookmark place guide');
+  }
+
+  static expand(placeGuideId) {
+    const divId = 'placeGuideOnList-' + '{' + placeGuideId + '}';
+    const placeGuideDiv = document.getElementById(divId);
+    placeGuideDiv.querySelectorAll('.folded-placeGuide')[0]
+        .style.display = 'none';
+    placeGuideDiv.querySelectorAll('.card-placeGuide')[0]
+        .style.display = 'block';
+    placeGuideDiv.style.padding = '0px';
+  }
+
   static getBlobSrc(blobKey) {
     const src = new URL('/serve-blob', document.URL);
     src.searchParams.append('blob-key', blobKey);
@@ -402,6 +426,8 @@ class PlaceGuideOnList {
 
   createBookmarkButton(placeGuideId, bookmarkedByCurrentUser, parentDiv) {
     const bookmarkButton = this.getPlaceGuideButtonWithPreparedClasses();
+    bookmarkButton.setAttribute("id",
+        PlaceGuideOnList.bookmarkButtonId(placeGuideId));
     bookmarkButton.setAttribute('title', 'bookmark place guide');
     bookmarkButton.innerText = 'bookmark_border';
     if (bookmarkedByCurrentUser) {
@@ -409,13 +435,6 @@ class PlaceGuideOnList {
       bookmarkButton.setAttribute('title', 'unbookmark place guide');
     }
     bookmarkButton.addEventListener('click', function() {
-      if (bookmarkButton.innerText == 'bookmark') {
-        bookmarkButton.innerText = 'bookmark_border';
-        bookmarkButton.setAttribute('title', 'bookmark place guide');
-      } else {
-        bookmarkButton.innerText = 'bookmark';
-        bookmarkButton.setAttribute('title', 'unbookmark place guide');
-      }
       placeGuideManager.toggleBookmark(placeGuideId);
     });
     parentDiv.appendChild(bookmarkButton);
@@ -440,5 +459,9 @@ class PlaceGuideOnList {
     });
 
     parentDiv.appendChild(backToListButton);
+  }
+
+  static bookmarkButtonId(placeGuideId) {
+    return `bookmarkBtn-${placeGuideId}`;
   }
 }
