@@ -14,6 +14,12 @@ class PlaceGuideRepository {
     CREATED_BY_GIVEN_USER_PUBLIC_IN_MAP_AREA: "CREATED_BY_GIVEN_USER_PUBLIC_IN_MAP_AREA"
   };
 
+  static BOOKMARK_ACTION_RESULT_TYPE = {
+      SUCCESS: {},
+      NOT_ALLOWED: {},
+      SERVER_FAILURE: {},
+  }
+
   constructor() {
     this._placeGuides = {};
   }
@@ -180,13 +186,22 @@ class PlaceGuideRepository {
         .catch(error => {
           console.log("BookmarkPlaceGuideServlet: failed to fetch: "
             + error);
-          alert("Failed to execute bookmarking/unbookmarking");
-          resolve(false);
+          resolve(PlaceGuideRepository.BOOKMARK_ACTION_RESULT_TYPE.SERVER_FAILURE);
+        })
+        .then(response => response.json())
+        .catch(error => {
+            console.log('updatePlaceGuides: failed to convert response to JSON'
+                  + error);
+            alert("Failed to process the response from the server");
         })
         .then(response => {
-          // Toggle in in-memory dictionary.
-          resolve(true);
-          thisRepository._placeGuides[placeGuideId].bookmarkedByCurrentUser = !isBookmarked;
+          if (response) {
+            thisRepository._placeGuides[placeGuideId].bookmarkedByCurrentUser = !isBookmarked;
+            // Toggle in in-memory dictionary.
+            resolve(PlaceGuideRepository.BOOKMARK_ACTION_RESULT_TYPE.SUCCESS);
+          } else{
+            resolve(PlaceGuideRepository.BOOKMARK_ACTION_RESULT_TYPE.NOT_ALLOWED);
+          }
         });
     });
   }
