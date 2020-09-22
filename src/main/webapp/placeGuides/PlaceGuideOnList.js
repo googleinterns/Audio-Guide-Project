@@ -15,6 +15,7 @@ class PlaceGuideOnList {
       isPublic: isPublic,
       latitude: latitude,
       longitude: longitude,
+      creator: creator,
     };
 
     this._placeGuideOnListDiv = this.createPlaceGuideOnListDiv(
@@ -34,6 +35,44 @@ class PlaceGuideOnList {
 
   static unhighlight(placeGuideId) {
     PlaceGuideOnList.close(placeGuideId);
+  }
+
+  static expand(placeGuideId) {
+    const divId = 'placeGuideOnList-' + '{' + placeGuideId + '}';
+    const placeGuideDiv = document.getElementById(divId);
+    placeGuideDiv.querySelectorAll('.folded-placeGuide')[0]
+        .style.display = 'none';
+    placeGuideDiv.querySelectorAll('.card-placeGuide')[0]
+        .style.display = 'block';
+    placeGuideDiv.style.padding = '0px';
+  }
+
+  static getBlobSrc(blobKey) {
+    const src = new URL('/serve-blob', document.URL);
+    src.searchParams.append('blob-key', blobKey);
+    return src;
+  }
+
+  static generateQueryString(placeGuideProperties) {
+    const query = Object.keys(placeGuideProperties)
+        .map(function(propertyKey) {
+          return encodeURIComponent(propertyKey) + '=' +
+              encodeURIComponent(placeGuideProperties[propertyKey]);
+        })
+        .join('&');
+    return query;
+  }
+
+  static close(placeGuideId) {
+    const divId = 'placeGuideOnList-' + '{' + placeGuideId + '}';
+    const placeGuideDiv = document.getElementById(divId);
+    if (placeGuideDiv !== null) {
+      placeGuideDiv
+          .querySelectorAll('.folded-placeGuide')[0].style.display = 'block';
+      placeGuideDiv
+          .querySelectorAll('.card-placeGuide')[0].style.display = 'none';
+      placeGuideDiv.style.removeProperty('padding');
+    }
   }
 
   createPlaceGuideOnListDiv(
@@ -97,19 +136,6 @@ class PlaceGuideOnList {
     return placeGuideNameContainer;
   }
 
-  foldedPlaceGuide_name(placeGuideName) {
-    const placeGuideNameContainer = document.createElement('div');
-    placeGuideNameContainer.classList.add(
-        'd-flex',
-        'w-100',
-        'justify-content-between');
-    const placeGuideNameElement = document.createElement('h5');
-    placeGuideNameElement.classList.add('mb-1');
-    placeGuideNameElement.innerText = placeGuideName;
-    placeGuideNameContainer.appendChild(placeGuideNameElement);
-    return placeGuideNameContainer;
-  }
-
   foldedPlaceGuide_placeName(placeName) {
     const placeNameElement = document.createElement('p');
     placeNameElement.classList.add('mb-1');
@@ -131,21 +157,13 @@ class PlaceGuideOnList {
     return buttonsContainer;
   }
 
-  static expand(placeGuideId) {
-    const divId = 'placeGuideOnList-' + '{' + placeGuideId + '}';
-    const placeGuideDiv = document.getElementById(divId);
-    placeGuideDiv.querySelectorAll('.folded-placeGuide')[0].style.display = 'none';
-    placeGuideDiv.querySelectorAll('.card-placeGuide')[0].style.display = 'block';
-    placeGuideDiv.style.padding = '0px';
-  }
-
   createCardPlaceGuide(
       placeGuideProperties, creator, createdByCurrentUser, bookmarkedByCurrentUser) {
     const cardPlaceGuideDiv = this.createCardPlaceGuideDiv();
     const cardDiv = this.createCardDiv();
 
     const cardContentsContainer =
-        this.createAndPopulateCardContentsContainer(placeGuideProperties, creator);
+        this.createAndPopulateCardContentsContainer(placeGuideProperties);
 
     const buttonsContainer =
         this.createAndPopulateButtonsContainer(
@@ -172,7 +190,7 @@ class PlaceGuideOnList {
     return cardDiv;
   }
 
-  createAndPopulateCardContentsContainer(placeGuideProperties, creator) {
+  createAndPopulateCardContentsContainer(placeGuideProperties) {
     const cardContentsContainer = document.createElement('div');
     cardContentsContainer.classList.add(
         'mdc-card__media',
@@ -183,7 +201,9 @@ class PlaceGuideOnList {
     const placeGuideImage =
         this.createPlaceGuideImageElement(placeGuideProperties.imageKey);
     const placeGuideTitle =
-        this.createPlaceGuideTitle(placeGuideProperties.name, creator.email);
+        this.createPlaceGuideTitle(
+            placeGuideProperties.name,
+            placeGuideProperties.creator);
     const placeGuideLength =
         this.createPlaceGuideLengthElement(placeGuideProperties.audioLength);
     const placeGuideDescription =
@@ -222,14 +242,12 @@ class PlaceGuideOnList {
     return placeGuideImage;
   }
 
-  createPlaceGuideTitle(placeGuideName, creatorEmail) {
+  createPlaceGuideTitle(placeGuideName, creator) {
     const placeGuideTitle = document.createElement('div');
     placeGuideTitle.classList.add('place-guide-title');
     const placeGuideNameElement = document.createElement('h5');
     placeGuideNameElement.innerText = placeGuideName;
-    const creatorButton = this.getPlaceGuideButtonWithPreparedClasses();
-    creatorButton.setAttribute('title', creatorEmail);
-    creatorButton.innerText = 'account_circle';
+    const creatorButton = new UserRepresentation(creator).div;
     placeGuideTitle.appendChild(placeGuideNameElement);
     placeGuideTitle.appendChild(creatorButton);
     placeGuideTitle.style.paddingTop = '10px';
@@ -324,22 +342,6 @@ class PlaceGuideOnList {
     return element;
   }
 
-  static getBlobSrc(blobKey) {
-    const src = new URL('/serve-blob', document.URL);
-    src.searchParams.append('blob-key', blobKey);
-    return src;
-  }
-
-  static generateQueryString(placeGuideProperties) {
-    const esc = encodeURIComponent;
-    const query = Object.keys(placeGuideProperties)
-        .map(function(k) {
-          return esc(k) + '=' + esc(placeGuideProperties[k]);
-        })
-        .join('&');
-    return query;
-  }
-
   createButtonsIfUserIsCreator(createdByCurrentUser, parentDiv, placeGuideProperties) {
     if (createdByCurrentUser) {
       this.createDeleteButton(parentDiv, placeGuideProperties.placeGuideId);
@@ -413,13 +415,5 @@ class PlaceGuideOnList {
     });
 
     parentDiv.appendChild(backToListButton);
-  }
-
-  static close(placeGuideId) {
-    const divId = 'placeGuideOnList-' + '{' + placeGuideId + '}';
-    const placeGuideDiv = document.getElementById(divId);
-    placeGuideDiv.querySelectorAll('.folded-placeGuide')[0].style.display = 'block';
-    placeGuideDiv.querySelectorAll('.card-placeGuide')[0].style.display = 'none';
-    placeGuideDiv.style.removeProperty('padding');
   }
 }

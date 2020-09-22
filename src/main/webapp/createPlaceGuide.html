@@ -125,8 +125,6 @@
 
             <fieldset style="display: none;">
                 <legend>Location of the Guide: </legend>
-                <label for = "placeName">place name : </label><br>
-                <input type = "text" name = "placeName" id = "placeName" readonly class="mdc-text-field mdc-text-field--outlined"><br>
                 <label for = "latitude">latitude : </label><br>
                 <input type = "text" name = "latitude" id = "latitude" onkeypress="return false;" class="mdc-text-field mdc-text-field--outlined"><br>
                 <label for = "longitude">longitude : </label><br>
@@ -145,6 +143,7 @@
     <div id = "map" class="right-element"></div>
 
 
+    <script src = "./UrlQueryUtils/UrlQueryUtils.js"></script>
     <script src = "./pages/menu.js"></script>
     <script src = "./maps/Geolocator.js"></script>
     <script src = "./maps/Searchbox.js"></script>
@@ -156,6 +155,7 @@
     <script src = "./user/userAuthentication.js"></script>
     <script src="https://unpkg.com/@google/markerclustererplus@4.0.1/dist/markerclustererplus.min.js"></script>
     <script src = "./maps/MapWidget.js"></script>
+    <script src = "./user/UserRepresentation.js"></script>
     <script src = "./placeGuides/Location.js"></script>
     <script src = "./placeGuides/ListPlaceGuideDisplayer.js"></script>
     <script src = "./placeGuides/MapPlaceGuideDisplayer.js"></script>

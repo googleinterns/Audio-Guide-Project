@@ -16,23 +16,33 @@ package com.google.sps.data;
 
 /** Specifies the possible form types of queries for PlaceGuides. */
 public enum PlaceGuideQueryType {
-  ALL_PUBLIC(false),
-  CREATED_ALL(false),
-  CREATED_PUBLIC(false),
-  CREATED_PRIVATE(false),
-  BOOKMARKED(false),
-  ALL_PUBLIC_IN_MAP_AREA(true),
-  CREATED_ALL_IN_MAP_AREA(true),
-  CREATED_PUBLIC_IN_MAP_AREA(true),
-  CREATED_PRIVATE_IN_MAP_AREA(true);
+  ALL_PUBLIC(/* requiresCoordinates= */ false, /* requiresUserIdFromRequest= */ false),
+  CREATED_ALL(/* requiresCoordinates= */ false, /* requiresUserIdFromRequest= */ false),
+  CREATED_PUBLIC(/* requiresCoordinates= */ false, /* requiresUserIdFromRequest= */ false),
+  CREATED_PRIVATE(/* requiresCoordinates= */ false, /* requiresUserIdFromRequest= */ false),
+  BOOKMARKED(/* requiresCoordinates= */ false, /* requiresUserIdFromRequest= */ false),
+  ALL_PUBLIC_IN_MAP_AREA(/* requiresCoordinates= */ true, /* requiresUserIdFromRequest= */ false),
+  CREATED_ALL_IN_MAP_AREA(/* requiresCoordinates= */ true, /* requiresUserIdFromRequest= */ false),
+  CREATED_PUBLIC_IN_MAP_AREA(
+      /* requiresCoordinates= */ true, /* requiresUserIdFromRequest= */ false),
+  CREATED_PRIVATE_IN_MAP_AREA(
+      /* requiresCoordinates= */ true, /* requiresUserIdFromRequest= */ false),
+  CREATED_BY_GIVEN_USER_PUBLIC_IN_MAP_AREA(
+      /* requiresCoordinates= */ true, /* requiresUserIdFromRequest= */ true);
 
   private final boolean requiresCoordinates;
+  private final boolean requiresUserIdFromRequest;
 
-  PlaceGuideQueryType(boolean requiresCoordinates) {
+  PlaceGuideQueryType(boolean requiresCoordinates, boolean requiresUserIdFromRequest) {
     this.requiresCoordinates = requiresCoordinates;
+    this.requiresUserIdFromRequest = requiresUserIdFromRequest;
   }
 
   public boolean requiresCoordinates() {
     return this.requiresCoordinates;
+  }
+
+  public boolean requiresUserIdFromRequest() {
+    return this.requiresUserIdFromRequest;
   }
 }
