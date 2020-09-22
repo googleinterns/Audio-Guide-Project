@@ -24,7 +24,7 @@
     </div>
 
     <div class = "content-container">
-        <div id = "listPlaceGuideDisplayer"></div>
+        <div id = "listPlaceGuideDisplayer" class="listContainer"></div>
 
         <div id = "mapDisplayer">
             <input id = "search-box" type = "text" placeholder = "Search for a new place!"/>
@@ -32,6 +32,7 @@
         </div>
     </div>
 
+    <script src = "./pages/fitContent.js"></script>
     <script src = "./pages/menu.js"></script>
     <script src = "./user/userAuthentication.js"></script>
     <script src = "./maps/Geolocator.js"></script>
@@ -39,6 +40,7 @@
     <script src = "./maps/Place.js"></script>
     <script src="https://unpkg.com/@google/markerclustererplus@4.0.1/dist/markerclustererplus.min.js"></script>
     <script src = "./maps/MapWidget.js"></script>
+    <script src = "./user/UserRepresentation.js"></script>
     <script src = "./placeGuides/Location.js"></script>
     <script src = "./placeGuides/ListPlaceGuideDisplayer.js"></script>
     <script src = "./placeGuides/MapPlaceGuideDisplayer.js"></script>

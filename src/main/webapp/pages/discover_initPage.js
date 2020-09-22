@@ -14,19 +14,21 @@ function initPage() {
       location.replace(userAuthenticationStatus.loginUrl);
     } else {
       const menu = new Menu(Menu.PAGE_NAMES.DISCOVER);
+      fitContent();
+      window.addEventListener('resize', function() {
+        fitContent();
+      });
       const mapWidget = new MapWidget();
       mapWidget.addGeolocationFunctionality();
       mapWidget.addSearchingFunctionality();
       map = mapWidget.map;
       placeGuideManager = new PlaceGuideManager(
           PlaceGuideManager.PAGE.DISCOVER, map);
-      setMapWidth();
-      window.addEventListener('resize', setMapWidth);
     }
   });
 }
 
-function setMapWidth() {
-  const availableWidth = window.innerWidth - 370;
-  document.getElementById('mapDisplayer').style.width = availableWidth.toString() + 'px';
+function fitContent() {
+  setMapWidth();
+  setContentHeight();
 }

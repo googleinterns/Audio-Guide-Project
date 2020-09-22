@@ -53,22 +53,18 @@ function enableSubmission() {
  * This function writes in the hidden form inputs the
  * data of the newly chosen location for the placeguide.
  */
-function updateLocation(position, placeId, placeName) {
-  if (placeName != null) {
+function updateLocation(position, placeId) {
+  if (placeId !== null) {
     document.getElementById(
-        'placeName').setAttribute('value', placeName);
-    document.getElementById(
-        'placeId').setAttribute('value', placeId);
+        'placeId').value = placeId;
   } else {
     document.getElementById(
-        'placeName').setAttribute('value', '-');
-    document.getElementById(
-        'placeId').setAttribute('value', '');
+        'placeId').value = '';
   }
   document.getElementById(
-      'latitude').setAttribute('value', position.lat());
+      'latitude').value = position.lat();
   document.getElementById(
-      'longitude').setAttribute('value', position.lng());
+      'longitude').value = position.lng();
 }
 
 /**
@@ -79,16 +75,10 @@ function fillFormWithPlaceGuideToEdit() {
   if (window.location.search != '') {
     enableSubmission();
     document.getElementById('audioKey').required = false;
-    const GET = {};
-    const queryString = decodeURI(window.location.search.replace(/^\?/, ''));
-    queryString.split(/\&/).forEach(function(keyValuePair) {
-      const paramName = keyValuePair.replace(/=.*$/, '');
-      const paramValue = keyValuePair.replace(/^[^=]*\=/, '');
-      GET[paramName] = paramValue;
-    });
+    const GET = UrlQueryUtils.getParamsFromQueryString();
     document.getElementById('id').value = GET['placeGuideId'];
     setFormInputValueOrEmpty(
-        document.getElementById('placeId').value,
+        document.getElementById('placeId'),
         GET['placeId']);
     setFormInputValueOrEmpty(
         new mdc.textField.MDCTextField(document.getElementById('nameInput')),
