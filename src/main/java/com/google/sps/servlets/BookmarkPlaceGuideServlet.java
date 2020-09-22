@@ -63,13 +63,12 @@ public class BookmarkPlaceGuideServlet extends HttpServlet {
         User user = userRepository.getUser(userId);
         if (user == null) {
           throw new IllegalStateException("The current user does not exist in the database!");
+        }
+        if (user.canBookmarkAnotherPlaceGuide()) {
+          userRepository.bookmarkPlaceGuide(placeGuideId, userId);
+          return true;
         } else {
-          if (user.canBookmarkAnotherPlaceGuide()) {
-            userRepository.bookmarkPlaceGuide(placeGuideId, userId);
-            return true;
-          } else {
-            return false;
-          }
+          return false;
         }
       case UNBOOKMARK:
         userRepository.removeBookmarkedPlaceGuide(placeGuideId, userId);
