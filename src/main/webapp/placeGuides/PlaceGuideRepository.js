@@ -24,15 +24,6 @@ class PlaceGuideRepository {
     this._placeGuides = {};
   }
 
-  // get placeGuides() {
-  //   for (const placeGuideId in this._placeGuides) {
-  //     if (this._placeGuides.hasOwnProperty(placeGuideId)) {
-  //       console.log(this._placeGuides[placeGuideId]);
-  //     }
-  //   }
-  //   return this._placeGuides;
-  // }
-
   static buildPlaceGuideDictionaryFromResponse(placeGuideWithCreatorPairs) {
     var placeGuidesDict = {};
     for (var i = 0; i < placeGuideWithCreatorPairs.length; i++) {
