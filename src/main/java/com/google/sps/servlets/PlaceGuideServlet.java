@@ -27,24 +27,16 @@ public class PlaceGuideServlet extends HttpServlet {
 
   private final BlobstoreService blobstoreService;
   private final BlobInfoFactory blobInfoFactory;
-  private final DatastoreService datastore;
 
   // For production.
   public PlaceGuideServlet() {
-    this(
-        BlobstoreServiceFactory.getBlobstoreService(),
-        new BlobInfoFactory(),
-        DatastoreServiceFactory.getDatastoreService());
+    this(BlobstoreServiceFactory.getBlobstoreService(), new BlobInfoFactory());
   }
 
   // For testing.
-  public PlaceGuideServlet(
-      BlobstoreService blobstoreService,
-      BlobInfoFactory blobInfoFactory,
-      DatastoreService datastore) {
+  public PlaceGuideServlet(BlobstoreService blobstoreService, BlobInfoFactory blobInfoFactory) {
     this.blobstoreService = blobstoreService;
     this.blobInfoFactory = blobInfoFactory;
-    this.datastore = datastore;
   }
 
   public static final String ID_INPUT = "id";
