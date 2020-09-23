@@ -115,7 +115,7 @@ function fillFormWithPlaceGuideData(placeGuide) {
       placeGuide.name);
   document.getElementById('audioPlayer').src =
       PlaceGuideOnList.getBlobSrc(placeGuide.audioKey);
-  if (placeGuide.imgKey !== 'undefined') {
+  if (placeGuide.imgKey !== undefined) {
     document.getElementById('imagePreview').style.display = 'block';
     document.getElementById('imagePreview').src =
       PlaceGuideOnList.getBlobSrc(placeGuide.imgKey);
@@ -126,7 +126,7 @@ function fillFormWithPlaceGuideData(placeGuide) {
   } else {
     activateRemoveImageFeature('clear-img-icon', false);
   }
-  if (placeGuide.description !== 'undefined') {
+  if (placeGuide.description !== undefined) {
     setFormInputValueOrEmpty(
         new mdc.textField.MDCTextField(
             document.getElementById('descriptionInput')),
