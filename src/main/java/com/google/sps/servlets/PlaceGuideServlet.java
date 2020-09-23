@@ -64,7 +64,8 @@ public class PlaceGuideServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     PlaceGuide placeGuide = getPlaceGuideFromRequest(request);
     placeGuideRepository.savePlaceGuide(placeGuide);
-    response.sendRedirect("/createPlaceGuide.html");
+    response.sendRedirect(
+        String.format("/createPlaceGuide.html?placeGuideId=%d", placeGuide.getId()));
   }
 
   /** Returns the data of the placeguide(s) asked by the user who is currently logged in. */
