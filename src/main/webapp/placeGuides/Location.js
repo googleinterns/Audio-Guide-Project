@@ -17,7 +17,7 @@ class Location {
     return this._placeId;
   }
 
-  get placeName() {
+  getPlaceName() {
     if (this._placeName !== undefined) {
       const thisPlaceName = this._placeName;
       return new Promise(function(resolve, reject) {

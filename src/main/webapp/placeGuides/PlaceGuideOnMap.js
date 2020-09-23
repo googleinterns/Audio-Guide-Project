@@ -86,7 +86,7 @@ class PlaceGuideOnMap {
       this._infoWindow.open(map, this._marker);
       this._highlighted = true;
     } else {
-      this._location.placeName
+      this._location.getPlaceName()
           .then((placeName) => {
             this._infoWindow = PlaceGuideOnMap
                 .getInfoWindow(this._guideName,
@@ -118,7 +118,7 @@ class PlaceGuideOnMap {
     if (this._infoWindow !== undefined) {
       this._infoWindow.open(map, this._marker);
     } else {
-      this._location.placeName
+      this._location.getPlaceName
           .then((placeName) => {
             this._infoWindow = PlaceGuideOnMap
                 .getInfoWindow(this._guideName,

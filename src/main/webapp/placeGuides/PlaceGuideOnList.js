@@ -124,7 +124,6 @@ class PlaceGuideOnList {
     const placeGuideAudioKey = placeGuideProperties.audioKey;
     const placeGuideId = placeGuideProperties.placeGuideId;
     const placeGuideName = placeGuideProperties.name;
-    const placeName = placeGuideProperties.placeName;
     const foldedPlaceGuideDiv = document.createElement('div');
     foldedPlaceGuideDiv.style.display = 'block';
     foldedPlaceGuideDiv.classList.add('folded-placeGuide');
@@ -167,7 +166,7 @@ class PlaceGuideOnList {
     const placeNameDiv = document.getElementById(
         PlaceGuideOnList.getPlaceGuidePlaceNameElementId(placeGuideId));
     if (placeNameDiv !== null && placeNameDiv.innerText === "") {
-      location.placeName
+      location.getPlaceName()
           .then((placeName) => {
             PlaceGuideOnList.showCardInsteadOfFoldedGuide(placeGuideDiv);
             if (placeName !== undefined) {
