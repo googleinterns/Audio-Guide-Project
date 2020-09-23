@@ -84,9 +84,9 @@ function fillFormWithPlaceGuideToEdit() {
         })
         .then(response => response.json())
         .catch(error => {
-          console.log('updatePlaceGuides: failed to convert response to JSON'
+          console.log('fillFormWithPlaceGuideToEdit: failed to convert response to JSON'
               + error);
-          alert("Failed to process the data of the gudie to edit");
+          alert("Failed to process the data of the guide to edit");
         })
         .then(placeGuideWithCreatorPair => {
           console.log("fetching finished");
