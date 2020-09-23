@@ -1,5 +1,5 @@
 class Modal {
-  static show(text) {
+  static show(text, timeLimit) {
     const modal = document.getElementById("myModal");
     modal.style.display = "block";
     const modalText = document.getElementById("modalText");
@@ -13,6 +13,9 @@ class Modal {
         Modal.hide();
       }
     });
+    if (timeLimit !== undefined) {
+      setTimeout(Modal.hide, timeLimit);
+    }
   }
 
   static hide() {
