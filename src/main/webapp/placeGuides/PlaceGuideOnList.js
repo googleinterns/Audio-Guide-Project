@@ -67,12 +67,14 @@ class PlaceGuideOnList {
   }
 
   static generateQueryString(placeGuideProperties) {
-    const query = Object.keys(placeGuideProperties)
-        .map(function(propertyKey) {
-          return encodeURIComponent(propertyKey) + '=' +
-              encodeURIComponent(placeGuideProperties[propertyKey]);
-        })
-        .join('&');
+    const query = encodeURIComponent("placeGuideId") + "=" +
+        encodeURIComponent(placeGuideProperties.placeGuideId);
+    // const query = Object.keys(placeGuideProperties)
+    //     .map(function(propertyKey) {
+    //       return encodeURIComponent(propertyKey) + '=' +
+    //           encodeURIComponent(placeGuideProperties[propertyKey]);
+    //     })
+    //     .join('&');
     return query;
   }
 
