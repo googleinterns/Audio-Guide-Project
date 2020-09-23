@@ -77,14 +77,18 @@ function fillFormWithPlaceGuideToEdit() {
     document.getElementById('audioKey').required = false;
     const GET = UrlQueryUtils.getParamsFromQueryString();
     document.getElementById('id').value = GET['placeGuideId'];
-    setFormInputValueOrEmpty(
-        document.getElementById('placeId'),
-        GET['placeId']);
-    setFormInputValueOrEmpty(
-        new mdc.textField.MDCTextField(document.getElementById('nameInput')),
-        GET['name']);
+    if(GET['placeId'] !== 'undefined' && GET['placeId'] !== 'null') {
+      setFormInputValueOrEmpty(
+          document.getElementById('placeId'),
+          GET['placeId']);
+    }
+    if(GET['name'] !== 'undefined') {
+      setFormInputValueOrEmpty(
+          new mdc.textField.MDCTextField(document.getElementById('nameInput')),
+          GET['name']);
+    }
     document.getElementById('audioPlayer').src = PlaceGuideOnList.getBlobSrc(GET['audioKey']);
-    if (GET['imageKey'] != 'undefined') {
+    if (GET['imageKey'] !== 'undefined') {
       document.getElementById('imagePreview').style.display = 'block';
       document.getElementById('imagePreview').src =
         PlaceGuideOnList.getBlobSrc(GET['imageKey']);
@@ -95,7 +99,7 @@ function fillFormWithPlaceGuideToEdit() {
     } else {
       activateRemoveImageFeature('clear-img-icon', false);
     }
-    if (GET['description'] != 'undefined') {
+    if (GET['description'] !== 'undefined') {
       setFormInputValueOrEmpty(
           new mdc.textField.MDCTextField(document.getElementById('descriptionInput')),
           GET['description']);
@@ -111,7 +115,7 @@ function fillFormWithPlaceGuideToEdit() {
         GET['audioLength']);
     const publicitySwitchControl =
     new mdc.switchControl.MDCSwitch(document.getElementById('publicitySwitch'));
-    if (GET['isPublic'] == 'true') {
+    if (GET['isPublic'] === 'true') {
       publicitySwitchControl.checked = true;
     } else {
       publicitySwitchControl.checked = false;
