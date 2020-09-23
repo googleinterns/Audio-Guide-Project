@@ -16,7 +16,7 @@ function initPage() {
       saveUserInDatabase().then((response) => {
         const menu = new Menu(undefined);
         fitContent();
-        window.addEventListener('resize', function () {
+        window.addEventListener('resize', function() {
           fitContent();
         });
         const mapWidget = new MapWidget();

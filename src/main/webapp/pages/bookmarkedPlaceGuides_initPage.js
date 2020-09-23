@@ -17,7 +17,7 @@ function initPage() {
       saveUserInDatabase().then((response) => {
         const menu = new Menu(Menu.PAGE_NAMES.BOOKMARKED_PLACEGUIDES);
         fitContent();
-        window.addEventListener('resize', function () {
+        window.addEventListener('resize', function() {
           fitContent();
         });
         const mapWidget = new MapWidget();
