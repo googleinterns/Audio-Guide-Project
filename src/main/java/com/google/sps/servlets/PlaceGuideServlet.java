@@ -54,6 +54,7 @@ public class PlaceGuideServlet extends HttpServlet {
   public static final String PLACE_GUIDE_QUERY_TYPE_PARAMETER = "placeGuideType";
   public static final String REGION_CORNERS_PARAMETER = "regionCorners";
   public static final String CREATOR_ID_PARAMETER = "creatorId";
+  public static final String PLACE_GUIDE_ID_PARAMETER = "placeGuideId";
 
   private final PlaceGuideRepository placeGuideRepository =
       PlaceGuideRepositoryFactory.getPlaceGuideRepository(RepositoryType.DATASTORE);
@@ -72,27 +73,39 @@ public class PlaceGuideServlet extends HttpServlet {
     String placeGuideQueryTypeString = request.getParameter(PLACE_GUIDE_QUERY_TYPE_PARAMETER);
     PlaceGuideQueryType placeGuideQueryType =
         PlaceGuideQueryType.valueOf(placeGuideQueryTypeString);
-    GeoPt northEastCorner = null;
-    GeoPt southWestCorner = null;
-    String creatorId = null;
-    if (placeGuideQueryType.requiresCoordinates()) {
-      String regionCornersString = request.getParameter(REGION_CORNERS_PARAMETER);
-      // On the client-side, the LatLngBound class's toUrlValue function will generate a string with
-      // the values being comma-separated. The string is parsed here.
-      String[] cornerCoordinates = regionCornersString.split(",");
-      southWestCorner =
-          new GeoPt(Float.parseFloat(cornerCoordinates[0]), Float.parseFloat(cornerCoordinates[1]));
-      northEastCorner =
-          new GeoPt(Float.parseFloat(cornerCoordinates[2]), Float.parseFloat(cornerCoordinates[3]));
+    if (placeGuideQueryType == PlaceGuideQueryType.PLACE_GUIDE_WITH_ID) {
+      long placeGuideId = request.getParameter(PLACE_GUIDE_ID_PARAMETER);
+      PlaceGuide placeGuide = placeGuideRepository.getPlaceGuide(placeGuideId);
+      String currentUserId = UserServiceFactory.getUserService().getCurrentUser().getUserId();
+      PlaceGuideInfo placeGuideInfo = new PlaceGuideInfo(placeGuide, currentUserId);
+      response.setContentType("application/json;");
+      response.getWriter().println(convertToJsonUsingGson(placeGuideInfo));
+    } else {
+      GeoPt northEastCorner = null;
+      GeoPt southWestCorner = null;
+      String creatorId = null;
+      if (placeGuideQueryType.requiresCoordinates()) {
+        String regionCornersString = request.getParameter(REGION_CORNERS_PARAMETER);
+        // On the client-side, the LatLngBound class's toUrlValue function will generate a string
+        // with
+        // the values being comma-separated. The string is parsed here.
+        String[] cornerCoordinates = regionCornersString.split(",");
+        southWestCorner =
+            new GeoPt(
+                Float.parseFloat(cornerCoordinates[0]), Float.parseFloat(cornerCoordinates[1]));
+        northEastCorner =
+            new GeoPt(
+                Float.parseFloat(cornerCoordinates[2]), Float.parseFloat(cornerCoordinates[3]));
+      }
+      if (placeGuideQueryType.requiresUserIdFromRequest()) {
+        creatorId = request.getParameter(CREATOR_ID_PARAMETER);
+      }
+      List<PlaceGuide> placeGuides =
+          getPlaceGuides(placeGuideQueryType, northEastCorner, southWestCorner, creatorId);
+      List<PlaceGuideInfo> placeGuideInfos = getPlaceGuideInfos(placeGuides);
+      response.setContentType("application/json;");
+      response.getWriter().println(convertToJsonUsingGson(placeGuideInfos));
     }
-    if (placeGuideQueryType.requiresCoordinates()) {
-      creatorId = request.getParameter(CREATOR_ID_PARAMETER);
-    }
-    List<PlaceGuide> placeGuides =
-        getPlaceGuides(placeGuideQueryType, northEastCorner, southWestCorner, creatorId);
-    List<PlaceGuideInfo> placeGuideInfos = getPlaceGuideInfos(placeGuides);
-    response.setContentType("application/json;");
-    response.getWriter().println(convertToJsonUsingGson(placeGuideInfos));
   }
 
   private List<PlaceGuideInfo> getPlaceGuideInfos(List<PlaceGuide> placeGuides) {
