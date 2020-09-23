@@ -73,52 +73,70 @@ function updateLocation(position, placeId) {
  */
 function fillFormWithPlaceGuideToEdit() {
   if (window.location.search != '') {
-    enableSubmission();
-    document.getElementById('audioKey').required = false;
     const GET = UrlQueryUtils.getParamsFromQueryString();
-    document.getElementById('id').value = GET['placeGuideId'];
-    if (GET['placeId'] !== 'null') {
-      setFormInputValueOrEmpty(
-          document.getElementById('placeId'),
-          GET['placeId']);
-    }
-    setFormInputValueOrEmpty(
-        new mdc.textField.MDCTextField(document.getElementById('nameInput')),
-        GET['name']);
-    document.getElementById('audioPlayer').src = PlaceGuideOnList.getBlobSrc(GET['audioKey']);
-    if (GET['imageKey'] !== 'undefined') {
-      document.getElementById('imagePreview').style.display = 'block';
-      document.getElementById('imagePreview').src =
-        PlaceGuideOnList.getBlobSrc(GET['imageKey']);
-      document.getElementById('no-img-icon')
-          .style.display = 'none';
-      document.getElementById('clear-img-icon').style.display = 'block';
-      activateRemoveImageFeature('clear-img-icon', true);
-    } else {
-      activateRemoveImageFeature('clear-img-icon', false);
-    }
-    if (GET['description'] !== 'undefined') {
-      setFormInputValueOrEmpty(
-          new mdc.textField.MDCTextField(document.getElementById('descriptionInput')),
-          GET['description']);
-    }
-    setFormInputValueOrEmpty(
-        document.getElementById('latitude'),
-        GET['latitude']);
-    setFormInputValueOrEmpty(
-        document.getElementById('longitude'),
-        GET['longitude']);
-    setFormInputValueOrEmpty(
-        new mdc.textField.MDCTextField(document.getElementById('lengthInput')),
-        GET['audioLength']);
-    const publicitySwitchControl =
-    new mdc.switchControl.MDCSwitch(document.getElementById('publicitySwitch'));
-    if (GET['isPublic'] === 'true') {
-      publicitySwitchControl.checked = true;
-    } else {
-      publicitySwitchControl.checked = false;
-    }
-  } else {
-    activateRemoveImageFeature('clear-img-icon', false);
+    var url = new URL('/place-guide-data', document.URL);
+    url.searchParams.append('placeGuideType', "PLACE_GUIDE_WITH_ID");
+    url.searchParams.append('placeGuideId', GET['placeGuideId']);
+    return fetch(url)
+        .catch(error => {
+          console.log("PlaceGuideServlet: failed to fetch: " + error);
+          alert("Failed to load the data of the guide to edit");
+        })
+        .then(response => response.json())
+        .catch(error => {
+          console.log('updatePlaceGuides: failed to convert response to JSON'
+              + error);
+          alert("Failed to process the data of the gudie to edit");
+        })
+        .then(placeGuideWithCreatorPair => {
+          console.log("fetching finished");
+          enableSubmission();
+          document.getElementById('audioKey').required = false;
+        });
   }
+
+  //   if (GET['placeId'] !== 'null') {
+  //     setFormInputValueOrEmpty(
+  //         document.getElementById('placeId'),
+  //         GET['placeId']);
+  //   }
+  //   setFormInputValueOrEmpty(
+  //       new mdc.textField.MDCTextField(document.getElementById('nameInput')),
+  //       GET['name']);
+  //   document.getElementById('audioPlayer').src = PlaceGuideOnList.getBlobSrc(GET['audioKey']);
+  //   if (GET['imageKey'] !== 'undefined') {
+  //     document.getElementById('imagePreview').style.display = 'block';
+  //     document.getElementById('imagePreview').src =
+  //       PlaceGuideOnList.getBlobSrc(GET['imageKey']);
+  //     document.getElementById('no-img-icon')
+  //         .style.display = 'none';
+  //     document.getElementById('clear-img-icon').style.display = 'block';
+  //     activateRemoveImageFeature('clear-img-icon', true);
+  //   } else {
+  //     activateRemoveImageFeature('clear-img-icon', false);
+  //   }
+  //   if (GET['description'] !== 'undefined') {
+  //     setFormInputValueOrEmpty(
+  //         new mdc.textField.MDCTextField(document.getElementById('descriptionInput')),
+  //         GET['description']);
+  //   }
+  //   setFormInputValueOrEmpty(
+  //       document.getElementById('latitude'),
+  //       GET['latitude']);
+  //   setFormInputValueOrEmpty(
+  //       document.getElementById('longitude'),
+  //       GET['longitude']);
+  //   setFormInputValueOrEmpty(
+  //       new mdc.textField.MDCTextField(document.getElementById('lengthInput')),
+  //       GET['audioLength']);
+  //   const publicitySwitchControl =
+  //   new mdc.switchControl.MDCSwitch(document.getElementById('publicitySwitch'));
+  //   if (GET['isPublic'] === 'true') {
+  //     publicitySwitchControl.checked = true;
+  //   } else {
+  //     publicitySwitchControl.checked = false;
+  //   }
+  // } else {
+  //   activateRemoveImageFeature('clear-img-icon', false);
+  // }
 }
