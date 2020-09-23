@@ -39,9 +39,16 @@ function setFormActionUrl(uploadUrl, formId) {
 function setBlobKeySrcToElement(blobKey, previewId, displayBlock) {
   const preview = document.getElementById(previewId);
   if (displayBlock) {
-    preview.style.display = "block";
+    preview.style.display = 'block';
   }
-  const src = new URL("/serve-blob", document.URL);
+  const src = new URL('/serve-blob', document.URL);
   src.searchParams.append('blob-key', blobKey);
   preview.setAttribute("src", src);
+}
+
+function setBlobKeyBackgroundToElement(blobKey, elementId) {
+  const htmlElement = document.getElementById(elementId);
+  const src = new URL("/serve-blob", document.URL);
+  src.searchParams.append('blob-key', blobKey);
+  htmlElement.style.backgroundImage = `url('${src}')`;
 }

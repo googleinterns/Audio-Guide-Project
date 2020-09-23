@@ -22,6 +22,5 @@ public class DeletePlaceGuideServlet extends HttpServlet {
     String id = request.getParameter("id");
     long parsedId = Long.parseLong(id);
     placeGuideRepository.deletePlaceGuide(parsedId);
-    response.sendRedirect("/myPlaceGuides.html");
   }
 }

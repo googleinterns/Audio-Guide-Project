@@ -1,5 +1,3 @@
-const DUMMY_DATA_FOR_PLACE_NAME = 'placeName';
-
 /**
  * Handles setting up the create place guide form whenever the page is loaded.
  */
@@ -7,8 +5,8 @@ function setUpCreatePlaceGuideForm() {
   addBlobstoreUploadUrlToForm(
       'CREATE_PLACE_GUIDE_FORM', 'createPlaceGuideForm');
   activatePreviewFeature();
-  activateRemoveImageFeature("clear-img-icon", false);
   styleInputs();
+  fillFormWithPlaceGuideToEdit();
 }
 
 /**
@@ -23,18 +21,18 @@ function styleInputs() {
   const descriptionInput = new mdc.textField.MDCTextField(
       document.getElementById('descriptionInput'));
   const submitButtonRipple = new mdc.ripple.MDCRipple(
-      document.getElementById("submitBtn"));
+      document.getElementById('submitBtn'));
   const chooseAudioFileButtonRipple = new mdc.ripple.MDCRipple(
-      document.getElementById("chooseAudioFileBtn"));
+      document.getElementById('chooseAudioFileBtn'));
   const chooseImageFileButtonRipple = new mdc.ripple.MDCRipple(
-      document.getElementById("chooseImageFileBtn"));
+      document.getElementById('chooseImageFileBtn'));
   const deletePrevImageCheckbox = new mdc.checkbox.MDCCheckbox(
       document.getElementById('deletePrevImageCheckbox'));
   const deletePrevImageFormField = new mdc.formField.MDCFormField(
       document.getElementById('deletePrevImageFormField'));
   deletePrevImageFormField.input = deletePrevImageCheckbox;
   const publicitySwitchControl = new mdc.switchControl.MDCSwitch(
-      document.getElementById("publicitySwitch"));
+      document.getElementById('publicitySwitch'));
 }
 
 /**
@@ -47,93 +45,78 @@ function activatePreviewFeature() {
       'audioKey', setAudioPreviewSource, removeAudioPreviewSource);
 }
 
-// Just a test by fetching actual place guides' data from database 
-// to see if image and audio previewing also works with files from blobstore.
-function testExistingPlaceGuide() {
-  getFetchedList().then(placeGuideCreatorPairs => {
-    if (placeGuideCreatorPairs === undefined ||
-        placeGuideCreatorPairs.length == 0) {
-      console.log("place guide does not exist yet.");
-    } else {
-      fillFormWithPlaceGuideData(placeGuideCreatorPairs[0].placeGuide);
-    }
-  });
-}
-
-// For testing.
-async function getFetchedList() {
-  return fetch(
-      '/place-guide-data?placeGuideType=ALL_PUBLIC', {method: 'GET'})
-      .then((response) => {
-        return response.json();
-      });
-}
-
 function enableSubmission() {
-  document.getElementById("submitBtn").disabled = false;
+  document.getElementById('submitBtn').disabled = false;
 }
 
 /**
  * This function writes in the hidden form inputs the
  * data of the newly chosen location for the placeguide.
  */
-function updateLocation(position, placeId, placeName) {
-  if (placeName != null) {
+function updateLocation(position, placeId) {
+  if (placeId !== null) {
     document.getElementById(
-        'placeName').setAttribute('value', placeName);
-    document.getElementById(
-        'placeId').setAttribute('value', placeId);
+        'placeId').value = placeId;
   } else {
     document.getElementById(
-        'placeName').setAttribute('value', '-');
-    document.getElementById(
-        'placeId').setAttribute('value', '');
+        'placeId').value = '';
   }
   document.getElementById(
-      'latitude').setAttribute('value', position.lat());
+      'latitude').value = position.lat();
   document.getElementById(
-      'longitude').setAttribute('value', position.lng());
+      'longitude').value = position.lng();
 }
 
-function fillFormWithPlaceGuideData(placeGuide) {
-  // Set required attribute to false since there must be a previous audio key
-  // from the previous place guide data.
-  document.getElementById('audioKey').required = false;
-  setFormInputValueOrEmpty(document.getElementById('id'), placeGuide.id);
-  setFormInputValueOrEmpty(
-      new mdc.textField.MDCTextField(document.getElementById('nameInput')),
-      placeGuide.name);
-  setBlobKeySrcToElement(
-      placeGuide.audioKey, 'audioPlayer', false);
-  const publicitySwitchControl =
-      new mdc.switchControl.MDCSwitch(document.getElementById("publicitySwitch"));
-  if (placeGuide.isPublic) {
-    publicitySwitchControl.checked = true;
+/**
+ * Will fill the form if query string exists. Query string exists only when user wants
+ * to edit a place guide.
+ */
+function fillFormWithPlaceGuideToEdit() {
+  if (window.location.search != '') {
+    enableSubmission();
+    document.getElementById('audioKey').required = false;
+    const GET = UrlQueryUtils.getParamsFromQueryString();
+    document.getElementById('id').value = GET['placeGuideId'];
+    setFormInputValueOrEmpty(
+        document.getElementById('placeId'),
+        GET['placeId']);
+    setFormInputValueOrEmpty(
+        new mdc.textField.MDCTextField(document.getElementById('nameInput')),
+        GET['name']);
+    document.getElementById('audioPlayer').src = PlaceGuideOnList.getBlobSrc(GET['audioKey']);
+    if (GET['imageKey'] != 'undefined') {
+      document.getElementById('imagePreview').style.display = 'block';
+      document.getElementById('imagePreview').src =
+        PlaceGuideOnList.getBlobSrc(GET['imageKey']);
+      document.getElementById('no-img-icon')
+          .style.display = 'none';
+      document.getElementById('clear-img-icon').style.display = 'block';
+      activateRemoveImageFeature('clear-img-icon', true);
+    } else {
+      activateRemoveImageFeature('clear-img-icon', false);
+    }
+    if (GET['description'] != 'undefined') {
+      setFormInputValueOrEmpty(
+          new mdc.textField.MDCTextField(document.getElementById('descriptionInput')),
+          GET['description']);
+    }
+    setFormInputValueOrEmpty(
+        document.getElementById('latitude'),
+        GET['latitude']);
+    setFormInputValueOrEmpty(
+        document.getElementById('longitude'),
+        GET['longitude']);
+    setFormInputValueOrEmpty(
+        new mdc.textField.MDCTextField(document.getElementById('lengthInput')),
+        GET['audioLength']);
+    const publicitySwitchControl =
+    new mdc.switchControl.MDCSwitch(document.getElementById('publicitySwitch'));
+    if (GET['isPublic'] == 'true') {
+      publicitySwitchControl.checked = true;
+    } else {
+      publicitySwitchControl.checked = false;
+    }
   } else {
-    publicitySwitchControl.checked = false;
+    activateRemoveImageFeature('clear-img-icon', false);
   }
-  setFormInputValueOrEmpty(
-      document.getElementById('latitude'),
-      placeGuide.coordinate.latitude);
-  setFormInputValueOrEmpty(
-      document.getElementById('longitude'),
-      placeGuide.coordinate.longitude);
-  setFormInputValueOrEmpty(
-      document.getElementById('length'),
-      placeGuide.length);
-  setFormInputValueOrEmpty(
-      new mdc.textField.MDCTextField(
-          document.getElementById('descriptionInput')),
-      placeGuide.description);
-  if (placeGuide.imageKey != undefined) {
-    setBlobKeySrcToElement(placeGuide.imageKey, "imagePreview", true);
-    document.getElementById("no-img-icon").style.display = "none";
-    document.getElementById("clear-img-icon").style.display = "block";
-    activateRemoveImageFeature(true);
-  } else {
-    activateRemoveImageFeature(false);
-  }
-  setFormInputValueOrEmpty(document.getElementById('placeName'),
-      DUMMY_DATA_FOR_PLACE_NAME);
 }
-

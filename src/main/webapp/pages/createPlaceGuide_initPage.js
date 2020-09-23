@@ -21,6 +21,10 @@ function initPage() {
     } else {
       saveUserInDatabase().then((response) => {
         const menu = new Menu(Menu.PAGE_NAMES.CREATE_PLACEGUIDE);
+        fitContent();
+        window.addEventListener('resize', function() {
+          fitContent();
+        });
         setUpCreatePlaceGuideForm();
         const mapWidget = new MapWidget();
         mapWidget.addGeolocationFunctionality();
@@ -41,9 +45,13 @@ function handleChosenLocationChangeEvent(mapWidget) {
   enableSubmission();
   if (mapWidget.pickedLocation.place != null) {
     updateLocation(mapWidget.pickedLocation.position,
-                  mapWidget.pickedLocation.place.place_id,
-                  mapWidget.pickedLocation.place.name);
+        mapWidget.pickedLocation.place.place_id);
   } else {
-    updateLocation(mapWidget.pickedLocation.position, null, null);
+    updateLocation(mapWidget.pickedLocation.position, null);
   }
+}
+
+function fitContent() {
+  setMapWidth();
+  setContentHeight();
 }

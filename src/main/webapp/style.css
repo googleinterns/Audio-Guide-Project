@@ -4,8 +4,34 @@
     box-sizing: border-box;
 }
 
-html, body {
+
+html, body{
+    font-family: Roboto; 
     height: 100%;
+}
+
+h3 {
+    display: block;
+    font-size: 1.17em;
+    margin-top: 0.1em;
+    margin-bottom: 0.1em;
+    margin-left: 0;
+    margin-right: 0;
+    font-weight: bold;
+}
+
+h4 {
+    display: block;
+    font-size: 1em;
+    margin-top: 0.1em;
+    margin-bottom: 0.1em;
+    margin-left: 0;
+    margin-right: 0;
+    font-weight: bold;
+}
+
+p {
+    margin-bottom: 0px;
 }
 
 .invisible-file-input {
@@ -27,16 +53,11 @@ html, body {
     margin: 15px auto;
 }
 
-.left-element {
-  width: 30%;
-  float: left;
-  max-height: 95%;
-  overflow: auto;
-}
-
-.right-element {
-    width: 70%;
-    float: right;
+#createPlaceGuide {
+    width: 350px;
+    float: left;
+    position: relative;
+    height: 100%;
 }
 
 .align-center {
@@ -59,14 +80,15 @@ html, body {
   background-color: #fff;
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
   border-radius: 3px;
-  border: 0px;
-  margin: 10px;
+  border: 0;
+  margin: 0 10px 10px 10px;
   padding: 30px 20px;
-  width: 95%;
-  min-width: 250px;
+    height: 100%;
+    overflow-y: auto;
 }
 
 #map {
+    margin-top: 10px;
     position: relative;
     height: 95%;
     margin: 0 auto; 
@@ -153,18 +175,122 @@ form img {
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
   border-radius: 3px;
   border: 0px;
+  margin: 5px auto 15px auto;
   align-items: center;
   justify-content: center;
   display: flex;
 }
 
-.closer-to-upper-element-form-item {
-  margin: 5px auto 15px auto;
-}
-
 #imagePreview {
   display: none;
   width: 100%;
+}
+
+body {
+    font-family: 'Roboto';
+    margin: 0;
+    padding-top: 0.1px;
+}
+
+.my-card {
+    height: 400px;
+    width: 100%;
+    padding-bottom: 5px;
+}
+
+.my-place-guide-list {
+    height: 100%;
+    width: 100%;
+}
+
+.my-card-content {
+    padding-left: 16px;
+    overflow: hidden;
+}
+
+.my-place-guide-image {
+    width: 100%;
+    padding: 0;
+    overflow: hidden;
+}
+
+.place-guide-description {
+    padding-top: -20px;
+    font-family: Montserrat;
+    padding-right: 16px;
+    padding-left: 16px;
+    top: 0;
+    word-wrap: break-word;
+    text-align: justify;
+    text-justify: inter-word;
+    font-size: 12px;
+}
+
+.place-guide-title {
+    display: flex;
+    justify-content: space-between;
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+.place-guide-length {
+    font-size: 10px;
+    padding-bottom: 2px;
+    font-style: italic;
+    padding-left: 16px;
+}
+
+.list-place-guide-displayer {
+    overflow:hidden; 
+    overflow-y:scroll;
+}
+
+.content-container {
+  width: 100%;
+  margin: auto;
+  padding: 10px;
+}
+
+.listContainer {
+    width: 350px;
+    height: 100%;
+    float: left;
+    position: relative;
+    background-color: #fff;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
+    border-radius: 3px;
+    border: 0px;
+    margin: 0px 10px 10px 10px;
+    padding: 30px 20px;
+}
+
+#mapDisplayer {
+  margin-left: 350px;
+  height: 100%;
+}
+
+#mapDisplayer #map{
+  height: 100%;
+}
+
+#specialMapDisplayer {
+  margin-left: 35%;
+  width: 65%;
+  height: 95%;
+}
+
+#specialListPlaceGuideDisplayer {
+  width: 0px;
+}
+
+.user-img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
+    border: 0px;
+    position: absolute;
+    right: 16px;
 }
 
 .clear-img-button {
@@ -175,4 +301,39 @@ form img {
 
 .form-action-button {
     width: 235px;
+}
+
+.mdc-card-content {
+    padding: 16px;
+}
+
+.rounded-div {
+    border-radius: 50%;
+}
+
+#portfolioImg {
+    width: 200px;
+    height: 200px;
+    margin: 60px auto 20px auto;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: lightgray;
+}
+
+.portfolio-text {
+    position: absolute;
+    top: 270px;
+    margin: 0px 40px 20px 40px;
+    height: fit-content;
+}
+
+.no-portfolio-img-icon {
+    position: absolute;
+    top: 88px;
+    left: 88px;
+}
+
+#portfolioDiv {
+    height: 390px;
 }

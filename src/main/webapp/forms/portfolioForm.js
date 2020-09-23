@@ -2,7 +2,7 @@
  * Handles setting up the portfolio form whenever the page is loaded.
  */
 function setUpPortfolioForm() {
-  addBlobstoreUploadUrlToForm("PORTFOLIO_FORM", "portfolioForm");
+  addBlobstoreUploadUrlToForm('PORTFOLIO_FORM', 'portfolioForm');
   styleInputs();
   activatePreviewFeature();
   fillPortfolioFormWithUserData();
@@ -18,16 +18,16 @@ function styleInputs() {
   const selfIntroductionInput = new mdc.textField.MDCTextField(
       document.getElementById('selfIntroductionInput'));
   const submitButtonRipple = new mdc.ripple.MDCRipple(
-      document.getElementById("submitBtn"));
+      document.getElementById('submitBtn'));
   const chooseFileButtonRipple = new mdc.ripple.MDCRipple(
-      document.getElementById("chooseFileBtn"));
+      document.getElementById('chooseFileBtn'));
   const deletePrevImageCheckbox = new mdc.checkbox.MDCCheckbox(
       document.getElementById('deletePrevImageCheckbox'));
   const deletePrevImageFormField = new mdc.formField.MDCFormField(
       document.getElementById('deletePrevImageFormField'));
   deletePrevImageFormField.input = deletePrevImageCheckbox;
   const switchControl = new mdc.switchControl.MDCSwitch(
-      document.getElementById("publicitySwitch"));
+      document.getElementById('publicitySwitch'));
 }
 
 /**
@@ -59,12 +59,12 @@ function fillPortfolioFormWithUserData() {
       switchControl.checked = false;
     }
     if (user.imgKey != undefined) {
-      setBlobKeySrcToElement(user.imgKey, "imagePreview", true);
-      document.getElementById("no-img-icon").style.display = "none";
-      document.getElementById("clear-img-icon").style.display = "block";
-      activateRemoveImageFeature("clear-img-icon", true);
+      setBlobKeySrcToElement(user.imgKey, 'imagePreview', true);
+      document.getElementById('no-img-icon').style.display = 'none';
+      document.getElementById('clear-img-icon').style.display = 'block';
+      activateRemoveImageFeature('clear-img-icon', true);
     } else {
-      activateRemoveImageFeature("clear-img-icon", false);
+      activateRemoveImageFeature('clear-img-icon', false);
     }
   });
 }
@@ -77,8 +77,8 @@ function getUserDataFromServlet() {
       .catch((error) => console.log('user-servlet: failed to fetch: ' + error))
       .then((response) => response.json())
       .catch((error) =>
-          console.log(
-              'fillFormInputsWithData: failed to convert to json: ' + error))
+        console.log(
+            'fillFormInputsWithData: failed to convert to json: ' + error))
       .then((response) => {
         return response;
       });

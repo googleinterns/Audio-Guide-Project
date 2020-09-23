@@ -22,6 +22,7 @@ import org.jetbrains.annotations.Nullable;
 
 /** Stores the data related to one user. */
 public class User {
+  private static final int MAX_NO_BOOKMARKED_PLACEGUIDES = 25;
   private final String id;
   private final String email;
   private final boolean publicPortfolio;
@@ -124,6 +125,10 @@ public class User {
 
   public Set<Long> getBookmarkedPlaceGuidesIds() {
     return Collections.unmodifiableSet(bookmarkedPlaceGuidesIds);
+  }
+
+  public boolean canBookmarkAnotherPlaceGuide() {
+    return this.bookmarkedPlaceGuidesIds.size() < MAX_NO_BOOKMARKED_PLACEGUIDES;
   }
 
   @Override

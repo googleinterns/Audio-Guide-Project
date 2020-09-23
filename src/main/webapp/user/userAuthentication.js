@@ -19,7 +19,7 @@ function queryAuthenticationServer(currentUrl) {
   requestUrl.search = new URLSearchParams(queryParams).toString();
 
   return fetch(requestUrl, {method: 'GET'})
-      .catch(error => console.log(error))
+      .catch((error) => console.log(error))
       .then((response) => {
         return response.json();
       });
@@ -43,5 +43,5 @@ function addLinktoLogoutButton(logoutUrl) {
  */
 function saveUserInDatabase() {
   return fetch('/user-creation-servlet', {method: 'POST'})
-      .catch(error => "saveUserInDatabase: failed to post new user: " + error);
+      .catch((error) => 'saveUserInDatabase: failed to post new user: ' + error);
 }

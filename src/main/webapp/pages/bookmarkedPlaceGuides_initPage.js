@@ -16,6 +16,10 @@ function initPage() {
     } else {
       saveUserInDatabase().then((response) => {
         const menu = new Menu(Menu.PAGE_NAMES.BOOKMARKED_PLACEGUIDES);
+        fitContent();
+        window.addEventListener('resize', function () {
+          fitContent();
+        });
         const mapWidget = new MapWidget();
         mapWidget.addGeolocationFunctionality();
         mapWidget.addSearchingFunctionality();
@@ -25,4 +29,9 @@ function initPage() {
       });
     }
   });
+}
+
+function fitContent() {
+  setMapWidth();
+  setContentHeight();
 }

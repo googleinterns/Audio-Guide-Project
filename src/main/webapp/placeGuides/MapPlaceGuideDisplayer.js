@@ -14,6 +14,8 @@ class MapPlaceGuideDisplayer {
   }
 
   remove(placeGuideId) {
+    this._markerClusterer.removeMarker(
+        this._placeGuidesOnMap[placeGuideId].marker);
     this._placeGuidesOnMap[placeGuideId].remove();
     delete this._placeGuidesOnMap[placeGuideId];
   }
@@ -23,21 +25,23 @@ class MapPlaceGuideDisplayer {
   }
 
   unhighlight(placeGuideId) {
-    this._placeGuidesOnMap[placeGuideId].unhighlight();
+    if ( this._placeGuidesOnMap[placeGuideId] != undefined) {
+      this._placeGuidesOnMap[placeGuideId].unhighlight();
+    }
   }
 
   // This function sets the map bound to the minimum one
   // which contains all the PlaceGuides.
   adjustMapToShowAll() {
-    let mapBounds = new google.maps.LatLngBounds();
+    const mapBounds = new google.maps.LatLngBounds();
     let guidesExist = false;
     const placeGuideIds = Object.getOwnPropertyNames(this._placeGuidesOnMap);
     placeGuideIds.forEach((placeGuideId) => {
-        const position =
+      const position =
           this._placeGuidesOnMap[placeGuideId].marker.getPosition();
-        mapBounds.extend(position);
-        guidesExist = true;
-      }
+      mapBounds.extend(position);
+      guidesExist = true;
+    },
     );
     if (guidesExist) {
       // Unless the zoom is increased manually, the fitBounds()
@@ -82,11 +86,11 @@ class MapPlaceGuideDisplayer {
   constructPlaceGuideOnMapFromPlaceGuide(placeGuide) {
     let placeType;
     if (placeGuide.isPublic) {
-        if (placeGuide.createdByCurrentUser) {
-            placeType = PlaceType.PUBLIC_OWN;
-        } else {
-            placeType = PlaceType.PUBLIC;
-        }
+      if (placeGuide.createdByCurrentUser) {
+        placeType = PlaceType.PUBLIC_OWN;
+      } else {
+        placeType = PlaceType.PUBLIC;
+      }
     } else {
       placeType = PlaceType.PRIVATE;
     }
@@ -97,20 +101,5 @@ class MapPlaceGuideDisplayer {
         placeGuide.creator,
         placeGuide.description,
         placeType);
-  }
-
-  remove(placeGuideId) {
-    this._markerClusterer.removeMarker(
-        this._placeGuidesOnMap[placeGuideId].marker);
-    this._placeGuidesOnMap[placeGuideId].remove();
-    delete this._placeGuidesOnMap[placeGuideId];
-  }
-
-  highlight(placeGuideId) {
-    this._placeGuidesOnMap[placeGuideId].highlight();
-  }
-
-  unhighlight(placeGuideId) {
-    this._placeGuidesOnMap[placeGuideId].unhighlight();
   }
 }

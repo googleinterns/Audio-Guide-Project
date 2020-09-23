@@ -6,47 +6,57 @@
  * executing it(PlaceGudieRepository, Map- and ListPlaceGuideDisplayer).
  */
 class PlaceGuideManager {
+  static MAX_NO_BOOKMARKED_GUIDES = 25;
   static PAGE = {
     DISCOVER: {
       query: PlaceGuideRepository.QUERY_TYPE.ALL_PUBLIC_IN_MAP_AREA,
-      guideBookmarkStatusChanged: undefined,
+      onGuideBookmarkStatusChanged: PlaceGuideManager.toogleBookmarkIcon,
+      name: "DISCOVER"
     },
     MY_GUIDES: {
       query: PlaceGuideRepository.QUERY_TYPE.CREATED_ALL_IN_MAP_AREA,
-      guideBookmarkStatusChanged: undefined,
+      onGuideBookmarkStatusChanged: PlaceGuideManager.toogleBookmarkIcon,
+      name: "MY_GUIDES"
     },
     CREATE_PLACE_GUIDE: {
       query: PlaceGuideRepository.QUERY_TYPE.CREATED_ALL_IN_MAP_AREA,
-      guideBookmarkStatusChanged: undefined,
+      onGuideBookmarkStatusChanged: PlaceGuideManager.toogleBookmarkIcon,
+      name: "CREATE_PLACE_GUIDE"
     },
     BOOKMARKED_PLACEGUIDES: {
       query: PlaceGuideRepository.QUERY_TYPE.BOOKMARKED,
-      guideBookmarkStatusChanged: PlaceGuideManager.removeGuideIfUnbookmarked,
+      onGuideBookmarkStatusChanged: PlaceGuideManager.removeGuideIfUnbookmarked,
+      name: "BOOKMARKED_PLACEGUIDES"
+    },
+    USERS_PORTFOLIO: {
+      query: PlaceGuideRepository.QUERY_TYPE.CREATED_BY_GIVEN_USER_PUBLIC_IN_MAP_AREA,
+      guideBookmarkStatusChanged: undefined,
+      name: "USERS_PORTFOLIO"
     }
   };
 
-  constructor(page, map) {
+  constructor(page, map, portfolioUserId) {
     this._page = page;
     this._placeGuideRepository = new PlaceGuideRepository();
     this._highlightedPlaceGuideId = null;
     this._mapPlaceGuideDisplayer = new MapPlaceGuideDisplayer();
-    this._listPlaceGuideDisplayer = new ListPlaceGuideDisplayer();
+    this._listPlaceGuideDisplayer = new ListPlaceGuideDisplayer(page);
     let thisManager = this;
     google.maps.event.addListenerOnce(map, 'idle', function () {
-      thisManager.refreshPlaceGuides(map.getBounds(), map.getZoom());
+      thisManager.refreshPlaceGuides(map.getBounds(), map.getZoom(), portfolioUserId);
     });
-    if (this._page != PlaceGuideManager.BOOKMARKED_PLACEGUIDES) {
+    if (this._page != PlaceGuideManager.PAGE.BOOKMARKED_PLACEGUIDES) {
       google.maps.event.addListener(map, 'idle', function () {
-        thisManager.refreshPlaceGuides(map.getBounds(), map.getZoom());
+        thisManager.refreshPlaceGuides(map.getBounds(), map.getZoom(), portfolioUserId);
       });
     }
   }
 
-  refreshPlaceGuides(bounds, zoom) {
-    this._placeGuideRepository.fetchPlaceGuides(this._page.query, bounds, zoom)
+  refreshPlaceGuides(bounds, zoom, portfolioUserId) {
+    this._placeGuideRepository.fetchPlaceGuides(this._page.query, bounds, zoom, portfolioUserId)
         .then((response) => {
           const placeGuides = this._placeGuideRepository.placeGuides;
-          this._mapPlaceGuideDisplayer.update(placeGuides);
+          this._listPlaceGuideDisplayer.update(placeGuides);
           this._mapPlaceGuideDisplayer.update(placeGuides);
           if (this._page === PlaceGuideManager.PAGE.BOOKMARKED_PLACEGUIDES) {
             this._mapPlaceGuideDisplayer.adjustMapToShowAll();
@@ -86,17 +96,37 @@ class PlaceGuideManager {
   toggleBookmark(placeGuideId) {
     this._placeGuideRepository.togglePlaceGuideBookmarkStatus(placeGuideId)
       .then((response) => {
-        if(response) {
-          if (this._page.guideBookmarkStatusChanged != undefined) {
-            this._page.guideBookmarkStatusChanged(this, placeGuideId);
+        if(response === PlaceGuideRepository.BOOKMARK_ACTION_RESULT_TYPE.SUCCESS) {
+          if (this._page.onGuideBookmarkStatusChanged != undefined) {
+            this._page.onGuideBookmarkStatusChanged(this, placeGuideId);
           }
+        } else if(response === PlaceGuideRepository.BOOKMARK_ACTION_RESULT_TYPE.NOT_ALLOWED) {
+          alert(`You can't bookmark more than ${PlaceGuideManager.MAX_NO_BOOKMARKED_GUIDES} gudies. Please unbookmark some of them before bookmarking a new one`);
+        } else {
+          alert("Failed to execute bookmarking/unbookmarking");
         }
       });
   }
 
   static removeGuideIfUnbookmarked(placeGuideManager, placeGuideId) {
-    if(!placeGuideManager._placeGuideRepository.isBookmarked(placeGuideId)) {
+    if (!placeGuideManager._placeGuideRepository.isBookmarked(placeGuideId)) {
       placeGuideManager.removePlaceGuideRepresentation(placeGuideId);
     }
+  }
+
+  static toogleBookmarkIcon(placeGuideManager, placeGuideId) {
+    if (placeGuideManager._placeGuideRepository.isBookmarked(placeGuideId)) {
+      placeGuideManager.setBookmarked(placeGuideId);
+    } else {
+      placeGuideManager.setUnBookmarked((placeGuideId));
+    }
+  }
+
+  setBookmarked(placeGuideId) {
+    this._listPlaceGuideDisplayer.bookmark(placeGuideId);
+  }
+
+  setUnBookmarked(placeGuideId) {
+    this._listPlaceGuideDisplayer.unbookmark(placeGuideId);
   }
 }
