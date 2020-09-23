@@ -74,8 +74,11 @@ public class PlaceGuideServlet extends HttpServlet {
     PlaceGuideQueryType placeGuideQueryType =
         PlaceGuideQueryType.valueOf(placeGuideQueryTypeString);
     if (placeGuideQueryType == PlaceGuideQueryType.PLACE_GUIDE_WITH_ID) {
-      long placeGuideId = request.getParameter(PLACE_GUIDE_ID_PARAMETER);
+      long placeGuideId = Long.parseLong(request.getParameter(PLACE_GUIDE_ID_PARAMETER));
       PlaceGuide placeGuide = placeGuideRepository.getPlaceGuide(placeGuideId);
+      if (placeGuide == null) {
+        throw new IllegalArgumentException("There is no placeguide ith this id: " + placeGuideId);
+      }
       String currentUserId = UserServiceFactory.getUserService().getCurrentUser().getUserId();
       PlaceGuideInfo placeGuideInfo = new PlaceGuideInfo(placeGuide, currentUserId);
       response.setContentType("application/json;");

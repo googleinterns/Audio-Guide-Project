@@ -334,6 +334,45 @@ public final class PlaceGuideServletTest {
   }
 
   @Test
+  public void doGet_getPlaceGuide_currentUserOwnsGuide() throws IOException {
+    saveUser(userC);
+    datastore.put(getEntityFromPlaceGuide(testInnerPublicPlaceGuideC));
+    setupDoGetMockRequest(
+        PlaceGuideQueryType.PLACE_GUIDE_WITH_ID, SOUTH_WEST_CORNER, NORTH_EAST_CORNER);
+    when(request.getParameter(PlaceGuideServlet.PLACE_GUIDE_ID_PARAMETER))
+        .thenReturn(String.valueOf(testInnerPublicPlaceGuideC.getId()));
+    PlaceGuideServlet placeGuideServlet = new PlaceGuideServlet(blobstoreService, blobInfoFactory);
+    placeGuideServlet.doGet(request, response);
+
+    printWriter.flush();
+    Gson gson = new Gson();
+    PlaceGuideInfo result =
+        new GsonBuilder().create().fromJson(stringWriter.toString(), PlaceGuideInfo.class);
+    PlaceGuideInfo expected = new PlaceGuideInfo(testInnerPublicPlaceGuideC, userC, true, false);
+    assertTrue(placeGuideInfoEquals(expected, result));
+  }
+
+  @Test
+  public void doGet_getPlaceGuide_currentUserDoesntOwnGuide() throws IOException {
+    saveUser(userC);
+    saveUser(userD);
+    datastore.put(getEntityFromPlaceGuide(testInnerPublicPlaceGuideD));
+    setupDoGetMockRequest(
+        PlaceGuideQueryType.PLACE_GUIDE_WITH_ID, SOUTH_WEST_CORNER, NORTH_EAST_CORNER);
+    when(request.getParameter(PlaceGuideServlet.PLACE_GUIDE_ID_PARAMETER))
+        .thenReturn(String.valueOf(testInnerPublicPlaceGuideD.getId()));
+    PlaceGuideServlet placeGuideServlet = new PlaceGuideServlet(blobstoreService, blobInfoFactory);
+    placeGuideServlet.doGet(request, response);
+
+    printWriter.flush();
+    Gson gson = new Gson();
+    PlaceGuideInfo result =
+        new GsonBuilder().create().fromJson(stringWriter.toString(), PlaceGuideInfo.class);
+    PlaceGuideInfo expected = new PlaceGuideInfo(testInnerPublicPlaceGuideD, userD, false, false);
+    assertTrue(placeGuideInfoEquals(expected, result));
+  }
+
+  @Test
   public void doGet_getAllPublicPlaceGuides_placeGuideExists_returnPlaceGuides()
       throws IOException {
     saveUser(userC);
