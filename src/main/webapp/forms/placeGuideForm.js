@@ -77,7 +77,7 @@ function fillFormWithPlaceGuideToEdit() {
     document.getElementById('audioKey').required = false;
     const GET = UrlQueryUtils.getParamsFromQueryString();
     document.getElementById('id').value = GET['placeGuideId'];
-    if(GET['placeId'] !== 'null') {
+    if (GET['placeId'] !== 'null') {
       setFormInputValueOrEmpty(
           document.getElementById('placeId'),
           GET['placeId']);
