@@ -1,38 +1,40 @@
 class Modal {
-  static show(text, timeLimit) {
-    const modal = document.getElementById("myModal");
-    modal.style.display = "block";
-    Modal.setModalText()
-    Modal.closeModalOnButtonClick();
-    Modal.closeModalOnWindowClick();
+  constructor() {
+    this.hidden = true;
+    this.modal = document.getElementById("myModal");
+    console.log("constructed");
+  }
+
+  show(text, timeLimit) {
+    this.hidden = false;
+    this.modal.style.display = "block";
+    this.setModalText(text);
+    this.closeModalOnButtonClick();
     if (timeLimit !== undefined) {
-      setTimeout(Modal.hide, timeLimit);
+      const thisModal = this;
+      setTimeout(function() {
+        thisModal.hide();
+      }, timeLimit);
     }
   }
 
-  static setModalText(text) {
+  setModalText(text) {
     const modalText = document.getElementById("modalText");
     modalText.innerText = text;
   }
 
-  static closeModalOnButtonClick() {
+  closeModalOnButtonClick() {
     const btn = document.getElementById("closeModalBtn");
+    const thisModal = this;
     btn.addEventListener("click", function() {
-      Modal.hide();
+      thisModal.hide();
     });
   }
 
-  static closeModalOnWindowClick() {
-    const modal = document.getElementById("myModal");
-    window.addEventListener("click", function(event) {
-      if (event.target === modal) {
-        Modal.hide();
-      }
-    });
-  }
-
-  static hide() {
-    const modal = document.getElementById("myModal");
-    modal.style.display = "none";
+  hide() {
+    if (!this.hidden) {
+      this.hidden = true;
+      this.modal.style.display = "none";
+    }
   }
 }
