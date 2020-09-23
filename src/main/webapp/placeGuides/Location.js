@@ -3,40 +3,54 @@
  * coordinates or by a place_id, which will be decoded with PlacesService.
  */
 class Location {
-  constructor(position, mapsPlace) {
-    this._mapsPlace = mapsPlace;
-    if (this._mapsPlace != null) {
-      this._position = this._mapsPlace.geometry.location;
-    } else {
-      this._position = position;
-    }
+  constructor(latitude, longitude, placeId) {
+    this._position = new google.maps.LatLng(latitude, longitude);
+    this._placeId = placeId;
+    this._placeName = undefined;
   }
 
   get position() {
     return this._position;
   }
 
-  get mapsPlace() {
-    return this._mapsPlace;
+  get placeId() {
+    return this._placeId;
   }
 
-  static constructLocationBasedOnCoordinates(positionLat, positionLng) {
-    return new Location(
-        new google.maps.LatLng(positionLat, positionLng), null);
+  getPlaceName() {
+    if (this._placeName !== undefined) {
+      const thisPlaceName = this._placeName;
+      return new Promise(function(resolve, reject) {
+        resolve(thisPlaceName);
+      });
+    } else {
+      if (this._placeId == undefined) {
+        return new Promise(function(resolve, reject) {
+          resolve(undefined);
+        });
+      }
+      const thisLocation = this;
+      return this.definePlaceName()
+          .then((newPlaceName) => {
+            thisLocation._placeName = newPlaceName;
+            return newPlaceName;
+          });
+    }
   }
 
-  static constructLocationBasedOnPlaceId(placeId) {
+  definePlaceName() {
     const request = {
-      placeId: placeId,
-      fields: ['address_components', 'name', 'geometry', 'place_id'],
+      placeId: this._placeId,
+      fields: ['name'],
     };
     return new Promise(function(resolve, reject) {
       const service = new google.maps.places.PlacesService(map);
       service.getDetails(request, (place, status) => {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
-          resolve(new Location(null, place));
+          resolve(place.name);
         } else {
-          reject(new Error('Couldn\'t find the place ' + placeId));
+          reject(new Error('Couldn\'t find the place ' + placeId + ' because' +
+              ' ' + status));
         }
       });
     });

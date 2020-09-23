@@ -1,12 +1,11 @@
 class PlaceGuideOnList {
   constructor(
-      placeGuideId, placeName, placeId, name, creator, description,
+      placeGuideId, location, name, creator, description,
       audioKey, audioLength, isPublic, imageKey, createdByCurrentUser,
       bookmarkedByCurrentUser, latitude, longitude) {
     this._placeGuideProperties = {
       placeGuideId: placeGuideId,
-      placeName: placeName,
-      placeId: placeId,
+      location: location,
       name: name,
       audioKey: audioKey,
       imageKey: imageKey,
@@ -29,8 +28,8 @@ class PlaceGuideOnList {
     return this._placeGuideOnListDiv;
   }
 
-  static highlight(placeGuideId) {
-    PlaceGuideOnList.expand(placeGuideId);
+  static highlight(placeGuideId, location) {
+    PlaceGuideOnList.expand(placeGuideId, location);
   }
 
   static unhighlight(placeGuideId) {
@@ -125,14 +124,10 @@ class PlaceGuideOnList {
     const placeGuideAudioKey = placeGuideProperties.audioKey;
     const placeGuideId = placeGuideProperties.placeGuideId;
     const placeGuideName = placeGuideProperties.name;
-    const placeName = placeGuideProperties.placeName;
     const foldedPlaceGuideDiv = document.createElement('div');
     foldedPlaceGuideDiv.style.display = 'block';
     foldedPlaceGuideDiv.classList.add('folded-placeGuide');
     foldedPlaceGuideDiv.appendChild(this.foldedPlaceGuide_name(placeGuideName));
-    if (placeName != undefined || placeName != '' || placeName != null) {
-      foldedPlaceGuideDiv.appendChild(this.foldedPlaceGuide_placeName(placeName));
-    }
     foldedPlaceGuideDiv.appendChild(this.foldedPlaceGuide_buttons(placeGuideId, placeGuideAudioKey));
     return foldedPlaceGuideDiv;
   }
@@ -150,13 +145,6 @@ class PlaceGuideOnList {
     return placeGuideNameContainer;
   }
 
-  foldedPlaceGuide_placeName(placeName) {
-    const placeNameElement = document.createElement('p');
-    placeNameElement.classList.add('mb-1');
-    placeNameElement.innerText = placeName;
-    return placeNameElement;
-  }
-
   foldedPlaceGuide_buttons(placeGuideId, audioKey) {
     const buttonsContainer = document.createElement('div');
     buttonsContainer.classList.add('mdc-card__action-icons');
@@ -164,11 +152,38 @@ class PlaceGuideOnList {
     const expandButton = this.getPlaceGuideButtonWithPreparedClasses();
     expandButton.setAttribute('title', 'expand');
     expandButton.innerText = 'open_in_full';
+    const placeGuideLocation = this._placeGuideProperties.location;
     expandButton.addEventListener('click', function() {
-      PlaceGuideOnList.expand(placeGuideId);
+      PlaceGuideOnList.expand(placeGuideId, placeGuideLocation);
     });
     buttonsContainer.appendChild(expandButton);
     return buttonsContainer;
+  }
+
+  static expand(placeGuideId, location) {
+    const divId = 'placeGuideOnList-' + '{' + placeGuideId + '}';
+    const placeGuideDiv = document.getElementById(divId);
+    const placeNameDiv = document.getElementById(
+        PlaceGuideOnList.getPlaceGuidePlaceNameElementId(placeGuideId));
+    if (placeNameDiv !== null && placeNameDiv.innerText === "") {
+      location.getPlaceName()
+          .then((placeName) => {
+            PlaceGuideOnList.showCardInsteadOfFoldedGuide(placeGuideDiv);
+            if (placeName !== undefined) {
+              placeNameDiv.innerText = placeName;
+            }
+          });
+    } else {
+      PlaceGuideOnList.showCardInsteadOfFoldedGuide(placeGuideDiv);
+    }
+  }
+
+  static showCardInsteadOfFoldedGuide(placeGuideDiv) {
+    placeGuideDiv.querySelectorAll('.folded-placeGuide')[0]
+        .style.display = 'none';
+    placeGuideDiv.querySelectorAll('.card-placeGuide')[0]
+        .style.display = 'block';
+    placeGuideDiv.style.padding = '0px';
   }
 
   createCardPlaceGuide(
@@ -225,6 +240,11 @@ class PlaceGuideOnList {
 
     cardContents.appendChild(placeGuideImage);
     cardContents.appendChild(placeGuideTitle);
+    if (this._placeGuideProperties.location.placeId != undefined) {
+      const placeGuidePlaceName =
+          this.createPlaceGuidePlaceNameElement();
+      cardContents.appendChild(placeGuidePlaceName);
+    }
     cardContents.appendChild(placeGuideLength);
     cardContents.appendChild(placeGuideDescription);
     cardContentsContainer.appendChild(cardContents);
@@ -274,6 +294,20 @@ class PlaceGuideOnList {
     placeGuideLength.classList.add('place-guide-length');
     placeGuideLength.innerText = placeGuideAudioLength + ' minutes';
     return placeGuideLength;
+  }
+
+  createPlaceGuidePlaceNameElement() {
+    const placeNameElement = document.createElement('h5');
+    const divId = PlaceGuideOnList.getPlaceGuidePlaceNameElementId(
+        this._placeGuideProperties.placeGuideId);
+    placeNameElement.setAttribute('id', divId);
+    placeNameElement.classList.add('place-guide-place-name');
+    placeNameElement.innerText = "";
+    return placeNameElement;
+  }
+
+  static getPlaceGuidePlaceNameElementId(placeGuideId) {
+    return `placeGuidePlaceName-{${placeGuideId}}`;
   }
 
   createPlaceGuideDescriptionElement(placeGuideDescription) {
