@@ -23,10 +23,12 @@
         </div>
     </div>
 
+    <button onclick="Modal.show('Random text');">Show Modal</button>
+
     <div id="myModal" class="modal">
         <div class="modal-content">
-            <span class="closeBtn">&times;</span>
-            <p>Some text in the Modal..</p>
+            <span id="closeModalBtn" class="closeBtn">&times;</span>
+            <p id="modalText"></p>
         </div>
     </div>
 
@@ -40,6 +42,7 @@
     </div>
 
     <script src = "./pages/fitContent.js"></script>
+    <script src = "./pages/modal.js"></script>
     <script src = "./pages/menu.js"></script>
     <script src = "./user/userAuthentication.js"></script>
     <script src = "./maps/Geolocator.js"></script>
