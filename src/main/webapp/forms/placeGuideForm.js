@@ -6,7 +6,7 @@ function setUpCreatePlaceGuideForm() {
       'CREATE_PLACE_GUIDE_FORM', 'createPlaceGuideForm');
   activatePreviewFeature();
   styleInputs();
-  if(window.location.search !== '') {
+  if (window.location.search !== '') {
     fillFormWithPlaceGuideToEdit();
   } else {
     activateRemoveImageFeature('clear-img-icon', false);
@@ -77,22 +77,22 @@ function updateLocation(position, placeId) {
  */
 function fillFormWithPlaceGuideToEdit() {
   const GET = UrlQueryUtils.getParamsFromQueryString();
-  var url = new URL('/place-guide-data', document.URL);
+  const url = new URL('/place-guide-data', document.URL);
   url.searchParams.append('placeGuideType', "PLACE_GUIDE_WITH_ID");
   url.searchParams.append('placeGuideId', GET['placeGuideId']);
   return fetch(url)
-      .catch(error => {
+      .catch((error) => {
         console.log("PlaceGuideServlet: failed to fetch: " + error);
         alert("Failed to load the data of the guide to edit");
       })
-      .then(response => response.json())
-      .catch(error => {
+      .then((response) => response.json())
+      .catch((error) => {
         console.log('fillFormWithPlaceGuideToEdit: ' +
-            'failed to convert response to JSON'
-            + error);
+            'failed to convert response to JSON' +
+             error);
         alert("Failed to process the data of the guide to edit");
       })
-      .then(placeGuideInfo => {
+      .then((placeGuideInfo) => {
         console.log("fetching finished");
         const placeGuideToEdit =
             PlaceGuideRepository.
