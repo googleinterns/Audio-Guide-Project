@@ -109,11 +109,15 @@ class ListPlaceGuideDisplayer {
     return placeGuideDiv;
   }
 
-  // Move the highlighted place guide to top of list.
-  highlight(placeGuideId) {
+  static getPlaceGuideOnListDivId(placeGuideId) {
+    return "placeGuideOnList-" + "{" + placeGuideId + "}";
+  }
+
+ // Move the highlighted place guide to top of list.
+  highlight(placeGuideId, location) {
     const placeGuideDiv = this.remove(placeGuideId);
     this.insertDivAfterTitle(placeGuideDiv);
-    PlaceGuideOnList.highlight(placeGuideId);
+    PlaceGuideOnList.highlight(placeGuideId, location);
   }
 
   insertDivAfterTitle(placeGuideDiv) {
@@ -128,19 +132,9 @@ class ListPlaceGuideDisplayer {
 
   constructPlaceGuideOnListDivFromPlaceGuide(placeGuide) {
     const mapsPlace = placeGuide.location.mapsPlace;
-    var placeName;
-    var placeId;
-    if (mapsPlace == null) {
-      placeName = null;
-      placeId = null;
-    } else {
-      placeName = mapsPlace.name;
-      placeId = mapsPlace.place_id;
-    }
     return new PlaceGuideOnList(
         placeGuide.id,
-        placeName,
-        placeId,
+        placeGuide.location,
         placeGuide.name,
         placeGuide.creator,
         placeGuide.description,

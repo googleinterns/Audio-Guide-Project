@@ -54,8 +54,7 @@ class PlaceGuideManager {
 
   refreshPlaceGuides(bounds, zoom, portfolioUserId) {
     this._placeGuideRepository.fetchPlaceGuides(this._page.query, bounds, zoom, portfolioUserId)
-        .then((response) => {
-          const placeGuides = this._placeGuideRepository.placeGuides;
+        .then((placeGuides) => {
           this._listPlaceGuideDisplayer.update(placeGuides);
           this._mapPlaceGuideDisplayer.update(placeGuides);
           if (this._page === PlaceGuideManager.PAGE.BOOKMARKED_PLACEGUIDES) {
@@ -84,7 +83,8 @@ class PlaceGuideManager {
     }
     this._highlightedPlaceGuideId = placeGuideId;
     this._mapPlaceGuideDisplayer.highlight(placeGuideId);
-    this._listPlaceGuideDisplayer.highlight(placeGuideId);
+    this._listPlaceGuideDisplayer.highlight(placeGuideId,
+        this._placeGuideRepository.location(placeGuideId));
   }
 
   unhighlightPlaceGuide() {

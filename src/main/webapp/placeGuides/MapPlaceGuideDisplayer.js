@@ -96,8 +96,7 @@ class MapPlaceGuideDisplayer {
     }
     return new PlaceGuideOnMap(placeGuide.id,
         placeGuide.name,
-        placeGuide.location.position,
-        placeGuide.location.mapsPlace,
+        placeGuide.location,
         placeGuide.creator,
         placeGuide.description,
         placeType);
