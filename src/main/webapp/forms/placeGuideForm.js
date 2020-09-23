@@ -82,11 +82,9 @@ function fillFormWithPlaceGuideToEdit() {
           document.getElementById('placeId'),
           GET['placeId']);
     }
-    if(GET['name'] !== 'undefined') {
-      setFormInputValueOrEmpty(
-          new mdc.textField.MDCTextField(document.getElementById('nameInput')),
-          GET['name']);
-    }
+    setFormInputValueOrEmpty(
+        new mdc.textField.MDCTextField(document.getElementById('nameInput')),
+        GET['name']);
     document.getElementById('audioPlayer').src = PlaceGuideOnList.getBlobSrc(GET['audioKey']);
     if (GET['imageKey'] !== 'undefined') {
       document.getElementById('imagePreview').style.display = 'block';
