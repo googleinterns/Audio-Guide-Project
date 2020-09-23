@@ -241,7 +241,7 @@ class PlaceGuideOnList {
 
     cardContents.appendChild(placeGuideImage);
     cardContents.appendChild(placeGuideTitle);
-    if (this._placeGuideProperties.location.placeId !== undefined) {
+    if (this._placeGuideProperties.location.placeId != undefined) {
       const placeGuidePlaceName =
           this.createPlaceGuidePlaceNameElement();
       cardContents.appendChild(placeGuidePlaceName);
