@@ -366,18 +366,21 @@ body {
     border: 0;
     margin: auto;
     padding: 20px;
-    width: 80%;
+    width: 40%;
 }
 
 .closeBtn {
     color: #aaaaaa;
-    float: right;
     font-size: 28px;
     font-weight: bold;
+    width: fit-content;
+    position: absolute;
+    right: 10px;
+    top: 0px;
 }
 
-.close:hover,
-.close:focus {
+.closeBtn:hover,
+.closeBtn:focus {
     color: #000;
     text-decoration: none;
     cursor: pointer;
