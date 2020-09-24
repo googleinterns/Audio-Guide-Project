@@ -32,7 +32,9 @@ function initPage() {
             mapWidget.addLocationChoosingAndSavingFunctionality(placeGuideToEdit);
             placeGuideManager = new PlaceGuideManager(
                 PlaceGuideManager.PAGE.CREATE_PLACE_GUIDE, map);
-            placeGuideManager.setEditedPlaceGuide(placeGuideToEdit.id)
+            if (placeGuideToEdit !== undefined) {
+              placeGuideManager.setEditedPlaceGuide(placeGuideToEdit.id);
+            }
           });
       document.getElementById('map')
           .addEventListener(MapWidget.CHOSEN_LOCATION_CHANGE_EVENT, function() {

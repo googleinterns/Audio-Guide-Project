@@ -43,25 +43,75 @@ class MapWidget {
     searchBox.init();
   }
 
-  addLocationChoosingAndSavingFunctionality() {
+  addLocationChoosingAndSavingFunctionality(placeGuideToEdit) {
     // Choose location functionality.
     // Remark that chosenLocation can be updated
     // from the SearchBox and by clicking as well.
-    var chosenLocation =
+    let chosenLocation;
+    if (placeGuideToEdit === null) {
+      chosenLocation = this.constructDefaultChosenLocation();
+      var searchBox = new SearchBox(
+          this._map, chosenLocation, "search-box");
+      searchBox.init();
+      this._locationPicker = new LocationPicker(this._map, chosenLocation);
+      this._locationPicker.init();
+      document.getElementById("map")
+          .addEventListener(MapWidget.CHOSEN_LOCATION_CHANGE_EVENT, function () {
+            chosenLocation.visible = true;
+          });
+    } else {
+      const thisMap = this._map;
+      this.constructChosenLocationForPlaceGuide(placeGuideToEdit)
+          .then((chosenLocation) => {
+            var searchBox = new SearchBox(
+                thisMap, chosenLocation, "search-box");
+            searchBox.init();
+            this._locationPicker = new LocationPicker(this._map, chosenLocation);
+            this._locationPicker.init();
+          });
+    }
+  }
+
+  constructDefaultChosenLocation() {
+    const thisMap = this._map;
+    const chosenLocation =
         Place.constructPlaceBasedOnCoordinates(
-            this._map, 0, 0,
+            thisMap, 0, 0,
             "Picked Location", PlaceType.SEARCH_RESULT, true);
     chosenLocation.visible = false;
     chosenLocation.draggable = true;
     chosenLocation.triggerChosenLocationChangeEvent = true;
-    var searchBox = new SearchBox(
-        this._map, chosenLocation, "search-box");
-    searchBox.init();
-    this._locationPicker = new LocationPicker(this._map, chosenLocation);
-    this._locationPicker.init();
-    document.getElementById("map")
-        .addEventListener(MapWidget.CHOSEN_LOCATION_CHANGE_EVENT, function () {
-          chosenLocation.visible = true;
-        });
+    return chosenLocation;
+  }
+
+  constructChosenLocationForPlaceGuide(placeGuide) {
+    const thisMap = this._map;
+    if (placeGuide.location.placeId != null) {
+          return Place.constructPlaceBasedOnPlaceId(thisMap,
+              placeGuide.location.placeId,
+              "Picked Location",
+              PlaceType.SEARCH_RESULT,
+              true)
+              .then((chosenLocation) => {
+                chosenLocation.visible = true;
+                chosenLocation.draggable = true;
+                chosenLocation.triggerChosenLocationChangeEvent = true;
+                return chosenLocation;
+              });
+    } else {
+      const chosenLocation =
+          Place.constructPlaceBasedOnCoordinates(thisMap,
+              placeGuide.location.position.lat(),
+              placeGuide.location.position.lng(),
+              "Picked Location",
+              PlaceType.SEARCH_RESULT,
+              true);
+      chosenLocation.visible = true;
+      chosenLocation.draggable = true;
+      chosenLocation.triggerChosenLocationChangeEvent = true;
+      return new Promise((resolve, reject) => {
+        resolve(chosenLocation);
+      });
+    }
   }
 }
