@@ -45,6 +45,7 @@ import org.junit.runners.JUnit4;
 public final class BookmarkPlaceGuideServletTest {
   private Map<String, Object> attributeToValue = new HashMap<>();
   private LocalServiceTestHelper helper;
+  private DatastoreService datastore;
 
   private HttpServletRequest request;
   private HttpServletResponse response;
@@ -62,6 +63,7 @@ public final class BookmarkPlaceGuideServletTest {
 
     request = mock(HttpServletRequest.class);
     response = mock(HttpServletResponse.class);
+    datastore = DatastoreServiceFactory.getDatastoreService();
   }
 
   @Test
@@ -69,6 +71,7 @@ public final class BookmarkPlaceGuideServletTest {
       throws IOException, EntityNotFoundException {
     setupCurrentUserIdInHelper(ID_A);
     saveUser(userA);
+    savePlaceGuidesWithIds(userA.getBookmarkedPlaceGuidesIds());
     savePlaceGuide(toBookmarkGuide);
     setupRequestandResponse("Bookmark", toBookmarkGuide.getId());
     BookmarkPlaceGuideServlet boookmarkPlaceGuideServlet = new BookmarkPlaceGuideServlet();
@@ -85,6 +88,7 @@ public final class BookmarkPlaceGuideServletTest {
       throws IOException, EntityNotFoundException {
     setupCurrentUserIdInHelper(ID_B);
     saveUser(userB);
+    savePlaceGuidesWithIds(userB.getBookmarkedPlaceGuidesIds());
     savePlaceGuide(toBookmarkGuide);
     setupRequestandResponse("Bookmark", toBookmarkGuide.getId());
     BookmarkPlaceGuideServlet boookmarkPlaceGuideServlet = new BookmarkPlaceGuideServlet();
@@ -100,6 +104,7 @@ public final class BookmarkPlaceGuideServletTest {
   public void doGet_unbookmark_succesfulUnbookmarking()
       throws IOException, EntityNotFoundException {
     setupCurrentUserIdInHelper(ID_C);
+    savePlaceGuidesWithIds(userC.getBookmarkedPlaceGuidesIds());
     saveUser(userC);
     savePlaceGuide(toBookmarkGuide);
     setupRequestandResponse("Unbookmark", toBookmarkGuide.getId());
@@ -122,6 +127,35 @@ public final class BookmarkPlaceGuideServletTest {
     attributeToValue.put("com.google.appengine.api.users.UserService.user_id_key", (Object) userId);
     helper.setEnvAttributes(attributeToValue);
     helper.setUp();
+  }
+
+  private void savePlaceGuidesWithIds(Set<Long> IDs) {
+    for (Long id : IDs) {
+      datastore.put(getEntityFromPlaceGuide(new PlaceGuide.Builder(id, "", "", "", null).build()));
+    }
+  }
+
+  private Entity getEntityFromPlaceGuide(PlaceGuide placeGuide) {
+    Entity placeGuideEntity =
+        new Entity(DatastorePlaceGuideRepository.ENTITY_KIND, placeGuide.getId());
+    placeGuideEntity.setProperty(DatastorePlaceGuideRepository.NAME_PROPERTY, placeGuide.getName());
+    placeGuideEntity.setProperty(
+        DatastorePlaceGuideRepository.AUDIO_KEY_PROPERTY, placeGuide.getAudioKey());
+    placeGuideEntity.setProperty(
+        DatastorePlaceGuideRepository.CREATOR_ID_PROPERTY, placeGuide.getCreatorId());
+    placeGuideEntity.setProperty(
+        DatastorePlaceGuideRepository.IS_PUBLIC_PROPERTY, placeGuide.isPublic());
+    placeGuideEntity.setProperty(
+        DatastorePlaceGuideRepository.PLACE_ID_PROPERTY, placeGuide.getPlaceId());
+    placeGuideEntity.setProperty(
+        DatastorePlaceGuideRepository.COORDINATE_PROPERTY, placeGuide.getCoordinate());
+    placeGuideEntity.setProperty(
+        DatastorePlaceGuideRepository.DESCRIPTION_PROPERTY, placeGuide.getDescription());
+    placeGuideEntity.setProperty(
+        DatastorePlaceGuideRepository.LENGTH_PROPERTY, placeGuide.getLength());
+    placeGuideEntity.setProperty(
+        DatastorePlaceGuideRepository.IMAGE_KEY_PROPERTY, placeGuide.getImageKey());
+    return placeGuideEntity;
   }
 
   // Users data.
