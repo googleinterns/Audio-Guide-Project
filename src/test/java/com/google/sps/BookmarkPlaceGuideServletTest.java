@@ -45,7 +45,6 @@ import org.junit.runners.JUnit4;
 public final class BookmarkPlaceGuideServletTest {
   private Map<String, Object> attributeToValue = new HashMap<>();
   private LocalServiceTestHelper helper;
-  private DatastoreService datastore;
 
   private HttpServletRequest request;
   private HttpServletResponse response;
@@ -63,7 +62,6 @@ public final class BookmarkPlaceGuideServletTest {
 
     request = mock(HttpServletRequest.class);
     response = mock(HttpServletResponse.class);
-    datastore = DatastoreServiceFactory.getDatastoreService();
   }
 
   @Test
@@ -100,6 +98,28 @@ public final class BookmarkPlaceGuideServletTest {
     assertFalse(userHasBookmarkedThePlaceGuide(ID_B, toBookmarkGuide.getId()));
   }
 
+  /**
+   * This test is for the case when the user had reached the limit before, but one of the guides
+   * does not exist anymore.
+   */
+  @Test
+  public void doGet_bookmark_bookmarkingLimitNotExceeded_succesfulBookmarking_2()
+      throws IOException, EntityNotFoundException {
+    setupCurrentUserIdInHelper(ID_D);
+    saveUser(userD);
+    savePlaceGuidesWithIds(userD.getBookmarkedPlaceGuidesIds());
+    savePlaceGuide(toBookmarkGuide);
+    deletePlaceGuide(25);
+    setupRequestandResponse("Bookmark", toBookmarkGuide.getId());
+    BookmarkPlaceGuideServlet boookmarkPlaceGuideServlet = new BookmarkPlaceGuideServlet();
+    boookmarkPlaceGuideServlet.doGet(request, response);
+    pw.flush();
+    Gson gson = new Gson();
+    Boolean successfulBookmark = gson.fromJson(sw.toString(), Boolean.class);
+    assertTrue(successfulBookmark);
+    assertTrue(userHasBookmarkedThePlaceGuide(ID_D, toBookmarkGuide.getId()));
+  }
+
   @Test
   public void doGet_unbookmark_succesfulUnbookmarking()
       throws IOException, EntityNotFoundException {
@@ -131,37 +151,15 @@ public final class BookmarkPlaceGuideServletTest {
 
   private void savePlaceGuidesWithIds(Set<Long> IDs) {
     for (Long id : IDs) {
-      datastore.put(getEntityFromPlaceGuide(new PlaceGuide.Builder(id, "", "", "", null).build()));
+      savePlaceGuide(new PlaceGuide.Builder(id, "", "", "", null).build());
     }
-  }
-
-  private Entity getEntityFromPlaceGuide(PlaceGuide placeGuide) {
-    Entity placeGuideEntity =
-        new Entity(DatastorePlaceGuideRepository.ENTITY_KIND, placeGuide.getId());
-    placeGuideEntity.setProperty(DatastorePlaceGuideRepository.NAME_PROPERTY, placeGuide.getName());
-    placeGuideEntity.setProperty(
-        DatastorePlaceGuideRepository.AUDIO_KEY_PROPERTY, placeGuide.getAudioKey());
-    placeGuideEntity.setProperty(
-        DatastorePlaceGuideRepository.CREATOR_ID_PROPERTY, placeGuide.getCreatorId());
-    placeGuideEntity.setProperty(
-        DatastorePlaceGuideRepository.IS_PUBLIC_PROPERTY, placeGuide.isPublic());
-    placeGuideEntity.setProperty(
-        DatastorePlaceGuideRepository.PLACE_ID_PROPERTY, placeGuide.getPlaceId());
-    placeGuideEntity.setProperty(
-        DatastorePlaceGuideRepository.COORDINATE_PROPERTY, placeGuide.getCoordinate());
-    placeGuideEntity.setProperty(
-        DatastorePlaceGuideRepository.DESCRIPTION_PROPERTY, placeGuide.getDescription());
-    placeGuideEntity.setProperty(
-        DatastorePlaceGuideRepository.LENGTH_PROPERTY, placeGuide.getLength());
-    placeGuideEntity.setProperty(
-        DatastorePlaceGuideRepository.IMAGE_KEY_PROPERTY, placeGuide.getImageKey());
-    return placeGuideEntity;
   }
 
   // Users data.
   private static final String ID_A = "useridA";
   private static final String ID_B = "useridB";
   private static final String ID_C = "useridC";
+  private static final String ID_D = "useridD";
   private static final String EMAIL = "user@gmail.com";
   private static final Set<Long> EMPTY_BOOKMARKED_PLACE_GUIDES_IDS = null;
   private static final Set<Long> BOOKMARKED_PLACE_GUIDES_IDS_A =
@@ -174,6 +172,11 @@ public final class BookmarkPlaceGuideServletTest {
   private static final Set<Long> BOOKMARKED_PLACE_GUIDES_IDS_C =
       new HashSet<>(
           Arrays.asList(1l, 2l, 3l, 4l, 5l, 6l, 7l, 8l, 9l, 10l, 11l, 12l, 13l, 14l, 15l, 26l));
+  private static final Set<Long> BOOKMARKED_PLACE_GUIDES_IDS_D =
+      new HashSet<>(
+          Arrays.asList(
+              1l, 2l, 3l, 4l, 5l, 6l, 7l, 8l, 9l, 10l, 11l, 12l, 13l, 14l, 15l, 16l, 17l, 18l, 19l,
+              20l, 21l, 22l, 23l, 24l, 25l));
   private static final String NAME = "username";
   private static final String SELF_INTRODUCTION = "I am the user";
   private static final String IMG_KEY = "/img.com";
@@ -199,6 +202,15 @@ public final class BookmarkPlaceGuideServletTest {
   private final User userC =
       new User.Builder(ID_C, EMAIL)
           .setBookmarkedPlaceGuidesIds(BOOKMARKED_PLACE_GUIDES_IDS_C)
+          .setName(NAME)
+          .setPublicPortfolio(true)
+          .addSelfIntroduction(SELF_INTRODUCTION)
+          .addImgKey(IMG_KEY)
+          .build();
+
+  private final User userD =
+      new User.Builder(ID_D, EMAIL)
+          .setBookmarkedPlaceGuidesIds(BOOKMARKED_PLACE_GUIDES_IDS_D)
           .setName(NAME)
           .setPublicPortfolio(true)
           .addSelfIntroduction(SELF_INTRODUCTION)
@@ -248,6 +260,13 @@ public final class BookmarkPlaceGuideServletTest {
   private void savePlaceGuide(PlaceGuide placeGuide) {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(getPlaceGuideEntity(placeGuide));
+  }
+
+  private void deletePlaceGuide(long placeGuideId) {
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    Key placeGuideEntityKey =
+        KeyFactory.createKey(DatastorePlaceGuideRepository.ENTITY_KIND, placeGuideId);
+    datastore.delete(placeGuideEntityKey);
   }
 
   private Entity getPlaceGuideEntity(PlaceGuide placeGuide) {
