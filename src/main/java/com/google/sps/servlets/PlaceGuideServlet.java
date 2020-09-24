@@ -75,41 +75,50 @@ public class PlaceGuideServlet extends HttpServlet {
     PlaceGuideQueryType placeGuideQueryType =
         PlaceGuideQueryType.valueOf(placeGuideQueryTypeString);
     if (placeGuideQueryType == PlaceGuideQueryType.PLACE_GUIDE_WITH_ID) {
-      long placeGuideId = Long.parseLong(request.getParameter(PLACE_GUIDE_ID_PARAMETER));
-      PlaceGuide placeGuide = placeGuideRepository.getPlaceGuide(placeGuideId);
-      if (placeGuide == null) {
-        throw new IllegalArgumentException("There is no placeguide ith this id: " + placeGuideId);
-      }
-      String currentUserId = UserServiceFactory.getUserService().getCurrentUser().getUserId();
-      PlaceGuideInfo placeGuideInfo = new PlaceGuideInfo(placeGuide, currentUserId);
+      PlaceGuideInfo placeGuideInfo = getSinglePlaceGuideInfo(request);
       response.setContentType("application/json;");
       response.getWriter().println(convertToJsonUsingGson(placeGuideInfo));
     } else {
-      GeoPt northEastCorner = null;
-      GeoPt southWestCorner = null;
-      String creatorId = null;
-      if (placeGuideQueryType.requiresCoordinates()) {
-        String regionCornersString = request.getParameter(REGION_CORNERS_PARAMETER);
-        // On the client-side, the LatLngBound class's toUrlValue function will generate a string
-        // with
-        // the values being comma-separated. The string is parsed here.
-        String[] cornerCoordinates = regionCornersString.split(",");
-        southWestCorner =
-            new GeoPt(
-                Float.parseFloat(cornerCoordinates[0]), Float.parseFloat(cornerCoordinates[1]));
-        northEastCorner =
-            new GeoPt(
-                Float.parseFloat(cornerCoordinates[2]), Float.parseFloat(cornerCoordinates[3]));
-      }
-      if (placeGuideQueryType.requiresUserIdFromRequest()) {
-        creatorId = request.getParameter(CREATOR_ID_PARAMETER);
-      }
-      List<PlaceGuide> placeGuides =
-          getPlaceGuides(placeGuideQueryType, northEastCorner, southWestCorner, creatorId);
-      List<PlaceGuideInfo> placeGuideInfos = getPlaceGuideInfos(placeGuides);
+      List<PlaceGuideInfo> placeGuideInfos = getPlaceGuideInfoList(request, placeGuideQueryType);
       response.setContentType("application/json;");
       response.getWriter().println(convertToJsonUsingGson(placeGuideInfos));
     }
+  }
+
+  private PlaceGuideInfo getSinglePlaceGuideInfo(HttpServletRequest request) {
+    long placeGuideId = Long.parseLong(request.getParameter(PLACE_GUIDE_ID_PARAMETER));
+    PlaceGuide placeGuide = placeGuideRepository.getPlaceGuide(placeGuideId);
+    if (placeGuide == null) {
+      throw new IllegalArgumentException("There is no placeguide ith this id: " + placeGuideId);
+    }
+    String currentUserId = UserServiceFactory.getUserService().getCurrentUser().getUserId();
+    PlaceGuideInfo placeGuideInfo = new PlaceGuideInfo(placeGuide, currentUserId);
+    return placeGuideInfo;
+  }
+
+  private List<PlaceGuideInfo> getPlaceGuideInfoList(
+      HttpServletRequest request, PlaceGuideQueryType placeGuideQueryType) {
+    GeoPt northEastCorner = null;
+    GeoPt southWestCorner = null;
+    String creatorId = null;
+    if (placeGuideQueryType.requiresCoordinates()) {
+      String regionCornersString = request.getParameter(REGION_CORNERS_PARAMETER);
+      // On the client-side, the LatLngBound class's toUrlValue function will generate a string
+      // with
+      // the values being comma-separated. The string is parsed here.
+      String[] cornerCoordinates = regionCornersString.split(",");
+      southWestCorner =
+          new GeoPt(Float.parseFloat(cornerCoordinates[0]), Float.parseFloat(cornerCoordinates[1]));
+      northEastCorner =
+          new GeoPt(Float.parseFloat(cornerCoordinates[2]), Float.parseFloat(cornerCoordinates[3]));
+    }
+    if (placeGuideQueryType.requiresUserIdFromRequest()) {
+      creatorId = request.getParameter(CREATOR_ID_PARAMETER);
+    }
+    List<PlaceGuide> placeGuides =
+        getPlaceGuides(placeGuideQueryType, northEastCorner, southWestCorner, creatorId);
+    List<PlaceGuideInfo> placeGuideInfos = getPlaceGuideInfos(placeGuides);
+    return placeGuideInfos;
   }
 
   private List<PlaceGuideInfo> getPlaceGuideInfos(List<PlaceGuide> placeGuides) {
