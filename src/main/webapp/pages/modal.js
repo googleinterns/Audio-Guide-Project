@@ -1,40 +1,47 @@
 class Modal {
-  constructor() {
-    this.hidden = true;
-    this.modal = document.getElementById("myModal");
-    console.log("constructed");
-  }
+  static MODAL_ELEMENT = document.getElementById("myModal");
+  static CLOSE_BTN = document.getElementById("closeModalBtn");
+  static MODAL_TEXT = document.getElementById("modalText");
+  static hidden = true;
+  static text = '';
+  static timeOutId = undefined;
+  static hasCloseButtonListener = false;
 
-  show(text, timeLimit) {
-    this.hidden = false;
-    this.modal.style.display = "block";
-    this.setModalText(text);
-    this.closeModalOnButtonClick();
+  static show(text, timeLimit) {
+    Modal.destroy();
+    Modal.hidden = false;
+    Modal.setText(text);
+    Modal.MODAL_ELEMENT.style.display = "block";
+    Modal.closeModalOnButtonClick();
     if (timeLimit !== undefined) {
-      const thisModal = this;
-      setTimeout(function() {
-        thisModal.hide();
+      Modal.timeOutId = setTimeout(function() {
+        Modal.hide();
       }, timeLimit);
     }
   }
 
-  setModalText(text) {
-    const modalText = document.getElementById("modalText");
-    modalText.innerText = text;
+  static setText(text) {
+    Modal.MODAL_TEXT.innerText = text;
   }
 
-  closeModalOnButtonClick() {
-    const btn = document.getElementById("closeModalBtn");
-    const thisModal = this;
-    btn.addEventListener("click", function() {
-      thisModal.hide();
-    });
+  static closeModalOnButtonClick() {
+    if (!Modal.hasCloseButtonListener) {
+      Modal.CLOSE_BTN.addEventListener("click", Modal.hide);
+      Modal.hasCloseButtonListener = true;
+    }
   }
 
-  hide() {
-    if (!this.hidden) {
-      this.hidden = true;
-      this.modal.style.display = "none";
+  static hide() {
+    if (!Modal.hidden) {
+      Modal.hidden = true;
+      Modal.MODAL_ELEMENT.style.display = "none";
+    }
+  }
+
+  static destroy() {
+    if (Modal.timeOutId !== undefined) {
+      clearTimeout(Modal.timeOutId);
+      Modal.timeOutId = undefined;
     }
   }
 }
