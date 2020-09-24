@@ -17,7 +17,6 @@ class MapWidget {
     };
     this._map = new google.maps.Map(
         document.getElementById('map'), myMapOptions);
-    Geolocator.centerMapAtCurrentLocation(this._map);
   }
 
   get map() {
@@ -26,6 +25,10 @@ class MapWidget {
 
   get pickedLocation() {
     return this._locationPicker.pickedLocation;
+  }
+
+  centerAtCurrentLocation() {
+    Geolocator.centerMapAtCurrentLocation(this._map);
   }
 
   addGeolocationFunctionality() {
@@ -68,6 +71,7 @@ class MapWidget {
             searchBox.init();
             this._locationPicker = new LocationPicker(this._map, chosenLocation);
             this._locationPicker.init();
+            this._map.setCenter(placeGuideToEdit.location.position);
           });
     }
   }

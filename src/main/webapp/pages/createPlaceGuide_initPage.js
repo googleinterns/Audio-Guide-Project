@@ -29,12 +29,14 @@ function initPage() {
       mapWidget.addGeolocationFunctionality();
       setUpCreatePlaceGuideForm()
           .then((placeGuideToEdit) => {
-            mapWidget.addLocationChoosingAndSavingFunctionality(placeGuideToEdit);
             placeGuideManager = new PlaceGuideManager(
                 PlaceGuideManager.PAGE.CREATE_PLACE_GUIDE, map);
-            if (placeGuideToEdit !== undefined) {
+            if (placeGuideToEdit !== null) {
               placeGuideManager.setEditedPlaceGuide(placeGuideToEdit.id);
+            } else {
+              mapWidget.centerAtCurrentLocation();
             }
+            mapWidget.addLocationChoosingAndSavingFunctionality(placeGuideToEdit);
           });
       document.getElementById('map')
           .addEventListener(MapWidget.CHOSEN_LOCATION_CHANGE_EVENT, function() {
