@@ -16,6 +16,7 @@ package com.google.sps.data;
 
 /** Specifies the possible form types of queries for PlaceGuides. */
 public enum PlaceGuideQueryType {
+  PLACE_GUIDE_WITH_ID(/* requiresCoordinates= */ false, /* requiresUserIdFromRequest= */ false),
   ALL_PUBLIC(/* requiresCoordinates= */ false, /* requiresUserIdFromRequest= */ false),
   CREATED_ALL(/* requiresCoordinates= */ false, /* requiresUserIdFromRequest= */ false),
   CREATED_PUBLIC(/* requiresCoordinates= */ false, /* requiresUserIdFromRequest= */ false),

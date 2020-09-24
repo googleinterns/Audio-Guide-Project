@@ -22,6 +22,7 @@ function initPage() {
         const mapWidget = new MapWidget();
         mapWidget.addGeolocationFunctionality();
         mapWidget.addSearchingFunctionality();
+        mapWidget.centerAtCurrentLocation();
         map = mapWidget.map;
         const user = User.getUserFromQueryString();
         fillPortfolioDiv(user);

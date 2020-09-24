@@ -24,7 +24,7 @@ class Location {
         resolve(thisPlaceName);
       });
     } else {
-      if (this._placeId == undefined) {
+      if (this._placeId === undefined) {
         return new Promise(function(resolve, reject) {
           resolve(undefined);
         });
