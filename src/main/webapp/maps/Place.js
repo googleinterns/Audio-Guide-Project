@@ -142,7 +142,9 @@ class Place {
     if (this._placeType.icon != null) {
       markerIcon = this._placeType.icon;
     } else {
-      markerIcon = getColoredMarkerIcon(this._placeType.iconColor, this._placeType.size);
+      markerIcon = getColoredMarkerIcon(
+          this._placeType.iconColor,
+          this._placeType.size);
     }
     this._marker = new google.maps.Marker({
       position: this._position,
@@ -225,31 +227,31 @@ var PlaceType = {
     // Orange icon
     icon: null,
     iconColor: 'de8a0b',
-    size: 1
+    size: 1,
   },
   PUBLIC_OWN: {
     // Lighter orange icon
     icon: null,
     iconColor: 'f5cb42',
-    size: 1
+    size: 1,
   },
   PRIVATE: {
     // Yellow icon
     icon: null,
     iconColor: 'f7ff05',
-    size: 1
+    size: 1,
   },
   SEARCH_RESULT: {
     // Green icon
     icon: null,
     iconColor: '82d613',
-    size: 1.2
+    size: 1.2,
   },
   SAVED_LOCATION: {
     // Blue icon
     icon: null,
     iconColor: '1d2480',
-    size: 1.2
+    size: 1.2,
   },
   CURRENT_LOCATION: {
     icon: './img/blue_dot.png',

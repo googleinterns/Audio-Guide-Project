@@ -36,7 +36,8 @@ function initPage() {
             } else {
               mapWidget.centerAtCurrentLocation();
             }
-            mapWidget.addLocationChoosingAndSavingFunctionality(placeGuideToEdit);
+            mapWidget
+                .addLocationChoosingAndSavingFunctionality(placeGuideToEdit);
           });
       document.getElementById('map')
           .addEventListener(MapWidget.CHOSEN_LOCATION_CHANGE_EVENT, function() {
