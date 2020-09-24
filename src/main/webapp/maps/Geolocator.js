@@ -118,7 +118,7 @@ class Geolocator {
           }
       );
     } else {
-      alert(Geolocator.NO_GEOLOCATION_SUPPORT_MSG);
+      Modal.show(Geolocator.NO_GEOLOCATION_SUPPORT_MSG, undefined);
     }
   }
 
@@ -142,10 +142,10 @@ class Geolocator {
       if (this._foundLocation) {
         this._currentLocation.centerMapAround();
       } else {
-        alert(Geolocator.LOCATION_NOT_FOUND_MSG);
+        Modal.show(Geolocator.LOCATION_NOT_FOUND_MSG, undefined);
       }
     } else {
-      alert(Geolocator.ENABLE_GEOLOCATION_MSG);
+      Modal.show(Geolocator.ENABLE_GEOLOCATION_MSG, undefined);
     }
   }
 
@@ -153,16 +153,16 @@ class Geolocator {
   showError(error) {
     switch (error.code) {
       case error.PERMISSION_DENIED:
-        alert(Geolocator.NO_LOCATION_PERMISSION_MSG);
+        Modal.show(Geolocator.NO_LOCATION_PERMISSION_MSG, 5000);
         break;
       case error.POSITION_UNAVAILABLE:
-        alert(Geolocator.NO_LOCATION_INFORMATION_MSG);
+        Modal.show(Geolocator.NO_LOCATION_INFORMATION_MSG, 5000);
         break;
       case error.TIMEOUT:
-        alert(Geolocator.REQUEST_TIMEOUT_MSG);
+        Modal.show(Geolocator.REQUEST_TIMEOUT_MSG, 5000);
         break;
       case error.UNKNOWN_ERROR:
-        alert(Geolocator.UNKNOWN_ERROR_MSG);
+        Modal.show(Geolocator.UNKNOWN_ERROR_MSG, 5000);
         break;
     }
   }
