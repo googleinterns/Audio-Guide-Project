@@ -32,7 +32,7 @@ public class PlaceGuideInfo {
   private boolean createdByCurrentUser;
   private boolean bookmarkedByCurrentUser;
   private static final UserRepository userRepository =
-      UserRepositoryFactory.getUserRepository(RepositoryType.DATASTORE);;
+      UserRepositoryFactory.getUserRepository(RepositoryType.DATASTORE);
 
   /** For production. */
   public PlaceGuideInfo(PlaceGuide placeGuide, String currentUserId) {
