@@ -14,18 +14,20 @@ function initPage() {
     if (!userAuthenticationStatus.isLoggedIn) {
       location.replace(userAuthenticationStatus.loginUrl);
     } else {
-      const menu = new Menu(Menu.PAGE_NAMES.MY_PLACEGUIDES);
-      fitContent();
-      window.addEventListener('resize', function() {
+      saveUserInDatabase().then((response) => {
+        const menu = new Menu(Menu.PAGE_NAMES.MY_PLACEGUIDES);
         fitContent();
+        window.addEventListener('resize', function() {
+          fitContent();
+        });
+        const mapWidget = new MapWidget();
+        mapWidget.addGeolocationFunctionality();
+        mapWidget.addSearchingFunctionality();
+        mapWidget.centerAtCurrentLocation();
+        map = mapWidget.map;
+        placeGuideManager = new PlaceGuideManager(
+            PlaceGuideManager.PAGE.MY_GUIDES, map);
       });
-      const mapWidget = new MapWidget();
-      mapWidget.addGeolocationFunctionality();
-      mapWidget.addSearchingFunctionality();
-      mapWidget.centerAtCurrentLocation();
-      map = mapWidget.map;
-      placeGuideManager = new PlaceGuideManager(
-          PlaceGuideManager.PAGE.MY_GUIDES, map);
     }
   });
 }

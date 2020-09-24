@@ -13,20 +13,22 @@ function initPage() {
     if (!userAuthenticationStatus.isLoggedIn) {
       location.replace(userAuthenticationStatus.loginUrl);
     } else {
-      const menu = new Menu(undefined);
-      fitContent();
-      window.addEventListener('resize', function() {
+      saveUserInDatabase().then((response) => {
+        const menu = new Menu(undefined);
         fitContent();
+        window.addEventListener('resize', function() {
+          fitContent();
+        });
+        const mapWidget = new MapWidget();
+        mapWidget.addGeolocationFunctionality();
+        mapWidget.addSearchingFunctionality();
+        mapWidget.centerAtCurrentLocation();
+        map = mapWidget.map;
+        const user = User.getUserFromQueryString();
+        fillPortfolioDiv(user);
+        placeGuideManager = new PlaceGuideManager(
+            PlaceGuideManager.PAGE.USERS_PORTFOLIO, map, user.id);
       });
-      const mapWidget = new MapWidget();
-      mapWidget.addGeolocationFunctionality();
-      mapWidget.addSearchingFunctionality();
-      mapWidget.centerAtCurrentLocation();
-      map = mapWidget.map;
-      const user = User.getUserFromQueryString();
-      fillPortfolioDiv(user);
-      placeGuideManager = new PlaceGuideManager(
-          PlaceGuideManager.PAGE.USERS_PORTFOLIO, map, user.id);
     }
   });
 }

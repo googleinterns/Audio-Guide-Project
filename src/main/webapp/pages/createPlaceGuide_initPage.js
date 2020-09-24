@@ -19,30 +19,32 @@ function initPage() {
     if (!userAuthenticationStatus.isLoggedIn) {
       location.replace(userAuthenticationStatus.loginUrl);
     } else {
-      const menu = new Menu(Menu.PAGE_NAMES.CREATE_PLACEGUIDE);
-      fitContent();
-      window.addEventListener('resize', function() {
+      saveUserInDatabase().then((response) => {
+        const menu = new Menu(Menu.PAGE_NAMES.CREATE_PLACEGUIDE);
         fitContent();
+        window.addEventListener('resize', function() {
+          fitContent();
+        });
+        const mapWidget = new MapWidget();
+        map = mapWidget.map;
+        mapWidget.addGeolocationFunctionality();
+        setUpPlaceGuideCreation()
+            .then((placeGuideToEdit) => {
+              placeGuideManager = new PlaceGuideManager(
+                  PlaceGuideManager.PAGE.CREATE_PLACE_GUIDE, map);
+              if (placeGuideToEdit !== null) {
+                placeGuideManager.setEditedPlaceGuide(placeGuideToEdit.id);
+              } else {
+                mapWidget.centerAtCurrentLocation();
+              }
+              mapWidget
+                  .addLocationChoosingAndSavingFunctionality(placeGuideToEdit);
+            });
+        document.getElementById('map')
+            .addEventListener(MapWidget.CHOSEN_LOCATION_CHANGE_EVENT, function() {
+              handleChosenLocationChangeEvent(mapWidget);
+            });
       });
-      const mapWidget = new MapWidget();
-      map = mapWidget.map;
-      mapWidget.addGeolocationFunctionality();
-      setUpPlaceGuideCreation()
-          .then((placeGuideToEdit) => {
-            placeGuideManager = new PlaceGuideManager(
-                PlaceGuideManager.PAGE.CREATE_PLACE_GUIDE, map);
-            if (placeGuideToEdit !== null) {
-              placeGuideManager.setEditedPlaceGuide(placeGuideToEdit.id);
-            } else {
-              mapWidget.centerAtCurrentLocation();
-            }
-            mapWidget
-                .addLocationChoosingAndSavingFunctionality(placeGuideToEdit);
-          });
-      document.getElementById('map')
-          .addEventListener(MapWidget.CHOSEN_LOCATION_CHANGE_EVENT, function() {
-            handleChosenLocationChangeEvent(mapWidget);
-          });
     }
   });
 }

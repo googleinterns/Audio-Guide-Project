@@ -28,7 +28,7 @@ function setUpUserAndForm() {
     } else {
       const menu = new Menu(Menu.PAGE_NAMES.MY_PORTFOLIO);
       addLinktoLogoutButton(userAuthenticationStatus.logoutUrl);
-      saveUserInDatabase().then(setUpPortfolioForm());
+      saveUserInDatabase().then((response) => setUpPortfolioForm());
     }
   });
 }
