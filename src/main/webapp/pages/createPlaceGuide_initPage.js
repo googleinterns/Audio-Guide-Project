@@ -24,13 +24,16 @@ function initPage() {
       window.addEventListener('resize', function() {
         fitContent();
       });
-      setUpCreatePlaceGuideForm();
       const mapWidget = new MapWidget();
-      mapWidget.addGeolocationFunctionality();
-      mapWidget.addLocationChoosingAndSavingFunctionality();
       map = mapWidget.map;
-      placeGuideManager = new PlaceGuideManager(
-          PlaceGuideManager.PAGE.CREATE_PLACE_GUIDE, map);
+      mapWidget.addGeolocationFunctionality();
+      setUpCreatePlaceGuideForm()
+          .then((placeGuideToEdit) => {
+            mapWidget.addLocationChoosingAndSavingFunctionality(placeGuideToEdit);
+            placeGuideManager = new PlaceGuideManager(
+                PlaceGuideManager.PAGE.CREATE_PLACE_GUIDE, map);
+            placeGuideManager.setEditedPlaceGuide(placeGuideToEdit.id)
+          });
       document.getElementById('map')
           .addEventListener(MapWidget.CHOSEN_LOCATION_CHANGE_EVENT, function() {
             handleChosenLocationChangeEvent(mapWidget);

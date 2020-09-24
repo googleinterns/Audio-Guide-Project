@@ -41,6 +41,7 @@ class PlaceGuideManager {
     this._highlightedPlaceGuideId = null;
     this._mapPlaceGuideDisplayer = new MapPlaceGuideDisplayer();
     this._listPlaceGuideDisplayer = new ListPlaceGuideDisplayer(page);
+    this._editedPlaceGuideId = undefined;
     let thisManager = this;
     google.maps.event.addListenerOnce(map, 'idle', function () {
       thisManager.refreshPlaceGuides(map.getBounds(), map.getZoom(), portfolioUserId);
@@ -60,7 +61,14 @@ class PlaceGuideManager {
           if (this._page === PlaceGuideManager.PAGE.BOOKMARKED_PLACEGUIDES) {
             this._mapPlaceGuideDisplayer.adjustMapToShowAll();
           }
+          this.removeEditedPlaceGuideRepresentation();
         });
+  }
+
+  removeEditedPlaceGuideRepresentation() {
+    if (this._editedPlaceGuideId !== undefined) {
+      this.removePlaceGuideRepresentation(this._editedPlaceGuideId);
+    }
   }
 
   removePlaceGuide(placeGuideId) {
@@ -106,6 +114,10 @@ class PlaceGuideManager {
           alert("Failed to execute bookmarking/unbookmarking");
         }
       });
+  }
+
+  setEditedPlaceGuide(placeGuideId) {
+    this._editedPlaceGuideId = placeGuideId;
   }
 
   static removeGuideIfUnbookmarked(placeGuideManager, placeGuideId) {

@@ -6,12 +6,16 @@ function setUpCreatePlaceGuideForm() {
       'CREATE_PLACE_GUIDE_FORM', 'createPlaceGuideForm');
   activatePreviewFeature();
   styleInputs();
-  if (window.location.search !== '') {
-    fillFormWithPlaceGuideToEdit();
-  } else {
+  if (window.location.search === '') {
     activateRemoveImageFeature('clear-img-icon', false);
+    return new Promise((resolve, reject) => {
+      resolve(null);
+    });
+  } else {
+    return fillFormWithPlaceGuideToEdit();
   }
 }
+
 
 /**
  * This function initializes the components
@@ -93,11 +97,11 @@ function fillFormWithPlaceGuideToEdit() {
         alert("Failed to process the data of the guide to edit");
       })
       .then((placeGuideInfo) => {
-        console.log("fetching finished");
         const placeGuideToEdit =
             PlaceGuideRepository.
                 getPlaceGuideFromPlaceGuideWithCreatorPair(placeGuideInfo);
         fillFormWithPlaceGuideData(placeGuideToEdit);
+        return placeGuideToEdit;
       });
 }
 
