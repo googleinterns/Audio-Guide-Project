@@ -367,6 +367,7 @@ body {
     margin: auto;
     padding: 20px;
     width: 40%;
+    position: relative;
 }
 
 .closeBtn {
