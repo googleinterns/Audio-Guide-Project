@@ -54,6 +54,7 @@ public class PlaceGuideServlet extends HttpServlet {
   public static final String PLACE_GUIDE_QUERY_TYPE_PARAMETER = "placeGuideType";
   public static final String REGION_CORNERS_PARAMETER = "regionCorners";
   public static final String CREATOR_ID_PARAMETER = "creatorId";
+  public static final String PLACE_GUIDE_ID_PARAMETER = "placeGuideId";
 
   private final PlaceGuideRepository placeGuideRepository =
       PlaceGuideRepositoryFactory.getPlaceGuideRepository(RepositoryType.DATASTORE);
@@ -63,7 +64,8 @@ public class PlaceGuideServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     PlaceGuide placeGuide = getPlaceGuideFromRequest(request);
     placeGuideRepository.savePlaceGuide(placeGuide);
-    response.sendRedirect("/createPlaceGuide.html");
+    response.sendRedirect(
+        String.format("/createPlaceGuide.html?placeGuideId=%d", placeGuide.getId()));
   }
 
   /** Returns the data of the placeguide(s) asked by the user who is currently logged in. */
@@ -72,12 +74,37 @@ public class PlaceGuideServlet extends HttpServlet {
     String placeGuideQueryTypeString = request.getParameter(PLACE_GUIDE_QUERY_TYPE_PARAMETER);
     PlaceGuideQueryType placeGuideQueryType =
         PlaceGuideQueryType.valueOf(placeGuideQueryTypeString);
+    if (placeGuideQueryType == PlaceGuideQueryType.PLACE_GUIDE_WITH_ID) {
+      PlaceGuideInfo placeGuideInfo = getSinglePlaceGuideInfo(request);
+      response.setContentType("application/json;");
+      response.getWriter().println(convertToJsonUsingGson(placeGuideInfo));
+    } else {
+      List<PlaceGuideInfo> placeGuideInfos = getPlaceGuideInfoList(request, placeGuideQueryType);
+      response.setContentType("application/json;");
+      response.getWriter().println(convertToJsonUsingGson(placeGuideInfos));
+    }
+  }
+
+  private PlaceGuideInfo getSinglePlaceGuideInfo(HttpServletRequest request) {
+    long placeGuideId = Long.parseLong(request.getParameter(PLACE_GUIDE_ID_PARAMETER));
+    PlaceGuide placeGuide = placeGuideRepository.getPlaceGuide(placeGuideId);
+    if (placeGuide == null) {
+      throw new IllegalArgumentException("There is no placeguide ith this id: " + placeGuideId);
+    }
+    String currentUserId = UserServiceFactory.getUserService().getCurrentUser().getUserId();
+    PlaceGuideInfo placeGuideInfo = new PlaceGuideInfo(placeGuide, currentUserId);
+    return placeGuideInfo;
+  }
+
+  private List<PlaceGuideInfo> getPlaceGuideInfoList(
+      HttpServletRequest request, PlaceGuideQueryType placeGuideQueryType) {
     GeoPt northEastCorner = null;
     GeoPt southWestCorner = null;
     String creatorId = null;
     if (placeGuideQueryType.requiresCoordinates()) {
       String regionCornersString = request.getParameter(REGION_CORNERS_PARAMETER);
-      // On the client-side, the LatLngBound class's toUrlValue function will generate a string with
+      // On the client-side, the LatLngBound class's toUrlValue function will generate a string
+      // with
       // the values being comma-separated. The string is parsed here.
       String[] cornerCoordinates = regionCornersString.split(",");
       southWestCorner =
@@ -85,14 +112,13 @@ public class PlaceGuideServlet extends HttpServlet {
       northEastCorner =
           new GeoPt(Float.parseFloat(cornerCoordinates[2]), Float.parseFloat(cornerCoordinates[3]));
     }
-    if (placeGuideQueryType.requiresCoordinates()) {
+    if (placeGuideQueryType.requiresUserIdFromRequest()) {
       creatorId = request.getParameter(CREATOR_ID_PARAMETER);
     }
     List<PlaceGuide> placeGuides =
         getPlaceGuides(placeGuideQueryType, northEastCorner, southWestCorner, creatorId);
     List<PlaceGuideInfo> placeGuideInfos = getPlaceGuideInfos(placeGuides);
-    response.setContentType("application/json;");
-    response.getWriter().println(convertToJsonUsingGson(placeGuideInfos));
+    return placeGuideInfos;
   }
 
   private List<PlaceGuideInfo> getPlaceGuideInfos(List<PlaceGuide> placeGuides) {
