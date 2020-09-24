@@ -3,9 +3,7 @@ const LIST_WIDTH = 375;
 const MENU_AND_USER_PORTFOLIO_HEIGHT = 520;
 
 function setContentHeight() {
-  console.log(window.innerHeight);
   const availableHeight = window.innerHeight - MENU_AND_MARGIN_HEIGHT;
-  console.log("available=" +availableHeight);
   document.getElementsByClassName("content-container")[0].style.height =
       availableHeight+ 'px';
 }

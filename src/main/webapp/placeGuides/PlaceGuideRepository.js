@@ -18,6 +18,7 @@ class PlaceGuideRepository {
       SUCCESS: {},
       NOT_ALLOWED: {},
       SERVER_FAILURE: {},
+      UNKNOWN_FAILURE: {}
   }
 
   constructor() {
@@ -82,13 +83,13 @@ class PlaceGuideRepository {
       return fetch(url)
           .catch(error => {
             console.log("PlaceGuideServlet: failed to fetch: " + error);
-            alert("Failed to load the data of guides");
+            Modal.show("Failed to load the data of guides", 3000);
           })
           .then(response => response.json())
           .catch(error => {
             console.log('updatePlaceGuides: failed to convert response to JSON'
                   + error);
-            alert("Failed to process the data of guides");
+            Modal.show("Failed to process the data of guides", 3000);
           })
           .then(placeGuideWithCreatorPairs => {
             thisRepository._placeGuides = PlaceGuideRepository
@@ -115,7 +116,7 @@ class PlaceGuideRepository {
         .catch(error => {
           console.log("DeletePlaceGuideServlet: failed to fetch: "
             + error);
-          alert("Failed to delete guide");
+          Modal.show("Failed to delete guide", undefined);
           resolve(false);
         })
         .then(response => {
@@ -148,7 +149,7 @@ class PlaceGuideRepository {
         .catch(error => {
             console.log('updatePlaceGuides: failed to convert response to JSON'
                   + error);
-            alert("Failed to process the response from the server");
+          resolve(PlaceGuideRepository.BOOKMARK_ACTION_RESULT_TYPE.UNKNOWN_FAILURE);
         })
         .then(response => {
           if (response) {
