@@ -118,6 +118,7 @@ public final class BookmarkPlaceGuideServletTest {
     Boolean successfulBookmark = gson.fromJson(sw.toString(), Boolean.class);
     assertTrue(successfulBookmark);
     assertTrue(userHasBookmarkedThePlaceGuide(ID_D, toBookmarkGuide.getId()));
+    assertFalse(userHasBookmarkedThePlaceGuide(ID_D, 25));
   }
 
   @Test

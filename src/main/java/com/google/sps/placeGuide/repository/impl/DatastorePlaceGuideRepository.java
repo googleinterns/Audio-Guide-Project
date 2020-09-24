@@ -236,7 +236,7 @@ public class DatastorePlaceGuideRepository implements PlaceGuideRepository {
         Entity placeGuideEntity = datastore.get(placeGuideEntityKey);
         bookmarkedPlaceGuides.add(getPlaceGuideFromEntity(placeGuideEntity));
       } catch (EntityNotFoundException err) {
-        System.out.println("Place Guide does not exist anymore.");
+        userRepository.removeBookmarkedPlaceGuide(placeGuideId, userId);
       }
     }
     return bookmarkedPlaceGuides;
