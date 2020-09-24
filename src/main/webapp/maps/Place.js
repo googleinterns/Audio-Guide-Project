@@ -142,7 +142,9 @@ class Place {
     if (this._placeType.icon != null) {
       markerIcon = this._placeType.icon;
     } else {
-      markerIcon = getColoredMarkerIcon(this._placeType.iconColor);
+      markerIcon = getColoredMarkerIcon(
+          this._placeType.iconColor,
+          this._placeType.size);
     }
     this._marker = new google.maps.Marker({
       position: this._position,
@@ -225,26 +227,31 @@ var PlaceType = {
     // Orange icon
     icon: null,
     iconColor: 'de8a0b',
+    size: 1,
   },
   PUBLIC_OWN: {
     // Lighter orange icon
     icon: null,
     iconColor: 'f5cb42',
+    size: 1,
   },
   PRIVATE: {
     // Yellow icon
     icon: null,
     iconColor: 'f7ff05',
+    size: 1,
   },
   SEARCH_RESULT: {
     // Green icon
     icon: null,
     iconColor: '82d613',
+    size: 1.2,
   },
   SAVED_LOCATION: {
     // Blue icon
     icon: null,
     iconColor: '1d2480',
+    size: 1.2,
   },
   CURRENT_LOCATION: {
     icon: './img/blue_dot.png',
@@ -252,14 +259,14 @@ var PlaceType = {
 };
 
 // Get icons from the charts API.
-function getColoredMarkerIcon(color) {
+function getColoredMarkerIcon(color, size) {
   const iconBase =
       'https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|';
   const markerIcon = {
     url: iconBase + color,
-    scaledSize: new google.maps.Size(30, 46),
+    scaledSize: new google.maps.Size(30*size, 46*size),
     origin: new google.maps.Point(0, 0),
-    anchor: new google.maps.Point(15, 45),
+    anchor: new google.maps.Point(15*size, 45*size),
   };
   return markerIcon;
 }

@@ -14,10 +14,12 @@ class MapPlaceGuideDisplayer {
   }
 
   remove(placeGuideId) {
-    this._markerClusterer.removeMarker(
-        this._placeGuidesOnMap[placeGuideId].marker);
-    this._placeGuidesOnMap[placeGuideId].remove();
-    delete this._placeGuidesOnMap[placeGuideId];
+    if (this._placeGuidesOnMap[placeGuideId] != undefined) {
+      this._markerClusterer.removeMarker(
+          this._placeGuidesOnMap[placeGuideId].marker);
+      this._placeGuidesOnMap[placeGuideId].remove();
+      delete this._placeGuidesOnMap[placeGuideId];
+    }
   }
 
   highlight(placeGuideId) {

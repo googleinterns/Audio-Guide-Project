@@ -24,13 +24,21 @@ function initPage() {
       window.addEventListener('resize', function() {
         fitContent();
       });
-      setUpCreatePlaceGuideForm();
       const mapWidget = new MapWidget();
-      mapWidget.addGeolocationFunctionality();
-      mapWidget.addLocationChoosingAndSavingFunctionality();
       map = mapWidget.map;
-      placeGuideManager = new PlaceGuideManager(
-          PlaceGuideManager.PAGE.CREATE_PLACE_GUIDE, map);
+      mapWidget.addGeolocationFunctionality();
+      setUpPlaceGuideCreation()
+          .then((placeGuideToEdit) => {
+            placeGuideManager = new PlaceGuideManager(
+                PlaceGuideManager.PAGE.CREATE_PLACE_GUIDE, map);
+            if (placeGuideToEdit !== null) {
+              placeGuideManager.setEditedPlaceGuide(placeGuideToEdit.id);
+            } else {
+              mapWidget.centerAtCurrentLocation();
+            }
+            mapWidget
+                .addLocationChoosingAndSavingFunctionality(placeGuideToEdit);
+          });
       document.getElementById('map')
           .addEventListener(MapWidget.CHOSEN_LOCATION_CHANGE_EVENT, function() {
             handleChosenLocationChangeEvent(mapWidget);

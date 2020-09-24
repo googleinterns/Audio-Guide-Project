@@ -41,6 +41,7 @@ class PlaceGuideManager {
     this._highlightedPlaceGuideId = null;
     this._mapPlaceGuideDisplayer = new MapPlaceGuideDisplayer();
     this._listPlaceGuideDisplayer = new ListPlaceGuideDisplayer(page);
+    this._editedPlaceGuideId = undefined;
     let thisManager = this;
     google.maps.event.addListenerOnce(map, 'idle', function () {
       thisManager.refreshPlaceGuides(map.getBounds(), map.getZoom(), portfolioUserId);
@@ -60,7 +61,14 @@ class PlaceGuideManager {
           if (this._page === PlaceGuideManager.PAGE.BOOKMARKED_PLACEGUIDES) {
             this._mapPlaceGuideDisplayer.adjustMapToShowAll();
           }
+          this.removeEditedPlaceGuideRepresentation();
         });
+  }
+
+  removeEditedPlaceGuideRepresentation() {
+    if (this._editedPlaceGuideId !== undefined) {
+      this.removePlaceGuideRepresentation(this._editedPlaceGuideId);
+    }
   }
 
   removePlaceGuide(placeGuideId) {
@@ -101,11 +109,15 @@ class PlaceGuideManager {
             this._page.onGuideBookmarkStatusChanged(this, placeGuideId);
           }
         } else if(response === PlaceGuideRepository.BOOKMARK_ACTION_RESULT_TYPE.NOT_ALLOWED) {
-          Modal.show(`You can't bookmark more than ${PlaceGuideManager.MAX_NO_BOOKMARKED_GUIDES} gudies. Please unbookmark some of them before bookmarking a new one`, undefined);
+          Modal.show(`You can't bookmark more than ${PlaceGuideManager.MAX_NO_BOOKMARKED_GUIDES} guides. Please unbookmark some of them before bookmarking a new one`, undefined);
         } else {
           Modal.show("Failed to execute bookmarking/unbookmarking", 3000);
         }
       });
+  }
+
+  setEditedPlaceGuide(placeGuideId) {
+    this._editedPlaceGuideId = placeGuideId;
   }
 
   static removeGuideIfUnbookmarked(placeGuideManager, placeGuideId) {
