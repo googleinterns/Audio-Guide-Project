@@ -27,7 +27,7 @@ function initPage() {
       const mapWidget = new MapWidget();
       map = mapWidget.map;
       mapWidget.addGeolocationFunctionality();
-      setUpCreatePlaceGuideForm()
+      setUpPlaceGuideCreation()
           .then((placeGuideToEdit) => {
             placeGuideManager = new PlaceGuideManager(
                 PlaceGuideManager.PAGE.CREATE_PLACE_GUIDE, map);

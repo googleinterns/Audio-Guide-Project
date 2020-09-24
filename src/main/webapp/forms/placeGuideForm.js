@@ -1,7 +1,9 @@
 /**
  * Handles setting up the create place guide form whenever the page is loaded.
+ * It returns a promise with the PlaceGuide to edit, or null if a new
+ * placeguide is created.
  */
-function setUpCreatePlaceGuideForm() {
+function setUpPlaceGuideCreation() {
   addBlobstoreUploadUrlToForm(
       'CREATE_PLACE_GUIDE_FORM', 'createPlaceGuideForm');
   activatePreviewFeature();
