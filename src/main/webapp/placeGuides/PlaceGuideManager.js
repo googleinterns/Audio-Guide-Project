@@ -101,9 +101,9 @@ class PlaceGuideManager {
             this._page.onGuideBookmarkStatusChanged(this, placeGuideId);
           }
         } else if(response === PlaceGuideRepository.BOOKMARK_ACTION_RESULT_TYPE.NOT_ALLOWED) {
-          alert(`You can't bookmark more than ${PlaceGuideManager.MAX_NO_BOOKMARKED_GUIDES} gudies. Please unbookmark some of them before bookmarking a new one`);
+          Modal.show(`You can't bookmark more than ${PlaceGuideManager.MAX_NO_BOOKMARKED_GUIDES} gudies. Please unbookmark some of them before bookmarking a new one`, undefined);
         } else {
-          alert("Failed to execute bookmarking/unbookmarking");
+          Modal.show("Failed to execute bookmarking/unbookmarking", 3000);
         }
       });
   }

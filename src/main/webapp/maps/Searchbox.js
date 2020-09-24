@@ -62,7 +62,7 @@ class SearchBox {
     service.getPlacePredictions({input: this._input.value},
         function (predictions, status) {
       if (status != google.maps.places.PlacesServiceStatus.OK) {
-        alert(status);
+        Modal.show(status, 3000);
         return;
       }
       searchResult.updatePlaceAndCenterBasedOnId(predictions[0].place_id);
