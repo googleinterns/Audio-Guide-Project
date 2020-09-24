@@ -4,6 +4,8 @@ import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
 import com.google.sps.data.RepositoryType;
+import com.google.sps.placeGuide.repository.PlaceGuideRepository;
+import com.google.sps.placeGuide.repository.PlaceGuideRepositoryFactory;
 import com.google.sps.user.User;
 import com.google.sps.user.repository.UserRepository;
 import com.google.sps.user.repository.UserRepositoryFactory;
@@ -25,6 +27,8 @@ public class BookmarkPlaceGuideServlet extends HttpServlet {
 
   private final UserRepository userRepository =
       UserRepositoryFactory.getUserRepository(RepositoryType.DATASTORE);
+  private final PlaceGuideRepository placeGuideRepository =
+      PlaceGuideRepositoryFactory.getPlaceGuideRepository(RepositoryType.DATASTORE);
 
   private enum BookmarkPlaceGuideQueryType {
     BOOKMARK,
@@ -60,11 +64,8 @@ public class BookmarkPlaceGuideServlet extends HttpServlet {
     String userId = UserServiceFactory.getUserService().getCurrentUser().getUserId();
     switch (bookmarkPlaceGuideQueryType) {
       case BOOKMARK:
-        User user = userRepository.getUser(userId);
-        if (user == null) {
-          throw new IllegalStateException("The current user does not exist in the database!");
-        }
-        if (user.canBookmarkAnotherPlaceGuide()) {
+        if (placeGuideRepository.getBookmarkedPlaceGuides(userId).size()
+            < User.MAX_NO_BOOKMARKED_PLACEGUIDES) {
           userRepository.bookmarkPlaceGuide(placeGuideId, userId);
           return true;
         } else {
