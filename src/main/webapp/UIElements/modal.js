@@ -3,7 +3,6 @@ class Modal {
   static CLOSE_BTN = document.getElementById("closeModalBtn");
   static MODAL_TEXT = document.getElementById("modalText");
   static hidden = true;
-  static text = '';
   static timeOutId = undefined;
   static hasCloseButtonListener = false;
 
