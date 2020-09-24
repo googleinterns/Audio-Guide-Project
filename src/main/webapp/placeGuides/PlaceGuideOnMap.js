@@ -42,7 +42,7 @@ class PlaceGuideOnMap {
     if (placeType.icon != null) {
       markerIcon = this._placeType.icon;
     } else {
-      markerIcon = getColoredMarkerIcon(placeType.iconColor);
+      markerIcon = getColoredMarkerIcon(placeType.iconColor, placeType.size);
     }
     return markerIcon;
   }
