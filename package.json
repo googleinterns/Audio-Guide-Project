@@ -42,7 +42,7 @@
     "flat-cache": "^2.0.1",
     "fs.realpath": "^1.0.0",
     "functional-red-black-tree": "^1.0.1",
-    "glob-parent": "^5.1.1",
+    "glob-parent": "^5.1.2",
     "glob": "^7.1.6",
     "globals": "^12.4.0",
     "has-flag": "^4.0.0",
